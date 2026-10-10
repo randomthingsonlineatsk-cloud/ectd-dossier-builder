@@ -89,8 +89,21 @@ export function repeatFolder(kind, settings) {
   return null;
 }
 
-// Path of a file's folder relative to the sequence folder.
-export function folderPath(code, settings) {
+// EU Module 1 country folders: 'ema' in the centralised procedure, the receiving member state
+// (or 'common') otherwise. Product information (1.3.1) adds a language folder.
+export const EU_LANG = { ema: 'en', common: 'en', nl: 'nl', de: 'de', fr: 'fr', ie: 'en', be: 'nl', es: 'es', it: 'it', se: 'sv', at: 'de', dk: 'da', pl: 'pl', pt: 'pt' };
+export function euCountry(node, settings, leaf = null) {
+  if (!node?.country) return null;
+  if (node.country === 'common') return 'common';
+  const proc = settings?.eu?.procedureType ?? 'centralised';
+  const cc = leaf?.country ?? (proc === 'centralised' ? 'ema' : 'common');
+  if (node.country.includes('/')) return `${cc}/${leaf?.lang ?? EU_LANG[cc] ?? 'en'}`;
+  return cc;
+}
+
+// Path of a file's folder relative to the sequence folder. The leaf, when given, supplies
+// leaf-level attributes: an EU country and language, or an ASMF part (applicant's or restricted).
+export function folderPath(code, settings, leaf = null) {
   const n = INDEX.map[code];
   if (!n) return null;
   if (n.isM1) {
@@ -98,7 +111,8 @@ export function folderPath(code, settings) {
     if (n.region !== 'EU') return pack.folder;
     const parts = [pack.folder];
     for (const a of ancestors(code).slice(1)) if (a.folder) parts.push(a.folder);
-    if (n.country) parts.push(n.country);
+    const cc = euCountry(n, settings, leaf);
+    if (cc) parts.push(cc);
     return parts.join('/');
   }
   const parts = [];
@@ -106,14 +120,14 @@ export function folderPath(code, settings) {
     if (a.folder) parts.push(a.folder);
     if (a.repeat && a.repeat !== 'excipient' && a.code !== '2.7.3') {
       const rf = repeatFolder(a.repeat, settings);
-      if (rf) parts.push(rf);
+      if (rf) parts.push(a.repeat === 'substance' && leaf?.part ? `${rf}-${leaf.part}` : rf);
     }
   }
   return parts.join('/');
 }
 
-export function filePath(code, fileName, settings) {
-  const folder = folderPath(code, settings);
+export function filePath(code, fileName, settings, leaf = null) {
+  const folder = folderPath(code, settings, leaf);
   return folder ? `${folder}/${fileName}` : fileName;
 }
 

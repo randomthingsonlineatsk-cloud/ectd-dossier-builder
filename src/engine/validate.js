@@ -1,6 +1,6 @@
 // Rule engine for the eCTD v3.2.2 profiles (US and EU core rules).
 import rulesData from '../data/rules.json' with { type: 'json' };
-import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion } from './tree.js';
+import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion, euCountry } from './tree.js';
 import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, optionFor, isRetireOp } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
@@ -31,6 +31,18 @@ export function m1Checklist(project, seq) {
 }
 
 export const profileLabel = (project) => rulesData.profiles[`${project.region}-${project.ectdVersion}`]?.label ?? `${project.region} · ${project.ectdVersion}`;
+
+// EU procedure tracking numbers by procedure (simplified from the EU numbering conventions).
+const TRACKING = {
+  centralised: [/^EMEA\/H\/C\/\d{6}$/, 'Procedure tracking number (EMEA/H/C/ plus six digits)'],
+  decentralised: [/^[A-Z]{2}\/H\/\d{4}\/\d{3}(-\d{3})?\/DC$/, 'Procedure number in the DCP format, e.g. NL/H/1234/001-002/DC'],
+  'mutual-recognition': [/^[A-Z]{2}\/H\/\d{4}\/\d{3}(-\d{3})?\/MR$/, 'Procedure number in the MRP format, e.g. DE/H/0126/001/MR'],
+  national: [/^\S.{2,}$/, 'National procedure number (or "to be advised")'],
+  asmf: [/^(EMEA\/ASMF\/\d{5}|EU\/ASMF\/\d{5}|To be advised)$/, 'ASMF number (EMEA/ASMF/ or EU/ASMF/ plus five digits, or "To be advised")'],
+};
+const trackingKey = (project, seq) => (seq.submissionType === 'asmf' ? 'asmf' : project.settings.eu?.procedureType ?? 'centralised');
+const trackingOk = (project, seq) => (TRACKING[trackingKey(project, seq)]?.[0] ?? /./).test(project.settings.eu?.trackingNumber || '');
+const trackingLabel = (project, seq) => TRACKING[trackingKey(project, seq)]?.[1] ?? 'Procedure tracking number';
 
 export function validate(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
@@ -73,7 +85,7 @@ export function validate(project, seqNumber) {
     ['subType', seq.subType, 'Submission type'],
   ] : eu ? [
     ['applicant', s.applicant?.name, 'Applicant name'],
-    ['trackingNumber', /^EMEA\/H\/C\/\d{6}$/.test(s.eu?.trackingNumber || '') ? 'ok' : '', 'Procedure tracking number (EMEA/H/C/ plus six digits)'],
+    ['trackingNumber', trackingOk(project, seq) ? 'ok' : '', trackingLabel(project, seq)],
     ['uuid', s.eu?.uuid, 'Envelope identifier (UUID)'],
     ['procedureType', s.eu?.procedureType, 'Procedure type'],
     ['inventedName', s.eu?.inventedName, 'Invented name'],
@@ -100,6 +112,24 @@ export function validate(project, seqNumber) {
     else if (rel && (!seqByNumber(project, rel) || rel >= seq.number)) add('EU-11', 'invalid', `Related sequence "${rel}" is not an earlier sequence of this application.`, { nodeCode: m1Root });
     else if (rel && !needsRelated) add('EU-11', 'unexpected', `An ${seq.subType} sequence should not name a related sequence.`, { nodeCode: m1Root });
     if (seq.submissionMode !== 'single' && (seq.changes?.length ?? 0) < 2) add('EU-12', 'changes', `Submission mode is ${seq.submissionMode} but ${seq.changes?.length ?? 0} change(s) are listed.`, { nodeCode: m1Root });
+    const proc = s.eu?.procedureType ?? 'centralised';
+    if (proc !== 'centralised' && seq.submissionType !== 'asmf') {
+      const states = proc === 'national' ? [s.eu?.rms] : [s.eu?.rms, ...(s.eu?.cms ?? [])];
+      if (!s.eu?.rms || (proc !== 'national' && !(s.eu?.cms ?? []).length)) add('EU-13', 'states', proc === 'national' ? 'Name the member state for the national procedure.' : 'Name the reference member state and at least one concerned member state.', { nodeCode: m1Root });
+      if (seq.submissionType === 'maa' && seq.subType === 'initial') {
+        for (const cc of states.filter(Boolean)) {
+          if (!seq.leaves.some((l) => l.nodeCode === 'eu:1.3.1' && !isRetireOp(l.operation) && l.country === cc)) add('EU-14', cc, `No product information for ${cc.toUpperCase()} in 1.3.1.`, { nodeCode: 'eu:1.3.1' });
+        }
+      }
+      for (const l of seq.leaves) if (!isRetireOp(l.operation) && l.country === 'ema') add('EU-15', l.id, `"${l.title}" is filed in the "ema" folder, which is only for the centralised procedure.`, { leafId: l.id, nodeCode: l.nodeCode });
+    }
+    if (seq.submissionType === 'asmf') {
+      for (const l of seq.leaves) {
+        if (isRetireOp(l.operation) || !(l.nodeCode === '2.3' || l.nodeCode.startsWith('3.2.S'))) continue;
+        if (!l.part || !new RegExp(`\\b${l.part}\\b`, 'i').test(l.title)) add('EU-16', l.id, `"${l.title}" does not say whether it is AP or RP.`, { leafId: l.id, nodeCode: l.nodeCode });
+        if (docForLeaf(project, l)?.decoy === 'rp-in-ap') add('EU-17', l.id, `"${l.title}" puts restricted information in the applicant's part.`, { leafId: l.id, nodeCode: l.nodeCode });
+      }
+    }
   }
 
   const leaves = seq.leaves;
@@ -197,7 +227,7 @@ export function validate(project, seqNumber) {
 
     // EU Module 1 file naming: country folder code first (ema-..., common-...)
     if (eu && node?.isM1 && node.country) {
-      const cc = node.country.split('/')[0];
+      const cc = euCountry(node, s, l).split('/')[0];
       if (!l.fileName.startsWith(`${cc}-`)) add('EU-10', l.id, `"${l.fileName}" in ${dc(l.nodeCode)} should start with "${cc}-".`, where);
     }
 

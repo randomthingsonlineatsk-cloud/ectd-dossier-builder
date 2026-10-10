@@ -672,6 +672,54 @@
       "title": "Patent certification for the listed drug is required in a 505(b)(2) NDA",
       "explain": "A 505(b)(2) application that relies on a listed drug certifies to each patent listed for it (Paragraph I to IV, or a section viii statement), in 1.3.5.2.",
       "fix": "Place the patent certification in 1.3.5.2."
+    },
+    {
+      "id": "EU-13",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Reference and concerned member states must be named",
+      "explain": "A decentralised or mutual recognition procedure has one reference member state (RMS) and at least one concerned member state (CMS); a national procedure names the member state. Each receiving state gets its own envelope.",
+      "fix": "Set the RMS and CMSs in Module 1."
+    },
+    {
+      "id": "EU-14",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "National product information needed for every receiving member state",
+      "explain": "Outside the centralised procedure, 1.3.1 holds product information per member state, in a country folder and a language folder (m1/eu/13-pi/131-spclabelpl/CC/LL/).",
+      "fix": "Place each member state's product information in 1.3.1."
+    },
+    {
+      "id": "EU-15",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "The 'ema' folder is only for the centralised procedure",
+      "explain": "Country folder 'ema' identifies documents for the EMA. In a decentralised, mutual recognition or national procedure, documents go in the member state's folder or 'common'.",
+      "fix": "Remove the EMA document and use the member state's version."
+    },
+    {
+      "id": "EU-16",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "ASMF documents must say whether they are AP or RP",
+      "explain": "The ASMF eCTD guideline asks for 'AP' or 'RP' in the substance metadata and in every leaf title in 2.3.S and 3.2.S, and recommends an -ap or -rp suffix on file names.",
+      "fix": "Add AP or RP to the leaf title and file name."
+    },
+    {
+      "id": "EU-17",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Restricted information placed in the applicant's part",
+      "explain": "The restricted part (detailed route of synthesis, materials, critical steps, process validation) is confidential to the authorities. In the applicant's part the MA applicant would see it.",
+      "fix": "Remove it from the AP and file it in the RP."
+    },
+    {
+      "id": "EU-18",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "Information about the quality expert expected",
+      "explain": "An ASMF includes information about the expert in Module 1.4.1.",
+      "fix": "Place the expert information in 1.4.1."
     }
   ],
   "required": {
@@ -1092,6 +1140,17 @@
       "3.2.P.8.3",
       "5.3.1.2",
       "5.4"
+    ],
+    "asmf:asmf:initial": [
+      "2.3",
+      "3.2.S.1.1",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.2.3",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1"
     ]
   }
 }

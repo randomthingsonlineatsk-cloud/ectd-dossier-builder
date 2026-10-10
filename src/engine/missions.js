@@ -5,6 +5,7 @@ import { tagFromDoc } from './stf.js';
 import { addCoverLetter, placeDoc, publishWithFiles, updateLeaf } from './ops.js';
 import { validate } from './validate.js';
 import { consistencyMatrix } from './consistency.js';
+import { publishSequence } from './backbone.js';
 
 export const MISSIONS = missionsData.missions;
 export const LEVELS = missionsData.levels;
@@ -16,7 +17,7 @@ const BASE_EXCLUDE = (d) => d.decoy || d.irOnly || d.later || d.defectOnly || d.
 export function buildComplete(project, { exclude = () => false } = {}) {
   const s = project.settings;
   const prod = PRODUCTS[project.productId];
-  if (project.region === 'EU') s.eu.trackingNumber = 'EMEA/H/C/006123';
+  if (project.region === 'EU') s.eu.trackingNumber = project.appType === 'asmf' ? 'EMEA/ASMF/01234' : ({ decentralised: 'NL/H/1234/001-002/DC', 'mutual-recognition': 'DE/H/0126/001/MR', national: 'IE/2026/00123' })[s.eu.procedureType] ?? 'EMEA/H/C/006123';
   else if (project.region === 'JP') s.jp.receptionNumber = '2026000123';
   else if (project.region === 'IN') s.in.agentName = 'Kestrel Regulatory Services Pvt. Ltd., Mumbai';
   else s.applicationNumber = project.appType === 'anda' ? '219876' : project.appType.startsWith('bla') ? '761999' : '299001';
@@ -74,7 +75,14 @@ export async function seedMission(id, difficulty, user) {
     for (const pl of m.plant ?? []) if (p.documents[pl.doc]) p.documents[pl.doc].factOverrides = { ...pl.facts };
     return p;
   }
-  if ([3, 14, 17, 18, 19].includes(m.id)) {
+  if (m.id === 20) {
+    const p = baseMissionProject(m, difficulty, user);
+    addExtras(p, m);
+    p.settings.eu.rms = '';
+    p.settings.eu.cms = [];
+    return p;
+  }
+  if ([3, 14, 17, 18, 19, 21].includes(m.id)) {
     const p = baseMissionProject(m, difficulty, user);
     addExtras(p, m);
     return p;
@@ -159,7 +167,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -426,6 +434,44 @@ function evalM19(p) {
     published1: pub(p, '0001') && noHighIn(p, '0001'),
     quiz: quizOk(p),
   }, findingsIn(p, '0001') ?? v0);
+}
+
+function evalM20(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const eu = p.settings.eu ?? {};
+  const xml = seqByNumber(p, '0000').leaves.length ? publishSequence(p, '0000').regional : '';
+  return finish(20, {
+    proc: eu.procedureType === 'decentralised' && eu.rms === 'nl' && [...(eu.cms ?? [])].sort().join() === 'de,fr,ie',
+    tracking: eu.trackingNumber === 'NL/H/1234/001-002/DC',
+    envelopes: (xml.match(/<envelope country=/g) ?? []).length === 4,
+    pi: !f('EU-14') && ['nl', 'de', 'fr', 'ie'].every((c) => leavesIn(p, '0000').some((l) => l.nodeCode === 'eu:1.3.1' && l.country === c)),
+    noEma: !f('EU-15'),
+    m1: !v.findings.some((x) => x.family.startsWith('Module 1') && x.severity !== 'Low'),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+}
+function evalM21(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const ls = leavesIn(p, '0000');
+  const s0 = seqByNumber(p, '0000');
+  return finish(21, {
+    meta: !f('BB-06') && /corvane/i.test(p.settings.applicant?.name ?? ''),
+    type: s0.submissionType === 'asmf' && s0.subType === 'initial',
+    m1: hasForm(p, '0000', 'eu:1.0') && hasForm(p, '0000', 'eu:1.4.1'),
+    qos: has(p, '0000', 'asmf-qos-ap', '2.3') && has(p, '0000', 'asmf-qos-rp', '2.3'),
+    parts: ['ap', 'rp'].every((pt) => ls.some((l) => l.nodeCode.startsWith('3.2.S') && l.part === pt)),
+    noLeak: !f('EU-17'),
+    labels: !f('EU-16'),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
 }
 
 // ---------- four scoring axes ----------

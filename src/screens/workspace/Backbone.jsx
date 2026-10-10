@@ -48,6 +48,10 @@ function Rendered({ xml, rootTag }) {
       );
     }
     if (['admin', 'title', 'eu-envelope'].includes(el.tagName)) return null;
+    if (['specific', 'pi-doc'].includes(el.tagName)) {
+      const tag = [el.getAttribute('country'), el.getAttribute('xml:lang')].filter(Boolean).join(' / ');
+      return <li key={`${el.tagName}-${tag}-${depth}`} className="rendered-node"><span className="h small muted">{tag}</span><ul>{kids.map((k) => walk(k, depth + 1)).filter(Boolean)}</ul></li>;
+    }
     const label = ELEMENT_TITLE[el.tagName] ?? el.tagName;
     const attrs = ['substance', 'manufacturer', 'product-name', 'dosageform', 'indication', 'form-type'].map((a) => el.getAttribute(a)).filter(Boolean);
     const body = kids.map((k) => walk(k, depth + 1)).filter(Boolean);

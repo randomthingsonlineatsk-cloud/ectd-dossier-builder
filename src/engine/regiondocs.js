@@ -4,6 +4,28 @@
 
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
+const LANG_NAME = { en: 'English', nl: 'Dutch', de: 'German', fr: 'French', es: 'Spanish', it: 'Italian', sv: 'Swedish', da: 'Danish', pl: 'Polish', pt: 'Portuguese' };
+const STATE_LANG = { nl: 'nl', de: 'de', fr: 'fr', ie: 'en', be: 'nl', es: 'es', it: 'it', se: 'sv', at: 'de', dk: 'da', pl: 'pl', pt: 'pt' };
+
+// EU documents for a non-centralised procedure: country folders instead of 'ema', national
+// product information for every receiving member state, and the centralised set left as a trap.
+function euNationalDocs(p, eu) {
+  const states = eu.procedureType === 'national' ? [eu.rms] : [eu.rms, ...(eu.cms ?? [])];
+  const base = euDocs(p).map((d) => {
+    if (d.id === 'eu-pi') return { ...d, id: 'eu-pi-ema', country: 'ema', title: `${d.title} (centralised, EMA folder)`, decoy: 'wrong-procedure', coach: 'This is the product information for a centralised procedure, filed in the "ema" folder. In a decentralised procedure each member state gets its own product information in its own folder and language.' };
+    if (d.id === 'eu-eaf') return { ...d, country: eu.rms, fileName: d.fileName.replace(/^ema-/, `${eu.rms}-`) };
+    return { ...d, fileName: d.fileName.replace(/^ema-/, 'common-'), country: /^ema-/.test(d.fileName) ? 'common' : undefined };
+  });
+  const form = slug(p.product.dosageForm.split(',')[0]).split('-').pop();
+  const str = slug(p.product.strengths.map((x) => x.replace(/\s+/g, '').replace(/\//g, 'per')).join('-'));
+  const national = states.filter(Boolean).map((cc) => ({
+    id: `eu-pi-${cc}`, section: 'eu:1.3.1', region: 'EU', country: cc, lang: STATE_LANG[cc] ?? 'en',
+    title: `SmPC, Labelling and Package Leaflet (${LANG_NAME[STATE_LANG[cc]] ?? 'English'}) - ${p.product.brandName} - ${cc.toUpperCase()}`,
+    fileName: `${cc}-combined-${form}${str}.pdf`, pages: 46, bookmarks: 16,
+  }));
+  return [...base, ...national];
+}
+
 export function euDocs(p) {
   const form = slug(p.product.dosageForm.split(',')[0]).split('-').pop();
   const str = slug(p.product.strengths.map((x) => x.replace(/\s+/g, '').replace(/\//g, 'per')).join('-'));
@@ -111,10 +133,36 @@ export function libraryBase(p, kind) {
     return docs.filter((d) => /^(3\.2\.|4\.)/.test(d.section) && !notYet.includes(d.section));
   }
   if (kind === 'dmf') return docs.filter((d) => d.section.startsWith('3.2.S'));
+  if (kind === 'asmf') return asmfDocs(p);
   return p.documents;
 }
 
+// EU ASMF: the active substance manufacturer's own dossier, split into the applicant's part
+// (AP, shared with the MA applicant) and the restricted part (RP, for the authorities only).
+const RP_ONLY = ['3.2.S.2.3', '3.2.S.2.4', '3.2.S.2.5', '3.2.S.2.6'];
+const BOTH = ['3.2.S.2.2', '3.2.S.3.2'];
+export function asmfDocs(p) {
+  const holder = p.substanceManufacturer;
+  const sDocs = p.documents.filter((d) => d.section.startsWith('3.2.S') && !d.decoy);
+  const mk = (d, part, extra = {}) => ({ ...d, id: `${part}-${d.id}`, part, title: `${d.title} - ${part.toUpperCase()}`, fileName: d.fileName.replace(/\.pdf$/, `-${part}.pdf`), ...extra });
+  const out = [];
+  for (const d of sDocs) {
+    if (!RP_ONLY.includes(d.section)) out.push(mk(d, 'ap', BOTH.includes(d.section) ? { title: `${d.title} (outline) - AP` } : {}));
+    if (RP_ONLY.includes(d.section) || BOTH.includes(d.section)) out.push(mk(d, 'rp', BOTH.includes(d.section) ? { title: `${d.title} (detailed) - RP`, pages: (d.pages ?? 10) * 2 } : {}));
+  }
+  const s23 = sDocs.find((d) => d.section === '3.2.S.2.3');
+  if (s23) out.push({ ...mk(s23, 'ap'), id: 'ap-trap-s23', title: `${s23.title} (full supplier and route details) - AP`, decoy: 'rp-in-ap', coach: 'The full detail of materials and the route of synthesis is confidential: it belongs in the restricted part, which the MA applicant never sees.' });
+  return [
+    { id: 'asmf-qos-ap', section: '2.3', part: 'ap', title: `Quality Overall Summary - ${p.product.inn} - AP`, fileName: 'quality-overall-summary-ap.pdf', pages: 24, bookmarks: 8 },
+    { id: 'asmf-qos-rp', section: '2.3', part: 'rp', title: `Quality Overall Summary - ${p.product.inn} - RP`, fileName: 'quality-overall-summary-rp.pdf', pages: 18, bookmarks: 6 },
+    { id: 'asmf-expert', section: 'eu:1.4.1', region: 'EU', title: `Information about the Expert - Quality (${holder.name})`, fileName: 'quality.pdf', pages: 3 },
+    ...out,
+  ];
+}
+
 export function regionDocs(p, region, opt = null) {
+  if (region === 'EU' && opt?.library === 'asmf') return [];
+  if (region === 'EU' && opt?.settings?.eu?.procedureType && opt.settings.eu.procedureType !== 'centralised') return euNationalDocs(p, opt.settings.eu).map((d) => ({ ...d, region: 'EU' }));
   if (region === 'US' && opt?.library === 'ind') return usIndDocs(p);
   if (region === 'US' && opt?.library === 'dmf') return usDmfDocs(p);
   const gen = p.generateRegionDocs ?? {};

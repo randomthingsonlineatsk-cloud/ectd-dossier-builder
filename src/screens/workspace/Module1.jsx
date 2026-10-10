@@ -33,6 +33,14 @@ const FEAF = [
   { k: 'paediatric', label: 'Paediatric requirements', help: 'PIP decision number and compliance status.' },
 ];
 
+const EU_STATES = { at: 'Austria', be: 'Belgium', de: 'Germany', dk: 'Denmark', es: 'Spain', fr: 'France', ie: 'Ireland', it: 'Italy', nl: 'Netherlands', pl: 'Poland', pt: 'Portugal', se: 'Sweden' };
+const TRACK_HELP = {
+  centralised: 'EMEA/H/C/ plus six digits, e.g. EMEA/H/C/006123',
+  decentralised: 'RMS code/H/number/product numbers/DC, e.g. NL/H/1234/001-002/DC',
+  'mutual-recognition': 'RMS code/H/number/product numbers/MR, e.g. DE/H/0126/001/MR',
+  national: 'the national procedure number, or "to be advised"',
+  asmf: 'EMEA/ASMF/ or EU/ASMF/ plus five digits, e.g. EMEA/ASMF/01234',
+};
 const FJP = [
   { k: 'brandName', label: 'Brand name (販売名)', help: 'Must match the submission unit metadata and the package insert draft in 1.8.' },
   { k: 'janName', label: 'Non-proprietary name (JAN)', help: 'The Japanese Accepted Name; this app uses the fictional INN.' },
@@ -134,7 +142,27 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
             </>
           ) : eu ? (
             <>
-              <label className="field">Procedure tracking number <small>EMEA/H/C/ plus six digits, e.g. EMEA/H/C/006123</small><input type="text" value={s.eu.trackingNumber} onChange={(e) => setSetting('eu.trackingNumber', e.target.value.trim())} /></label>
+              <label className="field">{seq.submissionType === 'asmf' ? 'ASMF number' : 'Procedure tracking number'} <small>{TRACK_HELP[seq.submissionType === 'asmf' ? 'asmf' : s.eu.procedureType] ?? ''}</small><input type="text" value={s.eu.trackingNumber} onChange={(e) => setSetting('eu.trackingNumber', e.target.value.trim())} /></label>
+              {s.eu.procedureType !== 'centralised' && seq.submissionType !== 'asmf' && (
+                <>
+                  <label className="field">{s.eu.procedureType === 'national' ? 'Member state' : 'Reference member state (RMS)'}
+                    <select value={s.eu.rms ?? ''} onChange={(e) => setSetting('eu.rms', e.target.value)}>
+                      <option value="">Choose…</option>
+                      {Object.keys(EU_STATES).map((c) => <option key={c} value={c}>{EU_STATES[c]} ({c})</option>)}
+                    </select>
+                  </label>
+                  {s.eu.procedureType !== 'national' && (
+                    <fieldset className="field" style={{ border: 0, padding: 0, margin: 0 }}>
+                      <legend>Concerned member states (CMS) <small>one envelope each</small></legend>
+                      <div className="row" style={{ flexWrap: 'wrap', gap: '.2rem .8rem' }}>
+                        {Object.keys(EU_STATES).filter((c) => c !== s.eu.rms).map((c) => (
+                          <label key={c} className="small row" style={{ gap: '.3rem' }}><input type="checkbox" checked={(s.eu.cms ?? []).includes(c)} onChange={(e) => setSetting('eu.cms', e.target.checked ? [...(s.eu.cms ?? []), c] : (s.eu.cms ?? []).filter((x) => x !== c))} />{EU_STATES[c]}</label>
+                        ))}
+                      </div>
+                    </fieldset>
+                  )}
+                </>
+              )}
               <label className="field">Procedure type
                 <select value={s.eu.procedureType} onChange={(e) => setSetting('eu.procedureType', e.target.value)}>
                   {pack.procedureTypes.map((t) => <option key={t} value={t}>{t}</option>)}
