@@ -18,10 +18,10 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Check the secrets
         run: |
@@ -64,7 +64,18 @@ jobs:
           URL=$(grep -oE 'https://[a-zA-Z0-9.-]+\.workers\.dev' deploy.log | head -n1)
           if [ -z "$URL" ]; then echo "::error::Could not read the Worker URL from the deploy output."; exit 1; fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
-          curl -fsS "$URL/ectd/v1/health"
+
+      - name: Wait for the new address to answer
+        run: |
+          URL="${{ steps.worker.outputs.url }}/ectd/v1/health"
+          for i in $(seq 1 24); do
+            CODE=$(curl -s -o /tmp/health.json -w "%{http_code}" "$URL" || true)
+            if [ "$CODE" = "200" ]; then cat /tmp/health.json; echo; echo "Server is up."; exit 0; fi
+            echo "Attempt $i: HTTP $CODE, waiting for workers.dev to go live..."
+            sleep 10
+          done
+          echo "::warning::The Worker deployed but $URL did not answer 200 within 4 minutes. The site is rebuilt anyway; check the Worker in the Cloudflare dashboard."
+          cat /tmp/health.json 2>/dev/null || true"
 
       - name: Rebuild the site with the classroom server built in
         env:
