@@ -82,6 +82,25 @@ export function jpDocs(p) {
   return [...m1, ...m2];
 }
 
+// India clinical trial application (Form CT-04) for a multinational phase 3 study.
+export function inCtaDocs(p) {
+  const study = Object.keys(p.studies ?? {}).find((k) => /3\d\d$/.test(k)) ?? 'STUDY-301';
+  return [
+    ['in:1.2.1', 'Brief Introduction about the Sponsor', 'sponsor-introduction.pdf', 3],
+    ['in:1.2.2', 'Form CT-04: Application for Permission to Conduct a Clinical Trial of a New Drug', 'form-ct-04.pdf', 6, { form: 'ct-04' }],
+    ['in:1.2.2', 'Fee Payment Receipt (Sixth Schedule, Phase III)', 'fee-receipt.pdf', 1, { form: 'fee' }],
+    ['in:1.2.2', 'Form CT-18: Application for Permission to Import a New Drug for Sale or Distribution', 'form-ct-18.pdf', 6, { form: 'ct-18', decoy: 'wrong-form', coach: 'CT-18 is for permission to import a new drug for sale. A clinical trial is applied for in Form CT-04.' }],
+    ['in:1.2.3', 'Authorisation of the Indian Representative (Clinical Research Organisation)', 'representative-authorisation.pdf', 2],
+    ['in:1.2.4', 'Coordinates: Sponsor Contact and Trial Sites in India', 'coordinates.pdf', 3],
+    ['in:1.5', 'Regulatory Status of the Trial in Other Countries', 'regulatory-status.pdf', 4],
+    ['in:ct.1', `Clinical Trial Protocol ${study} (India sites)`, `${study.toLowerCase()}-protocol.pdf`, 120, { bookmarks: 16 }],
+    ['in:ct.2', `Investigator's Brochure - ${p.product.inn} (Edition 4)`, 'investigators-brochure.pdf', 140, { bookmarks: 14 }],
+    ['in:ct.3', 'Participant Information Sheet and Informed Consent Form (English, Hindi, Marathi)', 'informed-consent-documents.pdf', 18],
+    ['in:ct.4', "Investigators' Undertakings (all India sites)", 'investigator-undertakings.pdf', 12],
+    ['in:ct.5', 'Ethics Committee Approval (lead site)', 'ethics-committee-approval.pdf', 3, { later: true, note: 'Arrives after the application; the trial cannot start without it.' }],
+  ].map(([section, title, fileName, pages, extra], i) => ({ id: `in-ct-${i + 1}`, section, title, fileName, pages, region: 'IN', ...(extra ?? {}) }));
+}
+
 export function inDocs(p) {
   return [
     ['in:1.2.1', 'Brief Introduction about the Applicant Company', 'applicant-introduction.pdf', 3],
@@ -134,6 +153,10 @@ export function libraryBase(p, kind) {
   }
   if (kind === 'dmf') return docs.filter((d) => d.section.startsWith('3.2.S'));
   if (kind === 'asmf') return asmfDocs(p);
+  if (kind === 'cta') {
+    const later = ['3.2.S.2.5', '3.2.P.3.5', '3.2.R', '3.2.A.1'];
+    return docs.filter((d) => /^(3\.2\.|4\.)/.test(d.section) && !later.includes(d.section));
+  }
   return p.documents;
 }
 
@@ -167,6 +190,7 @@ export function regionDocs(p, region, opt = null) {
   if (region === 'US' && opt?.library === 'dmf') return usDmfDocs(p);
   const gen = p.generateRegionDocs ?? {};
   if (region === 'JP' && gen.JP) return jpDocs(p);
+  if (region === 'IN' && opt?.library === 'cta') return inCtaDocs(p);
   if (region === 'IN' && gen.IN) return inDocs(p);
   if (region === 'EU' && gen.EU) return euDocs(p);
   if (region === 'US' && gen.US === 'nda') return usNdaDocs(p);

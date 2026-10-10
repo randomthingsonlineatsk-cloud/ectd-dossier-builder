@@ -2380,6 +2380,112 @@
      "label": "ASMF questions answered correctly"
     }
    ]
+  },
+  {
+   "id": 22,
+   "phase": 5,
+   "title": "Clinical trial application in India",
+   "region": "India",
+   "regionCode": "IN",
+   "variant": "cta",
+   "version": "CTD",
+   "productId": "nce-tablet",
+   "appType": "cta",
+   "minutes": {
+    "expert": 40
+   },
+   "brief": "Halcyon Ridge wants Indian sites in its phase 3 programme for Ostrevia. Through its Indian representative, apply to the Central Licensing Authority for permission to conduct the trial: the right form and fee, the protocol, the investigator's brochure, the informed consent documents, the investigators' undertakings, and the quality and nonclinical data. Then get it through screening.",
+   "quiz": [
+    {
+     "id": "form",
+     "q": "In which form is permission to conduct a clinical trial of a new drug applied for, and in which is it granted?",
+     "options": [
+      "CT-18 and CT-19",
+      "CT-04 and CT-06",
+      "CT-21 and CT-22",
+      "Form 44 and Form 45"
+     ],
+     "answer": 1,
+     "why": "Form CT-04 (which replaced Form 44) is the application; permission comes in Form CT-06."
+    },
+    {
+     "id": "time",
+     "q": "Within what time must the authority decide on a clinical trial application for a drug developed outside India?",
+     "options": [
+      "30 days",
+      "90 working days",
+      "180 days",
+      "No time limit"
+     ],
+     "answer": 1,
+     "why": "Rule 22 sets 90 working days. For a new drug discovered and developed in India, the application is deemed approved if no query is raised within 30 days."
+    },
+    {
+     "id": "start",
+     "q": "When can the first participant be enrolled at an Indian site?",
+     "options": [
+      "As soon as the application is sent",
+      "Once both the CT-06 permission and the ethics committee approval are in hand",
+      "After the first annual report",
+      "When the fee is paid"
+     ],
+     "answer": 1,
+     "why": "The trial needs the regulator's permission and the approval of a registered ethics committee before enrolment."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the Indian representative and its address.",
+    "Build 0000 as a clinical trial application: covering letter, Form CT-04 and the fee receipt in 1.2.2, the representative's authorisation, the coordinates of the sites, and the regulatory status elsewhere.",
+    "Place the protocol, investigator's brochure, informed consent documents and investigators' undertakings in the clinical trial section.",
+    "Add the quality and nonclinical data in Modules 3 and 4. Leave out any marketing application form.",
+    "Answer the quiz, validate and publish 0000, then send it through the mock gateway in Review."
+   ],
+   "hints": [
+    "CT-18 is in the library because people confuse it with CT-04.",
+    "The ethics committee approval can follow the application."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "Indian representative entered"
+    },
+    {
+     "id": "type",
+     "label": "Submission type: clinical trial (Form CT-04)"
+    },
+    {
+     "id": "forms",
+     "label": "Form CT-04 and fee receipt in 1.2.2"
+    },
+    {
+     "id": "noCt18",
+     "label": "No marketing application form"
+    },
+    {
+     "id": "ctdocs",
+     "label": "Protocol, investigator's brochure, informed consent and undertakings"
+    },
+    {
+     "id": "required",
+     "label": "Quality and nonclinical sections present"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "gateway",
+     "label": "Accepted at screening (mock gateway)"
+    },
+    {
+     "id": "quiz",
+     "label": "Clinical trial questions answered correctly"
+    }
+   ]
   }
  ]
 }

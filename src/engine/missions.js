@@ -82,7 +82,7 @@ export async function seedMission(id, difficulty, user) {
     p.settings.eu.cms = [];
     return p;
   }
-  if ([3, 14, 17, 18, 19, 21].includes(m.id)) {
+  if ([3, 14, 17, 18, 19, 21, 22].includes(m.id)) {
     const p = baseMissionProject(m, difficulty, user);
     addExtras(p, m);
     return p;
@@ -167,7 +167,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 22: evalM22, 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -470,6 +470,24 @@ function evalM21(p) {
     required: !f('CT-01'),
     noHigh: v.counts.High === 0,
     published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+}
+
+function evalM22(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const s0 = seqByNumber(p, '0000');
+  return finish(22, {
+    meta: !f('BB-06'),
+    type: s0.submissionType === 'clinical-trial',
+    forms: hasForm(p, '0000', 'in:1.2.2', 'ct-04') && hasForm(p, '0000', 'in:1.2.2', 'fee'),
+    noCt18: !hasForm(p, '0000', 'in:1.2.2', 'ct-18') && !hasForm(p, '0000', 'in:1.2.2', 'ct-21'),
+    ctdocs: ['in:ct.1', 'in:ct.2', 'in:ct.3', 'in:ct.4'].every((c) => hasForm(p, '0000', c)),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
+    gateway: p.review?.submissions?.['0000']?.outcome === 'accepted',
     quiz: quizOk(p),
   }, v);
 }

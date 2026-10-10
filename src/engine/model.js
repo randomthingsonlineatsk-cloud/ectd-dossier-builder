@@ -281,6 +281,13 @@ export function coverLetterText(project, seq) {
       `${jp.applicantName || s.applicant.name} submits this eCTD v4.0 submission unit for ${prod}.`,
       ...contact].join('\n');
   }
+  if (project.region === 'IN' && seq.submissionType === 'clinical-trial') {
+    return [...head,
+      'To: The Central Licensing Authority',
+      `Re: Application in Form CT-04 - permission to conduct a clinical trial of ${p.product.inn}`, '',
+      `${s.applicant.name}, through its representative in India${s.in?.agentName ? ` (${s.in.agentName})` : ''}, applies for permission to conduct the enclosed clinical trial of ${p.product.inn} under the New Drugs and Clinical Trials Rules, 2019. The protocol, investigator's brochure, informed consent documents and investigators' undertakings are enclosed; the ethics committee approval will follow.`,
+      ...contact].join('\n');
+  }
   if (project.region === 'IN') {
     const form = seq.submissionType === 'new-drug-manufacture' ? 'Form CT-21' : 'Form CT-18';
     return [...head,
