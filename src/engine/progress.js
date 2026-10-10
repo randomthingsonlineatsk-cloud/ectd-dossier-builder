@@ -69,3 +69,26 @@ export function progressSummary({ projects, attempts, lessonProgress, lessonCoun
   const missions = MISSIONS.map((m) => ({ ...m, best: best[m.id] ?? null, tries: done.filter((a) => a.missionId === m.id).length }));
   return { level, best, earned, avg, missions, publishedCount: published.length };
 }
+
+// ---------- Completion certificate ----------
+// A portfolio exercise, not an accreditation. Criteria are computed from stored results.
+export const CERT = { lessonMin: 80, missionMin: 80, examMin: 70, compareMin: 80, distinctionExpert: 8 };
+
+export function certificateStatus({ attempts, lessonProgress, lessonCount }) {
+  const best = bestByMission(attempts);
+  const lessonsOk = lessonCount > 0 && Array.from({ length: lessonCount }, (_, i) => lessonProgress[i + 1]?.best ?? 0).every((b) => b >= CERT.lessonMin);
+  const missionScores = MISSIONS.map((m) => ({ id: m.id, title: m.title, score: best[m.id]?.score ?? null, difficulty: best[m.id]?.difficulty ?? null }));
+  const missionsDone = missionScores.filter((m) => (m.score ?? 0) >= CERT.missionMin);
+  const exam = attempts.filter((a) => a.kind === 'quiz' && a.mode === 'exam').sort((a, b) => b.score - a.score)[0] ?? null;
+  const compare = attempts.filter((a) => a.kind === 'compare');
+  const bestCompare = (ex) => Math.max(0, ...compare.filter((a) => (ex === 'row' ? a.exercise?.startsWith('row:') : a.exercise === ex)).map((a) => a.score));
+  const compareOk = ['where', 'actd'].every((ex) => bestCompare(ex) >= CERT.compareMin);
+  const expertCount = Object.values(best).filter((a) => a.score >= CERT.missionMin && a.difficulty === 'expert').length;
+  const criteria = [
+    { id: 'lessons', label: `Every lesson quiz at ${CERT.lessonMin}% or more`, met: lessonsOk },
+    { id: 'missions', label: `All ${MISSIONS.length} missions at ${CERT.missionMin}% or more`, met: missionsDone.length === MISSIONS.length, detail: `${missionsDone.length} of ${MISSIONS.length}` },
+    { id: 'exam', label: `The mock exam passed at ${CERT.examMin}% or more`, met: (exam?.score ?? 0) >= CERT.examMin, detail: exam ? `best ${exam.score}%` : 'not taken' },
+    { id: 'compare', label: `Region comparison: "Where does it go?" and "CTD to ASEAN ACTD" at ${CERT.compareMin}% or more`, met: compareOk, detail: `best ${bestCompare('where')}% and ${bestCompare('actd')}%` },
+  ];
+  return { criteria, eligible: criteria.every((c) => c.met), distinction: expertCount >= CERT.distinctionExpert, expertCount, missionScores, exam };
+}
