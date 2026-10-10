@@ -62,4 +62,43 @@ await t('mission 19: DMF then a letter of authorization scores 100', async () =>
   assert.equal(ev.score, 100, failed(ev).join(', '));
 });
 
+await t('EU decentralised: envelopes per state, national PI per state, the EMA folder is refused', async () => {
+  const p = createProject({ name: 'dcp', region: 'EU', appType: 'maa', variant: 'dcp', user });
+  buildComplete(p);
+  const xml = publishSequence(p, '0000').regional;
+  assert.equal((xml.match(/<envelope country=/g) ?? []).length, 4);
+  assert.match(xml, /<pi-doc xml:lang="de" type="combined" country="de">/);
+  placeDoc(p, '0000', 'eu-pi-ema', 'eu:1.3.1');
+  const keys = validate(p, '0000').keys;
+  assert.ok([...keys].some((k) => k.startsWith('EU-15')));
+  p.settings.eu.cms = [...p.settings.eu.cms, 'es'];
+  assert.ok(validate(p, '0000').keys.has('EU-14:es'));
+  p.settings.eu.trackingNumber = 'EMEA/H/C/006123';
+  assert.ok(validate(p, '0000').keys.has('BB-06:trackingNumber'));
+});
+
+await t('mission 20: decentralised procedure scores 100', async () => {
+  const p = await seedMission(20, 'standard', user);
+  assert.equal(p.settings.eu.rms, '');
+  Object.assign(p.settings.eu, { rms: 'nl', cms: ['de', 'fr', 'ie'] });
+  buildComplete(p); answerAll(p);
+  await publishWithFiles(p, '0000');
+  const ev = evaluateMission(p);
+  assert.equal(ev.score, 100, failed(ev).join(', '));
+});
+
+await t('mission 21: ASMF with AP and RP scores 100; restricted detail in the AP is caught', async () => {
+  const p = await seedMission(21, 'standard', user);
+  buildComplete(p); answerAll(p);
+  const x = publishSequence(p, '0000').index;
+  assert.match(x, /substance="lumiravostat AP"/);
+  assert.match(x, /substance="lumiravostat RP"/);
+  const bad = structuredClone(p);
+  placeDoc(bad, '0000', 'ap-trap-s23', '3.2.S.2.3');
+  assert.ok([...validate(bad, '0000').keys].some((k) => k.startsWith('EU-17')));
+  await publishWithFiles(p, '0000');
+  const ev = evaluateMission(p);
+  assert.equal(ev.score, 100, failed(ev).join(', '));
+});
+
 console.log(`\n${pass} phase 5 tests passed`);

@@ -73,7 +73,7 @@ export function libraryFor(productId, region = 'US', opt = null) {
 export function defaultSettings(productId, opt = null) {
   const p = PRODUCTS[productId];
   const applicant = opt?.applicantFrom === 'substanceManufacturer' ? { ...p.applicant, ...p.substanceManufacturer, duns: '000000003', contact: p.substanceManufacturer.contact ?? 'Regulatory Affairs Manager', email: p.substanceManufacturer.email ?? 'regulatory@corvane.example' } : { ...p.applicant };
-  return deepMerge({
+  const out = deepMerge({
     applicant,
     applicationNumber: '',
     substance: { name: p.product.inn, manufacturer: p.substanceManufacturer.name },
@@ -94,6 +94,9 @@ export function defaultSettings(productId, opt = null) {
     jp: { receptionNumber: '', brandName: p.product.brandName, janName: p.product.inn, applicantName: p.applicant.name, productCategory: 'jp_1_1' },
     in: { agentName: '', agentAddress: '' },
   }, opt?.settings ?? {});
+  if (!out.eu.rms) out.eu.rms = '';
+  out.eu.cms ??= [];
+  return out;
 }
 
 export const SEQ_DEFAULTS = {
@@ -161,7 +164,7 @@ export function docForLeaf(project, leaf) {
 }
 
 export function leafPath(project, leaf) {
-  return filePath(leaf.nodeCode, leaf.fileName, project.settings);
+  return filePath(leaf.nodeCode, leaf.fileName, project.settings, leaf);
 }
 
 export function makeLeaf(project, doc, nodeCode, operation = 'new', target = null) {
@@ -173,6 +176,9 @@ export function makeLeaf(project, doc, nodeCode, operation = 'new', target = nul
     fileName: doc ? doc.fileName : '',
     operation,
     target,
+    ...(doc?.country ? { country: doc.country } : {}),
+    ...(doc?.country && doc?.lang ? { lang: doc.lang } : {}),
+    ...(doc?.part ? { part: doc.part } : {}),
   };
 }
 
@@ -292,8 +298,12 @@ export function coverLetterText(project, seq) {
       `Re: ${eu.trackingNumber || '[procedure number]'} - ${prod}`,
       `eCTD sequence ${seq.number} - submission type ${seq.submissionType}, submission unit ${unit}${seq.relatedSequence ? `, related sequence ${seq.relatedSequence}` : ''}`,
       '', 'Dear Sir or Madam,', ''];
-    if (seq.submissionType === 'maa' && unit === 'initial') {
-      lines.push(`${s.applicant.name} submits an application for a marketing authorisation for ${prod} through the ${eu.procedureType || 'centralised'} procedure, for the ${lc(p.product.indicationText)}.`, '', 'The dossier is provided in eCTD format (v3.2.2) with EU Module 1 and Modules 2 to 5. The electronic application form is in Module 1.2.');
+    if (seq.submissionType === 'asmf') {
+      lines.push(`${s.applicant.name}, the ASMF holder, submits ${unit === 'initial' ? 'an Active Substance Master File' : `${unit === 'response' ? 'responses for' : 'an update to'} the Active Substance Master File`} for ${p.product.inn} (${eu.trackingNumber || 'ASMF number to be advised'}).`, '', 'The ASMF is one eCTD sequence in which 2.3.S and 3.2.S branch into the applicant\'s part (AP) and the restricted part (RP).', '', 'Annex: letter of access for the marketing authorisation applicant ' + p.applicant.name + ', and administrative details of the ASMF holder.');
+    } else if (seq.submissionType === 'maa' && unit === 'initial') {
+      const proc = eu.procedureType || 'centralised';
+      const states = proc === 'centralised' ? '' : proc === 'national' ? ` in ${(eu.rms || '[member state]').toUpperCase()}` : ` with ${(eu.rms || '[RMS]').toUpperCase()} as reference member state and ${(eu.cms ?? []).map((c) => c.toUpperCase()).join(', ') || '[CMS]'} as concerned member states`;
+      lines.push(`${s.applicant.name} submits an application for a marketing authorisation for ${prod} through the ${proc} procedure${states}, for the ${lc(p.product.indicationText)}.`, '', 'The dossier is provided in eCTD format (v3.2.2) with EU Module 1 and Modules 2 to 5. The electronic application form is in Module 1.2.');
     } else if (unit === 'reformat') {
       lines.push(`${s.applicant.name} submits a reformatted baseline of the dossier for ${prod}. This sequence converts previously submitted information to eCTD format and contains no change in content.`);
     } else if (unit === 'response') {
@@ -346,7 +356,7 @@ export function makeCoverLetterDoc(project, seq) {
     region: project.region,
     lang: c.lang,
     title: `Cover Letter - ${project.ectdVersion === '4.0' ? 'Submission Unit' : 'Sequence'} ${project.ectdVersion === '4.0' ? seqIntLocal(seq.number) : seq.number}`,
-    fileName: c.fileName,
+    fileName: project.region === 'EU' && (project.settings.eu?.procedureType ?? 'centralised') !== 'centralised' ? 'common-cover.pdf' : c.fileName,
     pages: 2,
     generated: true,
     content: coverLetterText(project, seq),

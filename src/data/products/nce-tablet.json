@@ -911,6 +911,50 @@
    "appType": "maa"
   },
   {
+   "region": "EU",
+   "appType": "maa",
+   "variant": "dcp",
+   "label": "EU — decentralised procedure (RMS Netherlands; CMS Germany, France, Ireland)",
+   "settings": {
+    "eu": {
+     "procedureType": "decentralised",
+     "rms": "nl",
+     "cms": [
+      "de",
+      "fr",
+      "ie"
+     ],
+     "agency": ""
+    }
+   }
+  },
+  {
+   "region": "EU",
+   "appType": "maa",
+   "variant": "national",
+   "label": "EU — national procedure (Ireland)",
+   "settings": {
+    "eu": {
+     "procedureType": "national",
+     "rms": "ie",
+     "cms": [],
+     "agency": ""
+    }
+   }
+  },
+  {
+   "region": "EU",
+   "appType": "asmf",
+   "variant": "asmf",
+   "library": "asmf",
+   "applicantFrom": "substanceManufacturer",
+   "label": "EU — ASMF for the active substance (held by the API maker)",
+   "seq": {
+    "submissionType": "asmf",
+    "subType": "initial"
+   }
+  },
+  {
    "region": "JP",
    "appType": "nda"
   },

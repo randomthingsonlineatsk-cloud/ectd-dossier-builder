@@ -2,7 +2,7 @@
 // m1/us/us-regional.xml, plus a publishing log. Modelled on the public ICH and FDA
 // specifications; output is for training only.
 import SparkMD5 from 'spark-md5';
-import { INDEX, ancestors, REGION_PACKS } from './tree.js';
+import { INDEX, ancestors, REGION_PACKS, euCountry } from './tree.js';
 import { docForLeaf, leafPath, seqByNumber, isRetireOp } from './model.js';
 import { studyFiles } from './stf.js';
 import { buildSubmissionUnit, v4FolderTree, seqInt } from './v4.js';
@@ -41,33 +41,37 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
     attrs.push('checksum-type="md5"', `checksum="${sum}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
     if (doc) attrs.push(`application-version="PDF ${esc(doc.pdfVersion)}"`);
   }
-  attrs.push('xml:lang="en"');
+  attrs.push(`xml:lang="${esc(leaf.lang ?? 'en')}"`);
   return `${pad}<leaf ${attrs.join(' ')}>\n${pad}  <title>${esc(leaf.title)}</title>\n${pad}</leaf>`;
 }
 
-function repeatAttrs(node, settings) {
-  if (node.repeat === 'substance') return ` substance="${esc(settings.substance?.name)}" manufacturer="${esc(settings.substance?.manufacturer)}"`;
+function repeatAttrs(node, settings, part = null) {
+  if (node.repeat === 'substance') return ` substance="${esc(settings.substance?.name)}${part ? ` ${part.toUpperCase()}` : ''}" manufacturer="${esc(settings.substance?.manufacturer)}"`;
   if (node.repeat === 'product') return ` product-name="${esc(settings.product?.name)}" dosageform="${esc(settings.product?.dosageForm)}" manufacturer="${esc(settings.product?.manufacturer)}"`;
   if (node.repeat === 'indication') return ` indication="${esc(settings.indication)}"`;
   return '';
 }
 
 // Builds nested elements for the given leaves grouped by node, following tree order.
-function nestedXml(project, seq, leaves, rootCode, indent, leafFn) {
-  const byNode = {};
-  for (const l of leaves) (byNode[l.nodeCode] ??= []).push(l);
-  const used = new Set();
-  for (const code of Object.keys(byNode)) for (const a of ancestors(code)) used.add(a.code);
-  const render = (code, ind) => {
+// groupFn(node, leaves, ind) may wrap a node's leaves (EU 'specific' and 'pi-doc' elements).
+// A repeatable substance section is written once per ASMF part (applicant's / restricted).
+function nestedXml(project, seq, leaves, rootCode, indent, leafFn, groupFn = null) {
+  const render = (code, ind, list, part = null) => {
     const n = INDEX.map[code];
-    if (!used.has(code) || !n.element) return '';
+    if (!n.element) return '';
+    const mine = list.filter((l) => l.nodeCode === code || ancestors(l.nodeCode).some((a) => a.code === code));
+    if (!mine.length) return '';
+    if (n.repeat === 'substance' && part === null) {
+      const parts = [...new Set(mine.map((l) => l.part ?? null))];
+      if (parts.length > 1 || parts[0]) return parts.map((pt) => render(code, ind, mine.filter((l) => (l.part ?? null) === pt), pt ?? '')).join('\n');
+    }
     const pad = ' '.repeat(ind);
-    const inner = [];
-    for (const l of byNode[code] ?? []) inner.push(leafFn(l, ind + 2));
-    for (const c of n.children) { const r = render(c, ind + 2); if (r) inner.push(r); }
-    return `${pad}<${n.element}${repeatAttrs(n, project.settings)}>\n${inner.join('\n')}\n${pad}</${n.element}>`;
+    const own = mine.filter((l) => l.nodeCode === code);
+    const inner = groupFn && own.length ? groupFn(n, own, ind + 2) : own.map((l) => leafFn(l, ind + 2));
+    for (const c of n.children) { const r = render(c, ind + 2, mine, part); if (r) inner.push(r); }
+    return `${pad}<${n.element}${repeatAttrs(n, project.settings, part || null)}>\n${inner.join('\n')}\n${pad}</${n.element}>`;
   };
-  return render(rootCode, indent);
+  return render(rootCode, indent, leaves);
 }
 
 export function buildRegionalXml(project, seq) {
@@ -117,33 +121,59 @@ ${m1Body}
 `;
 }
 
+// Receiving member states: the agency in the centralised procedure, otherwise the RMS and CMSs.
+export const EU_AGENCY = { nl: 'NL-MEB', de: 'DE-BfArM', fr: 'FR-ANSM', ie: 'IE-HPRA', be: 'BE-FAMHP', es: 'ES-AEMPS', it: 'IT-AIFA', se: 'SE-MPA', at: 'AT-BASG', dk: 'DK-DKMA', pl: 'PL-URPL', pt: 'PT-INFARMED' };
+export function euEnvelopes(project) {
+  const eu = project.settings.eu ?? {};
+  if ((eu.procedureType ?? 'centralised') === 'centralised') return [{ country: 'ema', agency: eu.agency ?? 'EU-EMA' }];
+  const states = eu.procedureType === 'national' ? [eu.rms] : [eu.rms, ...(eu.cms ?? [])];
+  return states.filter(Boolean).map((c) => ({ country: c, agency: EU_AGENCY[c] ?? `${c.toUpperCase()}-NCA`, rms: c === eu.rms }));
+}
+
 function buildEuRegionalXml(project, seq) {
   const s = project.settings;
   const eu = s.eu ?? {};
   const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
   const leafFn = (l, ind) => leafXml(project, seq, l, ind);
-  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'eu:1', 2, leafFn) : '  <m1-eu/>';
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- TRAINING ONLY: fictional content modelled on the public EU Module 1 eCTD specification (v3.0.x). Not for submission. -->
-<!DOCTYPE eu:eu-backbone SYSTEM "../../util/dtd/eu-regional.dtd">
-<eu:eu-backbone xmlns:eu="http://europa.eu.int" xmlns:xlink="http://www.w3c.org/1999/xlink" dtd-version="3.0.4" xml:lang="en">
-  <eu-envelope>
-    <envelope country="ema">
+  // EU M1 wraps country-specific documents in 'specific' (or 'pi-doc' for 1.3.1) elements.
+  const groupFn = (node, leaves, ind) => {
+    if (!node.country || node.country === 'common' && node.code !== 'eu:1.0') return leaves.map((l) => leafFn(l, ind));
+    const groups = new Map();
+    for (const l of leaves) {
+      const cc = euCountry(node, s, l);
+      (groups.get(cc) ?? groups.set(cc, []).get(cc)).push(l);
+    }
+    const pad = ' '.repeat(ind);
+    return [...groups.entries()].map(([cc, ls]) => {
+      const [country, lang] = cc.split('/');
+      const open = node.code === 'eu:1.3.1' ? `<pi-doc xml:lang="${esc(lang ?? 'en')}" type="combined" country="${esc(country)}">` : `<specific country="${esc(country)}">`;
+      const close = node.code === 'eu:1.3.1' ? '</pi-doc>' : '</specific>';
+      return `${pad}${open}\n${ls.map((l) => leafFn(l, ind + 2)).join('\n')}\n${pad}${close}`;
+    });
+  };
+  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'eu:1', 2, leafFn, groupFn) : '  <m1-eu/>';
+  const envelopes = euEnvelopes(project).map((e) => `    <envelope country="${esc(e.country)}">
       <identifier>${esc(eu.uuid)}</identifier>
-      <submission type="${esc(seq.submissionType)}" mode="${esc(seq.submissionMode ?? 'single')}"/>
+      <submission type="${esc(seq.submissionType)}"${seq.submissionType === 'asmf' ? '' : ` mode="${esc(seq.submissionMode ?? 'single')}"`}/>
       <procedure-tracking>
         <number>${esc(eu.trackingNumber)}</number>
       </procedure-tracking>
       <submission-unit type="${esc(seq.subType)}"/>
       <applicant>${esc(s.applicant?.name)}</applicant>
-      <agency code="${esc(eu.agency ?? 'EU-EMA')}"/>
+      <agency code="${esc(e.agency)}"/>
       <procedure type="${esc(eu.procedureType)}"/>
       <invented-name>${esc(eu.inventedName)}</invented-name>
       <inn>${esc(eu.inn)}</inn>
       <sequence>${esc(seq.number)}</sequence>
       <related-sequence>${esc(seq.relatedSequence ?? '')}</related-sequence>
       <submission-description>${esc(seq.description)}</submission-description>
-    </envelope>
+    </envelope>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRAINING ONLY: fictional content modelled on the public EU Module 1 eCTD specification (v3.0.x). Not for submission. -->
+<!DOCTYPE eu:eu-backbone SYSTEM "../../util/dtd/eu-regional.dtd">
+<eu:eu-backbone xmlns:eu="http://europa.eu.int" xmlns:xlink="http://www.w3c.org/1999/xlink" dtd-version="3.0.4" xml:lang="en">
+  <eu-envelope>
+${envelopes}
   </eu-envelope>
 ${m1Body}
 </eu:eu-backbone>

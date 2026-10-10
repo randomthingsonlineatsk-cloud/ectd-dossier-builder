@@ -54,7 +54,7 @@ export function linkTargets(project, doc, seqNumber, sourcePath) {
   for (const code of doc.links ?? []) {
     const hit = current.find((e) => e.leaf.nodeCode === code);
     const label = `${displayCode(code)} ${INDEX.map[code]?.title ?? ''}`.trim();
-    if (hit) out.push({ label, href: relativePath(fromDir, `${hit.seq}/${filePath(hit.leaf.nodeCode, hit.leaf.fileName, project.settings)}`), ok: true });
+    if (hit) out.push({ label, href: relativePath(fromDir, `${hit.seq}/${filePath(hit.leaf.nodeCode, hit.leaf.fileName, project.settings, hit.leaf)}`), ok: true });
     else out.push({ label, href: relativePath(fromDir, `${seqNumber}/missing/${code.replace(/[^a-z0-9]/gi, '')}.pdf`), ok: false });
   }
   for (let i = 0; i < (doc.brokenLinks ?? 0); i++) out.push({ label: `Appendix ${i + 1} (moved)`, href: `old-appendix-${i + 1}.pdf`, ok: false });
@@ -262,7 +262,7 @@ export const md5Bytes = (bytes) => SparkMD5.ArrayBuffer.hash(bytes.buffer.slice(
 export async function leafPdf(project, seqNumber, leaf) {
   const doc = docForLeaf(project, leaf);
   if (!doc) return null;
-  const path = `${seqNumber}/${filePath(leaf.nodeCode, leaf.fileName, project.settings)}`;
+  const path = `${seqNumber}/${filePath(leaf.nodeCode, leaf.fileName, project.settings, leaf)}`;
   return generateStubPdf(project, doc, { links: linkTargets(project, doc, seqNumber, path) });
 }
 

@@ -276,7 +276,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                       <button className="btn ghost small" style={{ padding: 0, textAlign: 'left' }} onClick={() => setSelLeaf(l.id)}><span className="lt">{l.title || '(no title)'}</span></button>
                       <span className="row"><span className={`op ${l.operation}`}>{l.operation}</span>{fs.length > 0 && <span className={`pill ${fs[0].severity.toLowerCase()}`}>{fs.length} finding{fs.length > 1 ? 's' : ''}</span>}</span>
                     </div>
-                    <div className="fn">{isRetire(l.operation) ? `${l.operation === 'suspend' ? 'suspends' : 'deletes'} ${l.target?.seq}/${l.target?.leafId}` : filePath(l.nodeCode, l.fileName, project.settings)}</div>
+                    <div className="fn">{isRetire(l.operation) ? `${l.operation === 'suspend' ? 'suspends' : 'deletes'} ${l.target?.seq}/${l.target?.leafId}` : filePath(l.nodeCode, l.fileName, project.settings, l)}</div>
                     {l.target && !isRetire(l.operation) && <div className="small muted">{l.operation}s {l.target.seq} · {l.target.leafId}</div>}
                     {v4 && l.docId && delivered.has(l.docId) && <div className="small" style={{ color: 'var(--ok)' }}>Reuses the document sent in sequence {seqInt(delivered.get(l.docId).seq)}: no file is sent again.</div>}
                     {d?.note && <div className="small muted">{d.note}</div>}
@@ -415,7 +415,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               <span className="bar" style={{ background: modColor(d.section) }} />
               <div>
                 <div className="dt">{d.title}</div>
-                <div className="ds">{dc(d.section)} · {d.pages} p{d.version > 1 ? ` · version ${d.version}` : ''}{usedDocs.has(d.id) ? ' · in dossier' : ''}{d.irOnly ? ' · from the IR response pack' : ''}</div>
+                <div className="ds">{dc(d.section)}{d.part ? ` · ${d.part.toUpperCase()}` : ''}{d.country ? ` · ${d.country}${d.lang && d.section === 'eu:1.3.1' ? `/${d.lang}` : ''}` : ''} · {d.pages} p{d.version > 1 ? ` · version ${d.version}` : ''}{usedDocs.has(d.id) ? ' · in dossier' : ''}{d.irOnly ? ' · from the IR response pack' : ''}</div>
                 {guided && d.decoy && <div className="ds" style={{ color: 'var(--medium)' }}>{['coarse', 'fine'].includes(d.decoy) ? 'Check the granularity of this one before using it.' : 'Check that this one belongs in this application.'}</div>}
               </div>
               {editable && <button className="btn small" aria-pressed={picked?.id === d.id} onClick={() => setPicked(picked?.id === d.id ? null : { kind: 'doc', id: d.id })}>{picked?.id === d.id ? 'Held' : 'Pick up'}</button>}

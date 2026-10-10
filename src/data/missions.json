@@ -2164,6 +2164,222 @@
      "label": "DMF questions answered correctly"
     }
    ]
+  },
+  {
+   "id": 20,
+   "phase": 5,
+   "title": "Decentralised procedure",
+   "region": "EU",
+   "regionCode": "EU",
+   "variant": "dcp",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "maa",
+   "minutes": {
+    "expert": 50
+   },
+   "brief": "Halcyon Ridge files Ostrevia through the decentralised procedure instead of the centralised one: the Netherlands as reference member state, with Germany, France and Ireland as concerned member states. The procedure number is NL/H/1234/001-002/DC. Set up the envelopes, give every member state its own product information in its own folder and language, and keep the centralised material out.",
+   "quiz": [
+    {
+     "id": "dcp",
+     "q": "What distinguishes the decentralised procedure from mutual recognition?",
+     "options": [
+      "Nothing",
+      "In DCP no member state has authorised the product yet; in MRP the reference member state's existing authorisation is recognised by the others",
+      "DCP is only for generics",
+      "MRP goes through the EMA"
+     ],
+     "answer": 1,
+     "why": "DCP is for products not yet authorised anywhere in the EU; MRP extends an existing national authorisation to other member states."
+    },
+    {
+     "id": "national",
+     "q": "After a positive end of the decentralised procedure, what happens?",
+     "options": [
+      "The European Commission issues one decision",
+      "Each member state grants its own national authorisation within 30 days",
+      "The EMA publishes an EPAR",
+      "Nothing further"
+     ],
+     "answer": 1,
+     "why": "DCP and MRP end in national authorisations, granted by each member state within 30 days of the agreement."
+    },
+    {
+     "id": "env",
+     "q": "How many envelopes does the eu-regional.xml carry for this sequence?",
+     "options": [
+      "One, for the EMA",
+      "One per receiving member state: four",
+      "One, with country 'common'",
+      "None"
+     ],
+     "answer": 1,
+     "why": "Outside the centralised procedure each receiving member state gets an envelope with its country code; 'common' is not allowed in the envelope."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the procedure number NL/H/1234/001-002/DC, choose the Netherlands as RMS and tick Germany, France and Ireland as CMSs.",
+    "Build 0000: cover letter, application form, Modules 2 to 5, and the rest of Module 1.",
+    "In 1.3.1, place the product information for each of the four member states. Look at the folders: country, then language.",
+    "Leave out the centralised product information in the 'ema' folder.",
+    "Answer the quiz, validate and publish 0000. Look at the four envelopes in eu-regional.xml."
+   ],
+   "hints": [
+    "Ireland's product information is in English; the Netherlands', in Dutch.",
+    "The library's EMA product information is a trap here."
+   ],
+   "checks": [
+    {
+     "id": "proc",
+     "label": "Decentralised procedure, RMS Netherlands, CMS Germany, France and Ireland"
+    },
+    {
+     "id": "tracking",
+     "label": "Procedure number in the DCP format"
+    },
+    {
+     "id": "envelopes",
+     "label": "One envelope per receiving member state"
+    },
+    {
+     "id": "pi",
+     "label": "Product information for all four member states in 1.3.1"
+    },
+    {
+     "id": "noEma",
+     "label": "Nothing in the 'ema' folder"
+    },
+    {
+     "id": "m1",
+     "label": "Mandatory Module 1 items placed"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "DCP questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "phase": 5,
+   "title": "Active substance master file",
+   "region": "EU",
+   "regionCode": "EU",
+   "variant": "asmf",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "asmf",
+   "minutes": {
+    "expert": 45
+   },
+   "brief": "Corvane Fine Chemicals supplies lumiravostat to Halcyon Ridge for its EU marketing authorisation, but keeps its route of synthesis confidential. File an ASMF: one eCTD sequence in which 2.3.S and 3.2.S split into the applicant's part, which Halcyon Ridge may see, and the restricted part, for the authorities only.",
+   "quiz": [
+    {
+     "id": "rp",
+     "q": "Who sees the restricted part of an ASMF?",
+     "options": [
+      "The marketing authorisation applicant",
+      "Only the competent authorities",
+      "Anyone who requests it",
+      "The applicant's QP"
+     ],
+     "answer": 1,
+     "why": "The restricted part holds confidential know-how and goes only to the authorities; the applicant's part is shared with the MA applicant."
+    },
+    {
+     "id": "loa",
+     "q": "What does the letter of access do?",
+     "options": [
+      "Lets the ASMF holder see the MAA",
+      "Authorises the competent authorities to refer to the ASMF when assessing a named applicant's marketing authorisation application",
+      "Replaces the restricted part",
+      "Grants a GMP certificate"
+     ],
+     "answer": 1,
+     "why": "The letter of access names the MA applicant and lets the authorities use the ASMF in that application's assessment."
+    },
+    {
+     "id": "mark",
+     "q": "How does the ASMF eCTD guideline tell AP and RP apart?",
+     "options": [
+      "Separate eCTD dossiers",
+      "'AP' or 'RP' in the substance attribute and in every leaf title of 2.3.S and 3.2.S, with -ap/-rp recommended in file names",
+      "Different colours in the PDFs",
+      "The cover letter only"
+     ],
+     "answer": 1,
+     "why": "One sequence, two branches of 2.3.S and 3.2.S, each marked AP or RP."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the ASMF number EMEA/ASMF/01234 and check the holder (Corvane).",
+    "Build 0000 (submission type asmf, unit initial): a cover letter with the letter of access as an annex, and the quality expert information in 1.4.1.",
+    "Place the AP and RP quality overall summaries in 2.3.",
+    "Place 3.2.S: general information, characterisation, controls, reference standards, container and stability in the AP; the detailed manufacture (materials, critical steps, validation, development) in the RP. 3.2.S.2.2 and 3.2.S.3.2 have both an outline (AP) and a detailed (RP) version.",
+    "Keep restricted detail out of the applicant's part. Answer the quiz, validate and publish."
+   ],
+   "hints": [
+    "Watch for a 3.2.S.2.3 document labelled AP: control of materials is restricted.",
+    "Look at the folder tree: the substance folder appears twice, once ending -ap and once -rp."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "ASMF number and holder metadata complete"
+    },
+    {
+     "id": "type",
+     "label": "Submission type asmf, unit initial"
+    },
+    {
+     "id": "m1",
+     "label": "Cover letter and quality expert information"
+    },
+    {
+     "id": "qos",
+     "label": "AP and RP quality overall summaries in 2.3"
+    },
+    {
+     "id": "parts",
+     "label": "3.2.S split into AP and RP"
+    },
+    {
+     "id": "noLeak",
+     "label": "No restricted information in the applicant's part"
+    },
+    {
+     "id": "labels",
+     "label": "Every 2.3 and 3.2.S leaf marked AP or RP"
+    },
+    {
+     "id": "required",
+     "label": "Required sections present"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "ASMF questions answered correctly"
+    }
+   ]
   }
  ]
 }
