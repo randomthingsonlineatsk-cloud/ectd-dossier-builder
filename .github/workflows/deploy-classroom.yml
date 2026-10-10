@@ -86,16 +86,16 @@ jobs:
 
       - name: Publish the site to gh-pages
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          cp -r dist /tmp/site
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git fetch origin gh-pages
-          git checkout -B gh-pages origin/gh-pages
+          git worktree add --detach "$RUNNER_TEMP/site" origin/gh-pages
+          cd "$RUNNER_TEMP/site"
           git rm -rq .
-          cp -r /tmp/site/. .
+          cp -r "$GITHUB_WORKSPACE/dist/." .
           git add -A
           git commit -m "Deploy site with the classroom server (${{ steps.worker.outputs.url }})" || echo "No changes"
-          git push origin gh-pages
+          git push origin HEAD:gh-pages
 
       - name: Summary
         run: |
