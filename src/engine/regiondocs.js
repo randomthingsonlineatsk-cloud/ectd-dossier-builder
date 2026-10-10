@@ -78,7 +78,45 @@ export function inDocs(p) {
   ].map(([section, title, fileName, pages, extra], i) => ({ id: `in-${i + 1}`, section, title, fileName, pages, region: 'IN', ...(extra ?? {}) }));
 }
 
-export function regionDocs(p, region) {
+// US IND: the initial IND's Module 1 plus the first-in-human protocol and investigator's brochure.
+export function usIndDocs(p) {
+  const first = Object.keys(p.studies ?? {})[0] ?? 'STUDY-101';
+  return [
+    { id: 'ind-1571', section: '1.1', form: 'fda-1571', title: 'Form FDA 1571 Investigational New Drug Application', fileName: 'fda-1571.pdf', pages: 2 },
+    { id: 'ind-1572', section: '1.1', form: 'fda-1572', title: 'Form FDA 1572 Statement of Investigator', fileName: 'fda-1572.pdf', pages: 2 },
+    { id: 'ind-3674', section: '1.1', form: 'fda-3674', title: 'Form FDA 3674 Certification of Compliance', fileName: 'fda-3674.pdf', pages: 2 },
+    { id: 'ind-plan', section: '1.20', title: 'Introductory Statement and General Investigational Plan', fileName: 'general-investigational-plan.pdf', pages: 9, bookmarks: 4 },
+    { id: 'ind-ib', section: '1.14.4.1', title: `Investigator's Brochure - ${p.product.inn} (Edition 1)`, fileName: 'investigators-brochure.pdf', pages: 64, bookmarks: 12 },
+    { id: 'ind-envir', section: '1.12.14', title: 'Claim of Categorical Exclusion from Environmental Assessment (21 CFR 25.31(e))', fileName: 'environmental-analysis.pdf', pages: 1 },
+    { id: 'ind-protocol', section: '5.3.3.1', title: `Study ${first}: Protocol - first-in-human single and multiple ascending dose study`, fileName: `${first.toLowerCase()}-protocol.pdf`, pages: 86, bookmarks: 14, fileTag: 'protocol-or-amendment', study: first },
+    { id: 'ind-nda-356h', section: '1.1', form: 'fda-356h', title: 'Form FDA 356h', fileName: 'fda-356h.pdf', pages: 4, decoy: 'wrong-form', coach: 'Form FDA 356h is the marketing application form. An IND uses Form FDA 1571.' },
+  ].map((d) => ({ ...d, region: 'US' }));
+}
+
+// US Type II DMF: the holder's own submission for the drug substance.
+export function usDmfDocs(p) {
+  const holder = p.substanceManufacturer;
+  return [
+    { id: 'dmf-3938', section: '1.1', form: 'fda-3938', title: 'Form FDA 3938 Drug Master File Submission', fileName: 'fda-3938.pdf', pages: 2 },
+    { id: 'dmf-loa', section: '1.4.1', title: `Letter of Authorization - ${p.applicant.name} (${p.product.brandName} NDA)`, fileName: 'letter-of-authorization.pdf', pages: 1, later: true, note: 'Filed when Corvane authorizes a customer to reference the DMF.' },
+    { id: 'dmf-qos', section: '2.3', title: `Quality Overall Summary - Drug Substance (${p.product.inn}, ${holder.name})`, fileName: 'quality-overall-summary.pdf', pages: 38, bookmarks: 9, links: ['3.2.S.4.1', '3.2.S.7.1'] },
+  ].map((d) => ({ ...d, region: 'US' }));
+}
+
+// Library bases for variants: which of the product's own documents a variant starts from.
+export function libraryBase(p, kind) {
+  const docs = p.documents.filter((d) => !d.decoy);
+  if (kind === 'ind') {
+    const notYet = ['3.2.S.2.5', '3.2.P.3.5', '3.2.A.1', '3.2.R', '4.2.3.4.1', '4.2.3.4.2', '4.2.3.5.3'];
+    return docs.filter((d) => /^(3\.2\.|4\.)/.test(d.section) && !notYet.includes(d.section));
+  }
+  if (kind === 'dmf') return docs.filter((d) => d.section.startsWith('3.2.S'));
+  return p.documents;
+}
+
+export function regionDocs(p, region, opt = null) {
+  if (region === 'US' && opt?.library === 'ind') return usIndDocs(p);
+  if (region === 'US' && opt?.library === 'dmf') return usDmfDocs(p);
   const gen = p.generateRegionDocs ?? {};
   if (region === 'JP' && gen.JP) return jpDocs(p);
   if (region === 'IN' && gen.IN) return inDocs(p);

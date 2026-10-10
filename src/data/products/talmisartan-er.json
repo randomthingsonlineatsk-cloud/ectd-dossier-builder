@@ -1,0 +1,542 @@
+{
+ "id": "talmisartan-er",
+ "label": "505(b)(2) extended-release reformulation of an approved drug",
+ "fictional": true,
+ "basis": "505(b)(2)",
+ "options": [
+  {
+   "region": "US",
+   "appType": "nda",
+   "requiredKey": "505b2",
+   "label": "US — NDA under section 505(b)(2) (eCTD v3.2.2)"
+  }
+ ],
+ "product": {
+  "brandName": "Talvera XR",
+  "inn": "talmisartan",
+  "dosageForm": "capsule, extended release",
+  "route": "oral",
+  "strengths": [
+   "40 mg",
+   "80 mg"
+  ],
+  "indication": "hypertension",
+  "indicationText": "Treatment of hypertension in adults, to lower blood pressure, with once-daily extended-release dosing",
+  "shelfLife": "24 months",
+  "storage": "Store at 20°C to 25°C"
+ },
+ "listedDrug": {
+  "name": "Corvenza (talmisartan) tablets",
+  "holder": "Northmere Pharma Inc.",
+  "application": "NDA 210999",
+  "patents": [
+   "US 9,000,001 (compound, expires 2027)",
+   "US 9,000,002 (method of use, expires 2031)"
+  ]
+ },
+ "applicant": {
+  "name": "Calderon Therapeutics Inc.",
+  "address": "77 Meridian Court, Fictionburg, MA 02000, USA",
+  "duns": "000000004",
+  "contact": "Priya Menon, Senior Director, Regulatory Affairs",
+  "phone": "+1 555 0100 330",
+  "email": "regulatory@calderon.example"
+ },
+ "substanceManufacturer": {
+  "name": "Brindell Organics Pvt. Ltd.",
+  "address": "Survey No. 4, Imaginary Chemical Zone, Example District, India"
+ },
+ "productManufacturer": {
+  "name": "Calderon Therapeutics Inc., Fictionburg plant",
+  "address": "80 Meridian Court, Fictionburg, MA 02000, USA"
+ },
+ "facts": {
+  "strengths": "40 mg and 80 mg",
+  "dosageForm": "extended-release capsule",
+  "shelfLife": "24 months",
+  "storage": "Store at 20°C to 25°C",
+  "dsManufacturer": "Brindell Organics Pvt. Ltd., Example District, India",
+  "dpManufacturer": "Calderon Therapeutics Inc., Fictionburg, MA, USA",
+  "dissolution": "NMT 30% at 2 h, 45-70% at 8 h, NLT 80% at 20 h",
+  "assay": "95.0-105.0% of label claim",
+  "excipients": "hypromellose, microcrystalline cellulose, ethylcellulose, talc, gelatin capsule shell",
+  "batches": "CTX-2401, CTX-2402, CTX-2403",
+  "patients": "48 healthy subjects (relative bioavailability), 24 healthy subjects (food effect)",
+  "indication": "Treatment of hypertension in adults"
+ },
+ "studies": {
+  "CTX-101": "Relative bioavailability of Talvera XR 80 mg once daily versus Corvenza 40 mg twice daily at steady state",
+  "CTX-102": "Food-effect study of Talvera XR 80 mg"
+ },
+ "documents": [
+  {
+   "id": "x-356h",
+   "section": "1.1",
+   "form": "fda-356h",
+   "title": "Form FDA 356h",
+   "fileName": "fda-356h.pdf",
+   "pages": 4
+  },
+  {
+   "id": "x-3397",
+   "section": "1.1",
+   "form": "fda-3397",
+   "title": "Form FDA 3397 User Fee Coversheet",
+   "fileName": "fda-3397.pdf",
+   "pages": 1
+  },
+  {
+   "id": "x-3674",
+   "section": "1.1",
+   "form": "fda-3674",
+   "title": "Form FDA 3674 Certification of Compliance",
+   "fileName": "fda-3674.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-fieldcopy",
+   "section": "1.3.2",
+   "title": "Field Copy Certification",
+   "fileName": "field-copy-certification.pdf",
+   "pages": 1
+  },
+  {
+   "id": "x-debar",
+   "section": "1.3.3",
+   "title": "Debarment Certification",
+   "fileName": "debarment-certification.pdf",
+   "pages": 1
+  },
+  {
+   "id": "x-findisc",
+   "section": "1.3.4",
+   "title": "Financial Certification (Form FDA 3454)",
+   "fileName": "financial-certification.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-patinfo",
+   "section": "1.3.5.1",
+   "form": "fda-3542a",
+   "title": "Patent Information for Talvera XR (Form FDA 3542a)",
+   "fileName": "patent-information.pdf",
+   "pages": 4
+  },
+  {
+   "id": "x-patcert",
+   "section": "1.3.5.2",
+   "title": "Patent Certification for the Listed Drug Corvenza (Paragraph IV: US 9,000,002)",
+   "fileName": "patent-certification.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-exclus",
+   "section": "1.3.5.3",
+   "title": "Exclusivity Claim (new clinical investigations)",
+   "fileName": "exclusivity-claim.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-loa",
+   "section": "1.4.1",
+   "title": "Letter of Authorization for DMF (Brindell Organics)",
+   "fileName": "letter-of-authorization.pdf",
+   "pages": 1
+  },
+  {
+   "id": "x-envir",
+   "section": "1.12.14",
+   "title": "Claim of Categorical Exclusion from Environmental Assessment",
+   "fileName": "environmental-analysis.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-carton",
+   "section": "1.14.1.1",
+   "title": "Draft Carton and Container Labels",
+   "fileName": "draft-carton-container-labels.pdf",
+   "pages": 4
+  },
+  {
+   "id": "x-pi",
+   "section": "1.14.1.3",
+   "title": "Draft Prescribing Information",
+   "fileName": "draft-labeling-text.pdf",
+   "pages": 20,
+   "bookmarks": 17
+  },
+  {
+   "id": "x-intro",
+   "section": "2.2",
+   "title": "Introduction",
+   "fileName": "introduction.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-qos",
+   "section": "2.3",
+   "title": "Quality Overall Summary",
+   "fileName": "quality-overall-summary.pdf",
+   "pages": 64,
+   "bookmarks": 30,
+   "links": [
+    "3.2.P.5.1",
+    "3.2.P.2"
+   ]
+  },
+  {
+   "id": "x-ncover",
+   "section": "2.4",
+   "title": "Nonclinical Overview (based on published literature and the listed drug)",
+   "fileName": "nonclinical-overview.pdf",
+   "pages": 22,
+   "links": [
+    "4.3"
+   ]
+  },
+  {
+   "id": "x-cover",
+   "section": "2.5",
+   "title": "Clinical Overview: Scientific Bridge to the Listed Drug",
+   "fileName": "clinical-overview.pdf",
+   "pages": 34,
+   "links": [
+    "5.3.1.2",
+    "5.4"
+   ]
+  },
+  {
+   "id": "x-271",
+   "section": "2.7.1",
+   "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods",
+   "fileName": "summary-biopharm.pdf",
+   "pages": 26,
+   "links": [
+    "5.3.1.2"
+   ]
+  },
+  {
+   "id": "x-272",
+   "section": "2.7.2",
+   "title": "Summary of Clinical Pharmacology Studies",
+   "fileName": "summary-clin-pharm.pdf",
+   "pages": 18
+  },
+  {
+   "id": "x-274",
+   "section": "2.7.4",
+   "title": "Summary of Clinical Safety",
+   "fileName": "summary-clin-safety.pdf",
+   "pages": 22
+  },
+  {
+   "id": "x-43",
+   "section": "4.3",
+   "title": "Literature References (nonclinical)",
+   "fileName": "literature-references.pdf",
+   "pages": 120,
+   "bookmarks": 18
+  },
+  {
+   "id": "x-52",
+   "section": "5.2",
+   "title": "Tabular Listing of All Clinical Studies",
+   "fileName": "tabular-listing.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-ba101",
+   "section": "5.3.1.2",
+   "title": "Study CTX-101: Relative bioavailability of Talvera XR 80 mg once daily versus Corvenza 40 mg twice daily",
+   "fileName": "ctx-101-report.pdf",
+   "pages": 310,
+   "bookmarks": 15
+  },
+  {
+   "id": "x-ba102",
+   "section": "5.3.1.2",
+   "title": "Study CTX-102: Food-effect study of Talvera XR 80 mg",
+   "fileName": "ctx-102-report.pdf",
+   "pages": 180,
+   "bookmarks": 15
+  },
+  {
+   "id": "x-bmv",
+   "section": "5.3.1.4",
+   "title": "Bioanalytical method validation for talmisartan in human plasma",
+   "fileName": "bioanalytical-validation.pdf",
+   "pages": 90,
+   "study": "CTX-BMV-01"
+  },
+  {
+   "id": "x-54",
+   "section": "5.4",
+   "title": "Literature References (clinical)",
+   "fileName": "literature-references.pdf",
+   "pages": 160,
+   "bookmarks": 22
+  },
+  {
+   "id": "x-rldcsr",
+   "section": "5.3.5.1",
+   "title": "Clinical Study Report NM-301: Corvenza pivotal efficacy study (Northmere Pharma)",
+   "fileName": "nm-301-csr.pdf",
+   "pages": 520,
+   "decoy": "no-right",
+   "coach": "This is the listed drug sponsor's own study report. A 505(b)(2) applicant relies on FDA's finding for the listed drug and on literature; it has no right of reference to this report."
+  },
+  {
+   "id": "x-s11",
+   "section": "3.2.S.1.1",
+   "title": "Nomenclature",
+   "fileName": "nomenclature.pdf",
+   "pages": 1
+  },
+  {
+   "id": "x-s12",
+   "section": "3.2.S.1.2",
+   "title": "Structure",
+   "fileName": "structure.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-s13",
+   "section": "3.2.S.1.3",
+   "title": "General Properties",
+   "fileName": "general-properties.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-s21",
+   "section": "3.2.S.2.1",
+   "title": "Manufacturer(s) (see DMF, Brindell Organics)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-s22",
+   "section": "3.2.S.2.2",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 8
+  },
+  {
+   "id": "x-s32",
+   "section": "3.2.S.3.2",
+   "title": "Impurities",
+   "fileName": "impurities.pdf",
+   "pages": 10
+  },
+  {
+   "id": "x-s41",
+   "section": "3.2.S.4.1",
+   "title": "Specification",
+   "fileName": "specification.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-s42",
+   "section": "3.2.S.4.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 18
+  },
+  {
+   "id": "x-s43",
+   "section": "3.2.S.4.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 22
+  },
+  {
+   "id": "x-s44",
+   "section": "3.2.S.4.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 6
+  },
+  {
+   "id": "x-s45",
+   "section": "3.2.S.4.5",
+   "title": "Justification of Specification",
+   "fileName": "justification-of-specification.pdf",
+   "pages": 5
+  },
+  {
+   "id": "x-s5",
+   "section": "3.2.S.5",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 4
+  },
+  {
+   "id": "x-s6",
+   "section": "3.2.S.6",
+   "title": "Container Closure System",
+   "fileName": "container-closure-system.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-s71",
+   "section": "3.2.S.7.1",
+   "title": "Stability Summary and Conclusions",
+   "fileName": "stability-summary.pdf",
+   "pages": 5
+  },
+  {
+   "id": "x-s73",
+   "section": "3.2.S.7.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 30
+  },
+  {
+   "id": "x-p1",
+   "section": "3.2.P.1",
+   "title": "Description and Composition of the Drug Product",
+   "fileName": "description-composition.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-p2",
+   "section": "3.2.P.2",
+   "title": "Pharmaceutical Development (extended-release formulation)",
+   "fileName": "pharmaceutical-development.pdf",
+   "pages": 48
+  },
+  {
+   "id": "x-p31",
+   "section": "3.2.P.3.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-p32",
+   "section": "3.2.P.3.2",
+   "title": "Batch Formula",
+   "fileName": "batch-formula.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-p33",
+   "section": "3.2.P.3.3",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 12
+  },
+  {
+   "id": "x-p34",
+   "section": "3.2.P.3.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 6
+  },
+  {
+   "id": "x-p35",
+   "section": "3.2.P.3.5",
+   "title": "Process Validation and/or Evaluation",
+   "fileName": "process-validation.pdf",
+   "pages": 9
+  },
+  {
+   "id": "x-p41",
+   "section": "3.2.P.4.1",
+   "title": "Specifications - Excipients",
+   "fileName": "excipient-specifications.pdf",
+   "pages": 5
+  },
+  {
+   "id": "x-p51",
+   "section": "3.2.P.5.1",
+   "title": "Specification(s)",
+   "fileName": "specifications.pdf",
+   "pages": 2
+  },
+  {
+   "id": "x-p52",
+   "section": "3.2.P.5.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 24
+  },
+  {
+   "id": "x-p53",
+   "section": "3.2.P.5.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 30
+  },
+  {
+   "id": "x-p54",
+   "section": "3.2.P.5.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 8
+  },
+  {
+   "id": "x-p55",
+   "section": "3.2.P.5.5",
+   "title": "Characterisation of Impurities",
+   "fileName": "characterisation-impurities.pdf",
+   "pages": 6
+  },
+  {
+   "id": "x-p56",
+   "section": "3.2.P.5.6",
+   "title": "Justification of Specification(s)",
+   "fileName": "justification-of-specifications.pdf",
+   "pages": 7
+  },
+  {
+   "id": "x-p6",
+   "section": "3.2.P.6",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-p7",
+   "section": "3.2.P.7",
+   "title": "Container Closure System",
+   "fileName": "container-closure-system.pdf",
+   "pages": 5
+  },
+  {
+   "id": "x-p81",
+   "section": "3.2.P.8.1",
+   "title": "Stability Summary and Conclusion",
+   "fileName": "stability-summary.pdf",
+   "pages": 6
+  },
+  {
+   "id": "x-p82",
+   "section": "3.2.P.8.2",
+   "title": "Post-approval Stability Protocol and Stability Commitment",
+   "fileName": "stability-protocol-commitment.pdf",
+   "pages": 3
+  },
+  {
+   "id": "x-p83",
+   "section": "3.2.P.8.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 40
+  },
+  {
+   "id": "x-a1",
+   "section": "3.2.A.1",
+   "title": "Facilities and Equipment",
+   "fileName": "facilities-equipment.pdf",
+   "pages": 4
+  },
+  {
+   "id": "x-r",
+   "section": "3.2.R",
+   "title": "Executed Batch Records",
+   "fileName": "executed-batch-records.pdf",
+   "pages": 160,
+   "bookmarks": 10
+  }
+ ]
+}

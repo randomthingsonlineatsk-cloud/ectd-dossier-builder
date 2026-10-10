@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
 import { go } from '../App.jsx';
-import { createProject, PRODUCTS, productOptions, REGION_VERSION } from '../engine/model.js';
+import { createProject, PRODUCTS, productOptions, optionKey, REGION_VERSION } from '../engine/model.js';
 
 const REGION_OPTION = {
   US: (o) => `US — ${({ 'bla-351k': 'BLA 351(k) biosimilar' })[o.appType] ?? o.appType.toUpperCase()} (eCTD v3.2.2)`,
@@ -49,15 +49,15 @@ export default function Home() {
   const { user, projects, attempts, toast, saveProject, reload } = useApp();
   const [name, setName] = useState('');
   const [productId, setProductId] = useState('nce-tablet');
-  const [region, setRegion] = useState('US');
+  const [okey, setOkey] = useState('US:nda');
   const opts = productOptions(productId);
-  const opt = opts.find((o) => o.region === region) ?? opts[0];
+  const opt = opts.find((o) => optionKey(o) === okey) ?? opts[0];
   const fileRef = useRef();
 
   const start = async (e) => {
     e.preventDefault();
     const prod = PRODUCTS[productId];
-    const p = createProject({ name: name.trim() || `${prod.product.brandName} ${opt.appType.toUpperCase()} practice`, productId, region: opt.region, appType: opt.appType, user });
+    const p = createProject({ name: name.trim() || `${prod.product.brandName} ${opt.appType.toUpperCase()} practice`, productId, region: opt.region, appType: opt.appType, variant: opt.variant ?? null, user });
     await saveProject(p);
     go(`/project/${p.id}`);
   };
@@ -126,13 +126,13 @@ export default function Home() {
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={`${PRODUCTS[productId].product.brandName} ${opt.appType.toUpperCase()} practice`} />
           </label>
           <label className="field">Fictional product
-            <select value={productId} onChange={(e) => { setProductId(e.target.value); setRegion(productOptions(e.target.value)[0].region); }}>
+            <select value={productId} onChange={(e) => { setProductId(e.target.value); setOkey(optionKey(productOptions(e.target.value)[0])); }}>
               {Object.values(PRODUCTS).map((pr) => <option key={pr.id} value={pr.id}>{pr.product.brandName} ({pr.product.inn}) — {pr.label}</option>)}
             </select>
           </label>
           <label className="field">Region and application type
-            <select value={opt.region} onChange={(e) => setRegion(e.target.value)}>
-              {opts.map((o) => <option key={o.region} value={o.region}>{REGION_OPTION[o.region]?.(o) ?? `${o.region} — ${o.appType.toUpperCase()}`}</option>)}
+            <select value={optionKey(opt)} onChange={(e) => setOkey(e.target.value)}>
+              {opts.map((o) => <option key={optionKey(o)} value={optionKey(o)}>{o.label ?? REGION_OPTION[o.region]?.(o) ?? `${o.region} — ${o.appType.toUpperCase()}`}</option>)}
             </select>
           </label>
           <label className="field">eCTD version

@@ -416,7 +416,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               <div>
                 <div className="dt">{d.title}</div>
                 <div className="ds">{dc(d.section)} · {d.pages} p{d.version > 1 ? ` · version ${d.version}` : ''}{usedDocs.has(d.id) ? ' · in dossier' : ''}{d.irOnly ? ' · from the IR response pack' : ''}</div>
-                {guided && d.decoy && <div className="ds" style={{ color: 'var(--medium)' }}>Check the granularity of this one before using it.</div>}
+                {guided && d.decoy && <div className="ds" style={{ color: 'var(--medium)' }}>{['coarse', 'fine'].includes(d.decoy) ? 'Check the granularity of this one before using it.' : 'Check that this one belongs in this application.'}</div>}
               </div>
               {editable && <button className="btn small" aria-pressed={picked?.id === d.id} onClick={() => setPicked(picked?.id === d.id ? null : { kind: 'doc', id: d.id })}>{picked?.id === d.id ? 'Held' : 'Pick up'}</button>}
             </div>
