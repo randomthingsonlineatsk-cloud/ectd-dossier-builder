@@ -3,7 +3,7 @@
 // specifications; output is for training only.
 import SparkMD5 from 'spark-md5';
 import { INDEX, ancestors, REGION_PACKS } from './tree.js';
-import { docForLeaf, leafPath, seqByNumber } from './model.js';
+import { docForLeaf, leafPath, seqByNumber, isRetireOp } from './model.js';
 import { studyFiles } from './stf.js';
 import { buildSubmissionUnit, v4FolderTree, seqInt } from './v4.js';
 
@@ -34,7 +34,7 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
     const ref = isM1 ? `../../../${leaf.target.seq}/${regional}` : `../${leaf.target.seq}/index.xml`;
     attrs.push(`modified-file="${ref}#${esc(leaf.target.leafId)}"`);
   }
-  if (leaf.operation !== 'delete') {
+  if (!isRetireOp(leaf.operation)) {
     const full = leafPath(project, leaf);
     const href = hrefBase + (isM1 ? full.replace(/^m1\/(us|eu)\//, '') : full);
     const sum = leaf.stf ? md5(leaf.xml) : doc ? fileChecksum(doc) : '';
@@ -187,7 +187,7 @@ export function publishSequence(project, seqNumber) {
     return { v4: true, unit, index: unit.xml, regional: '', md5txt: unit.shaTxt, log, tree: v4FolderTree(project, seq, unit), stfs: [] };
   }
   if (project.region === 'IN') {
-    const log = seq.leaves.filter((l) => l.operation !== 'delete').map((l) => {
+    const log = seq.leaves.filter((l) => !isRetireOp(l.operation)).map((l) => {
       const doc = docForLeaf(project, l);
       return { file: `${seq.number}/${leafPath(project, l)}`, checksum: doc ? fileChecksum(doc) : '—', operation: 'upload', target: '—', node: l.nodeCode, leafId: l.id };
     });
@@ -204,7 +204,7 @@ export function publishSequence(project, seqNumber) {
     const doc = docForLeaf(project, l);
     log.push({
       file: l.operation === 'delete' ? '(no file — delete)' : `${seq.number}/${leafPath(project, l)}`,
-      checksum: l.operation === 'delete' || !doc ? '—' : fileChecksum(doc),
+      checksum: isRetireOp(l.operation) || !doc ? '—' : fileChecksum(doc),
       operation: l.operation,
       target: l.target ? `${l.target.seq} · ${l.target.leafId}` : '—',
       node: l.nodeCode,
@@ -228,7 +228,7 @@ export function folderTree(project, seq, { portal = false } = {}) {
     cur.files.push({ name: file, ...meta });
   };
   if (portal) {
-    for (const l of seq.leaves) if (l.operation !== 'delete') add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
+    for (const l of seq.leaves) if (!isRetireOp(l.operation)) add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
     return root;
   }
   add('index.xml', { kind: 'xml' });
@@ -238,6 +238,6 @@ export function folderTree(project, seq, { portal = false } = {}) {
   add(project.region === 'EU' ? 'util/dtd/eu-regional.dtd' : 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
   add('util/dtd/ich-stf-v2-2.dtd', { kind: 'dtd' });
   for (const f of studyFiles(project, seq)) add(f.path, { kind: 'xml', node: f.nodeCode, op: 'new' });
-  for (const l of seq.leaves) if (l.operation !== 'delete') add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
+  for (const l of seq.leaves) if (!isRetireOp(l.operation)) add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
   return root;
 }

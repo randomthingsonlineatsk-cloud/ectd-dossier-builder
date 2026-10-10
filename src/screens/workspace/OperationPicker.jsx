@@ -3,8 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 // Asks which lifecycle operation a newly placed document should carry.
 // Standard mode offers only valid targets (current leaves under the same heading);
 // expert mode lists every earlier leaf so users can make mistakes on purpose.
-export default function OperationPicker({ code, doc, prevState, expert, onCancel, onConfirm }) {
-  const all = [...prevState.entries.values()].filter((e) => e.leaf.operation !== 'delete');
+export default function OperationPicker({ project, code, doc, prevState, expert, onCancel, onConfirm }) {
+  const v4 = project?.ectdVersion === '4.0';
+  const all = [...prevState.entries.values()].filter((e) => e.leaf.operation !== 'delete' && e.leaf.operation !== 'suspend');
   const valid = all.filter((e) => e.status === 'current' && e.leaf.nodeCode === code);
   const targets = expert ? all : valid;
   const [choice, setChoice] = useState(valid.length ? `replace|${valid[0].key}` : 'new');
@@ -34,7 +35,8 @@ export default function OperationPicker({ code, doc, prevState, expert, onCancel
         <p className="small">You are placing this in {code}. {valid.length ? 'Earlier sequences already have a current document here.' : 'There is no current document here yet.'}</p>
         {opt('new', 'New', 'Adds the document alongside anything already current here.')}
         {targets.map((e) => opt(`replace|${e.key}`, `Replace: ${e.leaf.title || '(no title)'}`, `${e.leaf.nodeCode}, sequence ${e.seq}${e.status !== 'current' ? `, already ${e.status}` : ''}`))}
-        {targets.map((e) => opt(`append|${e.key}`, `Append to: ${e.leaf.title || '(no title)'}`, `${e.leaf.nodeCode}, sequence ${e.seq}. Adds to it without replacing it.`))}
+        {(!v4 || expert) && targets.map((e) => opt(`append|${e.key}`, `Append to: ${e.leaf.title || '(no title)'}`, `${e.leaf.nodeCode}, sequence ${e.seq}. Adds to it without replacing it.`))}
+        {v4 && <p className="small muted">eCTD v4.0 has no append. Send a replacement, or add the document as a new context of use.{expert ? ' Expert mode still lists append so you can see the validator catch it.' : ''}</p>}
         {expert && <p className="small muted">Expert mode: every earlier leaf is listed, including invalid targets.</p>}
         <div className="row" style={{ justifyContent: 'flex-end', marginTop: '.75rem' }}>
           <button className="btn" onClick={onCancel}>Cancel</button>

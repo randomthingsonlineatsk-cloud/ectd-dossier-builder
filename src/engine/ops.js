@@ -21,10 +21,11 @@ export function placeDoc(project, seqNumber, docId, nodeCode, operation = 'new',
   return leaf;
 }
 
-export function addDeleteLeaf(project, seqNumber, target) {
+// Retires a current leaf: 'delete' in v3.2.2, 'suspend' (statusCode suspended) in v4.0.
+export function addDeleteLeaf(project, seqNumber, target, operation = project.ectdVersion === '4.0' ? 'suspend' : 'delete') {
   const seq = seqByNumber(project, seqNumber);
   assertEditable(seq);
-  const leaf = makeLeaf(project, null, target.nodeCode, 'delete', { seq: target.seq, leafId: target.leafId });
+  const leaf = makeLeaf(project, null, target.nodeCode, operation, { seq: target.seq, leafId: target.leafId });
   leaf.title = target.title ?? '';
   seq.leaves.push(leaf);
   touch(project);
@@ -124,3 +125,5 @@ export async function publishWithFiles(project, seqNumber) {
   await computeSequenceChecksums(project, seqNumber);
   return publish(project, seqNumber);
 }
+
+export const addSuspendLeaf = (project, seqNumber, target) => addDeleteLeaf(project, seqNumber, target, 'suspend');

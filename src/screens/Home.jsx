@@ -2,6 +2,13 @@ import React, { useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
 import { go } from '../App.jsx';
 import { createProject, PRODUCTS, productOptions } from '../engine/model.js';
+
+const REGION_OPTION = {
+  US: (o) => `US — ${({ 'bla-351k': 'BLA 351(k) biosimilar' })[o.appType] ?? o.appType.toUpperCase()} (eCTD v3.2.2)`,
+  EU: () => 'EU — centralised MAA (eCTD v3.2.2)',
+  JP: () => 'Japan — new drug application (eCTD v4.0)',
+  IN: () => 'India — new drug, CTD for the online portal',
+};
 import { db } from '../engine/db.js';
 import { exportProject, parseProjectFile, download } from '../engine/io.js';
 import { slug } from '../engine/tree.js';
@@ -99,7 +106,7 @@ export default function Home() {
               <div className="list-item" key={p.id}>
                 <div>
                   <h3><a href={`#/project/${p.id}`}>{p.name}</a></h3>
-                  <span className="small muted">{PRODUCTS[p.productId]?.product.brandName} · {p.region} {p.appType.toUpperCase()} · eCTD {p.ectdVersion} · {p.sequences.length} sequence{p.sequences.length > 1 ? 's' : ''}, {pub} published · updated {new Date(p.updatedAt).toLocaleString()}</span>
+                  <span className="small muted">{PRODUCTS[p.productId]?.product.brandName} · {p.region} {p.appType.toUpperCase()} · {p.ectdVersion === 'CTD' ? 'CTD' : `eCTD ${p.ectdVersion}`} · {p.sequences.length} sequence{p.sequences.length > 1 ? 's' : ''}, {pub} published · updated {new Date(p.updatedAt).toLocaleString()}</span>
                 </div>
                 <div className="row">
                   <a className="btn small" href={`#/project/${p.id}`}>Open</a>
@@ -126,7 +133,7 @@ export default function Home() {
           </label>
           <label className="field">Region and application type
             <select value={opt.region} onChange={(e) => setRegion(e.target.value)}>
-              {opts.map((o) => <option key={o.region} value={o.region}>{o.region === 'EU' ? 'EU — centralised MAA' : `US — ${o.appType.toUpperCase()}`}</option>)}
+              {opts.map((o) => <option key={o.region} value={o.region}>{REGION_OPTION[o.region]?.(o) ?? `${o.region} — ${o.appType.toUpperCase()}`}</option>)}
               <option disabled>Japan — NDA, v4.0 (Phase 3)</option>
               <option disabled>India — NDA under NDCT Rules (Phase 3)</option>
             </select>

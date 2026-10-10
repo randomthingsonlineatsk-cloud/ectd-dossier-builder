@@ -8,6 +8,9 @@ import OperationPicker from './OperationPicker.jsx';
 import PdfPreview from '../../components/PdfPreview.jsx';
 import { FILE_TAGS, needsStudyTag, moduleOf, tagFromDoc, DEFAULT_TAG } from '../../engine/stf.js';
 import rulesData from '../../data/rules.json' with { type: 'json' };
+import { isV4, deliveredBefore, seqInt } from '../../engine/v4.js';
+
+const isRetire = (op) => op === 'delete' || op === 'suspend';
 
 const DND = 'application/x-ectd';
 
@@ -24,6 +27,8 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const [view, setView] = useState('tree');
   const [expanded, setExpanded] = useState(() => new Set([M1_ROOT[project.region] ?? '1', '2', '3', '3.2', '3.2.P', '5', '5.3']));
   const roots = rootsFor(project.region);
+  const v4 = isV4(project);
+  const retireWord = v4 ? 'Suspend' : 'Delete';
   const [overCode, setOverCode] = useState(null);
   const [picker, setPicker] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -40,6 +45,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const editable = seq.status !== 'published';
   const expert = !!project.settings.expertMode;
   const { isFirst, prevState } = useMemo(() => priorInfo(project, seq), [project, seq]);
+  const delivered = useMemo(() => (v4 ? deliveredBefore(project, seq.number) : new Map()), [project, seq, v4]);
   // Required headings: Modules 2-5 for the application type plus the mandatory Module 1 items.
   const required = useMemo(() => new Set([...requiredFor(project, seq), ...m1Checklist(project, seq).filter((i) => i.level === 'mandatory').map((i) => i.section)]), [project, seq]);
   const status = useMemo(() => nodeStatus(project, seq.number, required), [project, seq.number, required]);
@@ -153,7 +159,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
 
   // Middle column
   const node = selectedCode ? nodeOf(selectedCode) : null;
-  const priorHere = selectedCode ? (prevState.byNode[selectedCode] ?? []).filter((e) => e.status === 'current' && e.leaf.operation !== 'delete') : [];
+  const priorHere = selectedCode ? (prevState.byNode[selectedCode] ?? []).filter((e) => e.status === 'current' && !isRetire(e.leaf.operation)) : [];
   const leavesHere = selectedCode ? seq.leaves.filter((l) => l.nodeCode === selectedCode) : [];
   const leaf = selLeaf ? seq.leaves.find((l) => l.id === selLeaf) : null;
   const leafDoc = leaf ? docForLeaf(project, leaf) : null;
@@ -230,7 +236,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               {node.help && <p className="small muted">{node.help}</p>}
               {node.children.length > 0 && <p className="small muted">This heading has sub-headings. Documents go on the lowest level.</p>}
               {editable && project.region === 'US' && ['4', '5'].includes(node.module) && (() => {
-                const untagged = seq.leaves.filter((l) => needsStudyTag(l.nodeCode) && l.operation !== 'delete' && !l.study?.id && tagFromDoc(project, l));
+                const untagged = seq.leaves.filter((l) => needsStudyTag(l.nodeCode) && !isRetire(l.operation) && !l.study?.id && tagFromDoc(project, l));
                 return untagged.length > 0 && (
                   <p className="callout small">{untagged.length} study document{untagged.length > 1 ? 's' : ''} in Modules 4 and 5 {untagged.length > 1 ? 'have' : 'has'} no study tagging yet.{' '}
                     <button className="btn small" onClick={() => mutate((p) => { for (const l of p.sequences.find((x) => x.id === seq.id).leaves) if (needsStudyTag(l.nodeCode) && !l.study?.id) { const t = tagFromDoc(p, l); if (t) l.study = t; } })}>Tag studies from documents</button>
@@ -251,8 +257,8 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                     {isReplacedNow && <p className="small muted" style={{ margin: '.3rem 0 0' }}>Acted on in this sequence.</p>}
                     {editable && !isFirst && !isReplacedNow && (
                       <div className="row" style={{ marginTop: '.4rem' }}>
-                        <button className="btn small" onClick={() => mutate((p) => addDeleteLeaf(p, seq.number, { seq: e.seq, leafId: e.leaf.id, nodeCode: e.leaf.nodeCode, title: e.leaf.title }))}>Delete in {seq.number}</button>
-                        <span className="small muted">To replace it, drop the new version on this heading.</span>
+                        <button className="btn small" onClick={() => mutate((p) => addDeleteLeaf(p, seq.number, { seq: e.seq, leafId: e.leaf.id, nodeCode: e.leaf.nodeCode, title: e.leaf.title }))}>{retireWord} in {v4 ? seqInt(seq.number) : seq.number}</button>
+                        <span className="small muted">To replace it, drop the new version on this heading.{v4 ? ' Suspending sets the context of use to "suspended"; v4.0 has no delete.' : ''}</span>
                       </div>
                     )}
                   </div>
@@ -268,8 +274,9 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                       <button className="btn ghost small" style={{ padding: 0, textAlign: 'left' }} onClick={() => setSelLeaf(l.id)}><span className="lt">{l.title || '(no title)'}</span></button>
                       <span className="row"><span className={`op ${l.operation}`}>{l.operation}</span>{fs.length > 0 && <span className={`pill ${fs[0].severity.toLowerCase()}`}>{fs.length} finding{fs.length > 1 ? 's' : ''}</span>}</span>
                     </div>
-                    <div className="fn">{l.operation === 'delete' ? `deletes ${l.target?.seq}/${l.target?.leafId}` : filePath(l.nodeCode, l.fileName, project.settings)}</div>
-                    {l.target && l.operation !== 'delete' && <div className="small muted">{l.operation}s {l.target.seq} · {l.target.leafId}</div>}
+                    <div className="fn">{isRetire(l.operation) ? `${l.operation === 'suspend' ? 'suspends' : 'deletes'} ${l.target?.seq}/${l.target?.leafId}` : filePath(l.nodeCode, l.fileName, project.settings)}</div>
+                    {l.target && !isRetire(l.operation) && <div className="small muted">{l.operation}s {l.target.seq} · {l.target.leafId}</div>}
+                    {v4 && l.docId && delivered.has(l.docId) && <div className="small" style={{ color: 'var(--ok)' }}>Reuses the document sent in sequence {seqInt(delivered.get(l.docId).seq)}: no file is sent again.</div>}
                     {d?.note && <div className="small muted">{d.note}</div>}
                   </div>
                 );
@@ -288,7 +295,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                     <label className="field">Leaf title
                       <input type="text" value={leaf.title} disabled={!editable} onChange={(e) => mutate((p) => updateLeaf(p, seq.number, leaf.id, { title: e.target.value }), { quiet: true })} />
                     </label>
-                    {leaf.operation !== 'delete' && (
+                    {!isRetire(leaf.operation) && (
                       <label className="field">File name <small>lowercase a–z, 0–9 and hyphens, ending .pdf</small>
                         <input type="text" value={leaf.fileName} disabled={!editable} onChange={(e) => mutate((p) => updateLeaf(p, seq.number, leaf.id, { fileName: e.target.value }), { quiet: true })} />
                       </label>
@@ -300,11 +307,12 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                       }}>
                         <option value="new">new</option>
                         {(expert || !isFirst) && <option value="replace">replace</option>}
-                        {(expert || !isFirst) && <option value="append">append</option>}
+                        {(expert || !isFirst) && (!v4 || expert || leaf.operation === 'append') && <option value="append">append{v4 ? ' (not in v4.0)' : ''}</option>}
                         {leaf.operation === 'delete' && <option value="delete">delete</option>}
+                        {leaf.operation === 'suspend' && <option value="suspend">suspend</option>}
                       </select>
                     </label>
-                    {leaf.operation !== 'new' && leaf.operation !== 'delete' && (
+                    {leaf.operation !== 'new' && !isRetire(leaf.operation) && (
                       <label className="field">Target leaf
                         <select value={leaf.target ? `${leaf.target.seq}:${leaf.target.leafId}` : ''} disabled={!editable} onChange={(e) => {
                           const [s, id] = e.target.value.split(':');
@@ -312,13 +320,19 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                         }}>
                           <option value="">Choose…</option>
                           {[...prevState.entries.values()]
-                            .filter((x) => x.leaf.operation !== 'delete' && (expert || (x.status === 'current' && x.leaf.nodeCode === leaf.nodeCode)))
+                            .filter((x) => !isRetire(x.leaf.operation) && (expert || (x.status === 'current' && x.leaf.nodeCode === leaf.nodeCode)))
                             .map((x) => <option key={x.key} value={x.key}>{x.seq} · {dc(x.leaf.nodeCode)} · {x.leaf.title}{x.status !== 'current' ? ` (${x.status})` : ''}</option>)}
                           {leaf.target && !prevState.entries.has(`${leaf.target.seq}:${leaf.target.leafId}`) && <option value={`${leaf.target.seq}:${leaf.target.leafId}`}>{leaf.target.seq} · {leaf.target.leafId} (not found)</option>}
                         </select>
                       </label>
                     )}
-                    {project.region === 'US' && needsStudyTag(leaf.nodeCode) && leaf.operation !== 'delete' && (
+                    {v4 && needsStudyTag(leaf.nodeCode) && !isRetire(leaf.operation) && (
+                      <label className="field">Study ID keyword <small>v4.0 groups study documents with a keyword instead of a study tagging file</small>
+                        <input type="text" value={leaf.study?.id ?? ''} disabled={!editable} placeholder="e.g. HRP-301"
+                          onChange={(e) => mutate((p) => updateLeaf(p, seq.number, leaf.id, { study: { id: e.target.value } }))} />
+                      </label>
+                    )}
+                    {project.region === 'US' && needsStudyTag(leaf.nodeCode) && !isRetire(leaf.operation) && (
                       <fieldset style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-s)', padding: '.6rem .7rem' }}>
                         <legend className="small" style={{ fontWeight: 600 }}>Study tagging file (US)</legend>
                         <div className="grid-2" style={{ gap: '.5rem' }}>

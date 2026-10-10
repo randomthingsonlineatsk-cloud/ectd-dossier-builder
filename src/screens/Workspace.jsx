@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
+import { REGION_LABEL } from '../engine/tree.js';
 import { db, saveProject as dbSave, saveAttempt } from '../engine/db.js';
 import { seqByNumber, sortedSequences, PRODUCTS, migrateProject } from '../engine/model.js';
 import { validate } from '../engine/validate.js';
@@ -14,6 +15,8 @@ import Consistency from './workspace/Consistency.jsx';
 import { consistencyMatrix } from '../engine/consistency.js';
 import SettingsView from './workspace/SettingsView.jsx';
 import MissionView from './workspace/MissionView.jsx';
+import ReviewView from './workspace/ReviewView.jsx';
+import PlanningView from './workspace/PlanningView.jsx';
 
 function Timer({ mission, onExpire }) {
   const [now, setNow] = useState(Date.now());
@@ -119,8 +122,8 @@ export default function Workspace({ id }) {
   const consistencyCount = consistencyIssues;
   const tabs = [
     ...(project.mission ? [['mission', 'Mission']] : []),
-    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', 'Backbone'],
-    ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['settings', 'Settings'],
+    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', project.ectdVersion === '4.0' ? 'Submission unit' : project.region === 'IN' ? 'Portal upload' : 'Backbone'],
+    ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['planning', 'Planning'], ['review', 'Review', (project.review?.questions ?? []).filter((q) => q.status !== 'resolved').length], ['settings', 'Settings'],
   ];
   const guided = project.mission?.difficulty === 'guided';
 
@@ -129,7 +132,7 @@ export default function Workspace({ id }) {
       <div className="ws-head">
         <div className="ws-title">
           <div>
-            <p className="small muted" style={{ margin: 0 }}><a href="#/">Projects</a> / {p.product.brandName} ({p.product.inn}) · {project.region} {project.appType.toUpperCase()} · eCTD {project.ectdVersion}</p>
+            <p className="small muted" style={{ margin: 0 }}><a href="#/">Projects</a> / {p.product.brandName} ({p.product.inn}) · {REGION_LABEL[project.region]} {project.appType.toUpperCase()} · {project.ectdVersion === 'CTD' ? 'CTD (portal)' : `eCTD ${project.ectdVersion}`}</p>
             <h1>{project.name}</h1>
           </div>
           <label className="field" style={{ minWidth: 220 }}>Working on sequence
@@ -155,7 +158,7 @@ export default function Workspace({ id }) {
           <span className={`pill ${validation.counts.High ? 'high' : validation.counts.Medium ? 'medium' : 'ok'}`}>Seq {seq.number}: {validation.counts.High} high, {validation.counts.Medium} medium</span>
         </div>
       )}
-      {seq.status === 'published' && tab !== 'sequences' && tab !== 'mission' && (
+      {seq.status === 'published' && !['sequences', 'mission', 'review', 'planning'].includes(tab) && (
         <div className="callout" style={{ margin: '1rem 1.25rem 0' }}>Sequence {seq.number} is published and read-only. Go to Sequences to create the next one.</div>
       )}
       <div className="ws-body" role="tabpanel">
@@ -167,6 +170,8 @@ export default function Workspace({ id }) {
         {tab === 'sequences' && <Sequences project={project} seq={seq} setSeqNumber={setSeqNumber} mutate={mutate} mutateAsync={mutateAsync} toast={toast} />}
         {tab === 'backbone' && <Backbone project={project} seq={seq} />}
         {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
+        {tab === 'review' && <ReviewView project={project} seq={seq} mutate={mutate} toast={toast} setSeqNumber={setSeqNumber} setTab={setTab} focusNode={focusNode} />}
+        {tab === 'planning' && <PlanningView project={project} seq={seq} mutate={mutate} toast={toast} focusNode={focusNode} setTab={setTab} />}
         {tab === 'settings' && <SettingsView project={project} mutate={mutate} attempts={attempts} />}
       </div>
     </div>

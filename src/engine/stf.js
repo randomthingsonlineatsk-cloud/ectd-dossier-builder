@@ -2,7 +2,7 @@
 // specification and FDA file-tag list. Leaves in Modules 4.2 and 5.3 carry
 // leaf.study = { id, tag }; one STF per study and heading is generated per sequence.
 import { folderPath, slug } from './tree.js';
-import { docForLeaf } from './model.js';
+import { docForLeaf, isRetireOp } from './model.js';
 
 export const FILE_TAGS = {
   4: [
@@ -54,7 +54,7 @@ export function studyFiles(project, seq) {
   if (project.region !== 'US') return [];
   const groups = new Map();
   for (const l of seq.leaves) {
-    if (l.operation === 'delete' || !l.study?.id || !needsStudyTag(l.nodeCode)) continue;
+    if (isRetireOp(l.operation) || !l.study?.id || !needsStudyTag(l.nodeCode)) continue;
     const key = `${l.nodeCode}|${l.study.id}`;
     if (!groups.has(key)) groups.set(key, { nodeCode: l.nodeCode, studyId: l.study.id, leaves: [] });
     groups.get(key).leaves.push(l);

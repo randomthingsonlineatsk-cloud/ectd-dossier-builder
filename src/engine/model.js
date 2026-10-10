@@ -9,6 +9,8 @@ import biosimilarMab from '../data/products/biosimilar-mab.json' with { type: 'j
 import { INDEX, filePath, inRegion } from './tree.js';
 import { regionDocs } from './regiondocs.js';
 
+// delete (v3.2.2) and suspend (v4.0) both take a leaf out of the current view.
+export const isRetireOp = (op) => op === 'delete' || op === 'suspend';
 export const SCHEMA_VERSION = 2;
 export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable, 'mab-infusion': mabInfusion, 'biosimilar-mab': biosimilarMab };
 export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa', JP: 'nda', IN: 'nda' };

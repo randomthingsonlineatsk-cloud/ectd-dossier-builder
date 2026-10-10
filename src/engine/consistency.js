@@ -2,7 +2,7 @@
 // manufacturers, limits, batches, patient numbers...). The matrix compares every
 // statement of a fact across the current view and flags the ones that disagree.
 import data from '../data/consistency.json' with { type: 'json' };
-import { PRODUCTS, docForLeaf, lifecycleState, makeDoc, seqByNumber, touch } from './model.js';
+import { PRODUCTS, docForLeaf, lifecycleState, makeDoc, seqByNumber, touch, isRetireOp } from './model.js';
 import { INDEX } from './tree.js';
 
 export const FACTS = data.facts;
@@ -40,7 +40,7 @@ function reference(cells) {
 
 export function consistencyMatrix(project, seqNumber) {
   const st = lifecycleState(project, seqNumber);
-  let current = [...st.entries.values()].filter((e) => e.status === 'current' && e.leaf.operation !== 'delete');
+  let current = [...st.entries.values()].filter((e) => e.status === 'current' && !isRetireOp(e.leaf.operation));
   // Forms are sent fresh with each sequence; only the latest one of each form speaks for the dossier.
   const latestForm = {};
   for (const e of current) {
