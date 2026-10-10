@@ -1,138 +1,1148 @@
 {
-  "_about": "US Module 1 heading tree, modelled on the public FDA eCTD Module 1 specification (v2.3 headings). Section codes and element names follow the public spec; all content placed here in the app is fictional. Leaves are stored in m1/us/.",
+  "_about": "US Module 1 heading tree from FDA's Comprehensive Table of Contents Headings and Hierarchy v2.3.5 (Feb 2025); 1.15 and 1.16.2 are shown without their deepest promotional/REMS levels. Element names are modelled on the FDA regional spec. All content placed here in the app is fictional. Leaves are stored in m1/us/.",
   "region": "US",
   "regionalFile": "m1/us/us-regional.xml",
   "folder": "m1/us",
   "tree": {
-    "code": "1", "title": "Administrative Information and Prescribing Information (US)", "element": "m1-regional",
+    "code": "1",
+    "title": "Administrative Information and Prescribing Information (US)",
+    "element": "m1-regional",
     "children": [
-      { "code": "1.1", "title": "Forms", "element": "m1-1-forms",
-        "help": "Agency forms. In the regional XML each form leaf carries a form-type attribute such as FDA 356h, FDA 3397 or FDA 3674." },
-      { "code": "1.2", "title": "Cover Letters", "element": "m1-2-cover-letters",
-        "help": "Every sequence should open with a cover letter describing what is being sent and why." },
-      { "code": "1.3", "title": "Administrative Information", "element": "m1-3-administrative-information",
+      {
+        "code": "1.1",
+        "title": "Forms",
+        "element": "m1-1-forms",
+        "help": "Agency forms. In the regional XML each form leaf carries a form-type attribute such as FDA 356h, FDA 3397 or FDA 3674."
+      },
+      {
+        "code": "1.2",
+        "title": "Cover Letters",
+        "element": "m1-2-cover-letters",
+        "help": "Every sequence should open with a cover letter describing what is being sent and why."
+      },
+      {
+        "code": "1.3",
+        "title": "Administrative Information",
+        "element": "m1-3-administrative-information",
         "children": [
-          { "code": "1.3.1", "title": "Contact/Sponsor/Applicant Information", "element": "m1-3-1-contact-sponsor-applicant-information" },
-          { "code": "1.3.2", "title": "Field Copy Certification", "element": "m1-3-2-field-copy-certification",
-            "help": "For NDAs: certifies that a field copy of Module 3 was sent to the local district office." },
-          { "code": "1.3.3", "title": "Debarment Certification", "element": "m1-3-3-debarment-certification" },
-          { "code": "1.3.4", "title": "Financial Certification and Disclosure", "element": "m1-3-4-financial-certification-and-disclosure",
-            "help": "Forms FDA 3454 (certification) and/or 3455 (disclosure) for clinical investigators." },
-          { "code": "1.3.5", "title": "Patent and Exclusivity", "element": "m1-3-5-patent-and-exclusivity",
+          {
+            "code": "1.3.1",
+            "title": "Contact/Sponsor/Applicant Information",
+            "element": "m1-3-1-contact-sponsor-applicant-information",
             "children": [
-              { "code": "1.3.5.1", "title": "Patent Information", "element": "m1-3-5-1-patent-information", "help": "Form FDA 3542a submitted with an NDA." },
-              { "code": "1.3.5.2", "title": "Patent Certification", "element": "m1-3-5-2-patent-certification" },
-              { "code": "1.3.5.3", "title": "Exclusivity Claim", "element": "m1-3-5-3-exclusivity-claim" }
-            ] }
-        ] },
-      { "code": "1.4", "title": "References", "element": "m1-4-references",
-        "children": [
-          { "code": "1.4.1", "title": "Letter of Authorization", "element": "m1-4-1-letter-authorization", "help": "Letters authorising FDA to refer to a drug master file." },
-          { "code": "1.4.2", "title": "Statement of Right of Reference", "element": "m1-4-2-statement-right-reference" },
-          { "code": "1.4.3", "title": "List of Authorized Persons to Incorporate by Reference", "element": "m1-4-3-list-authorized-person-incorporate-reference" },
-          { "code": "1.4.4", "title": "Cross-Reference to Previously Submitted Information", "element": "m1-4-4-cross-reference-other-applications" }
-        ] },
-      { "code": "1.5", "title": "Application Status", "element": "m1-5-application-status" },
-      { "code": "1.6", "title": "Meetings", "element": "m1-6-meetings",
-        "children": [
-          { "code": "1.6.1", "title": "Meeting Request", "element": "m1-6-1-meeting-request" },
-          { "code": "1.6.2", "title": "Meeting Background Materials", "element": "m1-6-2-meeting-background-materials" },
-          { "code": "1.6.3", "title": "Correspondence Regarding Meetings", "element": "m1-6-3-correspondence-regarding-meetings" }
-        ] },
-      { "code": "1.7", "title": "Fast Track", "element": "m1-7-fast-track" },
-      { "code": "1.8", "title": "Special Protocol Assessment Request", "element": "m1-8-special-protocol-assessment-request" },
-      { "code": "1.9", "title": "Pediatric Administrative Information", "element": "m1-9-pediatric-administrative-information" },
-      { "code": "1.10", "title": "Dispute Resolution", "element": "m1-10-dispute-resolution" },
-      { "code": "1.11", "title": "Information Amendment: Information not Covered under Modules 2 to 5", "element": "m1-11-information-amendment",
-        "children": [
-          { "code": "1.11.1", "title": "Quality Information Amendment", "element": "m1-11-1-quality-information-amendment", "help": "Commonly used for the response document to a quality (CMC) information request." },
-          { "code": "1.11.2", "title": "Nonclinical Information Amendment", "element": "m1-11-2-nonclinical-information-amendment" },
-          { "code": "1.11.3", "title": "Clinical Information Amendment", "element": "m1-11-3-clinical-information-amendment" },
-          { "code": "1.11.4", "title": "Multiple Module Information Amendment", "element": "m1-11-4-multiple-module-information-amendment" }
-        ] },
-      { "code": "1.12", "title": "Other Correspondence", "element": "m1-12-other-correspondence",
-        "children": [
-          { "code": "1.12.4", "title": "Request for Comments and Advice", "element": "m1-12-4-request-comments-advice" },
-          { "code": "1.12.14", "title": "Environmental Analysis", "element": "m1-12-14-environmental-analysis", "help": "Environmental assessment or a claim of categorical exclusion." },
-          { "code": "1.12.15", "title": "Request for Waiver of In Vivo Bioavailability Studies", "element": "m1-12-15-request-waiver-in-vivo-bioavailability-studies" }
-        ] },
-      { "code": "1.13", "title": "Annual Report", "element": "m1-13-annual-report" },
-      { "code": "1.14", "title": "Labeling", "element": "m1-14-labeling",
-        "children": [
-          { "code": "1.14.1", "title": "Draft Labeling", "element": "m1-14-1-draft-labeling",
+              {
+                "code": "1.3.1.1",
+                "title": "Change of Address or Corporate Name",
+                "element": "m1-1-3-1-1-change-of-address-or-corporate-name"
+              },
+              {
+                "code": "1.3.1.2",
+                "title": "Change in Contact/Agent",
+                "element": "m1-1-3-1-2-change-in-contact-agent"
+              },
+              {
+                "code": "1.3.1.3",
+                "title": "Change in Sponsor",
+                "element": "m1-1-3-1-3-change-in-sponsor"
+              },
+              {
+                "code": "1.3.1.4",
+                "title": "Transfer of Obligation",
+                "element": "m1-1-3-1-4-transfer-of-obligation"
+              },
+              {
+                "code": "1.3.1.5",
+                "title": "Change in Ownership of an Application or Reissuance of License",
+                "element": "m1-1-3-1-5-change-in-ownership-of-an-application-or-reissuance-of-license"
+              }
+            ]
+          },
+          {
+            "code": "1.3.2",
+            "title": "Field Copy Certification",
+            "element": "m1-3-2-field-copy-certification",
+            "help": "For NDAs: certifies that a field copy of Module 3 was sent to the local district office."
+          },
+          {
+            "code": "1.3.3",
+            "title": "Debarment Certification",
+            "element": "m1-3-3-debarment-certification"
+          },
+          {
+            "code": "1.3.4",
+            "title": "Financial Certification and Disclosure",
+            "element": "m1-3-4-financial-certification-and-disclosure",
+            "help": "Forms FDA 3454 (certification) and/or 3455 (disclosure) for clinical investigators."
+          },
+          {
+            "code": "1.3.5",
+            "title": "Patent and Exclusivity",
+            "element": "m1-3-5-patent-and-exclusivity",
             "children": [
-              { "code": "1.14.1.1", "title": "Draft Carton and Container Labels", "element": "m1-14-1-1-draft-carton-container-labels" },
-              { "code": "1.14.1.2", "title": "Annotated Draft Labeling Text", "element": "m1-14-1-2-annotated-draft-labeling-text" },
-              { "code": "1.14.1.3", "title": "Draft Labeling Text", "element": "m1-14-1-3-draft-labeling-text", "help": "Prescribing information; structured product labeling (SPL) is also provided here in practice." },
-              { "code": "1.14.1.4", "title": "Label Comprehension Studies", "element": "m1-14-1-4-label-comprehension-studies" },
-              { "code": "1.14.1.5", "title": "Labeling History", "element": "m1-14-1-5-labeling-history" }
-            ] },
-          { "code": "1.14.2", "title": "Final Labeling", "element": "m1-14-2-final-labeling" },
-          { "code": "1.14.3", "title": "Listed Drug Labeling", "element": "m1-14-3-listed-drug-labeling" },
-          { "code": "1.14.4", "title": "Investigational Drug Labeling", "element": "m1-14-4-investigational-drug-labeling" },
-          { "code": "1.14.5", "title": "Foreign Labeling", "element": "m1-14-5-foreign-labeling" }
-        ] },
-      { "code": "1.15", "title": "Promotional Material", "element": "m1-15-promotional-material" },
-      { "code": "1.16", "title": "Risk Management Plans", "element": "m1-16-risk-management-plan" },
-      { "code": "1.17", "title": "Postmarketing Studies", "element": "m1-17-postmarketing-studies" },
-      { "code": "1.18", "title": "Proprietary Names", "element": "m1-18-proprietary-names" },
-      { "code": "1.19", "title": "Pre-EUA and EUA", "element": "m1-19-pre-eua-and-eua" },
-      { "code": "1.20", "title": "General Investigational Plan for Initial IND", "element": "m1-20-general-investigational-plan" }
+              {
+                "code": "1.3.5.1",
+                "title": "Patent Information",
+                "element": "m1-3-5-1-patent-information",
+                "help": "Form FDA 3542a submitted with an NDA."
+              },
+              {
+                "code": "1.3.5.2",
+                "title": "Patent Certification",
+                "element": "m1-3-5-2-patent-certification"
+              },
+              {
+                "code": "1.3.5.3",
+                "title": "Exclusivity Claim",
+                "element": "m1-3-5-3-exclusivity-claim"
+              }
+            ]
+          },
+          {
+            "code": "1.3.6",
+            "title": "Tropical Disease Priority Review Voucher",
+            "element": "m1-1-3-6-tropical-disease-priority-review-voucher"
+          }
+        ]
+      },
+      {
+        "code": "1.4",
+        "title": "References",
+        "element": "m1-4-references",
+        "children": [
+          {
+            "code": "1.4.1",
+            "title": "Letter of Authorization",
+            "element": "m1-4-1-letter-authorization",
+            "help": "Letters authorising FDA to refer to a drug master file."
+          },
+          {
+            "code": "1.4.2",
+            "title": "Statement of Right of Reference",
+            "element": "m1-4-2-statement-right-reference"
+          },
+          {
+            "code": "1.4.3",
+            "title": "List of Authorized Persons to Incorporate by Reference",
+            "element": "m1-4-3-list-authorized-person-incorporate-reference"
+          },
+          {
+            "code": "1.4.4",
+            "title": "Cross-Reference to Previously Submitted Information",
+            "element": "m1-4-4-cross-reference-other-applications"
+          }
+        ]
+      },
+      {
+        "code": "1.5",
+        "title": "Application Status",
+        "element": "m1-5-application-status",
+        "children": [
+          {
+            "code": "1.5.1",
+            "title": "Withdrawal of an IND",
+            "element": "m1-1-5-1-withdrawal-of-an-ind"
+          },
+          {
+            "code": "1.5.2",
+            "title": "Inactivation Request",
+            "element": "m1-1-5-2-inactivation-request"
+          },
+          {
+            "code": "1.5.3",
+            "title": "Reactivation Request",
+            "element": "m1-1-5-3-reactivation-request"
+          },
+          {
+            "code": "1.5.4",
+            "title": "Reinstatement Request",
+            "element": "m1-1-5-4-reinstatement-request"
+          },
+          {
+            "code": "1.5.5",
+            "title": "Withdrawal of an Unapproved BLA, NDA, ANDA, or Supplement",
+            "element": "m1-1-5-5-withdrawal-of-an-unapproved-bla-nda-anda-or-supplement"
+          },
+          {
+            "code": "1.5.6",
+            "title": "Withdrawal of Listed Drug",
+            "element": "m1-1-5-6-withdrawal-of-listed-drug"
+          },
+          {
+            "code": "1.5.7",
+            "title": "Withdrawal of Approval of an Application or Revocation of License",
+            "element": "m1-1-5-7-withdrawal-of-approval-of-an-application-or-revocation-of-license"
+          }
+        ]
+      },
+      {
+        "code": "1.6",
+        "title": "Meetings",
+        "element": "m1-6-meetings",
+        "children": [
+          {
+            "code": "1.6.1",
+            "title": "Meeting Request",
+            "element": "m1-6-1-meeting-request"
+          },
+          {
+            "code": "1.6.2",
+            "title": "Meeting Background Materials",
+            "element": "m1-6-2-meeting-background-materials"
+          },
+          {
+            "code": "1.6.3",
+            "title": "Correspondence Regarding Meetings",
+            "element": "m1-6-3-correspondence-regarding-meetings"
+          }
+        ]
+      },
+      {
+        "code": "1.7",
+        "title": "Fast Track",
+        "element": "m1-7-fast-track",
+        "children": [
+          {
+            "code": "1.7.1",
+            "title": "Fast Track Designation Request",
+            "element": "m1-1-7-1-fast-track-designation-request"
+          },
+          {
+            "code": "1.7.2",
+            "title": "Fast Track Designation Withdrawal Request",
+            "element": "m1-1-7-2-fast-track-designation-withdrawal-request"
+          },
+          {
+            "code": "1.7.3",
+            "title": "Rolling Review Request",
+            "element": "m1-1-7-3-rolling-review-request"
+          },
+          {
+            "code": "1.7.4",
+            "title": "Correspondence Regarding Fast Track/Rolling Review",
+            "element": "m1-1-7-4-correspondence-regarding-fast-track-rolling-review"
+          }
+        ]
+      },
+      {
+        "code": "1.8",
+        "title": "Special Protocol Assessment Request",
+        "element": "m1-8-special-protocol-assessment-request",
+        "children": [
+          {
+            "code": "1.8.1",
+            "title": "Clinical Study",
+            "element": "m1-1-8-1-clinical-study"
+          },
+          {
+            "code": "1.8.2",
+            "title": "Carcinogenicity Study",
+            "element": "m1-1-8-2-carcinogenicity-study"
+          },
+          {
+            "code": "1.8.3",
+            "title": "Stability Study",
+            "element": "m1-1-8-3-stability-study"
+          },
+          {
+            "code": "1.8.4",
+            "title": "Animal Efficacy Study for Approval under the Animal Rule",
+            "element": "m1-1-8-4-animal-efficacy-study-for-approval-under-the-animal-rule"
+          }
+        ]
+      },
+      {
+        "code": "1.9",
+        "title": "Pediatric Administrative Information",
+        "element": "m1-9-pediatric-administrative-information",
+        "children": [
+          {
+            "code": "1.9.1",
+            "title": "Request for Waiver of Pediatric Studies",
+            "element": "m1-1-9-1-request-for-waiver-of-pediatric-studies"
+          },
+          {
+            "code": "1.9.2",
+            "title": "Request for Deferral of Pediatric Studies",
+            "element": "m1-1-9-2-request-for-deferral-of-pediatric-studies"
+          },
+          {
+            "code": "1.9.3",
+            "title": "Request for Pediatric Exclusivity Determination",
+            "element": "m1-1-9-3-request-for-pediatric-exclusivity-determination"
+          },
+          {
+            "code": "1.9.4",
+            "title": "Proposed Pediatric Study Request and Amendments",
+            "element": "m1-1-9-4-proposed-pediatric-study-request-and-amendments"
+          },
+          {
+            "code": "1.9.6",
+            "title": "Other Correspondence Regarding Pediatric Exclusivity or Study Plans",
+            "element": "m1-1-9-6-other-correspondence-regarding-pediatric-exclusivity-or-study-plans"
+          }
+        ]
+      },
+      {
+        "code": "1.10",
+        "title": "Dispute Resolution",
+        "element": "m1-10-dispute-resolution",
+        "children": [
+          {
+            "code": "1.10.1",
+            "title": "Request for Dispute Resolution",
+            "element": "m1-1-10-1-request-for-dispute-resolution"
+          },
+          {
+            "code": "1.10.2",
+            "title": "Correspondence Related to Dispute Resolution",
+            "element": "m1-1-10-2-correspondence-related-to-dispute-resolution"
+          }
+        ]
+      },
+      {
+        "code": "1.11",
+        "title": "Information Amendment: Information not Covered under Modules 2 to 5",
+        "element": "m1-11-information-amendment",
+        "children": [
+          {
+            "code": "1.11.1",
+            "title": "Quality Information Amendment",
+            "element": "m1-11-1-quality-information-amendment",
+            "help": "Commonly used for the response document to a quality (CMC) information request."
+          },
+          {
+            "code": "1.11.2",
+            "title": "Nonclinical Information Amendment",
+            "element": "m1-11-2-nonclinical-information-amendment"
+          },
+          {
+            "code": "1.11.3",
+            "title": "Clinical Information Amendment",
+            "element": "m1-11-3-clinical-information-amendment"
+          },
+          {
+            "code": "1.11.4",
+            "title": "Multiple Module Information Amendment",
+            "element": "m1-11-4-multiple-module-information-amendment"
+          }
+        ]
+      },
+      {
+        "code": "1.12",
+        "title": "Other Correspondence",
+        "element": "m1-12-other-correspondence",
+        "children": [
+          {
+            "code": "1.12.1",
+            "title": "Pre IND Correspondence",
+            "element": "m1-1-12-1-pre-ind-correspondence"
+          },
+          {
+            "code": "1.12.2",
+            "title": "Request to Charge for Clinical Trial",
+            "element": "m1-1-12-2-request-to-charge-for-clinical-trial"
+          },
+          {
+            "code": "1.12.3",
+            "title": "Request to Charge for Expanded Access",
+            "element": "m1-1-12-3-request-to-charge-for-expanded-access"
+          },
+          {
+            "code": "1.12.4",
+            "title": "Request for Comments and Advice",
+            "element": "m1-12-4-request-comments-advice"
+          },
+          {
+            "code": "1.12.5",
+            "title": "Request for a Waiver",
+            "element": "m1-1-12-5-request-for-a-waiver"
+          },
+          {
+            "code": "1.12.6",
+            "title": "Exception from Informed Consent for Emergency Research",
+            "element": "m1-1-12-6-exception-from-informed-consent-for-emergency-research"
+          },
+          {
+            "code": "1.12.7",
+            "title": "Public Disclosure Statement for Exception from Informed Consent for Emergency Research",
+            "element": "m1-1-12-7-public-disclosure-statement-for-exception-from-informed-consent-for-emergency-re"
+          },
+          {
+            "code": "1.12.8",
+            "title": "Correspondence Regarding Exception from Informed Consent for Emergency Research",
+            "element": "m1-1-12-8-correspondence-regarding-exception-from-informed-consent-for-emergency-research"
+          },
+          {
+            "code": "1.12.9",
+            "title": "Notification of Discontinuation of Clinical Trial",
+            "element": "m1-1-12-9-notification-of-discontinuation-of-clinical-trial"
+          },
+          {
+            "code": "1.12.10",
+            "title": "Generic Drug Enforcement Act Statement",
+            "element": "m1-1-12-10-generic-drug-enforcement-act-statement"
+          },
+          {
+            "code": "1.12.11",
+            "title": "ANDA Basis for Submission Statement",
+            "element": "m1-1-12-11-anda-basis-for-submission-statement",
+            "help": "ANDA: the statement identifying the reference listed drug and the basis for submitting an ANDA."
+          },
+          {
+            "code": "1.12.12",
+            "title": "Comparison of Generic Drug and Reference Listed Drug",
+            "element": "m1-1-12-12-comparison-of-generic-drug-and-reference-listed-drug",
+            "help": "ANDA: side-by-side comparison of the generic and the reference listed drug (conditions of use, active ingredient, route, dosage form, strength)."
+          },
+          {
+            "code": "1.12.13",
+            "title": "Request for Waiver for In Vivo Studies",
+            "element": "m1-1-12-13-request-for-waiver-for-in-vivo-studies"
+          },
+          {
+            "code": "1.12.14",
+            "title": "Environmental Analysis",
+            "element": "m1-12-14-environmental-analysis",
+            "help": "Environmental assessment or a claim of categorical exclusion."
+          },
+          {
+            "code": "1.12.15",
+            "title": "Request for Waiver of In Vivo Bioavailability Studies",
+            "element": "m1-12-15-request-waiver-in-vivo-bioavailability-studies"
+          },
+          {
+            "code": "1.12.16",
+            "title": "Field Alert Reports",
+            "element": "m1-1-12-16-field-alert-reports"
+          },
+          {
+            "code": "1.12.17",
+            "title": "Orphan Drug Designation",
+            "element": "m1-1-12-17-orphan-drug-designation"
+          }
+        ]
+      },
+      {
+        "code": "1.13",
+        "title": "Annual Report",
+        "element": "m1-13-annual-report",
+        "children": [
+          {
+            "code": "1.13.1",
+            "title": "Summary for Nonclinical Studies",
+            "element": "m1-1-13-1-summary-for-nonclinical-studies"
+          },
+          {
+            "code": "1.13.2",
+            "title": "Summary of Clinical Pharmacology Information",
+            "element": "m1-1-13-2-summary-of-clinical-pharmacology-information"
+          },
+          {
+            "code": "1.13.3",
+            "title": "Summary of Safety Information",
+            "element": "m1-1-13-3-summary-of-safety-information"
+          },
+          {
+            "code": "1.13.4",
+            "title": "Summary of Labeling Changes",
+            "element": "m1-1-13-4-summary-of-labeling-changes"
+          },
+          {
+            "code": "1.13.5",
+            "title": "Summary of Manufacturing Changes",
+            "element": "m1-1-13-5-summary-of-manufacturing-changes"
+          },
+          {
+            "code": "1.13.6",
+            "title": "Summary of Microbiological Changes",
+            "element": "m1-1-13-6-summary-of-microbiological-changes"
+          },
+          {
+            "code": "1.13.7",
+            "title": "Summary of Other Significant New Information",
+            "element": "m1-1-13-7-summary-of-other-significant-new-information"
+          },
+          {
+            "code": "1.13.8",
+            "title": "Individual Study Information",
+            "element": "m1-1-13-8-individual-study-information"
+          },
+          {
+            "code": "1.13.9",
+            "title": "General Investigational Plan",
+            "element": "m1-1-13-9-general-investigational-plan"
+          },
+          {
+            "code": "1.13.10",
+            "title": "Foreign Marketing",
+            "element": "m1-1-13-10-foreign-marketing"
+          },
+          {
+            "code": "1.13.11",
+            "title": "Distribution Data",
+            "element": "m1-1-13-11-distribution-data"
+          },
+          {
+            "code": "1.13.12",
+            "title": "Status of Postmarketing Study Commitments and Requirements",
+            "element": "m1-1-13-12-status-of-postmarketing-study-commitments-and-requirements"
+          },
+          {
+            "code": "1.13.13",
+            "title": "Status of Other Postmarketing Studies and Requirements",
+            "element": "m1-1-13-13-status-of-other-postmarketing-studies-and-requirements"
+          },
+          {
+            "code": "1.13.14",
+            "title": "Log of Outstanding Regulatory Business",
+            "element": "m1-1-13-14-log-of-outstanding-regulatory-business"
+          },
+          {
+            "code": "1.13.15",
+            "title": "Development Safety Update Report (DSUR)",
+            "element": "m1-1-13-15-development-safety-update-report-dsur"
+          }
+        ],
+        "help": "Annual report sections. Each yearly report is a new set of documents, not a replacement of last year's."
+      },
+      {
+        "code": "1.14",
+        "title": "Labeling",
+        "element": "m1-14-labeling",
+        "children": [
+          {
+            "code": "1.14.1",
+            "title": "Draft Labeling",
+            "element": "m1-14-1-draft-labeling",
+            "children": [
+              {
+                "code": "1.14.1.1",
+                "title": "Draft Carton and Container Labels",
+                "element": "m1-14-1-1-draft-carton-container-labels"
+              },
+              {
+                "code": "1.14.1.2",
+                "title": "Annotated Draft Labeling Text",
+                "element": "m1-14-1-2-annotated-draft-labeling-text"
+              },
+              {
+                "code": "1.14.1.3",
+                "title": "Draft Labeling Text",
+                "element": "m1-14-1-3-draft-labeling-text",
+                "help": "Prescribing information; structured product labeling (SPL) is also provided here in practice."
+              },
+              {
+                "code": "1.14.1.4",
+                "title": "Label Comprehension Studies",
+                "element": "m1-14-1-4-label-comprehension-studies"
+              },
+              {
+                "code": "1.14.1.5",
+                "title": "Labeling History",
+                "element": "m1-14-1-5-labeling-history"
+              }
+            ]
+          },
+          {
+            "code": "1.14.2",
+            "title": "Final Labeling",
+            "element": "m1-14-2-final-labeling",
+            "children": [
+              {
+                "code": "1.14.2.1",
+                "title": "Final Carton or Container Labels",
+                "element": "m1-1-14-2-1-final-carton-or-container-labels"
+              },
+              {
+                "code": "1.14.2.2",
+                "title": "Final Package Insert (Package Inserts, Patient Information, Medication Guides)",
+                "element": "m1-1-14-2-2-final-package-insert-package-inserts-patient-information-medication-guides"
+              },
+              {
+                "code": "1.14.2.3",
+                "title": "Final Labeling Text",
+                "element": "m1-1-14-2-3-final-labeling-text"
+              }
+            ]
+          },
+          {
+            "code": "1.14.3",
+            "title": "Listed Drug Labeling",
+            "element": "m1-14-3-listed-drug-labeling",
+            "children": [
+              {
+                "code": "1.14.3.1",
+                "title": "Annotated Comparison with Listed Drug",
+                "element": "m1-1-14-3-1-annotated-comparison-with-listed-drug"
+              },
+              {
+                "code": "1.14.3.2",
+                "title": "Approved Labeling Text for Listed Drug",
+                "element": "m1-1-14-3-2-approved-labeling-text-for-listed-drug"
+              },
+              {
+                "code": "1.14.3.3",
+                "title": "Labeling Text for Reference Listed Drug",
+                "element": "m1-1-14-3-3-labeling-text-for-reference-listed-drug"
+              }
+            ]
+          },
+          {
+            "code": "1.14.4",
+            "title": "Investigational Drug Labeling",
+            "element": "m1-14-4-investigational-drug-labeling",
+            "children": [
+              {
+                "code": "1.14.4.1",
+                "title": "Investigational Brochure",
+                "element": "m1-1-14-4-1-investigational-brochure"
+              },
+              {
+                "code": "1.14.4.2",
+                "title": "Investigational Drug Labeling",
+                "element": "m1-1-14-4-2-investigational-drug-labeling"
+              }
+            ]
+          },
+          {
+            "code": "1.14.5",
+            "title": "Foreign Labeling",
+            "element": "m1-14-5-foreign-labeling"
+          },
+          {
+            "code": "1.14.6",
+            "title": "Product Labeling for 2253 Submissions",
+            "element": "m1-1-14-6-product-labeling-for-2253-submissions"
+          }
+        ]
+      },
+      {
+        "code": "1.15",
+        "title": "Promotional Material",
+        "element": "m1-15-promotional-material",
+        "help": "Promotional material has its own detailed sub-structure (1.15.1–1.15.2); it is not used in the missions."
+      },
+      {
+        "code": "1.16",
+        "title": "Risk Management Plans",
+        "element": "m1-16-risk-management-plan",
+        "children": [
+          {
+            "code": "1.16.1",
+            "title": "Risk Management (Non-REMS)",
+            "element": "m1-1-16-1-risk-management-non-rems"
+          },
+          {
+            "code": "1.16.2",
+            "title": "Risk Evaluation and Mitigation Strategy (REMS)",
+            "element": "m1-1-16-2-risk-evaluation-and-mitigation-strategy-rems",
+            "help": "REMS documents (final, draft, assessments) sit under this heading in the full specification."
+          }
+        ]
+      },
+      {
+        "code": "1.17",
+        "title": "Postmarketing Studies",
+        "element": "m1-17-postmarketing-studies",
+        "children": [
+          {
+            "code": "1.17.1",
+            "title": "Correspondence Regarding Postmarketing Commitments",
+            "element": "m1-1-17-1-correspondence-regarding-postmarketing-commitments"
+          },
+          {
+            "code": "1.17.2",
+            "title": "Correspondence Regarding Postmarketing Requirements",
+            "element": "m1-1-17-2-correspondence-regarding-postmarketing-requirements"
+          }
+        ]
+      },
+      {
+        "code": "1.18",
+        "title": "Proprietary Names",
+        "element": "m1-18-proprietary-names"
+      },
+      {
+        "code": "1.19",
+        "title": "Pre-EUA and EUA",
+        "element": "m1-19-pre-eua-and-eua"
+      },
+      {
+        "code": "1.20",
+        "title": "General Investigational Plan for Initial IND",
+        "element": "m1-20-general-investigational-plan"
+      }
     ]
   },
   "submissionTypes": [
-    { "value": "original-application", "label": "Original application" },
-    { "value": "efficacy-supplement", "label": "Efficacy supplement" },
-    { "value": "chemistry-manufacturing-controls-supplement", "label": "CMC supplement" },
-    { "value": "labeling-supplement", "label": "Labeling supplement" },
-    { "value": "annual-report", "label": "Annual report" },
-    { "value": "product-correspondence", "label": "Product correspondence" }
+    {
+      "value": "original-application",
+      "label": "Original application"
+    },
+    {
+      "value": "efficacy-supplement",
+      "label": "Efficacy supplement"
+    },
+    {
+      "value": "chemistry-manufacturing-controls-supplement",
+      "label": "Chemistry, manufacturing and controls supplement"
+    },
+    {
+      "value": "labeling-supplement",
+      "label": "Labeling supplement"
+    },
+    {
+      "value": "rems-supplement",
+      "label": "REMS supplement"
+    },
+    {
+      "value": "annual-report",
+      "label": "Annual report"
+    },
+    {
+      "value": "product-correspondence",
+      "label": "Product correspondence"
+    },
+    {
+      "value": "postmarketing-requirements-or-commitments",
+      "label": "Postmarketing requirements or commitments"
+    },
+    {
+      "value": "periodic-safety-reports",
+      "label": "Periodic safety reports (PADER or PSUR)"
+    }
   ],
   "submissionSubTypes": [
-    { "value": "presubmission", "label": "Presubmission" },
-    { "value": "original", "label": "Original" },
-    { "value": "amendment", "label": "Amendment" },
-    { "value": "resubmission", "label": "Resubmission" },
-    { "value": "report", "label": "Report" },
-    { "value": "correspondence", "label": "Correspondence" }
+    {
+      "value": "presubmission",
+      "label": "Presubmission",
+      "help": "Before the main application, e.g. a rolling-review package."
+    },
+    {
+      "value": "application",
+      "label": "Application",
+      "help": "The main submission for a new application or supplement."
+    },
+    {
+      "value": "amendment",
+      "label": "Amendment",
+      "help": "Adds to a pending submission, e.g. a response to an information request."
+    },
+    {
+      "value": "resubmission",
+      "label": "Resubmission",
+      "help": "Responds to an action letter such as a complete response."
+    },
+    {
+      "value": "report",
+      "label": "Report",
+      "help": "Annual reports and periodic safety reports."
+    },
+    {
+      "value": "original",
+      "label": "Original",
+      "help": "Promotional material and postmarketing requirement/commitment submissions only."
+    },
+    {
+      "value": "correspondence",
+      "label": "Correspondence",
+      "help": "Administrative or routine correspondence."
+    }
   ],
   "applicationTypes": [
-    { "value": "nda", "label": "NDA", "phase": 1 },
-    { "value": "ind", "label": "IND", "phase": 2 },
-    { "value": "anda", "label": "ANDA", "phase": 2 },
-    { "value": "nda-505b2", "label": "505(b)(2) NDA", "phase": 2 },
-    { "value": "bla", "label": "BLA 351(a)", "phase": 3 },
-    { "value": "bla-351k", "label": "BLA 351(k)", "phase": 3 },
-    { "value": "dmf", "label": "Type II DMF", "phase": 2 }
+    {
+      "value": "nda",
+      "label": "NDA",
+      "phase": 1
+    },
+    {
+      "value": "anda",
+      "label": "ANDA",
+      "phase": 2
+    },
+    {
+      "value": "ind",
+      "label": "IND",
+      "phase": 3
+    },
+    {
+      "value": "bla",
+      "label": "BLA 351(a)",
+      "phase": 3
+    },
+    {
+      "value": "bla-351k",
+      "label": "BLA 351(k)",
+      "phase": 3
+    }
   ],
   "forms": [
-    { "id": "fda-356h", "label": "Form FDA 356h — Application to Market a New or Abbreviated New Drug or Biologic for Human Use", "section": "1.1" },
-    { "id": "fda-3397", "label": "Form FDA 3397 — Prescription Drug User Fee Coversheet", "section": "1.1" },
-    { "id": "fda-3674", "label": "Form FDA 3674 — Certification of Compliance (ClinicalTrials.gov)", "section": "1.1" },
-    { "id": "fda-3542a", "label": "Form FDA 3542a — Patent Information Submitted with the Filing of an NDA", "section": "1.3.5.1" },
-    { "id": "fda-3454", "label": "Form FDA 3454 — Certification: Financial Interests of Clinical Investigators", "section": "1.3.4" }
+    {
+      "id": "fda-356h",
+      "label": "Form FDA 356h — Application to Market a New or Abbreviated New Drug or Biologic for Human Use",
+      "section": "1.1"
+    },
+    {
+      "id": "fda-3397",
+      "label": "Form FDA 3397 — Prescription Drug User Fee Coversheet",
+      "section": "1.1"
+    },
+    {
+      "id": "fda-3674",
+      "label": "Form FDA 3674 — Certification of Compliance (ClinicalTrials.gov)",
+      "section": "1.1"
+    },
+    {
+      "id": "fda-3542a",
+      "label": "Form FDA 3542a — Patent Information Submitted with the Filing of an NDA",
+      "section": "1.3.5.1"
+    },
+    {
+      "id": "fda-3454",
+      "label": "Form FDA 3454 — Certification: Financial Interests of Clinical Investigators",
+      "section": "1.3.4"
+    },
+    {
+      "id": "fda-3794",
+      "label": "Form FDA 3794 — Generic Drug User Fee Cover Sheet",
+      "section": "1.1"
+    },
+    {
+      "id": "fda-2252",
+      "label": "Form FDA 2252 — Transmittal of Periodic Reports for Drugs for Human Use",
+      "section": "1.1"
+    }
   ],
   "checklist": {
-    "nda:original": [
-      { "section": "1.1", "form": "fda-356h", "label": "Form FDA 356h", "level": "mandatory", "rule": "M1-01" },
-      { "section": "1.1", "form": "fda-3397", "label": "User fee coversheet (FDA 3397)", "level": "mandatory", "rule": "M1-03" },
-      { "section": "1.1", "form": "fda-3674", "label": "ClinicalTrials.gov certification (FDA 3674)", "level": "mandatory", "rule": "M1-09" },
-      { "section": "1.2", "label": "Cover letter", "level": "mandatory", "rule": "M1-02" },
-      { "section": "1.3.2", "label": "Field copy certification", "level": "mandatory", "rule": "M1-08" },
-      { "section": "1.3.3", "label": "Debarment certification", "level": "mandatory", "rule": "M1-05" },
-      { "section": "1.3.4", "label": "Financial certification and disclosure", "level": "mandatory", "rule": "M1-06" },
-      { "section": "1.3.5.1", "label": "Patent information (FDA 3542a)", "level": "mandatory", "rule": "M1-04" },
-      { "section": "1.3.5.3", "label": "Exclusivity claim", "level": "optional" },
-      { "section": "1.12.14", "label": "Environmental analysis", "level": "mandatory", "rule": "M1-10" },
-      { "section": "1.14.1.1", "label": "Draft carton and container labels", "level": "mandatory", "rule": "M1-07" },
-      { "section": "1.14.1.3", "label": "Draft labeling text (prescribing information)", "level": "mandatory", "rule": "M1-07" },
-      { "section": "1.4.1", "label": "Letter of authorization (if a DMF is referenced)", "level": "conditional" },
-      { "section": "1.18", "label": "Proprietary name request", "level": "optional" }
-    ],
     "nda:amendment": [
-      { "section": "1.2", "label": "Cover letter", "level": "mandatory", "rule": "M1-02" },
-      { "section": "1.1", "form": "fda-356h", "label": "Form FDA 356h", "level": "mandatory", "rule": "M1-01" },
-      { "section": "1.11", "label": "Information amendment / response document", "level": "conditional" }
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.11",
+        "label": "Information amendment / response document",
+        "level": "conditional"
+      }
+    ],
+    "nda:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3397",
+        "label": "User fee coversheet (FDA 3397)",
+        "level": "mandatory",
+        "rule": "M1-03"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3674",
+        "label": "ClinicalTrials.gov certification (FDA 3674)",
+        "level": "mandatory",
+        "rule": "M1-09"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      },
+      {
+        "section": "1.3.2",
+        "label": "Field copy certification",
+        "level": "mandatory",
+        "rule": "M1-08"
+      },
+      {
+        "section": "1.3.3",
+        "label": "Debarment certification",
+        "level": "mandatory",
+        "rule": "M1-05"
+      },
+      {
+        "section": "1.3.4",
+        "label": "Financial certification and disclosure",
+        "level": "mandatory",
+        "rule": "M1-06"
+      },
+      {
+        "section": "1.3.5.1",
+        "label": "Patent information (FDA 3542a)",
+        "level": "mandatory",
+        "rule": "M1-04"
+      },
+      {
+        "section": "1.3.5.3",
+        "label": "Exclusivity claim",
+        "level": "optional"
+      },
+      {
+        "section": "1.12.14",
+        "label": "Environmental analysis",
+        "level": "mandatory",
+        "rule": "M1-10"
+      },
+      {
+        "section": "1.14.1.1",
+        "label": "Draft carton and container labels",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.14.1.3",
+        "label": "Draft labeling text (prescribing information)",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.4.1",
+        "label": "Letter of authorization (if a DMF is referenced)",
+        "level": "conditional"
+      },
+      {
+        "section": "1.18",
+        "label": "Proprietary name request",
+        "level": "optional"
+      }
+    ],
+    "anda:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3794",
+        "label": "Generic drug user fee cover sheet (FDA 3794)",
+        "level": "mandatory",
+        "rule": "M1-11"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      },
+      {
+        "section": "1.3.2",
+        "label": "Field copy certification",
+        "level": "mandatory",
+        "rule": "M1-08"
+      },
+      {
+        "section": "1.3.3",
+        "label": "Debarment certification",
+        "level": "mandatory",
+        "rule": "M1-05"
+      },
+      {
+        "section": "1.3.4",
+        "label": "Financial certification (BE study investigators)",
+        "level": "mandatory",
+        "rule": "M1-06"
+      },
+      {
+        "section": "1.3.5.2",
+        "label": "Patent certification",
+        "level": "mandatory",
+        "rule": "M1-12"
+      },
+      {
+        "section": "1.3.5.3",
+        "label": "Exclusivity statement",
+        "level": "optional"
+      },
+      {
+        "section": "1.4.1",
+        "label": "Letter of authorization for the API DMF",
+        "level": "conditional"
+      },
+      {
+        "section": "1.12.11",
+        "label": "ANDA basis for submission statement",
+        "level": "mandatory",
+        "rule": "M1-13"
+      },
+      {
+        "section": "1.12.12",
+        "label": "Comparison of generic drug and reference listed drug",
+        "level": "mandatory",
+        "rule": "M1-14"
+      },
+      {
+        "section": "1.12.14",
+        "label": "Environmental analysis",
+        "level": "mandatory",
+        "rule": "M1-10"
+      },
+      {
+        "section": "1.12.15",
+        "label": "Request for waiver of in vivo BA studies (other strengths)",
+        "level": "conditional"
+      },
+      {
+        "section": "1.14.1.1",
+        "label": "Draft carton and container labels",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.14.1.3",
+        "label": "Draft labeling text",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.14.3.1",
+        "label": "Annotated comparison with listed drug",
+        "level": "mandatory",
+        "rule": "M1-15"
+      },
+      {
+        "section": "1.14.3.3",
+        "label": "Labeling text for reference listed drug",
+        "level": "mandatory",
+        "rule": "M1-15"
+      }
+    ],
+    "nda:chemistry-manufacturing-controls-supplement:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:chemistry-manufacturing-controls-supplement:amendment": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:labeling-supplement:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:labeling-supplement:amendment": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:efficacy-supplement:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:efficacy-supplement:amendment": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:annual-report:report": [
+      {
+        "section": "1.1",
+        "form": "fda-2252",
+        "label": "Form FDA 2252 transmittal",
+        "level": "mandatory",
+        "rule": "M1-16"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
+    ],
+    "nda:periodic-safety-reports:report": [
+      {
+        "section": "1.1",
+        "form": "fda-2252",
+        "label": "Form FDA 2252 transmittal",
+        "level": "mandatory",
+        "rule": "M1-16"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      }
     ]
-  }
+  },
+  "_subTypeSource": "FDA eCTD Backbone Files Specification for Module 1 v2.6, Tables 2 and 4"
 }

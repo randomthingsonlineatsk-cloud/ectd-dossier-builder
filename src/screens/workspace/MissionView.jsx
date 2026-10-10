@@ -1,7 +1,9 @@
 import React from 'react';
 import { missionById } from '../../engine/missions.js';
 
-export default function MissionView({ project, evaluation, onSubmit }) {
+const AXES = [['technical', 'Technical validity'], ['lifecycle', 'Lifecycle correctness'], ['consistency', 'Cross-module consistency'], ['time', 'Time']];
+
+export default function MissionView({ project, evaluation, onSubmit, mutate }) {
   const m = missionById(project.mission.id);
   const level = project.mission.difficulty;
   const guided = level === 'guided';
@@ -18,9 +20,35 @@ export default function MissionView({ project, evaluation, onSubmit }) {
         )}
       </section>
 
+      {m.quiz?.length > 0 && (
+        <section className="panel">
+          <h3 style={{ marginTop: 0 }}>Decide before you build</h3>
+          <p className="small muted">Your first answer counts toward the score.</p>
+          {m.quiz.map((q) => {
+            const ans = project.mission.answers?.[q.id];
+            const answered = ans !== undefined;
+            return (
+              <div className="quiz-q" key={q.id}>
+                <fieldset>
+                  <legend>{q.q}</legend>
+                  {q.options.map((o, j) => (
+                    <label key={j} className={`quiz-opt ${answered && j === q.answer ? 'right' : answered && ans === j ? 'wrong' : ''}`}>
+                      <input type="radio" name={`mq-${q.id}`} checked={ans === j} disabled={answered}
+                        onChange={() => mutate((p) => { p.mission.answers = { ...(p.mission.answers ?? {}), [q.id]: j }; })} />
+                      <span>{o}</span>
+                    </label>
+                  ))}
+                  {answered && <p className="small" style={{ margin: '.5rem 0 0' }}>{ans === q.answer ? 'Correct. ' : 'Not quite. '}{q.why}</p>}
+                </fieldset>
+              </div>
+            );
+          })}
+        </section>
+      )}
+
       {project.mission.letter && (
         <section>
-          <h3>Information request</h3>
+          <h3>{m.region === 'EU' ? 'List of questions' : 'Information request'}</h3>
           <div className="letter">
             <p><strong>From:</strong> {project.mission.letter.from}<br /><strong>Date:</strong> {project.mission.letter.date}<br /><strong>Subject:</strong> {project.mission.letter.subject}</p>
             {project.mission.letter.body.map((b) => <p key={b}>{b}</p>)}
@@ -52,6 +80,25 @@ export default function MissionView({ project, evaluation, onSubmit }) {
             )}
             {evaluation.introduced.length > 0 && <p className="callout warn small">You introduced {evaluation.introduced.length} new finding{evaluation.introduced.length > 1 ? 's' : ''} that were not in the handover (2 points each): {evaluation.introduced.slice(0, 4).map((f) => f.ruleId).join(', ')}{evaluation.introduced.length > 4 ? '…' : ''}</p>}
           </>
+        )}
+        {evaluation.axes && (
+          <div style={{ marginTop: '1rem' }}>
+            <h4 style={{ margin: '0 0 .4rem' }}>Scoring axes</h4>
+            <div className="grid-2" style={{ gap: '.5rem 1rem' }}>
+              {AXES.map(([k, label]) => {
+                const v = (submitted?.axes ?? evaluation.axes)[k];
+                return (
+                  <div key={k}>
+                    <div className="row small" style={{ justifyContent: 'space-between' }}><span>{label}</span><strong>{v}%</strong></div>
+                    <div style={{ height: 6, borderRadius: 3, background: 'var(--surface-2)' }} role="meter" aria-label={label} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
+                      <div style={{ width: `${v}%`, height: '100%', borderRadius: 3, background: v >= 80 ? 'var(--ok)' : v >= 50 ? 'var(--medium)' : 'var(--high)' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="small muted" style={{ marginTop: '.4rem' }}>Technical: validator findings. Lifecycle: lifecycle-rule findings across sequences. Consistency: contradictions in the current view. Time: against the mission clock (45 minutes when untimed).</p>
+          </div>
         )}
         <div className="row" style={{ marginTop: '1rem' }}>
           {!submitted ? <button className="btn primary" onClick={onSubmit}>Submit for scoring</button>

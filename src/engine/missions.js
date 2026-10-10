@@ -1,9 +1,10 @@
-// Mission seeds and scoring for Phase 1 missions 1, 4 and 11.
+// Mission seeds and scoring (Phase 1: missions 1, 4, 11; Phase 2: 2, 5, 6, 7, 8, 9, 10, 12).
 import missionsData from '../data/missions.json' with { type: 'json' };
-import { createProject, docForLeaf, makeDoc, seqByNumber } from './model.js';
+import { createProject, docForLeaf, makeDoc, seqByNumber, PRODUCTS } from './model.js';
 import { tagFromDoc } from './stf.js';
 import { addCoverLetter, placeDoc, publishWithFiles, updateLeaf } from './ops.js';
 import { validate } from './validate.js';
+import { consistencyMatrix } from './consistency.js';
 
 export const MISSIONS = missionsData.missions;
 export const LEVELS = missionsData.levels;
@@ -12,14 +13,16 @@ export const missionById = (id) => MISSIONS.find((m) => m.id === Number(id));
 const BASE_EXCLUDE = (d) => d.decoy || d.irOnly || d.defectOnly || d.generated || d.id === 'd-propname';
 
 // Builds a complete, clean sequence 0000 from the library.
-export function buildComplete(project) {
+export function buildComplete(project, { exclude = () => false } = {}) {
   const s = project.settings;
-  s.applicationNumber = '299001';
+  const prod = PRODUCTS[project.productId];
+  if (project.region === 'EU') s.eu.trackingNumber = 'EMEA/H/C/006123';
+  else s.applicationNumber = project.appType === 'anda' ? '219876' : '299001';
   const seq = project.sequences[0];
-  seq.description = 'Original NDA for Ostrevia (lumiravostat) tablets';
+  seq.description = `${project.region === 'EU' ? 'Initial MAA' : project.appType === 'anda' ? 'Original ANDA' : 'Original NDA'} for ${prod.product.brandName} (${prod.product.inn})`;
   const leafByDoc = {};
   for (const d of Object.values(project.documents)) {
-    if (BASE_EXCLUDE(d)) continue;
+    if (BASE_EXCLUDE(d) || exclude(d)) continue;
     const leaf = placeDoc(project, seq.number, d.id, d.section);
     const tag = tagFromDoc(project, leaf);
     if (tag) leaf.study = tag;
@@ -33,28 +36,48 @@ export function buildComplete(project) {
 function baseMissionProject(m, difficulty, user) {
   const p = createProject({
     name: `Mission ${m.id}: ${m.title}`,
-    productId: m.productId, appType: m.appType, user, missionId: m.id, difficulty,
+    productId: m.productId, region: m.region === 'EU' ? 'EU' : 'US', appType: m.appType, user, missionId: m.id, difficulty,
   });
   p.settings.expertMode = difficulty === 'expert';
-  p.mission = { id: m.id, difficulty, startedAt: new Date().toISOString(), minutes: m.minutes?.[difficulty] ?? null, submitted: null };
+  p.mission = { id: m.id, difficulty, startedAt: new Date().toISOString(), minutes: m.minutes?.[difficulty] ?? null, submitted: null, answers: {} };
+  if (m.letter) p.mission.letter = m.letter;
+  return p;
+}
+
+const addExtras = (p, m) => { for (const raw of m.extraDocuments ?? []) p.documents[raw.id] = makeDoc(raw); };
+
+// An approved product: complete sequence 0000, published, plus the mission's new documents.
+async function seedPublished(m, difficulty, user) {
+  const p = baseMissionProject(m, difficulty, user);
+  buildComplete(p);
+  await publishWithFiles(p, '0000');
+  addExtras(p, m);
   return p;
 }
 
 export async function seedMission(id, difficulty, user) {
   const m = missionById(id);
-  if (m.id === 1) return baseMissionProject(m, difficulty, user);
+  if (m.id === 1 || m.id === 12) return baseMissionProject(m, difficulty, user);
   if (m.id === 4) return seedMission4(m, difficulty, user);
   if (m.id === 11) return seedMission11(m, difficulty, user);
+  if ([5, 6, 7, 8, 9].includes(m.id)) return seedPublished(m, difficulty, user);
+  if (m.id === 2) {
+    const p = baseMissionProject(m, difficulty, user);
+    for (const pl of m.plant ?? []) if (p.documents[pl.doc]) p.documents[pl.doc].factOverrides = { ...pl.facts };
+    return p;
+  }
+  if (m.id === 10) {
+    const p = baseMissionProject(m, difficulty, user);
+    p.sequences[0].submissionType = 'none';
+    p.sequences[0].subType = 'reformat';
+    addExtras(p, m);
+    return p;
+  }
   throw new Error(`Mission ${id} arrives in a later phase.`);
 }
 
 async function seedMission4(m, difficulty, user) {
-  const p = baseMissionProject(m, difficulty, user);
-  buildComplete(p);
-  await publishWithFiles(p, '0000');
-  for (const raw of m.extraDocuments) p.documents[raw.id] = makeDoc(raw);
-  p.mission.letter = m.letter;
-  return p;
+  return seedPublished(m, difficulty, user);
 }
 
 function seedMission11(m, difficulty, user) {
@@ -102,10 +125,164 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  if (id === 1) return evalM1(project);
-  if (id === 4) return evalM4(project);
-  if (id === 11) return evalM11(project);
-  return null;
+  const fn = { 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  if (!fn) return null;
+  const ev = fn(project);
+  ev.axes = axesFor(project, ev);
+  return ev;
+}
+
+// ---------- helpers for Phase 2 checks ----------
+const leavesIn = (p, n) => seqByNumber(p, n)?.leaves ?? [];
+const has = (p, n, docId, code, ops = ['new']) => leavesIn(p, n).some((l) => l.docId === docId && l.nodeCode === code && ops.includes(l.operation));
+const hasForm = (p, n, code, form) => leavesIn(p, n).some((l) => l.nodeCode === code && l.operation !== 'delete' && (!form || docForLeaf(p, l)?.form === form));
+function replaced(p, n, newDoc, oldDoc, code, seq0 = '0000') {
+  const old = leavesIn(p, seq0).find((l) => l.docId === oldDoc);
+  return !!old && leavesIn(p, n).some((l) => l.docId === newDoc && l.nodeCode === code && l.operation === 'replace' && l.target?.seq === seq0 && l.target?.leafId === old.id);
+}
+const consistent = (p, n) => seqByNumber(p, n) ? consistencyMatrix(p, n).issues.length === 0 : false;
+const quizOk = (p) => {
+  const m = missionById(p.mission.id);
+  return (m.quiz ?? []).every((q) => p.mission.answers?.[q.id] === q.answer);
+};
+const pub = (p, n) => seqByNumber(p, n)?.status === 'published';
+const onlyIn = (p, n, codes) => { const ls = leavesIn(p, n); return ls.length > 0 && ls.every((l) => codes.includes(l.nodeCode)); };
+function finish(id, ok, validation) {
+  const m = missionById(id);
+  const checks = m.checks.map((c) => ({ ...c, ok: !!ok[c.id] }));
+  return { checks, score: scoreOf(checks), validation };
+}
+
+function evalBuild(p, id, extra = {}) {
+  const seq = seqByNumber(p, '0000');
+  const v = validate(p, '0000');
+  const hasF = (prefix) => v.findings.some((f) => f.ruleId.startsWith(prefix));
+  return finish(id, {
+    meta: !hasF('BB-06'),
+    m1: !v.findings.some((f) => f.family.startsWith('Module 1') && f.severity !== 'Low'),
+    required: !hasF('CT-01'),
+    noHigh: v.counts.High === 0,
+    noMedium: v.counts.Medium === 0,
+    noDecoys: !seq.leaves.some((l) => docForLeaf(p, l)?.decoy),
+    consistent: consistent(p, '0000'),
+    published: seq.status === 'published',
+    quiz: quizOk(p),
+    ...extra,
+  }, v);
+}
+const evalM2 = (p) => evalBuild(p, 2);
+const evalM12 = (p) => evalBuild(p, 12);
+
+function evalM5(p) {
+  const s1 = seqByNumber(p, '0001');
+  const v = s1 ? validate(p, '0001') : null;
+  return finish(5, {
+    seq: s1?.submissionType === 'maa' && s1?.subType === 'response',
+    related: s1?.relatedSequence === '0000',
+    forms: hasForm(p, '0001', 'eu:1.0'),
+    response: has(p, '0001', 'eu-resp-d120', 'eu:responses'),
+    replaceSpec: replaced(p, '0001', 'd-p51-v2', 'd-p51', '3.2.P.5.1'),
+    replacePi: replaced(p, '0001', 'eu-pi-v2', 'eu-pi', 'eu:1.3.1'),
+    consistent: consistent(p, '0001'),
+    onlyAsked: onlyIn(p, '0001', ['eu:1.0', 'eu:responses', '3.2.P.5.1', 'eu:1.3.1', '2.3', '3.2.P.5.6']),
+    noHigh: !!v && v.counts.High === 0,
+    published: pub(p, '0001'),
+  }, v);
+}
+
+function evalM6(p) {
+  const s1 = seqByNumber(p, '0001');
+  const v = s1 ? validate(p, '0001') : null;
+  return finish(6, {
+    quiz: quizOk(p),
+    seq: s1?.submissionType === 'chemistry-manufacturing-controls-supplement' && s1?.subType === 'application',
+    forms: has(p, '0001', 'd-356h-s1', '1.1') && hasForm(p, '0001', '1.2'),
+    replaceP31: replaced(p, '0001', 'd-p31-v2', 'd-p31', '3.2.P.3.1'),
+    replaceA1: replaced(p, '0001', 'd-a1-v2', 'd-a1', '3.2.A.1'),
+    siteB: has(p, '0001', 'd-p35-siteb', '3.2.P.3.5', ['new', 'append']) && has(p, '0001', 'd-p83-siteb', '3.2.P.8.3', ['new', 'append']),
+    consistent: consistent(p, '0001'),
+    noHigh: !!v && v.counts.High === 0,
+    published: pub(p, '0001'),
+  }, v);
+}
+
+function evalM7(p) {
+  const s1 = seqByNumber(p, '0001');
+  const v = s1 ? validate(p, '0001') : null;
+  return finish(7, {
+    quiz: quizOk(p),
+    seq: s1?.submissionType === 'labeling-supplement' && s1?.subType === 'application',
+    forms: hasForm(p, '0001', '1.1', 'fda-356h') && hasForm(p, '0001', '1.2'),
+    replacePi: replaced(p, '0001', 'd-pi-v2', 'd-pi', '1.14.1.3'),
+    replaceAnnot: replaced(p, '0001', 'd-annot-v2', 'd-annot', '1.14.1.2'),
+    review: has(p, '0001', 'd-hep-review', '5.3.6'),
+    onlyAsked: onlyIn(p, '0001', ['1.1', '1.2', '1.14.1.2', '1.14.1.3', '5.3.6']),
+    noHigh: !!v && v.counts.High === 0,
+    published: pub(p, '0001'),
+  }, v);
+}
+
+function evalM8(p) {
+  const s1 = seqByNumber(p, '0001');
+  const s2 = seqByNumber(p, '0002');
+  const v1 = s1 ? validate(p, '0001') : null;
+  const v2 = s2 ? validate(p, '0002') : null;
+  return finish(8, {
+    quiz: quizOk(p),
+    ar: s1?.submissionType === 'annual-report' && s1?.subType === 'report' && hasForm(p, '0001', '1.1', 'fda-2252') && hasForm(p, '0001', '1.2'),
+    arDocs: [['d-ar-safety', '1.13.3'], ['d-ar-mfg', '1.13.5'], ['d-ar-dist', '1.13.11'], ['d-ar-pmc', '1.13.12']].every(([d, c]) => has(p, '0001', d, c)),
+    psr: s2?.submissionType === 'periodic-safety-reports' && s2?.subType === 'report' && hasForm(p, '0002', '1.1', 'fda-2252') && hasForm(p, '0002', '1.2'),
+    pader: has(p, '0002', 'd-pader', '5.3.6'),
+    noHigh: !!v1 && !!v2 && v1.counts.High === 0 && v2.counts.High === 0,
+    published: pub(p, '0001') && pub(p, '0002'),
+  }, v2 ?? v1);
+}
+
+function evalM9(p) {
+  const s1 = seqByNumber(p, '0001');
+  const v = s1 ? validate(p, '0001') : null;
+  return finish(9, {
+    quiz: quizOk(p),
+    seq: s1?.submissionType === 'chemistry-manufacturing-controls-supplement' && s1?.subType === 'application',
+    forms: hasForm(p, '0001', '1.1', 'fda-356h') && hasForm(p, '0001', '1.2'),
+    replaceLoa: replaced(p, '0001', 'd-loa-v2', 'd-loa', '1.4.1'),
+    replaceS22: replaced(p, '0001', 'd-s22-v2', 'd-s22', '3.2.S.2.2'),
+    batches: has(p, '0001', 'd-s44-post', '3.2.S.4.4', ['new', 'append']),
+    noHigh: !!v && v.counts.High === 0,
+    published: pub(p, '0001'),
+  }, v);
+}
+
+function evalM10(p) {
+  const s0 = seqByNumber(p, '0000');
+  const v = validate(p, '0000');
+  return finish(10, {
+    seq: s0.subType === 'reformat' && ['none', 'maa'].includes(s0.submissionType),
+    forms: hasForm(p, '0000', 'eu:1.0'),
+    required: !v.findings.some((f) => f.ruleId === 'CT-01'),
+    noLegacy: !s0.leaves.some((l) => ['legacy-s', 'legacy-p'].includes(l.docId)),
+    onlyM3: s0.leaves.length > 0 && s0.leaves.every((l) => l.nodeCode.startsWith('3.') || l.nodeCode === 'eu:1.0'),
+    noHigh: v.counts.High === 0,
+    published: s0.status === 'published',
+  }, v);
+}
+
+// ---------- four scoring axes ----------
+const clamp = (n) => Math.max(0, Math.min(100, Math.round(n)));
+export function axesFor(p, ev) {
+  const seqs = p.sequences.filter((s) => s.leaves.length);
+  const vals = seqs.map((s) => validate(p, s.number));
+  const last = [...seqs].sort((a, b) => b.number.localeCompare(a.number))[0];
+  const tech = ev.validation ? clamp(100 - ev.validation.counts.High * 30 - ev.validation.counts.Medium * 10 - ev.validation.counts.Low * 2) : 0;
+  const lcFindings = vals.reduce((n, v) => n + v.findings.filter((f) => f.family === 'Lifecycle').length, 0);
+  const lifecycle = clamp(100 - lcFindings * 25);
+  const issues = last ? consistencyMatrix(p, last.number).issues.length : 0;
+  const consistency = clamp(100 - issues * 25);
+  const m = p.mission ?? {};
+  const seconds = m.submitted?.seconds ?? Math.floor((Date.now() - new Date(m.startedAt ?? Date.now()).getTime()) / 1000);
+  const limit = (m.minutes ?? 45) * 60;
+  const time = clamp(seconds <= limit ? 100 : 100 - ((seconds - limit) / 60) * 5);
+  return { technical: tech, lifecycle, consistency, time };
 }
 
 function scoreOf(checks) {

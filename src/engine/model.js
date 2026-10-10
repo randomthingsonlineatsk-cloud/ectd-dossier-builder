@@ -2,10 +2,17 @@
 // Every project, mission attempt and score carries userId and classId so classroom mode
 // (Phase 4) can be added without changing stored data.
 import nceTablet from '../data/products/nce-tablet.json' with { type: 'json' };
-import { INDEX, filePath } from './tree.js';
+import genericTablet from '../data/products/generic-tablet.json' with { type: 'json' };
+import sterileInjectable from '../data/products/sterile-injectable.json' with { type: 'json' };
+import { INDEX, filePath, inRegion } from './tree.js';
+import { regionDocs } from './regiondocs.js';
 
-export const SCHEMA_VERSION = 1;
-export const PRODUCTS = { 'nce-tablet': nceTablet };
+export const SCHEMA_VERSION = 2;
+export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable };
+export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa' };
+
+// Which regions and application types each product supports.
+export const productOptions = (productId) => PRODUCTS[productId]?.options ?? [{ region: 'US', appType: 'nda' }];
 
 export function uid(prefix = '') {
   const r = (globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`);
@@ -32,10 +39,18 @@ export function makeDoc(raw) {
   return d;
 }
 
-export function libraryFor(productId) {
+// Region of a library document: explicit, or US for unprefixed Module 1 sections, or shared.
+export const docRegion = (d) => d.region ?? (/^1(\.|$)/.test(String(d.section)) ? 'US' : null);
+
+export function libraryFor(productId, region = 'US') {
   const p = PRODUCTS[productId];
   const docs = {};
-  for (const raw of p.documents) docs[raw.id] = makeDoc(raw);
+  for (const raw of [...p.documents, ...regionDocs(p, region)]) {
+    const r = docRegion(raw);
+    if (r && r !== region) continue;
+    if (raw.section && !inRegion(raw.section, region) && !raw.decoy) continue;
+    docs[raw.id] = makeDoc(raw);
+  }
   return docs;
 }
 
@@ -49,15 +64,34 @@ export function defaultSettings(productId) {
     indication: p.product.indication,
     sequenceStart: '0000',
     expertMode: false,
+    // EU envelope (eu-regional.xml). The UUID is the same for every sequence of an application.
+    eu: {
+      procedureType: 'centralised',
+      trackingNumber: '',
+      uuid: (globalThis.crypto?.randomUUID?.() ?? uid()).toLowerCase(),
+      agency: 'EU-EMA',
+      inventedName: p.product.brandName,
+      inn: p.product.inn,
+    },
   };
 }
 
-export function newSequence(number, opts = {}) {
+export const SEQ_DEFAULTS = {
+  US: { submissionType: 'original-application', subType: 'application' },
+  EU: { submissionType: 'maa', subType: 'initial' },
+};
+
+// For the EU, subType holds the submission unit type; submissionMode and relatedSequence are EU-only.
+export function newSequence(number, opts = {}, region = 'US') {
+  const d = SEQ_DEFAULTS[region] ?? SEQ_DEFAULTS.US;
   return {
     id: uid('s'),
     number,
-    submissionType: opts.submissionType ?? 'original-application',
-    subType: opts.subType ?? 'original',
+    submissionType: opts.submissionType ?? d.submissionType,
+    subType: opts.subType ?? d.subType,
+    submissionMode: opts.submissionMode ?? 'single',
+    relatedSequence: opts.relatedSequence ?? '',
+    changes: opts.changes ?? [],
     description: opts.description ?? '',
     status: 'draft',
     publishedAt: null,
@@ -65,7 +99,8 @@ export function newSequence(number, opts = {}) {
   };
 }
 
-export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = 'nda', ectdVersion = '3.2.2', user, missionId = null, difficulty = null }) {
+export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = null, ectdVersion = '3.2.2', user, missionId = null, difficulty = null }) {
+  appType ??= productOptions(productId).find((o) => o.region === region)?.appType ?? DEFAULT_APP_TYPE[region];
   const now = new Date().toISOString();
   const settings = defaultSettings(productId);
   return {
@@ -79,8 +114,8 @@ export function createProject({ name, productId = 'nce-tablet', region = 'US', a
     createdAt: now, updatedAt: now,
     settings,
     forms: {},
-    documents: libraryFor(productId),
-    sequences: [newSequence(settings.sequenceStart)],
+    documents: libraryFor(productId, region),
+    sequences: [newSequence(settings.sequenceStart, {}, region)],
     log: [],
   };
 }
@@ -174,7 +209,7 @@ export function nodeStatus(project, seqNumber, requiredCodes) {
   const status = {};
   for (const code of INDEX.order) {
     const n = INDEX.map[code];
-    if (n.children.length) continue;
+    if (n.children.length || !inRegion(code, project.region)) continue;
     if (n.notInEctd) status[code] = 'na';
     else if (filled.has(code)) status[code] = 'filled';
     else if (requiredCodes.has(code)) status[code] = 'required';
@@ -194,40 +229,81 @@ export function touch(project) {
   return project;
 }
 
+const APP_LABEL = { nda: 'NDA', anda: 'ANDA', bla: 'BLA', maa: 'MAA' };
+const lc = (t) => t.charAt(0).toLowerCase() + t.slice(1);
+
 export function coverLetterText(project, seq) {
   const p = PRODUCTS[project.productId];
   const s = project.settings;
-  const subLabel = { original: 'original application', amendment: 'amendment', resubmission: 'resubmission', report: 'report', correspondence: 'correspondence', presubmission: 'presubmission' }[seq.subType] ?? seq.subType;
-  const lines = [
-    `${s.applicant.name}`,
-    `${s.applicant.address}`,
-    '',
-    `Date: [date of dispatch]`,
-    '',
-    `Re: NDA ${s.applicationNumber || '[application number]'} — ${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(' and ')}`,
-    `eCTD sequence ${seq.number} — ${subLabel}`,
-    '',
-    'Dear Review Division,',
-    '',
-  ];
-  if (seq.subType === 'original') {
-    lines.push(`${s.applicant.name} submits this original New Drug Application for ${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(' and ')}, proposed for the ${p.product.indicationText.charAt(0).toLowerCase() + p.product.indicationText.slice(1)}.`);
-    lines.push('', 'The application is provided in eCTD format (v3.2.2) and contains Modules 1 to 5. The user fee coversheet (Form FDA 3397) is included in Module 1.1.');
-  } else {
-    lines.push(`${s.applicant.name} submits this ${subLabel} to NDA ${s.applicationNumber || '[number]'}. ${seq.description || ''}`.trim());
+  const prod = `${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(' and ')}`;
+  const contact = ['', `Contact: ${s.applicant.contact}, ${s.applicant.phone}, ${s.applicant.email}`, '', 'Sincerely,', '', s.applicant.contact, '', 'TRAINING ONLY - fictional product and company, not for submission.'];
+  const head = [s.applicant.name, s.applicant.address, '', 'Date: [date of dispatch]', ''];
+  if (project.region === 'EU') {
+    const eu = s.eu ?? {};
+    const unit = seq.subType;
+    const lines = [...head,
+      `Re: ${eu.trackingNumber || '[procedure number]'} - ${prod}`,
+      `eCTD sequence ${seq.number} - submission type ${seq.submissionType}, submission unit ${unit}${seq.relatedSequence ? `, related sequence ${seq.relatedSequence}` : ''}`,
+      '', 'Dear Sir or Madam,', ''];
+    if (seq.submissionType === 'maa' && unit === 'initial') {
+      lines.push(`${s.applicant.name} submits an application for a marketing authorisation for ${prod} through the ${eu.procedureType || 'centralised'} procedure, for the ${lc(p.product.indicationText)}.`, '', 'The dossier is provided in eCTD format (v3.2.2) with EU Module 1 and Modules 2 to 5. The electronic application form is in Module 1.2.');
+    } else if (unit === 'reformat') {
+      lines.push(`${s.applicant.name} submits a reformatted baseline of the dossier for ${prod}. This sequence converts previously submitted information to eCTD format and contains no change in content.`);
+    } else if (unit === 'response') {
+      lines.push(`${s.applicant.name} submits responses to the questions adopted for ${eu.trackingNumber || 'this procedure'}. The responses document is in the Responses section of Module 1 and the updated dossier sections replace those in sequence ${seq.relatedSequence || '[related sequence]'}.`);
+    } else {
+      lines.push(`${s.applicant.name} submits this ${seq.submissionType} sequence (${unit}) for ${prod}. ${seq.description || ''}`.trim());
+    }
+    if (seq.changes?.length) lines.push('', 'Changes covered by this submission:', ...seq.changes.map((c, i) => `${i + 1}. ${c.type}: ${c.scope}`));
+    return [...lines, ...contact].join('\n');
   }
-  lines.push('', `Contact: ${s.applicant.contact}, ${s.applicant.phone}, ${s.applicant.email}`, '', 'Sincerely,', '', s.applicant.contact, '', 'TRAINING ONLY — fictional product and company, not for submission.');
-  return lines.join('\n');
+  const app = APP_LABEL[project.appType] ?? project.appType.toUpperCase();
+  const lines = [...head,
+    `Re: ${app} ${s.applicationNumber || '[application number]'} - ${prod}`,
+    `eCTD sequence ${seq.number} - ${seq.submissionType} / ${seq.subType}`,
+    '', 'Dear Review Division,', ''];
+  if (seq.submissionType === 'original-application' && seq.subType === 'application') {
+    if (project.appType === 'anda') {
+      lines.push(`${s.applicant.name} submits this Abbreviated New Drug Application for ${prod}, referencing ${p.rld?.name ?? 'the reference listed drug'}.`, '', 'The application is provided in eCTD format (v3.2.2). The generic drug user fee cover sheet is included in Module 1.1.');
+    } else {
+      lines.push(`${s.applicant.name} submits this original New Drug Application for ${prod}, proposed for the ${lc(p.product.indicationText)}.`, '', 'The application is provided in eCTD format (v3.2.2) and contains Modules 1 to 5. The user fee coversheet (Form FDA 3397) is included in Module 1.1.');
+    }
+  } else if (seq.submissionType === 'annual-report') {
+    lines.push(`${s.applicant.name} submits the annual report for ${app} ${s.applicationNumber || '[number]'}. ${seq.description || ''}`.trim());
+  } else {
+    lines.push(`${s.applicant.name} submits this ${seq.submissionType.replace(/-/g, ' ')} (${seq.subType}) to ${app} ${s.applicationNumber || '[number]'}. ${seq.description || ''}`.trim());
+  }
+  return [...lines, ...contact].join('\n');
 }
 
 export function makeCoverLetterDoc(project, seq) {
+  const eu = project.region === 'EU';
   return makeDoc({
     id: `gen-cl-${seq.number}-${uid().slice(0, 4)}`,
-    section: '1.2',
-    title: `Cover Letter — Sequence ${seq.number}`,
-    fileName: 'cover-letter.pdf',
+    section: eu ? 'eu:1.0' : '1.2',
+    region: project.region,
+    title: `Cover Letter - Sequence ${seq.number}`,
+    fileName: eu ? 'ema-cover.pdf' : 'cover-letter.pdf',
     pages: 2,
     generated: true,
     content: coverLetterText(project, seq),
   });
+}
+
+// Brings projects saved by earlier versions up to date.
+export function migrateProject(p) {
+  if (!p) return p;
+  p.region ??= 'US';
+  for (const s of p.sequences ?? []) {
+    if (s.submissionType === 'original-application' && s.subType === 'original') s.subType = 'application';
+    s.submissionMode ??= 'single';
+    s.relatedSequence ??= '';
+    s.changes ??= [];
+  }
+  if (p.settings && !p.settings.eu) {
+    const prod = PRODUCTS[p.productId];
+    p.settings.eu = { procedureType: 'centralised', trackingNumber: '', uuid: uid().toLowerCase(), agency: 'EU-EMA', inventedName: prod?.product.brandName ?? '', inn: prod?.product.inn ?? '' };
+  }
+  p.schema = SCHEMA_VERSION;
+  return p;
 }

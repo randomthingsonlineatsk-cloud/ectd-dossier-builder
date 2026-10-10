@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import rulesData from '../../data/rules.json' with { type: 'json' };
-import { RULES } from '../../engine/validate.js';
+import { RULES, profileLabel } from '../../engine/validate.js';
+import { displayCode as dc } from '../../engine/tree.js';
 import { download } from '../../engine/io.js';
 import { slug } from '../../engine/tree.js';
 
@@ -13,7 +14,7 @@ export default function ValidateView({ project, seq, validation, focusNode, setT
       <div className="row" style={{ justifyContent: 'space-between' }}>
         <div>
           <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>Validation report: sequence {seq.number}</h2>
-          <span className="small muted">Profile: {rulesData.profiles['US-3.2.2'].label} · {rulesData.rules.length} core rules · runs live as you edit</span>
+          <span className="small muted">Profile: {profileLabel(project)} · {rulesData.rules.length} core rules · runs live as you edit</span>
         </div>
         <div className="row">
           <button className="btn" onClick={onRerun}>Run validation again</button>
@@ -38,7 +39,7 @@ export default function ValidateView({ project, seq, validation, focusNode, setT
               <p className="small" style={{ margin: '0 0 .3rem' }}>{f.message}</p>
               <p className="small muted" style={{ margin: 0 }}>{RULES[f.ruleId].explain} <strong>Fix:</strong> {RULES[f.ruleId].fix}</p>
             </div>
-            {f.nodeCode && <button className="btn small" onClick={() => { focusNode(f.nodeCode, f.leafId); setTab(f.ruleId === 'BB-06' || f.ruleId === 'BB-07' ? (f.ruleId === 'BB-06' ? 'm1' : 'settings') : 'builder'); }}>Go to {f.ruleId === 'BB-06' ? 'metadata' : f.ruleId === 'BB-07' ? 'settings' : f.nodeCode}</button>}
+            {f.nodeCode && <button className="btn small" onClick={() => { focusNode(f.nodeCode, f.leafId); setTab(['BB-06', 'EU-11'].includes(f.ruleId) ? 'm1' : f.ruleId === 'EU-12' ? 'sequences' : f.ruleId === 'BB-07' ? 'settings' : 'builder'); }}>Go to {['BB-06', 'EU-11', 'EU-12'].includes(f.ruleId) ? 'metadata' : f.ruleId === 'BB-07' ? 'settings' : dc(f.nodeCode)}</button>}
           </article>
         ))}
         {!list.length && <p className="muted">No findings{sev !== 'All' ? ` at ${sev} severity` : ''}.</p>}

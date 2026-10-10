@@ -10,9 +10,10 @@
 import { PDFDocument, StandardFonts, PDFName, PDFHexString, PDFString, rgb, degrees } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import SparkMD5 from 'spark-md5';
-import { INDEX, filePath } from './tree.js';
+import { INDEX, filePath, displayCode } from './tree.js';
 import { lifecycleState, PRODUCTS, docForLeaf, seqByNumber } from './model.js';
 import { fileContentKey } from './backbone.js';
+import { factsForDoc, FACTS } from './consistency.js';
 
 import { fontBytes, defaultHeadings, bookmarkTitles } from './pdfmeta.js';
 export { setFontLoader, defaultHeadings, bookmarkTitles } from './pdfmeta.js';
@@ -51,9 +52,9 @@ export function linkTargets(project, doc, seqNumber, sourcePath) {
   const out = [];
   for (const code of doc.links ?? []) {
     const hit = current.find((e) => e.leaf.nodeCode === code);
-    const label = `${code} ${INDEX.map[code]?.title ?? ''}`.trim();
+    const label = `${displayCode(code)} ${INDEX.map[code]?.title ?? ''}`.trim();
     if (hit) out.push({ label, href: relativePath(fromDir, `${hit.seq}/${filePath(hit.leaf.nodeCode, hit.leaf.fileName, project.settings)}`), ok: true });
-    else out.push({ label, href: relativePath(fromDir, `${seqNumber}/missing/${code.replace(/\./g, '')}.pdf`), ok: false });
+    else out.push({ label, href: relativePath(fromDir, `${seqNumber}/missing/${code.replace(/[^a-z0-9]/gi, '')}.pdf`), ok: false });
   }
   for (let i = 0; i < (doc.brokenLinks ?? 0); i++) out.push({ label: `Appendix ${i + 1} (moved)`, href: `old-appendix-${i + 1}.pdf`, ok: false });
   return out;
@@ -108,10 +109,10 @@ export async function generateStubPdf(project, doc, opts = {}) {
   const pdf = await PDFDocument.create();
   pdf.setTitle(doc.title || doc.fileName, { showInWindowTitleBar: true });
   pdf.setAuthor(project.settings.applicant?.name ?? 'Fictional applicant');
-  pdf.setSubject(`${doc.section} — TRAINING ONLY, fictional, not for submission`);
+  pdf.setSubject(`${displayCode(doc.section)} - TRAINING ONLY, fictional, not for submission`);
   pdf.setCreator('eCTD Dossier Builder (training)');
   pdf.setProducer('eCTD Dossier Builder stub generator');
-  pdf.setKeywords(['training', 'fictional', doc.section]);
+  pdf.setKeywords(['training', 'fictional', displayCode(doc.section)]);
   pdf.setCreationDate(FIXED_DATE);
   pdf.setModificationDate(FIXED_DATE);
   pdf.setLanguage('en-US');
@@ -161,7 +162,7 @@ export async function generateStubPdf(project, doc, opts = {}) {
   text(tp, 'TRAINING ONLY - FICTIONAL - NOT FOR SUBMISSION', 50, 740, 10, bold, rgb(0.72, 0.2, 0.16));
   text(tp, project.settings.applicant?.name ?? '', 50, 700, 12, font, grey);
   text(tp, `${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(', ')}`, 50, 680, 12, font, grey);
-  text(tp, `${doc.section}  ${INDEX.map[doc.section]?.title ?? ''}`, 50, 620, 14, bold);
+  text(tp, `${displayCode(doc.section)}  ${INDEX.map[doc.section]?.title ?? ''}`, 50, 620, 14, bold);
   const titleLines = wrap(T(doc.title || doc.fileName), bold, 22, 500);
   titleLines.forEach((l, i) => text(tp, l, 50, 585 - i * 28, 22, bold));
   let y = 585 - titleLines.length * 28 - 20;
@@ -198,12 +199,26 @@ export async function generateStubPdf(project, doc, opts = {}) {
     });
   }
 
+  // Structured facts this document states (compared by the consistency QC), boxed at the
+  // top of the first content page.
+  const facts = factsForDoc(project, doc);
+  const factKeys = Object.keys(facts);
+  let factsBottom = 760;
+  if (factKeys.length && stubPages > contentStart) {
+    const fp = pages[contentStart];
+    const boxH = 24 + factKeys.length * 14;
+    if (!scanned) fp.drawRectangle({ x: 45, y: 752 - boxH, width: 520, height: boxH, color: rgb(0.95, 0.96, 0.97), borderColor: rgb(0.8, 0.83, 0.87), borderWidth: 0.5 });
+    text(fp, 'Key facts stated in this document', 55, 736, 10.5, bold);
+    factKeys.forEach((k, i) => text(fp, `${FACTS.find((f) => f.key === k).label}: ${facts[k]}`, 55, 720 - i * 14, 9.5));
+    factsBottom = 752 - boxH - 10;
+  }
+
   // Content pages: headings and invented text
   const mod = String(doc.section).split('.')[0];
   const bank = BANK[mod] ?? BANK[2];
   for (let pi = contentStart; pi < stubPages; pi++) {
     const page = pages[pi];
-    let cy = 740;
+    let cy = pi === contentStart ? Math.min(740, factsBottom - 14) : 740;
     const hs = outline.filter((o) => o.page === pi).slice(0, 5);
     const list = hs.length ? hs : [{ title: `${doc.section} (continued)` }];
     for (const h of list) {

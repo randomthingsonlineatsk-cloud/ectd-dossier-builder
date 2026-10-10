@@ -1,26 +1,29 @@
-// Rule engine for the US eCTD v3.2.2 profile (Phase 1 core rules).
+// Rule engine for the eCTD v3.2.2 profiles (US and EU core rules).
 import rulesData from '../data/rules.json' with { type: 'json' };
-import usM1 from '../data/us-m1.json' with { type: 'json' };
-import { INDEX, ancestors } from './tree.js';
+import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion } from './tree.js';
 import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
-export const REQUIRED = {
-  'nda:original': new Set(rulesData.required['nda:original']),
-};
+export const REQUIRED = Object.fromEntries(Object.entries(rulesData.required).filter(([, v]) => Array.isArray(v)).map(([k, v]) => [k, new Set(v)]));
 export const SEVERITY_ORDER = { High: 0, Medium: 1, Low: 2 };
 const PDF_OK = new Set(['1.4', '1.5', '1.6', '1.7', 'A-1', 'A-2']);
 const FILE_RE = /^[a-z0-9][a-z0-9-]*\.pdf$/;
 
+const keysFor = (project, seq) => [`${project.appType}:${seq.submissionType}:${seq.subType}`, `${project.appType}:${seq.subType}`];
+
 export function requiredFor(project, seq) {
-  if (seq.subType !== 'original') return new Set();
-  return REQUIRED[`${project.appType}:original`] ?? new Set();
+  for (const k of keysFor(project, seq)) if (REQUIRED[k]) return REQUIRED[k];
+  return new Set();
 }
 
 export function m1Checklist(project, seq) {
-  return usM1.checklist[`${project.appType}:${seq.subType}`] ?? [];
+  const cl = REGION_PACKS[project.region]?.checklist ?? {};
+  for (const k of keysFor(project, seq)) if (cl[k]) return cl[k];
+  return [];
 }
+
+export const profileLabel = (project) => rulesData.profiles[`${project.region}-3.2.2`]?.label ?? project.region;
 
 export function validate(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
@@ -42,16 +45,36 @@ export function validate(project, seqNumber) {
   // Sequence-level
   if (!/^\d{4}$/.test(seq.number)) add('LC-01', 'format', `Sequence number "${seq.number}" is not four digits.`);
   if (project.sequences.filter((x) => x.number === seq.number).length > 1) add('LC-01', 'unique', `Sequence ${seq.number} is used more than once.`);
-  if (seqs.slice(idx + 1).some((x) => x.status === 'published')) add('LC-01', 'order', `A later sequence is already published; ${seq.number} would arrive out of order.`);
+  if (seq.status !== 'published' && seqs.slice(idx + 1).some((x) => x.status === 'published')) add('LC-01', 'order', `A later sequence is already published; ${seq.number} would arrive out of order.`);
 
-  const meta = [
+  const eu = project.region === 'EU';
+  const m1Root = eu ? 'eu:1' : '1';
+  const meta = eu ? [
+    ['applicant', s.applicant?.name, 'Applicant name'],
+    ['trackingNumber', /^EMEA\/H\/C\/\d{6}$/.test(s.eu?.trackingNumber || '') ? 'ok' : '', 'Procedure tracking number (EMEA/H/C/ plus six digits)'],
+    ['uuid', s.eu?.uuid, 'Envelope identifier (UUID)'],
+    ['procedureType', s.eu?.procedureType, 'Procedure type'],
+    ['inventedName', s.eu?.inventedName, 'Invented name'],
+    ['inn', s.eu?.inn, 'INN'],
+    ['submissionType', seq.submissionType, 'Submission type'],
+    ['subType', seq.subType, 'Submission unit type'],
+  ] : [
     ['applicant', s.applicant?.name, 'Applicant name'],
     ['applicationNumber', /^\d{6}$/.test(s.applicationNumber || '') ? 'ok' : '', 'Application number (six digits)'],
     ['submissionType', seq.submissionType, 'Submission type'],
     ['subType', seq.subType, 'Submission sub-type'],
     ['duns', s.applicant?.duns, 'D-U-N-S number'],
   ];
-  for (const [k, v, label] of meta) if (!String(v ?? '').trim()) add('BB-06', k, `${label} is missing from the regional metadata.`, { nodeCode: '1' });
+  for (const [k, v, label] of meta) if (!String(v ?? '').trim()) add('BB-06', k, `${label} is missing from the regional metadata.`, { nodeCode: m1Root });
+
+  if (eu) {
+    const needsRelated = !['initial', 'reformat'].includes(seq.subType);
+    const rel = seq.relatedSequence?.trim();
+    if (needsRelated && !rel) add('EU-11', 'missing', `Sequence ${seq.number} (${seq.subType}) has no related sequence.`, { nodeCode: m1Root });
+    else if (rel && (!seqByNumber(project, rel) || rel >= seq.number)) add('EU-11', 'invalid', `Related sequence "${rel}" is not an earlier sequence of this application.`, { nodeCode: m1Root });
+    else if (rel && !needsRelated) add('EU-11', 'unexpected', `An ${seq.subType} sequence should not name a related sequence.`, { nodeCode: m1Root });
+    if (seq.submissionMode !== 'single' && (seq.changes?.length ?? 0) < 2) add('EU-12', 'changes', `Submission mode is ${seq.submissionMode} but ${seq.changes?.length ?? 0} change(s) are listed.`, { nodeCode: m1Root });
+  }
 
   const leaves = seq.leaves;
   if (leaves.some((l) => l.nodeCode.startsWith('3.2.S'))) {
@@ -77,6 +100,7 @@ export function validate(project, seqNumber) {
   for (const l of leaves) {
     const node = INDEX.map[l.nodeCode];
     const doc = docForLeaf(project, l);
+    if (!inRegion(l.nodeCode, project.region)) { add('FF-04', l.id, `"${l.title || l.id}" is under ${dc(l.nodeCode)}, which belongs to another region's Module 1.`, { nodeCode: l.nodeCode, leafId: l.id }); continue; }
     const where = { nodeCode: l.nodeCode, leafId: l.id };
     const name = l.title || l.fileName || l.id;
 
@@ -92,10 +116,10 @@ export function validate(project, seqNumber) {
       if (!t || !tEntry) add('LC-02', l.id, `"${name}" (${l.operation}) has no valid target leaf in an earlier sequence.`, where);
       else if (tEntry.status !== 'current') add('LC-02', l.id, `"${name}" targets a leaf that is already ${tEntry.status}.`, where);
       else if (tSeq && tSeq.status !== 'published') add('LC-02', l.id, `"${name}" targets sequence ${t.seq}, which has not been published.`, where);
-      else if (tEntry.leaf.nodeCode !== l.nodeCode) add('LC-03', l.id, `"${name}" is in ${l.nodeCode} but its target is in ${tEntry.leaf.nodeCode}.`, where);
+      else if (tEntry.leaf.nodeCode !== l.nodeCode) add('LC-03', l.id, `"${name}" is in ${dc(l.nodeCode)} but its target is in ${dc(tEntry.leaf.nodeCode)}.`, where);
     }
     // Forms and cover letters are sent new with every sequence, so they are exempt.
-    if (l.operation === 'new' && !isFirst && !['1.1', '1.2'].includes(l.nodeCode)) {
+    if (l.operation === 'new' && !isFirst && !['1.1', '1.2', 'eu:1.0', 'eu:1.2'].includes(l.nodeCode)) {
       const dup = (before.byNode[l.nodeCode] ?? []).find((e) => e.status === 'current' && e.leaf.title.trim().toLowerCase() === l.title.trim().toLowerCase());
       if (dup) add('LC-05', l.id, `"${name}" is new but a current leaf with the same title exists from sequence ${dup.seq}.`, where);
     }
@@ -103,7 +127,7 @@ export function validate(project, seqNumber) {
 
     // Backbone
     if (!doc) { add('BB-01', l.id, `Leaf "${name}" points to a document that is not in the library.`, where); continue; }
-    if (!l.title.trim()) add('BB-04', l.id, `The leaf in ${l.nodeCode} (${l.fileName}) has no title.`, where);
+    if (!l.title.trim()) add('BB-04', l.id, `The leaf in ${dc(l.nodeCode)} (${l.fileName}) has no title.`, where);
     else if (/\.pdf$/i.test(l.title.trim()) || l.title.trim().toLowerCase() === l.fileName.toLowerCase()) add('BB-05', l.id, `Leaf title "${l.title}" looks like a file name.`, where);
 
     // Files and folders
@@ -111,9 +135,9 @@ export function validate(project, seqNumber) {
     if (l.fileName.length > 64) add('FF-02', l.id, `File name is ${l.fileName.length} characters.`, where);
     const full = `${seq.number}/${leafPath(project, l)}`;
     if (full.length > 180) add('FF-03', l.id, `Path is ${full.length} characters: ${full}`, where);
-    if (node?.notInEctd) add('FF-05', l.id, `"${name}" is placed in ${l.nodeCode}, which is not used in eCTD.`, where);
+    if (node?.notInEctd) add('FF-05', l.id, `"${name}" is placed in ${dc(l.nodeCode)}, which is not used in eCTD.`, where);
     else if (doc.section && !doc.decoy && doc.section !== l.nodeCode) {
-      add('FF-04', l.id, `"${name}" belongs in ${doc.section} but is placed in ${l.nodeCode}.`, where);
+      add('FF-04', l.id, `"${name}" belongs in ${dc(doc.section)} but is placed in ${dc(l.nodeCode)}.`, where);
     }
 
     // PDF
@@ -125,14 +149,14 @@ export function validate(project, seqNumber) {
     if (doc.brokenLinks > 0 || missingTargets.length) {
       const parts = [];
       if (doc.brokenLinks > 0) parts.push(`${doc.brokenLinks} link(s) point to pages that no longer exist`);
-      if (missingTargets.length) parts.push(`links to ${missingTargets.join(', ')} have no document in the current view`);
+      if (missingTargets.length) parts.push(`links to ${missingTargets.map(dc).join(', ')} have no document in the current view`);
       add('PDF-05', l.id, `"${name}": ${parts.join('; ')}.`, where);
     }
     if (!doc.textSearchable) add('PDF-06', l.id, `"${name}" is a scanned image without searchable text.`, where);
 
     // Study grouping (US v3.2.2 study tagging files)
-    if (needsStudyTag(l.nodeCode)) {
-      if (!l.study?.id?.trim()) add('SG-01', l.id, `"${name}" in ${l.nodeCode} has no study ID or file tag.`, where);
+    if (!eu && needsStudyTag(l.nodeCode)) {
+      if (!l.study?.id?.trim()) add('SG-01', l.id, `"${name}" in ${dc(l.nodeCode)} has no study ID or file tag.`, where);
       else {
         if (!isValidTag(l.nodeCode, l.study.tag)) add('SG-02', l.id, `"${name}" has file tag "${l.study.tag || '(none)'}", which is not valid for Module ${l.nodeCode[0]}.`, where);
         const sug = suggestedStudy(doc);
@@ -140,9 +164,15 @@ export function validate(project, seqNumber) {
       }
     }
 
+    // EU Module 1 file naming: country folder code first (ema-..., common-...)
+    if (eu && node?.isM1 && node.country) {
+      const cc = node.country.split('/')[0];
+      if (!l.fileName.startsWith(`${cc}-`)) add('EU-10', l.id, `"${l.fileName}" in ${dc(l.nodeCode)} should start with "${cc}-".`, where);
+    }
+
     // Granularity
     if (doc.decoy === 'coarse') add('GR-01', l.id, `"${name}" bundles several CTD subsections into one file.`, where);
-    if (doc.decoy === 'fine') add('GR-02', l.id, `"${name}" splits ${doc.section} finer than ICH granularity expects.`, where);
+    if (doc.decoy === 'fine') add('GR-02', l.id, `"${name}" splits ${dc(doc.section)} finer than ICH granularity expects.`, where);
   }
 
   // Module 1 checklist (this sequence only)
@@ -154,12 +184,16 @@ export function validate(project, seqNumber) {
       const d = docForLeaf(project, l);
       return d?.form === item.form;
     });
-    if (!ok) add(item.rule, `${item.section}${item.form ? '/' + item.form : ''}`, `${item.label} is missing from ${item.section}.`, { nodeCode: item.section });
+    if (!ok) add(item.rule, `${item.section}${item.form ? '/' + item.form : ''}`, `${item.label} is missing from ${dc(item.section)}.`, { nodeCode: item.section });
+  }
+
+  if (eu && seq.subType === 'response' && !leaves.some((l) => l.nodeCode === 'eu:responses' && l.operation !== 'delete')) {
+    add('EU-09', 'responses', 'This response sequence has no responses document.', { nodeCode: 'eu:responses' });
   }
 
   // Content completeness (current view after this sequence)
   for (const code of requiredFor(project, seq)) {
-    if (!currentAfterCodes.has(code)) add('CT-01', code, `${code} ${INDEX.map[code]?.title ?? ''} has no document.`, { nodeCode: code });
+    if (!currentAfterCodes.has(code)) add('CT-01', code, `${dc(code)} ${INDEX.map[code]?.title ?? ''} has no document.`, { nodeCode: code });
   }
 
   return summarise(findings);

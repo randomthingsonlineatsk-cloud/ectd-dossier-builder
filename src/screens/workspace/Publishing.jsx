@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { INDEX, isPlaceable } from '../../engine/tree.js';
+import { INDEX, isPlaceable, displayCode as dc } from '../../engine/tree.js';
 import { docForLeaf, lifecycleState, sortedSequences } from '../../engine/model.js';
 import { updateLeaf, fixDoc } from '../../engine/ops.js';
 import { bookmarkTitles, defaultHeadings } from '../../engine/pdfmeta.js';
-import { suggestedStudy, needsStudyTag } from '../../engine/stf.js';
+import { suggestedStudy, needsStudyTag, STUDY_ID_RE } from '../../engine/stf.js';
 import PdfPreview from '../../components/PdfPreview.jsx';
 import { modColor } from '../../ctx.js';
 
@@ -21,7 +21,7 @@ function titleIssues(project, seq) {
     const seen = {};
     for (const e of list) {
       const k = e.leaf.title.trim().toLowerCase();
-      if (k && seen[k]) issues.push({ leaf: e.leaf, seq: e.seq, kind: 'Duplicate title in the same heading', detail: `"${e.leaf.title}" appears twice in ${code}; reviewers cannot tell the documents apart.` });
+      if (k && seen[k]) issues.push({ leaf: e.leaf, seq: e.seq, kind: 'Duplicate title in the same heading', detail: `"${e.leaf.title}" appears twice in ${dc(code)}; reviewers cannot tell the documents apart.` });
       seen[k] = true;
     }
   }
@@ -37,7 +37,7 @@ function titleIssues(project, seq) {
     if (doc && !doc.generated && t.trim() && t.trim() !== doc.title && !/\.pdf$/i.test(t)) issues.push({ ...base, kind: 'Differs from the document', detail: `Leaf title "${t}" does not match the document's own title "${doc.title}".`, fix: { label: 'Use the document title', title: doc.title } });
     if (doc && needsStudyTag(l.nodeCode)) {
       const sid = suggestedStudy(doc);
-      if (sid && /^(HR[NP]-\d+)/.test(sid) && !t.includes(sid)) issues.push({ ...base, kind: 'Study ID missing from title', detail: `Study reports are easier to find when the title starts with the study ID (${sid}).`, fix: { label: `Prefix ${sid}`, title: `Study ${sid}: ${t.replace(/^Study [^:]+:\s*/, '')}` } });
+      if (sid && STUDY_ID_RE.test(sid) && !t.includes(sid)) issues.push({ ...base, kind: 'Study ID missing from title', detail: `Study reports are easier to find when the title starts with the study ID (${sid}).`, fix: { label: `Prefix ${sid}`, title: `Study ${sid}: ${t.replace(/^Study [^:]+:\s*/, '')}` } });
     }
     if (l.target && (l.operation === 'replace' || l.operation === 'append')) {
       const tgt = st.entries.get(`${l.target.seq}:${l.target.leafId}`);
@@ -93,7 +93,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
             return (
               <button key={l.id} className={`doc ${selId === l.id ? 'picked' : ''}`} style={{ width: '100%', textAlign: 'left', cursor: 'pointer' }} onClick={() => { setSelId(l.id); setShowPdf(false); }}>
                 <span className="bar" style={{ background: modColor(l.nodeCode) }} />
-                <span><span className="dt" style={{ display: 'block' }}>{l.title || '(no title)'}</span><span className="ds">{l.nodeCode}{is.length ? ` · ${is.join(', ')}` : ''}</span></span>
+                <span><span className="dt" style={{ display: 'block' }}>{l.title || '(no title)'}</span><span className="ds">{dc(l.nodeCode)}{is.length ? ` · ${is.join(', ')}` : ''}</span></span>
                 <span />
               </button>
             );
@@ -114,7 +114,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <div>
                 <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>{leaf.title || '(no title)'}</h2>
-                <span className="small muted">{leaf.nodeCode} · {leaf.fileName} · {doc.pages} pages</span>
+                <span className="small muted">{dc(leaf.nodeCode)} · {leaf.fileName} · {doc.pages} pages</span>
               </div>
               <div className="row">
                 <button className="btn small" aria-expanded={showPdf} onClick={() => setShowPdf(!showPdf)}>{showPdf ? 'Hide PDF' : 'Show PDF'}</button>
@@ -164,7 +164,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
               <tbody>
                 {(doc.links ?? []).map((c) => (
                   <tr key={c}>
-                    <td><strong>{c}</strong> {INDEX.map[c]?.title}</td>
+                    <td><strong>{dc(c)}</strong> {INDEX.map[c]?.title}</td>
                     <td>{currentCodes.has(c) ? <span className="pill ok">Resolves</span> : <span className="pill high">Broken: no document</span>}</td>
                     <td>{editable && <button className="btn small ghost" onClick={() => editDoc((d) => { d.links = d.links.filter((x) => x !== c); })}>Remove link</button>}</td>
                   </tr>
@@ -183,7 +183,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
               <div className="row" style={{ marginTop: '.5rem' }}>
                 <select value={newLink} onChange={(e) => setNewLink(e.target.value)} style={{ maxWidth: 360 }} aria-label="Link target">
                   <option value="">Add a link to…</option>
-                  {placedCodes.filter((c) => c !== leaf.nodeCode && isPlaceable(c) && !(doc.links ?? []).includes(c)).map((c) => <option key={c} value={c}>{c} {INDEX.map[c]?.title}</option>)}
+                  {placedCodes.filter((c) => c !== leaf.nodeCode && isPlaceable(c) && !(doc.links ?? []).includes(c)).map((c) => <option key={c} value={c}>{dc(c)} {INDEX.map[c]?.title}</option>)}
                 </select>
                 <button className="btn small" disabled={!newLink} onClick={() => { editDoc((d) => { d.links = [...(d.links ?? []), newLink]; }); setNewLink(''); }}>Add link</button>
               </div>
@@ -201,7 +201,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
                 return (
                   <li key={l.id} style={{ marginBottom: '.3rem' }}>
                     <button className="btn ghost small" style={{ padding: 0 }} onClick={() => setSelId(l.id)}><strong>{l.title || l.fileName}</strong></button>{' '}
-                    ({l.nodeCode}): {[d.brokenLinks ? `${d.brokenLinks} to moved files` : null, missing.length ? `to ${missing.join(', ')} with no document` : null].filter(Boolean).join('; ')}
+                    ({dc(l.nodeCode)}): {[d.brokenLinks ? `${d.brokenLinks} to moved files` : null, missing.length ? `to ${missing.join(', ')} with no document` : null].filter(Boolean).join('; ')}
                   </li>
                 );
               })}
@@ -217,7 +217,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
               {issues.map((it, i) => (
                 <article key={i} className="finding Low">
                   <span className="pill low">{it.kind}</span>
-                  <div><h4 style={{ fontSize: 'var(--step--1)' }}>{it.leaf.nodeCode} · {it.leaf.title || '(no title)'} <span className="muted">({it.seq})</span></h4><p className="small" style={{ margin: 0 }}>{it.detail}</p></div>
+                  <div><h4 style={{ fontSize: 'var(--step--1)' }}>{dc(it.leaf.nodeCode)} · {it.leaf.title || '(no title)'} <span className="muted">({it.seq})</span></h4><p className="small" style={{ margin: 0 }}>{it.detail}</p></div>
                   {it.fix && it.editable ? <button className="btn small" onClick={() => mutate((p) => updateLeaf(p, seq.number, it.leaf.id, { title: it.fix.title }))}>{it.fix.label}</button> : <span />}
                 </article>
               ))}

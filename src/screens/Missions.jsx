@@ -30,6 +30,7 @@ function MissionCard({ m }) {
         <h2 id={`m${m.id}`} style={{ fontSize: 'var(--step-1)', margin: 0 }}>Mission {m.id}: {m.title}</h2>
         <span className="row small">
           <span className="pill">{m.region}, eCTD v{m.version}</span>
+          {m.phase === 2 && <span className="pill">New</span>}
           {mine.length > 0 && <span className={`pill ${best >= 80 ? 'ok' : 'medium'}`}>Best {best}%</span>}
         </span>
       </div>
@@ -48,12 +49,12 @@ function MissionCard({ m }) {
 }
 
 export default function Missions() {
-  const available = MISSIONS.filter((m) => m.phase === 1);
-  const later = MISSIONS.filter((m) => m.phase > 1).sort((a, b) => a.id - b.id);
+  const available = MISSIONS.filter((m) => m.phase <= 2).sort((a, b) => a.id - b.id);
+  const later = MISSIONS.filter((m) => m.phase > 2).sort((a, b) => a.id - b.id);
   return (
     <div className="page">
       <h1>Missions</h1>
-      <p>Each mission sets a product, a region and a goal, then grades your dossier. Starting a mission creates its own project, so you can retry as often as you like.</p>
+      <p>Each mission sets a product, a region and a goal, then grades your dossier on four axes: technical validity, lifecycle correctness, cross-module consistency and time. Starting a mission creates its own project, so you can retry as often as you like. For quick lifecycle practice, try the <a href="#/drills">lifecycle drills</a>.</p>
       <div className="stack" style={{ marginTop: '1.5rem' }}>
         {available.map((m) => <MissionCard key={m.id} m={m} />)}
       </div>

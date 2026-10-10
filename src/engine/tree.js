@@ -1,46 +1,56 @@
-// Builds a flat index over the CTD Modules 2-5 tree and the regional Module 1 tree.
+// One flat index over every heading the app knows: each region's Module 1 tree plus
+// the harmonised CTD Modules 2-5. Region Module 1 codes other than the US carry a prefix
+// (e.g. "eu:1.3.1") so they never clash; displayCode() strips it for people.
 import ctd from '../data/ctd-tree.json' with { type: 'json' };
 import usM1 from '../data/us-m1.json' with { type: 'json' };
+import euM1 from '../data/eu-m1.json' with { type: 'json' };
 
-export const REGION_PACKS = { US: usM1 };
+export const REGION_PACKS = { US: usM1, EU: euM1 };
+export const M1_ROOT = { US: '1', EU: 'eu:1' };
+export const REGIONS = Object.keys(REGION_PACKS);
 
-function indexTree(root, out, parent = null, module = null, isM1 = false) {
+function indexTree(root, out, parent, module, region) {
   const node = {
     code: root.code,
+    display: root.display ?? root.code,
     title: root.title,
     element: root.element ?? null,
     folder: root.folder ?? null,
+    country: root.country ?? null,
     repeat: root.repeat ?? null,
     notInEctd: !!root.notInEctd,
     note: root.note ?? null,
     help: root.help ?? null,
     parent: parent ? parent.code : null,
-    module: module ?? root.code,
-    isM1,
+    module,
+    region,
+    isM1: module === '1',
     children: [],
   };
   out.map[node.code] = node;
   out.order.push(node.code);
   if (parent) parent.children.push(node.code);
-  for (const c of root.children ?? []) indexTree(c, out, node, module ?? root.code, isM1);
+  for (const c of root.children ?? []) indexTree(c, out, node, module, region);
   return node;
 }
 
-export function buildIndex(region = 'US') {
+function buildIndex() {
   const out = { map: {}, order: [], roots: [] };
-  const pack = REGION_PACKS[region];
-  const m1 = indexTree(pack.tree, out, null, '1', true);
-  out.roots.push(m1.code);
-  for (const mod of ctd.modules) {
-    const n = indexTree(mod, out, null, mod.code, false);
-    out.roots.push(n.code);
-  }
+  for (const r of REGIONS) out.roots.push(indexTree(REGION_PACKS[r].tree, out, null, '1', r).code);
+  for (const mod of ctd.modules) out.roots.push(indexTree(mod, out, null, mod.code, null).code);
   return out;
 }
 
-export const INDEX = buildIndex('US');
+export const INDEX = buildIndex();
 
 export const nodeOf = (code) => INDEX.map[code];
+export const displayCode = (code) => INDEX.map[code]?.display ?? String(code ?? '').replace(/^eu:/, '');
+export const nodeLabel = (code) => `${displayCode(code)} ${INDEX.map[code]?.title ?? ''}`.trim();
+export const rootsFor = (region) => [M1_ROOT[region] ?? '1', '2', '3', '4', '5'];
+export const inRegion = (code, region) => {
+  const n = INDEX.map[code];
+  return !!n && (!n.isM1 || n.region === region);
+};
 export const isPlaceable = (code) => {
   const n = INDEX.map[code];
   return !!n && n.children.length === 0;
@@ -74,11 +84,18 @@ export function repeatFolder(kind, settings) {
   return null;
 }
 
-// Path of a file relative to the sequence folder, e.g. m3/32-body-data/32p-drug-prod/ostrevia-tablet/32p5-contr-drug-prod/32p51-spec/specifications.pdf
+// Path of a file's folder relative to the sequence folder.
 export function folderPath(code, settings) {
   const n = INDEX.map[code];
   if (!n) return null;
-  if (n.isM1) return REGION_PACKS.US.folder;
+  if (n.isM1) {
+    const pack = REGION_PACKS[n.region];
+    if (n.region === 'US') return pack.folder;
+    const parts = [pack.folder];
+    for (const a of ancestors(code).slice(1)) if (a.folder) parts.push(a.folder);
+    if (n.country) parts.push(n.country);
+    return parts.join('/');
+  }
   const parts = [];
   for (const a of ancestors(code)) {
     if (a.folder) parts.push(a.folder);

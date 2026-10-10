@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
 import { go } from '../App.jsx';
-import { createProject, PRODUCTS } from '../engine/model.js';
+import { createProject, PRODUCTS, productOptions } from '../engine/model.js';
 import { db } from '../engine/db.js';
 import { exportProject, parseProjectFile, download } from '../engine/io.js';
 import { slug } from '../engine/tree.js';
@@ -41,11 +41,16 @@ function Binder() {
 export default function Home() {
   const { user, projects, attempts, toast, saveProject, reload } = useApp();
   const [name, setName] = useState('');
+  const [productId, setProductId] = useState('nce-tablet');
+  const [region, setRegion] = useState('US');
+  const opts = productOptions(productId);
+  const opt = opts.find((o) => o.region === region) ?? opts[0];
   const fileRef = useRef();
 
   const start = async (e) => {
     e.preventDefault();
-    const p = createProject({ name: name.trim() || 'Ostrevia NDA practice', user });
+    const prod = PRODUCTS[productId];
+    const p = createProject({ name: name.trim() || `${prod.product.brandName} ${opt.appType.toUpperCase()} practice`, productId, region: opt.region, appType: opt.appType, user });
     await saveProject(p);
     go(`/project/${p.id}`);
   };
@@ -69,7 +74,7 @@ export default function Home() {
       <section className="hero">
         <div>
           <h1>Publish a dossier before you publish a real one.</h1>
-          <p className="lede">Assemble a fictional NDA in eCTD v3.2.2: place documents into the CTD tree, build the backbone, run the validator, and manage lifecycle sequences the way a regulatory operations team does.</p>
+          <p className="lede">Assemble a fictional NDA, ANDA or EU marketing authorisation application in eCTD v3.2.2: place documents into the CTD tree, build the backbone, run the validator, and manage lifecycle sequences the way a regulatory operations team does.</p>
           <div className="row">
             <a className="btn primary" href="#/learn">Start with lesson 1</a>
             <a className="btn" href="#/missions">Take a mission</a>
@@ -111,20 +116,17 @@ export default function Home() {
       <form className="panel" onSubmit={start}>
         <div className="grid-2">
           <label className="field">Project name
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ostrevia NDA practice" />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder={`${PRODUCTS[productId].product.brandName} ${opt.appType.toUpperCase()} practice`} />
           </label>
           <label className="field">Fictional product
-            <select defaultValue="nce-tablet">
-              <option value="nce-tablet">Ostrevia (lumiravostat) — new chemical entity, IR tablet</option>
-              <option disabled>Generic tablet — Phase 2</option>
-              <option disabled>Sterile injectable — Phase 2</option>
+            <select value={productId} onChange={(e) => { setProductId(e.target.value); setRegion(productOptions(e.target.value)[0].region); }}>
+              {Object.values(PRODUCTS).map((pr) => <option key={pr.id} value={pr.id}>{pr.product.brandName} ({pr.product.inn}) — {pr.label}</option>)}
               <option disabled>Monoclonal antibody, biosimilar — Phase 3</option>
             </select>
           </label>
           <label className="field">Region and application type
-            <select defaultValue="US-nda">
-              <option value="US-nda">US — NDA</option>
-              <option disabled>EU — centralised MAA (Phase 2)</option>
+            <select value={opt.region} onChange={(e) => setRegion(e.target.value)}>
+              {opts.map((o) => <option key={o.region} value={o.region}>{o.region === 'EU' ? 'EU — centralised MAA' : `US — ${o.appType.toUpperCase()}`}</option>)}
               <option disabled>Japan — NDA, v4.0 (Phase 3)</option>
               <option disabled>India — NDA under NDCT Rules (Phase 3)</option>
             </select>
@@ -137,7 +139,7 @@ export default function Home() {
       </form>
 
       <div className="section-head"><h2>Where eCTD stands in 2026</h2></div>
-      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This release teaches v3.2.2 with the US pack; later releases add v4.0 and other regions.</p>
+      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This release teaches v3.2.2 with the US and EU packs; a later release adds v4.0, Japan and India.</p>
       <StatusTable />
     </div>
   );

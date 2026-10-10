@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { publishSequence } from '../../engine/backbone.js';
-import { INDEX } from '../../engine/tree.js';
+import { INDEX, REGION_PACKS } from '../../engine/tree.js';
 import { download } from '../../engine/io.js';
 import { modColor } from '../../ctx.js';
 
@@ -46,7 +46,7 @@ function Rendered({ xml, rootTag }) {
         </li>
       );
     }
-    if (['admin', 'title'].includes(el.tagName)) return null;
+    if (['admin', 'title', 'eu-envelope'].includes(el.tagName)) return null;
     const label = ELEMENT_TITLE[el.tagName] ?? el.tagName;
     const attrs = ['substance', 'manufacturer', 'product-name', 'dosageform', 'indication', 'form-type'].map((a) => el.getAttribute(a)).filter(Boolean);
     const body = kids.map((k) => walk(k, depth + 1)).filter(Boolean);
@@ -77,9 +77,10 @@ function FolderTree({ node }) {
 export default function Backbone({ project, seq }) {
   const pkg = useMemo(() => publishSequence(project, seq.number), [project, seq.number]);
   const [view, setView] = useState('index');
+  const regionalName = REGION_PACKS[project.region].regionalFile.split('/').pop();
   const [stfId, setStfId] = useState(null);
   const views = [
-    ['index', 'index.xml'], ['regional', 'us-regional.xml'], ['md5', 'index-md5.txt'], ['stf', `Study tagging files (${pkg.stfs.length})`], ['rendered', 'Rendered view'], ['folders', 'Folder tree'], ['log', 'Publishing log'],
+    ['index', 'index.xml'], ['regional', regionalName], ['md5', 'index-md5.txt'], ['stf', `Study tagging files (${pkg.stfs.length})`], ['rendered', 'Rendered view'], ['folders', 'Folder tree'], ['log', 'Publishing log'],
   ];
   const stf = pkg.stfs.find((f) => f.id === stfId) ?? pkg.stfs[0];
   return (
@@ -90,12 +91,12 @@ export default function Backbone({ project, seq }) {
         </div>
         <div className="row">
           <button className="btn small" onClick={() => download(`${seq.number}-index.xml`, pkg.index, 'application/xml')}>Download index.xml</button>
-          <button className="btn small" onClick={() => download(`${seq.number}-us-regional.xml`, pkg.regional, 'application/xml')}>Download us-regional.xml</button>
+          <button className="btn small" onClick={() => download(`${seq.number}-${regionalName}`, pkg.regional, 'application/xml')}>Download {regionalName}</button>
         </div>
       </div>
       <p className="small muted">
         {seq.status === 'published' ? `Sequence ${seq.number} is published; this is its frozen backbone.` : `Live preview of sequence ${seq.number}. It updates as you place documents. Until you publish, PDF checksums are preview hashes; publishing generates each PDF and records the MD5 of its real bytes.`}
-        {' '}Modelled on the public ICH v3.2.2 and FDA Module 1 structures. Training only.
+        {' '}Modelled on the public ICH v3.2.2 and {project.region === 'EU' ? 'EU' : 'FDA'} Module 1 structures. Training only.
       </p>
       {view === 'index' && <Xml text={pkg.index} />}
       {view === 'regional' && <Xml text={pkg.regional} />}
@@ -118,7 +119,7 @@ export default function Backbone({ project, seq }) {
       ))}
       {view === 'rendered' && (
         <div className="grid-2" style={{ alignItems: 'start' }}>
-          <div><h3>As a reviewer's viewer shows it</h3><Rendered xml={pkg.index} rootTag="ectd:ectd" /><h3 style={{ marginTop: '1rem' }}>Module 1 (regional)</h3><Rendered xml={pkg.regional} rootTag="fda-regional:fda-regional" /></div>
+          <div><h3>As a reviewer's viewer shows it</h3><Rendered xml={pkg.index} rootTag="ectd:ectd" /><h3 style={{ marginTop: '1rem' }}>Module 1 (regional)</h3><Rendered xml={pkg.regional} rootTag={project.region === 'EU' ? 'eu:eu-backbone' : 'fda-regional:fda-regional'} /></div>
           <div><h3>Raw index.xml</h3><Xml text={pkg.index} /></div>
         </div>
       )}
