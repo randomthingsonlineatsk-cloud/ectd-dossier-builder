@@ -4,6 +4,10 @@
     "US-3.2.2": {
       "label": "US · eCTD v3.2.2",
       "rules": "all"
+    },
+    "EU-3.2.2": {
+      "label": "EU · eCTD v3.2.2",
+      "rules": "all"
     }
   },
   "families": [
@@ -12,8 +16,9 @@
     "PDF",
     "Lifecycle",
     "Module 1",
-    "Content",
+    "Module 1 (EU)",
     "Study grouping",
+    "Content",
     "Granularity"
   ],
   "rules": [
@@ -328,10 +333,165 @@
       "title": "Study ID does not match the document",
       "explain": "The study ID on the leaf differs from the study the document reports, so the file is grouped under the wrong study.",
       "fix": "Use the study ID shown in the document title."
+    },
+    {
+      "id": "M1-11",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Generic drug user fee cover sheet expected",
+      "explain": "An ANDA includes Form FDA 3794 in Module 1.1.",
+      "fix": "Place Form FDA 3794 in 1.1."
+    },
+    {
+      "id": "M1-12",
+      "family": "Module 1",
+      "severity": "High",
+      "title": "Patent certification is required for an ANDA",
+      "explain": "An ANDA certifies, for each patent listed for the reference listed drug, under Paragraph I, II, III or IV (or a section viii statement), in 1.3.5.2.",
+      "fix": "Place the patent certification in 1.3.5.2."
+    },
+    {
+      "id": "M1-13",
+      "family": "Module 1",
+      "severity": "High",
+      "title": "ANDA basis for submission statement is required",
+      "explain": "The basis for submission names the reference listed drug the ANDA relies on, in 1.12.11.",
+      "fix": "Place the basis for submission statement in 1.12.11."
+    },
+    {
+      "id": "M1-14",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Comparison with the reference listed drug is expected",
+      "explain": "1.12.12 compares the generic with the RLD: conditions of use, active ingredient, route, dosage form and strength.",
+      "fix": "Place the comparison in 1.12.12."
+    },
+    {
+      "id": "M1-15",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Listed drug labeling is expected for an ANDA",
+      "explain": "An ANDA includes the RLD's labeling and a side-by-side annotated comparison in 1.14.3.",
+      "fix": "Place both documents in 1.14.3.1 and 1.14.3.3."
+    },
+    {
+      "id": "M1-16",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Form FDA 2252 expected with periodic reports",
+      "explain": "Annual reports and periodic safety reports for an NDA are transmitted with Form FDA 2252 in 1.1.",
+      "fix": "Place Form FDA 2252 in 1.1."
+    },
+    {
+      "id": "EU-01",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Cover letter required in 1.0",
+      "explain": "Every EU sequence includes a cover letter in Module 1.0.",
+      "fix": "Generate a cover letter and place it in 1.0."
+    },
+    {
+      "id": "EU-02",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Application form required in 1.2",
+      "explain": "Initial applications and variations include the electronic application form in 1.2.",
+      "fix": "Place the eAF in 1.2."
+    },
+    {
+      "id": "EU-03",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Product information required in 1.3.1",
+      "explain": "An MAA includes the SmPC, labelling and package leaflet (English, QRD template) in 1.3.1.",
+      "fix": "Place the combined product information in 1.3.1."
+    },
+    {
+      "id": "EU-04",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "Mock-ups expected in 1.3.2",
+      "explain": "Mock-ups of the outer and immediate packaging accompany an MAA.",
+      "fix": "Place the mock-ups in 1.3.2."
+    },
+    {
+      "id": "EU-05",
+      "family": "Module 1 (EU)",
+      "severity": "Low",
+      "title": "Expert information expected in 1.4",
+      "explain": "Signed information about the quality, non-clinical and clinical experts is provided in 1.4.1 to 1.4.3.",
+      "fix": "Place each expert document."
+    },
+    {
+      "id": "EU-06",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "Environmental risk assessment expected in 1.6",
+      "explain": "An MAA includes an environmental risk assessment, for non-GMO products in 1.6.1.",
+      "fix": "Place the ERA in 1.6.1."
+    },
+    {
+      "id": "EU-07",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Pharmacovigilance information required in 1.8",
+      "explain": "An MAA includes the summary of the pharmacovigilance system (1.8.1) and the risk management plan (1.8.2).",
+      "fix": "Place both documents."
+    },
+    {
+      "id": "EU-08",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "Paediatric information expected in 1.10",
+      "explain": "An MAA for a new medicine includes the PIP decision or waiver and compliance information.",
+      "fix": "Place the paediatric document in 1.10."
+    },
+    {
+      "id": "EU-09",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Response sequences need a responses document",
+      "explain": "A sequence with submission unit 'response' carries the responses to the questions in the Responses section.",
+      "fix": "Place the responses document under Responses."
+    },
+    {
+      "id": "EU-10",
+      "family": "Module 1 (EU)",
+      "severity": "Low",
+      "title": "EU Module 1 file names should start with the country code",
+      "explain": "Files in a country folder are named with that country code first, e.g. ema-cover.pdf or common-responses-maa-d120.pdf.",
+      "fix": "Rename the file with the country prefix."
+    },
+    {
+      "id": "EU-11",
+      "family": "Module 1 (EU)",
+      "severity": "High",
+      "title": "Related sequence must point to an earlier sequence",
+      "explain": "Every sequence after the start of a procedure names the sequence that started it (related sequence). Initial and reformat sequences leave it empty.",
+      "fix": "Set the related sequence in the envelope."
+    },
+    {
+      "id": "EU-12",
+      "family": "Module 1 (EU)",
+      "severity": "Medium",
+      "title": "Grouped or worksharing submissions list their changes",
+      "explain": "A grouping covers several changes in one submission; worksharing covers one change across several products. The cover letter and eAF must list them.",
+      "fix": "List each change (type and scope) in Sequences."
     }
   ],
   "required": {
-    "nda:original": [
+    "optional": [
+      "2.6.3",
+      "2.6.5",
+      "2.6.7",
+      "2.7.5",
+      "3.2.A.1",
+      "3.2.R",
+      "3.3",
+      "4.3",
+      "5.4"
+    ],
+    "nda:application": [
       "2.2",
       "2.3",
       "2.4",
@@ -369,16 +529,113 @@
       "5.2",
       "5.3.5.1"
     ],
-    "optional": [
-      "2.6.3",
-      "2.6.5",
-      "2.6.7",
-      "2.7.5",
-      "3.2.A.1",
-      "3.2.R",
-      "3.3",
-      "4.3",
-      "5.4"
+    "maa:maa:initial": [
+      "2.2",
+      "2.3",
+      "2.4",
+      "2.5",
+      "2.6.1",
+      "2.6.2",
+      "2.6.4",
+      "2.6.6",
+      "2.7.1",
+      "2.7.2",
+      "2.7.3",
+      "2.7.4",
+      "2.7.6",
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3",
+      "4.2.3.2",
+      "5.2",
+      "5.3.5.1"
+    ],
+    "maa:maa:reformat": [
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3"
+    ],
+    "maa:none:reformat": [
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3"
+    ],
+    "anda:application": [
+      "2.3",
+      "2.7.1",
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3",
+      "5.3.1.2",
+      "5.3.1.4"
     ]
   }
 }

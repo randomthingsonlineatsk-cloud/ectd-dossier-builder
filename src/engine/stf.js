@@ -1,7 +1,7 @@
 // US study tagging files (STF) for eCTD v3.2.2, modelled on the public ICH STF
 // specification and FDA file-tag list. Leaves in Modules 4.2 and 5.3 carry
 // leaf.study = { id, tag }; one STF per study and heading is generated per sequence.
-import { INDEX, folderPath, slug } from './tree.js';
+import { folderPath, slug } from './tree.js';
 import { docForLeaf } from './model.js';
 
 export const FILE_TAGS = {
@@ -22,13 +22,17 @@ export const FILE_TAGS = {
 };
 export const DEFAULT_TAG = { 4: 'pre-clinical-study-report', 5: 'study-report' };
 
-export const needsStudyTag = (code) => /^4\.2\./.test(code) || /^5\.3\./.test(code);
+// Study reports in 4.2 and 5.3.1-5.3.5. Post-marketing reports (5.3.6) and CRFs (5.3.7) are not grouped here.
+export const needsStudyTag = (code) => /^4\.2\./.test(code) || /^5\.3\.[1-5](\.|$)/.test(code);
 export const moduleOf = (code) => Number(String(code).split('.')[0]);
+
+// Study IDs in this app look like HRP-301, MRN-0130 or AGL-BE-101.
+export const STUDY_ID_RE = /\b([A-Z]{2,4}(?:-[A-Z]{2,3})?-\d{3,4})\b/;
 
 export function suggestedStudy(doc) {
   if (!doc) return null;
   if (doc.study) return doc.study;
-  const m = /\b(HR[NP]-\d{3,4})\b/.exec(doc.title ?? '');
+  const m = STUDY_ID_RE.exec(doc.title ?? '');
   return m ? m[1] : null;
 }
 
@@ -47,6 +51,7 @@ const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').
 
 // Groups this sequence's tagged leaves into study tagging files.
 export function studyFiles(project, seq) {
+  if (project.region !== 'US') return [];
   const groups = new Map();
   for (const l of seq.leaves) {
     if (l.operation === 'delete' || !l.study?.id || !needsStudyTag(l.nodeCode)) continue;
@@ -93,4 +98,3 @@ export function isValidTag(code, tag) {
   return (FILE_TAGS[moduleOf(code)] ?? []).some((t) => t.value === tag);
 }
 
-export const nodeLabel = (code) => `${code} ${INDEX.map[code]?.title ?? ''}`;

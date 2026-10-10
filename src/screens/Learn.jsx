@@ -31,6 +31,7 @@ export default function Learn() {
           </div>
         ))}
         <a className="lesson-card" href="#/glossary"><span className="n">8</span><strong>Glossary</strong><span className="small muted">Every term used in the app, searchable.</span></a>
+        <a className="lesson-card" href="#/drills"><span className="n">+</span><strong>Lifecycle drills</strong><span className="small muted">Eight quick situations built on the most common lifecycle mistakes.</span></a>
       </div>
     </div>
   );

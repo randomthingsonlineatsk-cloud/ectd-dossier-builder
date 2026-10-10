@@ -16,7 +16,7 @@ export function fileContentKey(doc) {
   if (!doc) return '';
   return [doc.id, `v${doc.version}`, doc.pdfVersion, doc.fontsEmbedded, doc.secured, doc.textSearchable,
     doc.bookmarks, (doc.bookmarkList ?? []).join('~'), doc.toc ? 'toc' : '', doc.pages, doc.brokenLinks,
-    (doc.links ?? []).join(','), doc.title, doc.content ?? ''].join('|');
+    (doc.links ?? []).join(','), doc.title, JSON.stringify(doc.factOverrides ?? {}), doc.content ?? ''].join('|');
 }
 // Real MD5 of the generated PDF once computed (at publish); a preview hash before that.
 export const isRealChecksum = (doc) => !!doc?.md5 && doc.md5Key === fileContentKey(doc);
@@ -29,12 +29,13 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
   const isM1 = !!INDEX.map[leaf.nodeCode]?.isM1;
   // Regional XML lives in m1/us/, so its references are relative to that folder.
   if (leaf.target) {
-    const ref = isM1 ? `../../../${leaf.target.seq}/m1/us/us-regional.xml` : `../${leaf.target.seq}/index.xml`;
+    const regional = REGION_PACKS[INDEX.map[leaf.nodeCode]?.region ?? 'US']?.regionalFile ?? 'm1/us/us-regional.xml';
+    const ref = isM1 ? `../../../${leaf.target.seq}/${regional}` : `../${leaf.target.seq}/index.xml`;
     attrs.push(`modified-file="${ref}#${esc(leaf.target.leafId)}"`);
   }
   if (leaf.operation !== 'delete') {
     const full = leafPath(project, leaf);
-    const href = hrefBase + (isM1 ? full.replace(/^m1\/us\//, '') : full);
+    const href = hrefBase + (isM1 ? full.replace(/^m1\/(us|eu)\//, '') : full);
     const sum = leaf.stf ? md5(leaf.xml) : doc ? fileChecksum(doc) : '';
     attrs.push('checksum-type="md5"', `checksum="${sum}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
     if (doc) attrs.push(`application-version="PDF ${esc(doc.pdfVersion)}"`);
@@ -69,6 +70,7 @@ function nestedXml(project, seq, leaves, rootCode, indent, leafFn) {
 }
 
 export function buildRegionalXml(project, seq) {
+  if (project.region === 'EU') return buildEuRegionalXml(project, seq);
   const s = project.settings;
   const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
   const leafFn = (l, ind) => {
@@ -114,10 +116,43 @@ ${m1Body}
 `;
 }
 
+function buildEuRegionalXml(project, seq) {
+  const s = project.settings;
+  const eu = s.eu ?? {};
+  const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
+  const leafFn = (l, ind) => leafXml(project, seq, l, ind);
+  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'eu:1', 2, leafFn) : '  <m1-eu/>';
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRAINING ONLY: fictional content modelled on the public EU Module 1 eCTD specification (v3.0.x). Not for submission. -->
+<!DOCTYPE eu:eu-backbone SYSTEM "../../util/dtd/eu-regional.dtd">
+<eu:eu-backbone xmlns:eu="http://europa.eu.int" xmlns:xlink="http://www.w3c.org/1999/xlink" dtd-version="3.0.4" xml:lang="en">
+  <eu-envelope>
+    <envelope country="ema">
+      <identifier>${esc(eu.uuid)}</identifier>
+      <submission type="${esc(seq.submissionType)}" mode="${esc(seq.submissionMode ?? 'single')}"/>
+      <procedure-tracking>
+        <number>${esc(eu.trackingNumber)}</number>
+      </procedure-tracking>
+      <submission-unit type="${esc(seq.subType)}"/>
+      <applicant>${esc(s.applicant?.name)}</applicant>
+      <agency code="${esc(eu.agency ?? 'EU-EMA')}"/>
+      <procedure type="${esc(eu.procedureType)}"/>
+      <invented-name>${esc(eu.inventedName)}</invented-name>
+      <inn>${esc(eu.inn)}</inn>
+      <sequence>${esc(seq.number)}</sequence>
+      <related-sequence>${esc(seq.relatedSequence ?? '')}</related-sequence>
+      <submission-description>${esc(seq.description)}</submission-description>
+    </envelope>
+  </eu-envelope>
+${m1Body}
+</eu:eu-backbone>
+`;
+}
+
 export function buildIndexXml(project, seq, regionalXml) {
   const pack = REGION_PACKS[project.region];
   const regionalLeaf = `    <leaf ID="R${seq.number}" operation="new" checksum-type="md5" checksum="${md5(regionalXml)}" xlink:type="simple" xlink:href="${pack.regionalFile}" xml:lang="en">
-      <title>US Regional</title>
+      <title>${project.region} Regional</title>
     </leaf>`;
   const stfLeaves = studyFiles(project, seq).map((f) => ({ id: f.id, nodeCode: f.nodeCode, operation: 'new', fileName: f.fileName, title: f.title, stf: true, xml: f.xml }));
   const body = [...seq.leaves, ...stfLeaves].filter((l) => !INDEX.map[l.nodeCode]?.isM1 && INDEX.map[l.nodeCode]?.element);
@@ -144,7 +179,7 @@ export function publishSequence(project, seqNumber) {
   const log = [];
   log.push({ file: `${seq.number}/index.xml`, checksum: md5(index), operation: '—', target: '—', node: 'backbone' });
   log.push({ file: `${seq.number}/index-md5.txt`, checksum: md5(md5txt), operation: '—', target: '—', node: 'backbone checksum' });
-  log.push({ file: `${seq.number}/m1/us/us-regional.xml`, checksum: md5(regional), operation: 'new', target: '—', node: 'regional' });
+  log.push({ file: `${seq.number}/${REGION_PACKS[project.region].regionalFile}`, checksum: md5(regional), operation: 'new', target: '—', node: 'regional' });
   for (const l of seq.leaves) {
     const doc = docForLeaf(project, l);
     log.push({
@@ -174,9 +209,9 @@ export function folderTree(project, seq) {
   };
   add('index.xml', { kind: 'xml' });
   add('index-md5.txt', { kind: 'txt' });
-  add('m1/us/us-regional.xml', { kind: 'xml' });
+  add(REGION_PACKS[project.region].regionalFile, { kind: 'xml' });
   add('util/dtd/ich-ectd-3-2.dtd', { kind: 'dtd' });
-  add('util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
+  add(project.region === 'EU' ? 'util/dtd/eu-regional.dtd' : 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
   add('util/dtd/ich-stf-v2-2.dtd', { kind: 'dtd' });
   for (const f of studyFiles(project, seq)) add(f.path, { kind: 'xml', node: f.nodeCode, op: 'new' });
   for (const l of seq.leaves) if (l.operation !== 'delete') add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });

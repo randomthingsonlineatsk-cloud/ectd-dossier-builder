@@ -1,13 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import usM1 from '../../data/us-m1.json' with { type: 'json' };
-import { INDEX } from '../../engine/tree.js';
+import { INDEX, REGION_PACKS, displayCode as dc } from '../../engine/tree.js';
 import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences } from '../../engine/model.js';
 import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 
 export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
   const seqs = sortedSequences(project);
-  const [form, setForm] = useState({ submissionType: 'original-application', subType: 'amendment', description: '' });
+  const eu = project.region === 'EU';
+  const pack = REGION_PACKS[project.region];
+  const [form, setForm] = useState(eu
+    ? { submissionType: 'maa', subType: 'response', relatedSequence: '0000', submissionMode: 'single', description: '' }
+    : { submissionType: 'original-application', subType: 'amendment', description: '' });
+  const [change, setChange] = useState({ type: 'Type II', scope: '' });
   const [view, setView] = useState('current');
   const [hist, setHist] = useState(null);
   const [confirming, setConfirming] = useState(null);
@@ -48,7 +52,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
               {seqs.map((s) => (
                 <tr key={s.id} style={s.number === seq.number ? { background: 'var(--surface-2)' } : undefined}>
                   <td><span className="seq-chip">{s.number}</span></td>
-                  <td>{s.submissionType} / {s.subType}</td>
+                  <td>{s.submissionType} / {s.subType}{eu && s.relatedSequence ? <span className="small muted"> · related {s.relatedSequence}</span> : null}{eu && s.submissionMode !== 'single' ? <span className="small muted"> · {s.submissionMode}</span> : null}</td>
                   <td>{s.description || <span className="muted">—</span>}</td>
                   <td>{s.leaves.length}</td>
                   <td>{s.status === 'published'
@@ -67,22 +71,52 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
         <p className="small muted">Publishing freezes a sequence, as in real life. Any later change needs a new sequence.</p>
       </section>
 
+      {eu && seq.status === 'draft' && seq.submissionMode !== 'single' && (
+        <section className="panel">
+          <h2 style={{ fontSize: 'var(--step-1)' }}>Changes in sequence {seq.number} ({seq.submissionMode})</h2>
+          <p className="small muted">{seq.submissionMode === 'grouping' ? 'A grouping covers several variations of one product in one submission.' : 'Worksharing covers one change across several products of the same holder.'} List each change; the cover letter picks them up.</p>
+          <ol className="small">{(seq.changes ?? []).map((c, i) => <li key={i}>{c.type}: {c.scope} <button className="btn small ghost" onClick={() => mutate((p) => { const q = p.sequences.find((x) => x.id === seq.id); q.changes.splice(i, 1); })}>Remove</button></li>)}</ol>
+          <div className="row">
+            <select value={change.type} onChange={(e) => setChange({ ...change, type: e.target.value })} style={{ maxWidth: 160 }} aria-label="Variation type">
+              {['Type IA', 'Type IAIN', 'Type IB', 'Type II'].map((t) => <option key={t}>{t}</option>)}
+            </select>
+            <input type="text" value={change.scope} onChange={(e) => setChange({ ...change, scope: e.target.value })} placeholder="Scope, e.g. B.II.b.1.c - addition of a manufacturing site" style={{ maxWidth: 420 }} aria-label="Change scope" />
+            <button className="btn small" disabled={!change.scope.trim()} onClick={() => { mutate((p) => { const q = p.sequences.find((x) => x.id === seq.id); q.changes = [...(q.changes ?? []), { ...change, scope: change.scope.trim() }]; }); setChange({ ...change, scope: '' }); }}>Add change</button>
+          </div>
+        </section>
+      )}
+
       <section className="panel">
         <h2 style={{ fontSize: 'var(--step-1)' }}>Create sequence {nextNum}</h2>
         {drafts.length > 0 && <p className="callout warn small">Sequence {drafts.map((d) => d.number).join(', ')} is still a draft. Lifecycle targets must come from published sequences, so publish it first unless you are working ahead.</p>}
         <form onSubmit={create} className="grid-2">
           <label className="field">Submission type
             <select value={form.submissionType} onChange={(e) => setForm({ ...form, submissionType: e.target.value })}>
-              {usM1.submissionTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              {pack.submissionTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </label>
           <label className="field">Sub-type
             <select value={form.subType} onChange={(e) => setForm({ ...form, subType: e.target.value })}>
-              {usM1.submissionSubTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              {pack.submissionSubTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </label>
+          {eu && (
+            <>
+              <label className="field">Related sequence <small>the sequence that started the procedure</small>
+                <select value={form.relatedSequence} onChange={(e) => setForm({ ...form, relatedSequence: e.target.value })}>
+                  <option value="">None (initial or reformat)</option>
+                  {seqs.map((x) => <option key={x.id} value={x.number}>{x.number}</option>)}
+                </select>
+              </label>
+              <label className="field">Submission mode
+                <select value={form.submissionMode} onChange={(e) => setForm({ ...form, submissionMode: e.target.value })}>
+                  {pack.submissionModes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
+              </label>
+            </>
+          )}
           <label className="field" style={{ gridColumn: '1 / -1' }}>Description
-            <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="e.g. Response to information request dated Day 74" />
+            <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder={eu ? 'e.g. Responses to the Day 120 list of questions' : 'e.g. Response to information request dated Day 74'} />
           </label>
           <div><button className="btn primary" type="submit">Create sequence {nextNum}</button></div>
         </form>
@@ -103,7 +137,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
             <tbody>
               {rows.map((e) => (
                 <tr key={e.key}>
-                  <td><strong>{e.leaf.nodeCode}</strong></td>
+                  <td><strong>{dc(e.leaf.nodeCode)}</strong></td>
                   <td><button className="btn ghost small" style={{ padding: 0, textAlign: 'left' }} onClick={() => setHist(e.key)}>{e.leaf.title || '(no title)'}</button></td>
                   <td>{e.seq}</td>
                   <td><span className={`op ${e.leaf.operation}`}>{e.leaf.operation}</span></td>
@@ -124,7 +158,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
               {historyOf(project, hist).map((e) => (
                 <li key={e.key} className="lc-seq">
                   <span className="num">{e.seq}</span>
-                  <span><span className={`op ${e.leaf.operation}`}>{e.leaf.operation}</span> {e.leaf.title || '(no title)'} <span className="small muted">({e.leaf.nodeCode}, {e.status})</span></span>
+                  <span><span className={`op ${e.leaf.operation}`}>{e.leaf.operation}</span> {e.leaf.title || '(no title)'} <span className="small muted">({dc(e.leaf.nodeCode)}, {e.status})</span></span>
                 </li>
               ))}
             </ol>

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { INDEX, isPlaceable, ancestors, nodeOf, filePath } from '../../engine/tree.js';
+import { INDEX, isPlaceable, ancestors, nodeOf, filePath, rootsFor, displayCode as dc, M1_ROOT } from '../../engine/tree.js';
 import { docForLeaf, lifecycleState, nodeStatus, sortedSequences } from '../../engine/model.js';
-import { requiredFor } from '../../engine/validate.js';
+import { requiredFor, m1Checklist } from '../../engine/validate.js';
 import { placeDoc, moveLeaf, removeLeaf, updateLeaf, fixDoc, addDeleteLeaf, PDF_FIXES } from '../../engine/ops.js';
 import { modColor } from '../../ctx.js';
 import OperationPicker from './OperationPicker.jsx';
@@ -22,7 +22,8 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const [selLeaf, setSelLeaf] = useState(null);
   const [picked, setPicked] = useState(null); // { kind: 'doc'|'leaf', id }
   const [view, setView] = useState('tree');
-  const [expanded, setExpanded] = useState(() => new Set(['1', '2', '3', '3.2', '3.2.P', '5', '5.3']));
+  const [expanded, setExpanded] = useState(() => new Set([M1_ROOT[project.region] ?? '1', '2', '3', '3.2', '3.2.P', '5', '5.3']));
+  const roots = rootsFor(project.region);
   const [overCode, setOverCode] = useState(null);
   const [picker, setPicker] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -39,7 +40,8 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const editable = seq.status !== 'published';
   const expert = !!project.settings.expertMode;
   const { isFirst, prevState } = useMemo(() => priorInfo(project, seq), [project, seq]);
-  const required = useMemo(() => requiredFor(project, seq), [project, seq]);
+  // Required headings: Modules 2-5 for the application type plus the mandatory Module 1 items.
+  const required = useMemo(() => new Set([...requiredFor(project, seq), ...m1Checklist(project, seq).filter((i) => i.level === 'mandatory').map((i) => i.section)]), [project, seq]);
   const status = useMemo(() => nodeStatus(project, seq.number, required), [project, seq.number, required]);
   const counts = useMemo(() => {
     const c = {};
@@ -61,13 +63,13 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const warnFit = (doc, code) => {
     if (!doc) return;
     if (doc.decoy) { toast(`Granularity coach: ${doc.coach}`, 'warn'); return; }
-    if (!expert && doc.section && doc.section !== code) toast(`"${doc.title}" is a ${doc.section} document, but you placed it in ${code}. The validator will flag this.`, 'warn');
+    if (!expert && doc.section && doc.section !== code) toast(`"${doc.title}" is a ${dc(doc.section)} document, but you placed it in ${dc(code)}. The validator will flag this.`, 'warn');
   };
 
   const placeInto = (code, item = picked) => {
     if (!item) return;
     if (!editable) { toast(`Sequence ${seq.number} is published and frozen. Create a new sequence to make changes.`, 'error'); return; }
-    if (!isPlaceable(code)) { toast(`${code} has sub-headings. Open it and drop on the lowest-level heading.`, 'warn'); return; }
+    if (!isPlaceable(code)) { toast(`${dc(code)} has sub-headings. Open it and drop on the lowest-level heading.`, 'warn'); return; }
     if (item.kind === 'leaf') {
       mutate((p) => moveLeaf(p, seq.number, item.id, code));
       setPicked(null); setSelectedCode(code);
@@ -133,7 +135,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
       >
         {hasKids ? <button className="twist" tabIndex={-1} aria-hidden="true" onClick={(e) => { e.stopPropagation(); toggle(code); }}>{open ? '▾' : '▸'}</button> : <span className="twist" />}
         {!hasKids && <span className={`dot ${st}`} title={st} aria-label={st} />}
-        <span className="code">{code}</span>
+        <span className="code">{dc(code)}</span>
         <span className="t" title={n.title}>{n.title}</span>
         {flagged.has(code) && <span className="flag" title="Has validation findings" aria-label="has findings">!</span>}
         {counts[code] ? <span className="n" aria-label={`${counts[code]} leaves in this sequence`}>{counts[code]}</span> : null}
@@ -185,27 +187,27 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               <div className="map-legend" style={{ margin: '.2rem .3rem .6rem' }}>
                 <span><span className="dot filled" /> filled</span><span><span className="dot required" /> required</span><span><span className="dot optional" /> optional</span><span><span className="dot na" /> not used in eCTD</span>
               </div>
-              <ul className="tree" role="tree" aria-label="CTD headings">{INDEX.roots.map((c) => renderNode(c))}</ul>
+              <ul className="tree" role="tree" aria-label="CTD headings">{roots.map((c) => renderNode(c))}</ul>
             </>
           ) : (
             <div className="map">
-              {INDEX.roots.map((r) => {
-                const codes = allCodes.filter((c) => INDEX.map[c].module === r);
+              {roots.map((r) => {
+                const codes = allCodes.filter((c) => INDEX.map[c].module === INDEX.map[r].module && ancestors(c)[0].code === r);
                 const filled = codes.filter((c) => status[c] === 'filled').length;
-                const req = codes.filter((c) => required.has(c) || (r === '1' && status[c] === 'filled'));
+                const req = codes.filter((c) => required.has(c));
                 return (
                   <div key={r} className="map-mod" style={{ '--mod': modColor(r) }}>
-                    <h3>Module {r} · {filled} of {codes.length} headings filled</h3>
+                    <h3>Module {dc(r)} · {filled} of {codes.length} headings filled</h3>
                     <div className="map-cells">
                       {codes.map((c) => (
-                        <button key={c} className={`map-cell ${status[c]}`} title={`${c} ${INDEX.map[c].title} (${status[c]})`}
+                        <button key={c} className={`map-cell ${status[c]}`} title={`${dc(c)} ${INDEX.map[c].title} (${status[c]})`}
                           onClick={() => { setSelectedCode(c); setView('tree'); setExpanded((s) => new Set([...s, ...ancestors(c).map((a) => a.code)])); }}
                           {...dropProps(c)}>
-                          {c}
+                          {dc(c)}
                         </button>
                       ))}
                     </div>
-                    {req.length === 0 && r !== '1' && <p className="small muted">No required headings for this submission type.</p>}
+                    {req.length === 0 && !INDEX.map[r].isM1 && <p className="small muted">No required headings for this submission type.</p>}
                   </div>
                 );
               })}
@@ -217,7 +219,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
 
       {/* Node detail */}
       <section className="col sticky-col" aria-label="Heading detail">
-        <div className="col-head"><h2>{node ? `${node.code} ${node.title}` : 'Select a heading'}</h2>
+        <div className="col-head"><h2>{node ? `${dc(node.code)} ${node.title}` : 'Select a heading'}</h2>
           {node && <span className={`pill ${status[node.code] === 'filled' ? 'ok' : status[node.code] === 'required' ? 'high' : ''}`}>{node.children.length ? 'section' : status[node.code]}</span>}
         </div>
         <div className="col-body">
@@ -227,7 +229,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               {node.note && <p className="callout warn small">{node.note}</p>}
               {node.help && <p className="small muted">{node.help}</p>}
               {node.children.length > 0 && <p className="small muted">This heading has sub-headings. Documents go on the lowest level.</p>}
-              {editable && ['4', '5'].includes(node.module) && (() => {
+              {editable && project.region === 'US' && ['4', '5'].includes(node.module) && (() => {
                 const untagged = seq.leaves.filter((l) => needsStudyTag(l.nodeCode) && l.operation !== 'delete' && !l.study?.id && tagFromDoc(project, l));
                 return untagged.length > 0 && (
                   <p className="callout small">{untagged.length} study document{untagged.length > 1 ? 's' : ''} in Modules 4 and 5 {untagged.length > 1 ? 'have' : 'has'} no study tagging yet.{' '}
@@ -311,12 +313,12 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                           <option value="">Choose…</option>
                           {[...prevState.entries.values()]
                             .filter((x) => x.leaf.operation !== 'delete' && (expert || (x.status === 'current' && x.leaf.nodeCode === leaf.nodeCode)))
-                            .map((x) => <option key={x.key} value={x.key}>{x.seq} · {x.leaf.nodeCode} · {x.leaf.title}{x.status !== 'current' ? ` (${x.status})` : ''}</option>)}
+                            .map((x) => <option key={x.key} value={x.key}>{x.seq} · {dc(x.leaf.nodeCode)} · {x.leaf.title}{x.status !== 'current' ? ` (${x.status})` : ''}</option>)}
                           {leaf.target && !prevState.entries.has(`${leaf.target.seq}:${leaf.target.leafId}`) && <option value={`${leaf.target.seq}:${leaf.target.leafId}`}>{leaf.target.seq} · {leaf.target.leafId} (not found)</option>}
                         </select>
                       </label>
                     )}
-                    {needsStudyTag(leaf.nodeCode) && leaf.operation !== 'delete' && (
+                    {project.region === 'US' && needsStudyTag(leaf.nodeCode) && leaf.operation !== 'delete' && (
                       <fieldset style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-s)', padding: '.6rem .7rem' }}>
                         <legend className="small" style={{ fontWeight: 600 }}>Study tagging file (US)</legend>
                         <div className="grid-2" style={{ gap: '.5rem' }}>
@@ -341,7 +343,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                     <>
                       <div className="row" style={{ marginTop: '.6rem' }}><button className="btn small" onClick={() => setPreview(leaf)}>Open PDF</button><span className="small muted">Generated stub with the properties below built in.</span></div>
                       <dl>
-                        <dt>Belongs in</dt><dd>{leafDoc.section}{leafDoc.section !== leaf.nodeCode && !leafDoc.decoy ? ' (not here)' : ''}</dd>
+                        <dt>Belongs in</dt><dd>{dc(leafDoc.section)}{leafDoc.section !== leaf.nodeCode && !leafDoc.decoy ? ' (not here)' : ''}</dd>
                         <dt>Pages</dt><dd>{leafDoc.pages}</dd>
                         <dt>File size</dt><dd>{(leafDoc.sizeKb / 1024).toFixed(2)} MB</dd>
                         <dt>PDF version</dt><dd>{leafDoc.pdfVersion}</dd>
@@ -397,7 +399,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               <span className="bar" style={{ background: modColor(d.section) }} />
               <div>
                 <div className="dt">{d.title}</div>
-                <div className="ds">{d.section} · {d.pages} p{d.version > 1 ? ` · version ${d.version}` : ''}{usedDocs.has(d.id) ? ' · in dossier' : ''}{d.irOnly ? ' · from the IR response pack' : ''}</div>
+                <div className="ds">{dc(d.section)} · {d.pages} p{d.version > 1 ? ` · version ${d.version}` : ''}{usedDocs.has(d.id) ? ' · in dossier' : ''}{d.irOnly ? ' · from the IR response pack' : ''}</div>
                 {guided && d.decoy && <div className="ds" style={{ color: 'var(--medium)' }}>Check the granularity of this one before using it.</div>}
               </div>
               {editable && <button className="btn small" aria-pressed={picked?.id === d.id} onClick={() => setPicked(picked?.id === d.id ? null : { kind: 'doc', id: d.id })}>{picked?.id === d.id ? 'Held' : 'Pick up'}</button>}

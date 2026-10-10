@@ -7,6 +7,9 @@ import Lesson from './screens/Lesson.jsx';
 import Missions from './screens/Missions.jsx';
 import Workspace from './screens/Workspace.jsx';
 import Glossary from './screens/Glossary.jsx';
+import Progress from './screens/Progress.jsx';
+import Drills from './screens/Drills.jsx';
+import { migrateProject } from './engine/model.js';
 
 function useHashRoute() {
   const read = () => (window.location.hash.replace(/^#/, '') || '/').split('/').filter(Boolean);
@@ -38,6 +41,7 @@ export default function App() {
 
   const reload = useCallback(async () => {
     const [p, a] = await Promise.all([db.all('projects'), db.all('attempts')]);
+    p.forEach(migrateProject);
     p.sort((x, y) => y.updatedAt.localeCompare(x.updatedAt));
     setProjects(p); setAttempts(a);
   }, []);
@@ -76,6 +80,8 @@ export default function App() {
   else if (section === 'learn') screen = <Learn />;
   else if (section === 'missions') screen = <Missions />;
   else if (section === 'glossary') screen = <Glossary />;
+  else if (section === 'progress') screen = <Progress />;
+  else if (section === 'drills') screen = <Drills />;
   else if (section === 'project' && arg) screen = <Workspace key={arg} id={arg} />;
   else screen = <div className="page"><h1>Page not found</h1><p><a href="#/">Go to the start page</a></p></div>;
 
@@ -98,6 +104,7 @@ export default function App() {
             <a href="#/" aria-current={!section ? 'page' : undefined}>Projects</a>
             <a href="#/learn" aria-current={section === 'learn' ? 'page' : undefined}>Learn</a>
             <a href="#/missions" aria-current={section === 'missions' ? 'page' : undefined}>Missions</a>
+            <a href="#/progress" aria-current={section === 'progress' ? 'page' : undefined}>Progress</a>
             <a href="#/glossary" aria-current={section === 'glossary' ? 'page' : undefined}>Glossary</a>
           </nav>
           <span className="spacer" />

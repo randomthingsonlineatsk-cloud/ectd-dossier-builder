@@ -1,5 +1,5 @@
 // Mutating operations on a project (callers pass a clone).
-import { isPlaceable } from './tree.js';
+import { isPlaceable, inRegion, displayCode } from './tree.js';
 import { docForLeaf, makeCoverLetterDoc, makeLeaf, newSequence, nextSequenceNumber, seqByNumber, touch } from './model.js';
 import { publishSequence } from './backbone.js';
 import { validate } from './validate.js';
@@ -12,7 +12,8 @@ export function assertEditable(seq) {
 export function placeDoc(project, seqNumber, docId, nodeCode, operation = 'new', target = null) {
   const seq = seqByNumber(project, seqNumber);
   assertEditable(seq);
-  if (!isPlaceable(nodeCode)) throw new Error(`${nodeCode} has sub-headings; place documents at the lowest level.`);
+  if (!inRegion(nodeCode, project.region)) throw new Error(`${displayCode(nodeCode)} is not part of the ${project.region} dossier.`);
+  if (!isPlaceable(nodeCode)) throw new Error(`${displayCode(nodeCode)} has sub-headings; place documents at the lowest level.`);
   const doc = project.documents[docId];
   const leaf = makeLeaf(project, doc, nodeCode, operation, target);
   seq.leaves.push(leaf);
@@ -38,7 +39,7 @@ export function findLeaf(project, seqNumber, leafId) {
 export function moveLeaf(project, seqNumber, leafId, nodeCode) {
   const { seq, leaf } = findLeaf(project, seqNumber, leafId);
   assertEditable(seq);
-  if (!isPlaceable(nodeCode)) throw new Error(`${nodeCode} has sub-headings; place documents at the lowest level.`);
+  if (!isPlaceable(nodeCode)) throw new Error(`${displayCode(nodeCode)} has sub-headings; place documents at the lowest level.`);
   leaf.nodeCode = nodeCode;
   touch(project);
 }
@@ -79,14 +80,14 @@ export function addCoverLetter(project, seqNumber, place = true) {
   const doc = makeCoverLetterDoc(project, seq);
   project.documents[doc.id] = doc;
   let leaf = null;
-  if (place) leaf = placeDoc(project, seqNumber, doc.id, '1.2');
+  if (place) leaf = placeDoc(project, seqNumber, doc.id, doc.section);
   return { doc, leaf };
 }
 
 export function createSequence(project, opts = {}) {
   const number = opts.number ?? nextSequenceNumber(project);
   if (project.sequences.some((s) => s.number === number)) throw new Error(`Sequence ${number} already exists.`);
-  const seq = newSequence(number, opts);
+  const seq = newSequence(number, opts, project.region);
   project.sequences.push(seq);
   touch(project);
   return seq;

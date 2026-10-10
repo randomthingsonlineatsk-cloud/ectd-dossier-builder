@@ -1,0 +1,496 @@
+{
+ "id": "sterile-injectable",
+ "label": "Sterile injectable in vials",
+ "fictional": true,
+ "options": [
+  {
+   "region": "US",
+   "appType": "nda"
+  },
+  {
+   "region": "EU",
+   "appType": "maa"
+  }
+ ],
+ "generateRegionDocs": {
+  "US": "nda",
+  "EU": true
+ },
+ "product": {
+  "brandName": "Nelvaprox",
+  "inn": "velnaprozine",
+  "dosageForm": "solution for injection",
+  "route": "intravenous",
+  "strengths": [
+   "10 mg/mL"
+  ],
+  "indication": "postoperative nausea and vomiting",
+  "indicationText": "Prevention of postoperative nausea and vomiting in adults undergoing elective surgery",
+  "shelfLife": "24 months",
+  "storage": "Store below 25°C; do not freeze; keep the vial in the outer carton to protect from light"
+ },
+ "applicant": {
+  "name": "Meridale Therapeutics Inc.",
+  "address": "77 Harbor View Road, Fictionville, MA 02000, USA",
+  "duns": "000000003",
+  "contact": "Lena Marsh, Senior Director, Regulatory Operations",
+  "phone": "+1 555 0100 330",
+  "email": "regops@meridale.example"
+ },
+ "substanceManufacturer": {
+  "name": "Tavell Pharmachem GmbH",
+  "address": "Musterstrasse 12, Beispielstadt, Germany"
+ },
+ "productManufacturer": {
+  "name": "Sterivault Fill-Finish SA",
+  "address": "Rue Imaginaire 5, Exempleville, Belgium"
+ },
+ "facts": {
+  "strengths": "10 mg/mL (50 mg in 5 mL)",
+  "dosageForm": "solution for injection in a single-dose vial",
+  "shelfLife": "24 months",
+  "storage": "Store below 25°C; protect from light",
+  "dsManufacturer": "Tavell Pharmachem GmbH, Beispielstadt, Germany",
+  "dpManufacturer": "Sterivault Fill-Finish SA, Exempleville, Belgium",
+  "dissolution": "Not applicable (solution); bacterial endotoxins NMT 0.5 EU/mg",
+  "assay": "95.0-105.0% of label claim",
+  "excipients": "sodium citrate, citric acid, sodium chloride, water for injections",
+  "batches": "SV-2401, SV-2402, SV-2403",
+  "patients": "1,104 patients randomised (MRT-301: 548; MRT-302: 556)",
+  "indication": "Prevention of postoperative nausea and vomiting in adults"
+ },
+ "studies": {
+  "MRT-101": "Single ascending dose study",
+  "MRT-201": "Phase 2 dose-finding study",
+  "MRT-301": "Phase 3 placebo-controlled study",
+  "MRT-302": "Phase 3 active-controlled study"
+ },
+ "documents": [
+  {
+   "id": "i-intro",
+   "section": "2.2",
+   "title": "Introduction",
+   "fileName": "introduction.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-qos",
+   "section": "2.3",
+   "title": "Quality Overall Summary",
+   "fileName": "quality-overall-summary.pdf",
+   "pages": 78,
+   "bookmarks": 40,
+   "links": [
+    "3.2.P.3.5",
+    "3.2.P.5.1"
+   ]
+  },
+  {
+   "id": "i-ncover",
+   "section": "2.4",
+   "title": "Nonclinical Overview",
+   "fileName": "nonclinical-overview.pdf",
+   "pages": 36,
+   "bookmarks": 22
+  },
+  {
+   "id": "i-cover",
+   "section": "2.5",
+   "title": "Clinical Overview",
+   "fileName": "clinical-overview.pdf",
+   "pages": 52,
+   "bookmarks": 28,
+   "links": [
+    "5.3.5.1"
+   ]
+  },
+  {
+   "id": "i-261",
+   "section": "2.6.1",
+   "title": "Introduction",
+   "fileName": "introduction-nonclinical.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-262",
+   "section": "2.6.2",
+   "title": "Pharmacology Written Summary",
+   "fileName": "pharmacology-written-summary.pdf",
+   "pages": 14,
+   "bookmarks": 9
+  },
+  {
+   "id": "i-264",
+   "section": "2.6.4",
+   "title": "Pharmacokinetics Written Summary",
+   "fileName": "pk-written-summary.pdf",
+   "pages": 16,
+   "bookmarks": 10
+  },
+  {
+   "id": "i-266",
+   "section": "2.6.6",
+   "title": "Toxicology Written Summary",
+   "fileName": "toxicology-written-summary.pdf",
+   "pages": 30,
+   "bookmarks": 18
+  },
+  {
+   "id": "i-271",
+   "section": "2.7.1",
+   "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods",
+   "fileName": "summary-biopharm.pdf",
+   "pages": 8,
+   "bookmarks": 5
+  },
+  {
+   "id": "i-272",
+   "section": "2.7.2",
+   "title": "Summary of Clinical Pharmacology Studies",
+   "fileName": "summary-clin-pharm.pdf",
+   "pages": 26,
+   "bookmarks": 15
+  },
+  {
+   "id": "i-273",
+   "section": "2.7.3",
+   "title": "Summary of Clinical Efficacy - PONV",
+   "fileName": "summary-clin-efficacy-ponv.pdf",
+   "pages": 48,
+   "bookmarks": 26
+  },
+  {
+   "id": "i-274",
+   "section": "2.7.4",
+   "title": "Summary of Clinical Safety",
+   "fileName": "summary-clin-safety.pdf",
+   "pages": 55,
+   "bookmarks": 30
+  },
+  {
+   "id": "i-276",
+   "section": "2.7.6",
+   "title": "Synopses of Individual Studies",
+   "fileName": "synopses-individual-studies.pdf",
+   "pages": 22,
+   "bookmarks": 6
+  },
+  {
+   "id": "i-s11",
+   "section": "3.2.S.1.1",
+   "title": "Nomenclature",
+   "fileName": "nomenclature.pdf",
+   "pages": 1
+  },
+  {
+   "id": "i-s12",
+   "section": "3.2.S.1.2",
+   "title": "Structure",
+   "fileName": "structure.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-s13",
+   "section": "3.2.S.1.3",
+   "title": "General Properties",
+   "fileName": "general-properties.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-s21",
+   "section": "3.2.S.2.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-s22",
+   "section": "3.2.S.2.2",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 8
+  },
+  {
+   "id": "i-s32",
+   "section": "3.2.S.3.2",
+   "title": "Impurities",
+   "fileName": "impurities.pdf",
+   "pages": 10
+  },
+  {
+   "id": "i-s41",
+   "section": "3.2.S.4.1",
+   "title": "Specification",
+   "fileName": "specification.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-s42",
+   "section": "3.2.S.4.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 18
+  },
+  {
+   "id": "i-s43",
+   "section": "3.2.S.4.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 22
+  },
+  {
+   "id": "i-s44",
+   "section": "3.2.S.4.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 6
+  },
+  {
+   "id": "i-s45",
+   "section": "3.2.S.4.5",
+   "title": "Justification of Specification",
+   "fileName": "justification-of-specification.pdf",
+   "pages": 5
+  },
+  {
+   "id": "i-s5",
+   "section": "3.2.S.5",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 4
+  },
+  {
+   "id": "i-s6",
+   "section": "3.2.S.6",
+   "title": "Container Closure System",
+   "fileName": "container-closure-system.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-s71",
+   "section": "3.2.S.7.1",
+   "title": "Stability Summary and Conclusions",
+   "fileName": "stability-summary.pdf",
+   "pages": 5
+  },
+  {
+   "id": "i-s73",
+   "section": "3.2.S.7.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 30
+  },
+  {
+   "id": "i-p1",
+   "section": "3.2.P.1",
+   "title": "Description and Composition of the Drug Product",
+   "fileName": "description-composition.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-p2",
+   "section": "3.2.P.2",
+   "title": "Pharmaceutical Development (including container closure integrity and compatibility)",
+   "fileName": "pharmaceutical-development.pdf",
+   "pages": 72,
+   "bookmarks": 36
+  },
+  {
+   "id": "i-p31",
+   "section": "3.2.P.3.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-p32",
+   "section": "3.2.P.3.2",
+   "title": "Batch Formula",
+   "fileName": "batch-formula.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-p33",
+   "section": "3.2.P.3.3",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 12
+  },
+  {
+   "id": "i-p34",
+   "section": "3.2.P.3.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 6
+  },
+  {
+   "id": "i-p35",
+   "section": "3.2.P.3.5",
+   "title": "Process Validation: Aseptic Filling, Media Fills and Filter Validation",
+   "fileName": "process-validation.pdf",
+   "pages": 86,
+   "bookmarks": 30
+  },
+  {
+   "id": "i-p41",
+   "section": "3.2.P.4.1",
+   "title": "Specifications - Excipients",
+   "fileName": "excipient-specifications.pdf",
+   "pages": 5
+  },
+  {
+   "id": "i-p51",
+   "section": "3.2.P.5.1",
+   "title": "Specification(s)",
+   "fileName": "specifications.pdf",
+   "pages": 2
+  },
+  {
+   "id": "i-p52",
+   "section": "3.2.P.5.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 24
+  },
+  {
+   "id": "i-p53",
+   "section": "3.2.P.5.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 30
+  },
+  {
+   "id": "i-p54",
+   "section": "3.2.P.5.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 8
+  },
+  {
+   "id": "i-p55",
+   "section": "3.2.P.5.5",
+   "title": "Characterisation of Impurities",
+   "fileName": "characterisation-impurities.pdf",
+   "pages": 6
+  },
+  {
+   "id": "i-p56",
+   "section": "3.2.P.5.6",
+   "title": "Justification of Specification(s)",
+   "fileName": "justification-of-specifications.pdf",
+   "pages": 7
+  },
+  {
+   "id": "i-p6",
+   "section": "3.2.P.6",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-p7",
+   "section": "3.2.P.7",
+   "title": "Container Closure System (Type I glass vial, bromobutyl stopper)",
+   "fileName": "container-closure-system.pdf",
+   "pages": 8
+  },
+  {
+   "id": "i-p81",
+   "section": "3.2.P.8.1",
+   "title": "Stability Summary and Conclusion",
+   "fileName": "stability-summary.pdf",
+   "pages": 6
+  },
+  {
+   "id": "i-p82",
+   "section": "3.2.P.8.2",
+   "title": "Post-approval Stability Protocol and Stability Commitment",
+   "fileName": "stability-protocol-commitment.pdf",
+   "pages": 3
+  },
+  {
+   "id": "i-p83",
+   "section": "3.2.P.8.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 40
+  },
+  {
+   "id": "i-a1",
+   "section": "3.2.A.1",
+   "title": "Facilities and Equipment",
+   "fileName": "facilities-equipment.pdf",
+   "pages": 4
+  },
+  {
+   "id": "i-a2",
+   "section": "3.2.A.2",
+   "title": "Adventitious Agents Safety Evaluation (TSE statement for excipients)",
+   "fileName": "adventitious-agents.pdf",
+   "pages": 4
+  },
+  {
+   "id": "i-4213",
+   "section": "4.2.1.3",
+   "title": "Study MRN-0130: Cardiovascular safety pharmacology in dogs",
+   "fileName": "mrn-0130.pdf",
+   "pages": 40,
+   "bookmarks": 14
+  },
+  {
+   "id": "i-4232",
+   "section": "4.2.3.2",
+   "title": "Study MRN-0326: 13-week intravenous toxicity study in rats",
+   "fileName": "mrn-0326.pdf",
+   "pages": 180,
+   "bookmarks": 36
+  },
+  {
+   "id": "i-4236",
+   "section": "4.2.3.6",
+   "title": "Study MRN-0610: Local tolerance after intravenous and perivenous injection in rabbits",
+   "fileName": "mrn-0610.pdf",
+   "pages": 44,
+   "bookmarks": 12
+  },
+  {
+   "id": "i-52",
+   "section": "5.2",
+   "title": "Tabular Listing of All Clinical Studies",
+   "fileName": "tabular-listing.pdf",
+   "pages": 4
+  },
+  {
+   "id": "i-5331",
+   "section": "5.3.3.1",
+   "title": "Study MRT-101: Single ascending dose study in healthy subjects",
+   "fileName": "mrt-101-csr.pdf",
+   "pages": 140,
+   "bookmarks": 32
+  },
+  {
+   "id": "i-5351a",
+   "section": "5.3.5.1",
+   "title": "Study MRT-201: Phase 2 dose-finding study",
+   "fileName": "mrt-201-csr.pdf",
+   "pages": 260,
+   "bookmarks": 52
+  },
+  {
+   "id": "i-5351b",
+   "section": "5.3.5.1",
+   "title": "Study MRT-301: Phase 3 placebo-controlled study",
+   "fileName": "mrt-301-csr.pdf",
+   "pages": 420,
+   "bookmarks": 70
+  },
+  {
+   "id": "i-5351c",
+   "section": "5.3.5.1",
+   "title": "Study MRT-302: Phase 3 active-controlled study",
+   "fileName": "mrt-302-csr.pdf",
+   "pages": 410,
+   "bookmarks": 68
+  }
+ ]
+}

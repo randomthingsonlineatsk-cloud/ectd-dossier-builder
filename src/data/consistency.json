@@ -1,0 +1,128 @@
+{
+  "_about": "Facts that must agree across modules, and the headings whose documents state each fact. A document states a fact when it sits in one of these headings (\"code@form\" names a specific form in that heading). Values come from the product's facts unless a document overrides them, which is how missions plant contradictions.",
+  "facts": [
+    {
+      "key": "strengths",
+      "label": "Strengths",
+      "sections": [
+        "1.1@fda-356h",
+        "eu:1.2@eaf",
+        "3.2.P.1",
+        "1.14.1.1",
+        "1.14.1.3",
+        "eu:1.3.1",
+        "eu:1.3.2",
+        "1.12.12"
+      ]
+    },
+    {
+      "key": "dosageForm",
+      "label": "Dosage form",
+      "sections": [
+        "1.1@fda-356h",
+        "eu:1.2@eaf",
+        "3.2.P.1",
+        "1.14.1.3",
+        "eu:1.3.1"
+      ]
+    },
+    {
+      "key": "shelfLife",
+      "label": "Shelf life",
+      "sections": [
+        "3.2.P.8.1",
+        "1.14.1.3",
+        "eu:1.3.1",
+        "2.3"
+      ]
+    },
+    {
+      "key": "storage",
+      "label": "Storage conditions",
+      "sections": [
+        "3.2.P.8.1",
+        "1.14.1.3",
+        "1.14.1.1",
+        "eu:1.3.1",
+        "eu:1.3.2"
+      ]
+    },
+    {
+      "key": "dsManufacturer",
+      "label": "Drug substance manufacturer",
+      "sections": [
+        "1.1@fda-356h",
+        "eu:1.2@eaf",
+        "3.2.S.2.1",
+        "1.4.1"
+      ]
+    },
+    {
+      "key": "dpManufacturer",
+      "label": "Drug product manufacturer",
+      "sections": [
+        "1.1@fda-356h",
+        "eu:1.2@eaf",
+        "3.2.P.3.1",
+        "3.2.A.1"
+      ]
+    },
+    {
+      "key": "dissolution",
+      "label": "Dissolution / key release limit",
+      "sections": [
+        "3.2.P.5.1",
+        "2.3"
+      ]
+    },
+    {
+      "key": "assay",
+      "label": "Assay limits",
+      "sections": [
+        "3.2.P.5.1",
+        "2.3"
+      ]
+    },
+    {
+      "key": "excipients",
+      "label": "Excipients",
+      "sections": [
+        "3.2.P.1",
+        "1.14.1.3",
+        "eu:1.3.1"
+      ]
+    },
+    {
+      "key": "batches",
+      "label": "Primary batch numbers",
+      "sections": [
+        "3.2.P.5.4",
+        "3.2.P.8.3",
+        "3.2.P.3.5"
+      ]
+    },
+    {
+      "key": "patients",
+      "label": "Patients in pivotal studies",
+      "sections": [
+        "2.5",
+        "2.7.3",
+        "2.7.4",
+        "5.3.5.3",
+        "5.3.1.2",
+        "2.7.1"
+      ]
+    },
+    {
+      "key": "indication",
+      "label": "Indication wording",
+      "sections": [
+        "2.5",
+        "1.1@fda-356h",
+        "eu:1.2@eaf",
+        "1.14.1.3",
+        "eu:1.3.1"
+      ]
+    }
+  ]
+}

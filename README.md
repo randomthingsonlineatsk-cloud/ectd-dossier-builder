@@ -6,22 +6,34 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 > **Training only.** Every product, company, document, study and person in the app is fictional. Section codes, form numbers and XML element names follow the public ICH and FDA specifications, but nothing the app produces is suitable for a real submission.
 
-## What is in this release (Phase 1 · Core)
+## What is in this release (Phases 1 and 2)
 
-- **Learn:** lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, plus a searchable glossary.
-- **One fictional product:** Ostrevia (lumiravostat) film-coated tablets, 10 mg and 25 mg, a new chemical entity, with a 106-document library and two granularity decoys.
-- **US pack, eCTD v3.2.2:** the US Module 1 tree (1.1–1.20) with a metadata form, NDA checklist, cover-letter generator and a practice 356h form; the full ICH Modules 2–5 heading tree with repeatable 3.2.S, 3.2.P and 5.3.5 sections.
-- **Real stub PDFs:** every library document is generated in the browser with pdf-lib: a title page, invented content, bookmarks, an optional linked table of contents and relative cross-document links. Defects are built into the file: the PDF version in the header, non-embedded fonts, scanned pages without text, missing bookmarks and broken links (document security is simulated, as pdf-lib cannot encrypt). Open any document in the browser's PDF viewer or download it.
-- **Builder:** drag and drop documents onto headings (with a keyboard alternative: *Pick up*, select a heading, press Enter), misplacement and granularity warnings, a placeholder view (required, optional, not used in eCTD), a dossier map heat map, and a properties panel with "publishing tool" fixes for PDF problems.
-- **Study tagging files (US):** study ID and file tag on every Module 4.2 and 5.3 leaf, one generated STF per study and heading, listed in the backbone.
-- **Publishing tools:** bookmark editor with auto-bookmarking, table-of-contents generator, hyperlink manager, a broken-link finder and a leaf-title consistency checker.
-- **Backbone viewer:** live `index.xml`, `m1/us/us-regional.xml`, `index-md5.txt` and study tagging files; publishing generates every PDF and records the MD5 of its real bytes, a reviewer-style rendered view next to the raw XML, the folder tree, and a publishing log.
-- **Validation engine:** 39 core rules across backbone, files and folders, PDF, lifecycle, Module 1, study grouping, content and granularity; high/medium/low severity; each finding links to its heading with an explanation and a fix; a verdict on whether an agency would likely reject the sequence; the report downloads as PDF or CSV.
-- **Lifecycle:** sequences 0000, 0001 …, new/replace/append/delete with an operation picker (expert mode allows invalid targets on purpose), publish-and-freeze, current vs cumulative view, per-document history.
-- **Missions 1, 4 and 11** at guided, standard and expert levels: first NDA; answer an information request; rescue a dossier with 25 planted defects in 30 minutes.
-- **Project export and import** as a JSON file.
+**Learn.** Lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, eight lifecycle drills, and a searchable glossary.
 
-Later phases add the EU, Japan (v4.0), Canada, Switzerland and India packs, consistency QC, the review clock, planning and tracking, scoring badges and classroom mode. The data model already carries a `userId` and `classId` on every project and attempt, so classroom mode needs no migration.
+**Products.** Three fictional products, each with its own document library and structured facts:
+- Ostrevia (lumiravostat) film-coated tablets: a new chemical entity (US NDA or EU MAA), with two granularity decoys.
+- Talmisartan tablets: a generic referencing a fictional listed drug (US ANDA), with bioequivalence studies and a biowaiver request.
+- Nelvaprox (velnaprozine) solution for injection in vials (US NDA or EU MAA), with sterile-product documents.
+
+**Regions.** The engine is region-neutral; each region is a data pack.
+- US: the full Module 1 heading list from FDA's Comprehensive Table of Contents (v2.3.5), the us-regional.xml metadata, FDA submission types and sub-types (from the Module 1 backbone specification v2.6), checklists for NDA and ANDA applications, supplements, amendments, annual reports and periodic safety reports, and study tagging files for Modules 4 and 5.
+- EU: the Module 1 tree, folders and file-naming conventions from the EU M1 specification, the eu-regional.xml envelope (UUID, tracking number, submission type and mode, submission unit, related sequence), centralised MAA, response and variation checklists, and an eAF practice form.
+
+**Builder and publishing.** Drag and drop (or Pick up and Enter) into the CTD tree; misplacement and granularity warnings; required/optional view and a dossier map; real stub PDFs generated with pdf-lib (title page, bookmarks, linked table of contents, cross-document links, key facts, defects built into the file); a publishing tab with a bookmark editor, TOC generator, hyperlink manager, broken-link finder and leaf-title consistency checker.
+
+**Backbone and validation.** index.xml, the regional XML, index-md5.txt and study tagging files, shown raw and rendered, with a folder tree and publishing log; publishing records the MD5 of every file's real bytes. 57 core rules across backbone, files and folders, PDF, lifecycle, US and EU Module 1, study grouping, content and granularity, with a verdict line and PDF/CSV report download.
+
+**Lifecycle.** Sequences with new, replace, append and delete; an operation picker with an expert mode; publish-and-freeze; current and cumulative views; per-document history; EU related sequences, grouping and worksharing.
+
+**Cross-module consistency QC.** Every document states structured facts (strengths, dosage form, shelf life, storage, manufacturers, limits, excipients, batches, patient numbers, indication). A matrix compares each fact wherever it is stated and highlights contradictions; reviewer's eye mode hides the highlights so you hunt first; corrections revise a draft document or create a new version to send with replace.
+
+**Missions.** Eleven missions at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
+
+**Progress.** Career levels (Associate, Specialist, Senior Specialist, Lead), eight badges, strengths and weak areas, and mission and lesson history.
+
+**Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
+
+Phase 3 adds eCTD v4.0 and the Japan pack, the mock gateway and review clock, the questions engine, planning and tracking, India Module 1 and biologic products.
 
 ## How it works
 
@@ -33,14 +45,17 @@ Content lives in data files so it can grow without code changes:
 | --- | --- |
 | `src/data/ctd-tree.json` | ICH Modules 2–5 headings, element names and folder names |
 | `src/data/us-m1.json` | US Module 1 headings, submission types, forms and checklists |
-| `src/data/products/nce-tablet.json` | The fictional product and its document library |
+| `src/data/eu-m1.json` | EU Module 1 headings, folders, envelope values and checklists |
+| `src/data/consistency.json` | Facts compared across modules and the headings that state them |
+| `src/data/drills.json` | Lifecycle drills |
+| `src/data/products/*.json` | The fictional products, their facts and document libraries |
 | `src/data/rules.json` | Validation rule library and required headings |
 | `src/data/missions.json` | Mission briefs, steps, hints and checks |
 | `src/data/lessons.json` | Lesson text and quizzes |
 | `src/data/ectd-status.json` | Where eCTD v3.2.2 and v4.0 stand by region (dated) |
 | `src/data/glossary.json` | Glossary terms |
 
-The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `stf.js` (study tagging files), `pdfgen.js` and `pdfmeta.js` (stub PDFs, loaded only when a PDF is built), `report.js` (validation report), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
+The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `stf.js` (study tagging files), `regiondocs.js` (generated regional Module 1 documents), `consistency.js` (cross-module QC), `progress.js` (levels and badges), `pdfgen.js` and `pdfmeta.js` (stub PDFs, loaded only when a PDF is built), `report.js` (validation report), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
 
 ## Run it locally
 
@@ -49,7 +64,7 @@ Requires Node.js 18 or newer.
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # engine tests
+npm test           # engine and mission tests
 node tests/pdf-sample.mjs out/   # write sample stub PDFs to inspect
 npm run build      # production build in dist/
 npm run preview    # serve the build at http://localhost:4173

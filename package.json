@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node tests/engine.test.mjs"
+    "test": "node tests/engine.test.mjs && node tests/phase2.test.mjs"
   },
   "author": "Khan Gulrez Shagufa Fazal Ahmed",
   "license": "Apache-2.0",

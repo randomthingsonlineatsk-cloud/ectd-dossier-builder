@@ -1,0 +1,74 @@
+[
+  {
+    "id": "d1", "title": "Replace from the right sequence",
+    "situation": "The specification was filed new in 0000 and replaced in 0002. You are building 0005 with another revision.",
+    "current": ["0000 · 3.2.P.5.1 · Specification(s) (replaced in 0002)", "0002 · 3.2.P.5.1 · Specification(s) (current)"],
+    "question": "Which leaf should the 0005 replace target?",
+    "options": ["The 0000 leaf, because it is the original", "The 0002 leaf, the one that is current", "Both leaves", "No target: use new"],
+    "answer": 1,
+    "why": "A replace must point to a leaf that is current. The 0000 leaf was already replaced; targeting it again is a high-severity lifecycle error."
+  },
+  {
+    "id": "d2", "title": "Deleting twice",
+    "situation": "A superseded stability protocol was deleted in 0003. A colleague's draft for 0006 deletes it again 'to be safe'.",
+    "current": ["0001 · 3.2.P.8.2 · Stability protocol (deleted in 0003)"],
+    "question": "What happens to the second delete?",
+    "options": ["Nothing, it is harmless", "It is a lifecycle error: the target is no longer current", "It restores the document", "It deletes the whole heading"],
+    "answer": 1,
+    "why": "Delete, like replace, must target a current leaf. Once deleted, a leaf cannot be acted on again in v3.2.2."
+  },
+  {
+    "id": "d3", "title": "Renamed file, broken lifecycle",
+    "situation": "An updated batch analyses document arrives named batch-analyses-2026.pdf instead of batch-analyses.pdf. The publisher files it with operation new.",
+    "current": ["0000 · 3.2.P.5.4 · Batch Analyses"],
+    "question": "What does the reviewer now see under 3.2.P.5.4?",
+    "options": ["Only the new document", "Two batch analyses documents, old and new", "Only the old document", "An error page"],
+    "answer": 1,
+    "why": "Lifecycle follows the leaf, not the file name. Filed as new, the update sits beside the old one. It should have been a replace targeting the 0000 leaf; the new file name is then fine."
+  },
+  {
+    "id": "d4", "title": "Append or replace",
+    "situation": "Twelve-month stability data must be added. The 6-month report in 0000 is still valid and the company wants reviewers to see both.",
+    "current": ["0000 · 3.2.P.8.3 · Stability Data (6 months)"],
+    "question": "Which operation fits best?",
+    "options": ["Replace with a complete updated report", "Append the 12-month update to the 0000 leaf", "Delete the 0000 leaf", "New, without a target"],
+    "answer": 1,
+    "why": "Append adds to an earlier leaf without replacing it. Many companies prefer a complete replacement report instead, which is also correct, but here the brief is to keep both visible and linked."
+  },
+  {
+    "id": "d5", "title": "Forms in every sequence",
+    "situation": "Sequence 0004 is an amendment. Form FDA 356h from 0000 is still in the current view.",
+    "current": ["0000 · 1.1 · Form FDA 356h", "0002 · 1.1 · Form FDA 356h"],
+    "question": "How is the 356h for 0004 filed?",
+    "options": ["Replace the 0002 form", "New, with every submission", "Not needed: the 0000 form still applies", "Append to the 0000 form"],
+    "answer": 1,
+    "why": "The application form and the cover letter belong to each submission. They are filed new every time, so the validator does not treat them as duplicates."
+  },
+  {
+    "id": "d6", "title": "Related sequence in the EU",
+    "situation": "The MAA started with 0000. Responses to the Day 120 list of questions go in 0003; validation responses went in 0001 and 0002.",
+    "current": ["0000 · initial", "0001 · validation-response", "0002 · validation-response"],
+    "question": "What is the related sequence of 0003?",
+    "options": ["0002, the previous sequence", "0000, the sequence that started the procedure", "None", "0001"],
+    "answer": 1,
+    "why": "In the EU envelope, related sequence points to the sequence that started the procedure, so every response in the MAA names 0000."
+  },
+  {
+    "id": "d7", "title": "Withdrawn document",
+    "situation": "A nonclinical report was filed by mistake in 4.2.3.7 in 0001 and must no longer be considered.",
+    "current": ["0001 · 4.2.3.7 · Study HRN-0990 (filed by mistake)"],
+    "question": "How do you remove it from the current view?",
+    "options": ["Replace it with a blank page", "Delete operation targeting the 0001 leaf", "Re-publish 0001 without it", "Ask the agency to ignore it"],
+    "answer": 1,
+    "why": "Published sequences cannot change. A later sequence removes the leaf with a delete operation. In eCTD v4.0 the same intent is a suspended context of use."
+  },
+  {
+    "id": "d8", "title": "Study tagging after an update",
+    "situation": "In 0003 you replace the HRP-301 study report (5.3.5.1) with a corrected version.",
+    "current": ["0000 · 5.3.5.1 · Study HRP-301 report (tagged HRP-301, study-report)"],
+    "question": "What does the replacement leaf need in the US?",
+    "options": ["Nothing else", "Study ID HRP-301 and a file tag, so a study tagging file in 0003 groups it", "A new study ID", "It must go in 5.3.5.4"],
+    "answer": 1,
+    "why": "Study tagging files group the documents of each sequence. The new leaf needs the same study ID and its file tag, so the reviewer still sees it under HRP-301."
+  }
+]

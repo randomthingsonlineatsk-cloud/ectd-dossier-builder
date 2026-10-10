@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
 import { db, saveProject as dbSave, saveAttempt } from '../engine/db.js';
-import { seqByNumber, sortedSequences, PRODUCTS } from '../engine/model.js';
+import { seqByNumber, sortedSequences, PRODUCTS, migrateProject } from '../engine/model.js';
 import { validate } from '../engine/validate.js';
 import { evaluateMission } from '../engine/missions.js';
 import Builder from './workspace/Builder.jsx';
@@ -10,6 +10,8 @@ import Sequences from './workspace/Sequences.jsx';
 import Backbone from './workspace/Backbone.jsx';
 import ValidateView from './workspace/ValidateView.jsx';
 import Publishing from './workspace/Publishing.jsx';
+import Consistency from './workspace/Consistency.jsx';
+import { consistencyMatrix } from '../engine/consistency.js';
 import SettingsView from './workspace/SettingsView.jsx';
 import MissionView from './workspace/MissionView.jsx';
 
@@ -34,7 +36,7 @@ function Timer({ mission, onExpire }) {
 
 export default function Workspace({ id }) {
   const { projects, attempts, toast, reload, user } = useApp();
-  const [project, setProject] = useState(() => projects.find((p) => p.id === id) ?? null);
+  const [project, setProject] = useState(() => { const p = projects.find((x) => x.id === id); return p ? migrateProject(structuredClone(p)) : null; });
   const [missing, setMissing] = useState(false);
   const [seqNumber, setSeqNumber] = useState(null);
   const [tab, setTab] = useState(null);
@@ -46,7 +48,7 @@ export default function Workspace({ id }) {
 
   useEffect(() => {
     if (project) return;
-    db.get('projects', id).then((p) => { if (p) { latest.current = p; setProject(p); } else setMissing(true); });
+    db.get('projects', id).then((p) => { if (p) { migrateProject(p); latest.current = p; setProject(p); } else setMissing(true); });
   }, [id, project]);
   useEffect(() => {
     if (project && !seqNumber) {
@@ -88,6 +90,7 @@ export default function Workspace({ id }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const validation = useMemo(() => (seq ? validate(project, seq.number) : null), [project, seq, nonce]);
   const evaluation = useMemo(() => (project?.mission ? evaluateMission(project) : null), [project]);
+  const consistencyIssues = useMemo(() => (seq ? consistencyMatrix(project, seq.number).issues.length : 0), [project, seq]);
 
   const submitMission = useCallback(() => {
     {
@@ -99,7 +102,9 @@ export default function Workspace({ id }) {
       next.mission.submitted = { at: new Date().toISOString(), score: ev.score, seconds };
       persist(next);
       const att = attempts.find((a) => a.id === cur.mission.attemptId) ?? { id: cur.mission.attemptId, kind: 'mission', missionId: cur.mission.id, projectId: cur.id, difficulty: cur.mission.difficulty, startedAt: cur.mission.startedAt };
-      saveAttempt({ ...att, userId: cur.userId ?? user?.userId, classId: cur.classId ?? null, finishedAt: new Date().toISOString(), score: ev.score, seconds, detail: ev.checks ?? { fixed: ev.fixed, total: ev.total } });
+      const withinTime = !cur.mission.minutes || seconds <= cur.mission.minutes * 60;
+      next.mission.submitted.axes = ev.axes;
+      saveAttempt({ ...att, userId: cur.userId ?? user?.userId, classId: cur.classId ?? null, finishedAt: new Date().toISOString(), score: ev.score, seconds, withinTime, axes: ev.axes, detail: ev.checks ?? { fixed: ev.fixed, total: ev.total } });
       toast(`Mission scored: ${ev.score}%.`);
       setProject(next);
     }
@@ -111,9 +116,10 @@ export default function Workspace({ id }) {
   if (!project || !seq || !tab) return <div className="page muted">Loading project…</div>;
 
   const p = PRODUCTS[project.productId];
+  const consistencyCount = consistencyIssues;
   const tabs = [
     ...(project.mission ? [['mission', 'Mission']] : []),
-    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['sequences', 'Sequences'], ['backbone', 'Backbone'],
+    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', 'Backbone'],
     ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['settings', 'Settings'],
   ];
   const guided = project.mission?.difficulty === 'guided';
@@ -135,7 +141,7 @@ export default function Workspace({ id }) {
         <div className="tabs" role="tablist" aria-label="Workspace">
           {tabs.map(([k, label, count]) => (
             <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}>
-              {label}{count ? <span className={`pill ${validation.counts.High ? 'high' : 'medium'} count`}>{count}</span> : null}
+              {label}{count ? <span className={`pill ${k === 'validate' && validation.counts.High ? 'high' : 'medium'} count`}>{count}</span> : null}
             </button>
           ))}
         </div>
@@ -153,10 +159,11 @@ export default function Workspace({ id }) {
         <div className="callout" style={{ margin: '1rem 1.25rem 0' }}>Sequence {seq.number} is published and read-only. Go to Sequences to create the next one.</div>
       )}
       <div className="ws-body" role="tabpanel">
-        {tab === 'mission' && <MissionView project={project} evaluation={evaluation} onSubmit={submitMission} />}
+        {tab === 'mission' && <MissionView project={project} evaluation={evaluation} onSubmit={submitMission} mutate={mutate} />}
         {tab === 'builder' && <Builder project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} guided={guided} selectedCode={selectedCode} setSelectedCode={setSelectedCode} focusLeaf={focusLeaf} />}
         {tab === 'm1' && <Module1 project={project} seq={seq} mutate={mutate} toast={toast} setTab={setTab} focusNode={focusNode} />}
         {tab === 'publishing' && <Publishing project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} focusNode={focusNode} setTab={setTab} />}
+        {tab === 'consistency' && <Consistency project={project} seq={seq} mutate={mutate} toast={toast} />}
         {tab === 'sequences' && <Sequences project={project} seq={seq} setSeqNumber={setSeqNumber} mutate={mutate} mutateAsync={mutateAsync} toast={toast} />}
         {tab === 'backbone' && <Backbone project={project} seq={seq} />}
         {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
