@@ -24,4 +24,16 @@ assert.match(coverLetterText(p, seq), /CBE-30 training letter/);
 assert.equal(todoStatus(seq).filter((t) => t.placed).length, 0);
 assert.throws(() => importChangePackage(createProject({ name: 'e', productId: 'nce-tablet', region: 'EU' }), parsed), /for US/);
 assert.throws(() => parseChangePackage('{"kind":"other"}'));
+// EU package: variation type, mode and the change list for the cover letter.
+const euPkg = { ...pkg, region: 'EU', product: { ...pkg.product, appType: 'nda' },
+  submission: { ...pkg.submission, category: 'IB', categoryLabel: 'Type IB', ectd: { submissionType: 'var-type1b', subType: 'initial', submissionMode: 'grouping' } },
+  changes: [{ id: 'ch-2', title: 'Move drug product manufacturing to a different site', category: 'IB', categoryLabel: 'Type IB', entry: { at: 'Q.II.b.1(e)' } }],
+  module1: [{ code: 'eu:1.0', label: 'Cover letter' }, { code: 'eu:1.2', label: 'Application form' }],
+  ctd: [{ code: 'eu:1.0', label: 'Cover letter', operation: 'new', why: [] }, { code: '3.2.P.3.1', label: 'Manufacturers', operation: 'replace', why: [] }] };
+const pe = createProject({ name: 'eu', productId: 'nce-tablet', region: 'EU', user: { userId: 'u-1' } });
+const r2 = importChangePackage(pe, parseChangePackage(euPkg));
+assert.equal(r2.seq.submissionType, 'var-type1b'); assert.equal(r2.seq.submissionMode, 'grouping');
+assert.equal(r2.seq.changes[0].type, 'Type IB'); assert.match(r2.seq.changes[0].scope, /Q\.II\.b\.1\(e\)/);
+assert.deepEqual(r2.warnings, []);
+assert.ok(r2.seq.changePackage.todo.every((t) => t.known), 'EU codes exist in the EU tree');
 console.log('phase 6 tests: change package import passed');
