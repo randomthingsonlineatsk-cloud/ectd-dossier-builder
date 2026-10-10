@@ -115,3 +115,11 @@ export function publish(project, seqNumber) {
   touch(project);
   return { result, pkg };
 }
+
+// Generates the sequence's PDF files, records their real MD5 checksums, then publishes.
+export async function publishWithFiles(project, seqNumber) {
+  assertEditable(seqByNumber(project, seqNumber));
+  const { computeSequenceChecksums } = await import('./pdfgen.js');
+  await computeSequenceChecksums(project, seqNumber);
+  return publish(project, seqNumber);
+}

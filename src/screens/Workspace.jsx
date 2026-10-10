@@ -9,6 +9,7 @@ import Module1 from './workspace/Module1.jsx';
 import Sequences from './workspace/Sequences.jsx';
 import Backbone from './workspace/Backbone.jsx';
 import ValidateView from './workspace/ValidateView.jsx';
+import Publishing from './workspace/Publishing.jsx';
 import SettingsView from './workspace/SettingsView.jsx';
 import MissionView from './workspace/MissionView.jsx';
 
@@ -74,6 +75,15 @@ export default function Workspace({ id }) {
     return true;
   }, [persist, toast]);
 
+  // For work that generates files (publishing): runs on a copy, commits when done.
+  const mutateAsync = useCallback(async (fn) => {
+    const next = structuredClone(latest.current);
+    try { await fn(next); } catch (e) { toast(e.message, 'error'); return false; }
+    persist(next);
+    setProject(next);
+    return true;
+  }, [persist, toast]);
+
   const seq = project && seqNumber ? seqByNumber(project, seqNumber) : null;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const validation = useMemo(() => (seq ? validate(project, seq.number) : null), [project, seq, nonce]);
@@ -103,7 +113,7 @@ export default function Workspace({ id }) {
   const p = PRODUCTS[project.productId];
   const tabs = [
     ...(project.mission ? [['mission', 'Mission']] : []),
-    ['builder', 'Builder'], ['m1', 'Module 1'], ['sequences', 'Sequences'], ['backbone', 'Backbone'],
+    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['sequences', 'Sequences'], ['backbone', 'Backbone'],
     ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['settings', 'Settings'],
   ];
   const guided = project.mission?.difficulty === 'guided';
@@ -146,9 +156,10 @@ export default function Workspace({ id }) {
         {tab === 'mission' && <MissionView project={project} evaluation={evaluation} onSubmit={submitMission} />}
         {tab === 'builder' && <Builder project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} guided={guided} selectedCode={selectedCode} setSelectedCode={setSelectedCode} focusLeaf={focusLeaf} />}
         {tab === 'm1' && <Module1 project={project} seq={seq} mutate={mutate} toast={toast} setTab={setTab} focusNode={focusNode} />}
-        {tab === 'sequences' && <Sequences project={project} seq={seq} setSeqNumber={setSeqNumber} mutate={mutate} toast={toast} />}
+        {tab === 'publishing' && <Publishing project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} focusNode={focusNode} setTab={setTab} />}
+        {tab === 'sequences' && <Sequences project={project} seq={seq} setSeqNumber={setSeqNumber} mutate={mutate} mutateAsync={mutateAsync} toast={toast} />}
         {tab === 'backbone' && <Backbone project={project} seq={seq} />}
-        {tab === 'validate' && <ValidateView seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
+        {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
         {tab === 'settings' && <SettingsView project={project} mutate={mutate} attempts={attempts} />}
       </div>
     </div>

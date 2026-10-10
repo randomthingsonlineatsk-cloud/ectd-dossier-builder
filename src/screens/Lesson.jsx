@@ -160,7 +160,48 @@ function Lifecycle() {
   );
 }
 
-const INTERACTIVES = { modules: ModulesTriangle, compare: Compare, status: StatusTable, granularity: Granularity, leaf: LeafAnatomy, lifecycle: Lifecycle };
+function Versions() {
+  const rows = [
+    ['Backbone file', 'index.xml plus regional XML', 'One submission unit message'],
+    ['Removing a document', 'Delete operation', 'Suspend a context of use (can be reactivated)'],
+    ['Grouping study files', 'US study tagging files, EU node extensions', 'Keywords and grouping in the message'],
+    ['Metadata', 'Mostly free text', "Controlled vocabularies, including region-specific ones such as Japan's"],
+    ['Document reuse', 'Re-submit or cross-reference', 'One document referenced from several places'],
+    ['Checksum', 'MD5', 'SHA-256'],
+  ];
+  return (
+    <div className="table-wrap">
+      <table className="data">
+        <thead><tr><th>Concept</th><th>v3.2.2</th><th>v4.0</th></tr></thead>
+        <tbody>{rows.map((r) => <tr key={r[0]}><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}</tbody>
+      </table>
+    </div>
+  );
+}
+
+const REGIONS = {
+  US: ['1.1 forms (356h for NDA/BLA/ANDA, 1571 for an IND, user fee coversheet 3397)', '1.2 cover letter', 'Administrative items: patent information, debarment certification, financial disclosure', 'DMF letters of authorization (1.4.1)', 'Meetings and correspondence history', '1.14 labeling, with structured product labeling'],
+  EU: ['1.0 cover letter', '1.2 electronic application form (eAF)', '1.3 product information: SmPC, labelling and package leaflet in the QRD template, mock-ups', 'Expert information', '1.6 environmental risk assessment', 'Orphan information', '1.8 pharmacovigilance: PV system summary, risk management plan', '1.10 paediatrics: PIP decision'],
+  Japan: ['Japanese application form', 'Draft package insert', 'Japanese-language documents in Modules 1 and 2', 'eCTD v4.0 for new applications from April 2026'],
+  Canada: ['Submission forms', 'Cover letter', 'Product monograph'],
+  Switzerland: ['Swiss Module 1 forms', 'Product information for Switzerland'],
+  India: ['Application form and covering letter under the NDCT Rules', 'Indian agent authorisation', 'Label and package insert', 'Fee details', 'Filed through the SUGAM portal'],
+};
+function Regions() {
+  const [r, setR] = useState('US');
+  return (
+    <div>
+      <div className="seg" role="group" aria-label="Region">
+        {Object.keys(REGIONS).map((k) => <button key={k} aria-pressed={r === k} onClick={() => setR(k)}>{k}</button>)}
+      </div>
+      <ul className="callout" style={{ marginTop: '.75rem', paddingLeft: '2rem' }} aria-live="polite">
+        {REGIONS[r].map((x) => <li key={x}>{x}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+const INTERACTIVES = { versions: Versions, regions: Regions, modules: ModulesTriangle, compare: Compare, status: StatusTable, granularity: Granularity, leaf: LeafAnatomy, lifecycle: Lifecycle };
 
 function Quiz({ lesson }) {
   const { saveLesson, toast } = useApp();

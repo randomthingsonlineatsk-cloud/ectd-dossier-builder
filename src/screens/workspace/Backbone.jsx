@@ -77,9 +77,11 @@ function FolderTree({ node }) {
 export default function Backbone({ project, seq }) {
   const pkg = useMemo(() => publishSequence(project, seq.number), [project, seq.number]);
   const [view, setView] = useState('index');
+  const [stfId, setStfId] = useState(null);
   const views = [
-    ['index', 'index.xml'], ['regional', 'us-regional.xml'], ['md5', 'index-md5.txt'], ['rendered', 'Rendered view'], ['folders', 'Folder tree'], ['log', 'Publishing log'],
+    ['index', 'index.xml'], ['regional', 'us-regional.xml'], ['md5', 'index-md5.txt'], ['stf', `Study tagging files (${pkg.stfs.length})`], ['rendered', 'Rendered view'], ['folders', 'Folder tree'], ['log', 'Publishing log'],
   ];
+  const stf = pkg.stfs.find((f) => f.id === stfId) ?? pkg.stfs[0];
   return (
     <div className="stack">
       <div className="row" style={{ justifyContent: 'space-between' }}>
@@ -92,7 +94,7 @@ export default function Backbone({ project, seq }) {
         </div>
       </div>
       <p className="small muted">
-        {seq.status === 'published' ? `Sequence ${seq.number} is published; this is its frozen backbone.` : `Live preview of sequence ${seq.number}. It updates as you place documents; checksums are fixed when you publish.`}
+        {seq.status === 'published' ? `Sequence ${seq.number} is published; this is its frozen backbone.` : `Live preview of sequence ${seq.number}. It updates as you place documents. Until you publish, PDF checksums are preview hashes; publishing generates each PDF and records the MD5 of its real bytes.`}
         {' '}Modelled on the public ICH v3.2.2 and FDA Module 1 structures. Training only.
       </p>
       {view === 'index' && <Xml text={pkg.index} />}
@@ -103,6 +105,17 @@ export default function Backbone({ project, seq }) {
           <pre className="xml">{pkg.md5txt}</pre>
         </div>
       )}
+      {view === 'stf' && (pkg.stfs.length === 0 ? <p className="muted">No study tagging files yet. Tag the study documents in Modules 4 and 5 in the builder.</p> : (
+        <div className="stack">
+          <label className="field" style={{ maxWidth: 520 }}>Study tagging file
+            <select value={stf.id} onChange={(e) => setStfId(e.target.value)}>
+              {pkg.stfs.map((f) => <option key={f.id} value={f.id}>{f.studyId} — {f.nodeCode} ({f.leafIds.length} file{f.leafIds.length > 1 ? 's' : ''})</option>)}
+            </select>
+          </label>
+          <p className="small muted">Path: <span className="mono">{seq.number}/{stf.path}</span>. The STF names the study and points to each of its files in index.xml with a file tag.</p>
+          <Xml text={stf.xml} />
+        </div>
+      ))}
       {view === 'rendered' && (
         <div className="grid-2" style={{ alignItems: 'start' }}>
           <div><h3>As a reviewer's viewer shows it</h3><Rendered xml={pkg.index} rootTag="ectd:ectd" /><h3 style={{ marginTop: '1rem' }}>Module 1 (regional)</h3><Rendered xml={pkg.regional} rootTag="fda-regional:fda-regional" /></div>

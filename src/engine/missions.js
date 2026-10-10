@@ -1,7 +1,8 @@
 // Mission seeds and scoring for Phase 1 missions 1, 4 and 11.
 import missionsData from '../data/missions.json' with { type: 'json' };
 import { createProject, docForLeaf, makeDoc, seqByNumber } from './model.js';
-import { addCoverLetter, placeDoc, publish, updateLeaf } from './ops.js';
+import { tagFromDoc } from './stf.js';
+import { addCoverLetter, placeDoc, publishWithFiles, updateLeaf } from './ops.js';
 import { validate } from './validate.js';
 
 export const MISSIONS = missionsData.missions;
@@ -19,7 +20,10 @@ export function buildComplete(project) {
   const leafByDoc = {};
   for (const d of Object.values(project.documents)) {
     if (BASE_EXCLUDE(d)) continue;
-    leafByDoc[d.id] = placeDoc(project, seq.number, d.id, d.section);
+    const leaf = placeDoc(project, seq.number, d.id, d.section);
+    const tag = tagFromDoc(project, leaf);
+    if (tag) leaf.study = tag;
+    leafByDoc[d.id] = leaf;
   }
   const { leaf } = addCoverLetter(project, seq.number, true);
   leafByDoc.coverLetter = leaf;
@@ -36,7 +40,7 @@ function baseMissionProject(m, difficulty, user) {
   return p;
 }
 
-export function seedMission(id, difficulty, user) {
+export async function seedMission(id, difficulty, user) {
   const m = missionById(id);
   if (m.id === 1) return baseMissionProject(m, difficulty, user);
   if (m.id === 4) return seedMission4(m, difficulty, user);
@@ -44,10 +48,10 @@ export function seedMission(id, difficulty, user) {
   throw new Error(`Mission ${id} arrives in a later phase.`);
 }
 
-function seedMission4(m, difficulty, user) {
+async function seedMission4(m, difficulty, user) {
   const p = baseMissionProject(m, difficulty, user);
   buildComplete(p);
-  publish(p, '0000');
+  await publishWithFiles(p, '0000');
   for (const raw of m.extraDocuments) p.documents[raw.id] = makeDoc(raw);
   p.mission.letter = m.letter;
   return p;

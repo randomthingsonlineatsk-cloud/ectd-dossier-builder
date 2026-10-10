@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import rulesData from '../../data/rules.json' with { type: 'json' };
 import { RULES } from '../../engine/validate.js';
+import { download } from '../../engine/io.js';
+import { slug } from '../../engine/tree.js';
 
-export default function ValidateView({ seq, validation, focusNode, setTab, onRerun }) {
+export default function ValidateView({ project, seq, validation, focusNode, setTab, onRerun }) {
   const [sev, setSev] = useState('All');
   const [showRules, setShowRules] = useState(false);
   const list = validation.findings.filter((f) => sev === 'All' || f.severity === sev);
@@ -13,7 +15,11 @@ export default function ValidateView({ seq, validation, focusNode, setTab, onRer
           <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>Validation report: sequence {seq.number}</h2>
           <span className="small muted">Profile: {rulesData.profiles['US-3.2.2'].label} · {rulesData.rules.length} core rules · runs live as you edit</span>
         </div>
-        <button className="btn" onClick={onRerun}>Run validation again</button>
+        <div className="row">
+          <button className="btn" onClick={onRerun}>Run validation again</button>
+          <button className="btn" onClick={async () => download(`${slug(project.name)}-${seq.number}-validation.pdf`, await (await import('../../engine/report.js')).validationPdf(project, seq, validation), 'application/pdf')}>Download report (PDF)</button>
+          <button className="btn" onClick={async () => download(`${slug(project.name)}-${seq.number}-validation.csv`, await (await import('../../engine/report.js')).validationCsv(project, seq, validation), 'text/csv')}>Download CSV</button>
+        </div>
       </div>
       <p className={`verdict ${validation.verdict.level}`} role="status">{validation.verdict.text}</p>
       <div className="row">

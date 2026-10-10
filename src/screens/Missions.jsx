@@ -8,17 +8,20 @@ import { uid } from '../engine/model.js';
 function MissionCard({ m }) {
   const { user, attempts, saveProject, toast } = useApp();
   const [level, setLevel] = useState('guided');
+  const [busy, setBusy] = useState(false);
   const mine = attempts.filter((a) => a.missionId === m.id && a.kind === 'mission');
   const best = mine.reduce((b, a) => Math.max(b, a.score ?? 0), 0);
   const start = async () => {
+    setBusy(true);
     try {
-      const p = seedMission(m.id, level, user);
+      const p = await seedMission(m.id, level, user);
       const attempt = { id: uid('a'), kind: 'mission', userId: user.userId, classId: user.classId ?? null, missionId: m.id, projectId: p.id, difficulty: level, startedAt: new Date().toISOString(), finishedAt: null, score: null };
       p.mission.attemptId = attempt.id;
       await saveAttempt(attempt);
       await saveProject(p);
       go(`/project/${p.id}`);
     } catch (e) { toast(e.message, 'error'); }
+    setBusy(false);
   };
   const mins = m.minutes?.[level];
   return (
@@ -38,7 +41,7 @@ function MissionCard({ m }) {
           ))}
         </div>
         <span className="small muted">{LEVELS.find((l) => l.id === level).about}{mins ? ` Clock: ${mins} minutes.` : ''}</span>
-        <button className="btn primary" onClick={start}>Start mission {m.id}</button>
+        <button className="btn primary" onClick={start} disabled={busy}>{busy ? 'Preparing the dossier…' : `Start mission ${m.id}`}</button>
       </div>
     </article>
   );

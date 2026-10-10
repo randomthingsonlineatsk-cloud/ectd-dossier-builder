@@ -5,6 +5,8 @@ import { requiredFor } from '../../engine/validate.js';
 import { placeDoc, moveLeaf, removeLeaf, updateLeaf, fixDoc, addDeleteLeaf, PDF_FIXES } from '../../engine/ops.js';
 import { modColor } from '../../ctx.js';
 import OperationPicker from './OperationPicker.jsx';
+import PdfPreview from '../../components/PdfPreview.jsx';
+import { FILE_TAGS, needsStudyTag, moduleOf, tagFromDoc, DEFAULT_TAG } from '../../engine/stf.js';
 import rulesData from '../../data/rules.json' with { type: 'json' };
 
 const DND = 'application/x-ectd';
@@ -23,6 +25,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const [expanded, setExpanded] = useState(() => new Set(['1', '2', '3', '3.2', '3.2.P', '5', '5.3']));
   const [overCode, setOverCode] = useState(null);
   const [picker, setPicker] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [q, setQ] = useState('');
   const [unplacedOnly, setUnplacedOnly] = useState(false);
 
@@ -224,6 +227,14 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
               {node.note && <p className="callout warn small">{node.note}</p>}
               {node.help && <p className="small muted">{node.help}</p>}
               {node.children.length > 0 && <p className="small muted">This heading has sub-headings. Documents go on the lowest level.</p>}
+              {editable && ['4', '5'].includes(node.module) && (() => {
+                const untagged = seq.leaves.filter((l) => needsStudyTag(l.nodeCode) && l.operation !== 'delete' && !l.study?.id && tagFromDoc(project, l));
+                return untagged.length > 0 && (
+                  <p className="callout small">{untagged.length} study document{untagged.length > 1 ? 's' : ''} in Modules 4 and 5 {untagged.length > 1 ? 'have' : 'has'} no study tagging yet.{' '}
+                    <button className="btn small" onClick={() => mutate((p) => { for (const l of p.sequences.find((x) => x.id === seq.id).leaves) if (needsStudyTag(l.nodeCode) && !l.study?.id) { const t = tagFromDoc(p, l); if (t) l.study = t; } })}>Tag studies from documents</button>
+                  </p>
+                );
+              })()}
               {nodeFindings.map((f) => <p key={f.key} className={`callout small ${f.severity === 'High' ? 'bad' : 'warn'}`}><strong>{f.ruleId}</strong> {f.message}</p>)}
               {priorHere.length > 0 && <h3 className="small muted" style={{ marginTop: '.5rem' }}>Current from earlier sequences</h3>}
               {priorHere.map((e) => {
@@ -305,9 +316,30 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                         </select>
                       </label>
                     )}
+                    {needsStudyTag(leaf.nodeCode) && leaf.operation !== 'delete' && (
+                      <fieldset style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-s)', padding: '.6rem .7rem' }}>
+                        <legend className="small" style={{ fontWeight: 600 }}>Study tagging file (US)</legend>
+                        <div className="grid-2" style={{ gap: '.5rem' }}>
+                          <label className="field">Study ID
+                            <input type="text" value={leaf.study?.id ?? ''} disabled={!editable} placeholder="e.g. HRP-301"
+                              onChange={(e) => mutate((p) => updateLeaf(p, seq.number, leaf.id, { study: { tag: leaf.study?.tag ?? DEFAULT_TAG[moduleOf(leaf.nodeCode)], id: e.target.value } }))} />
+                          </label>
+                          <label className="field">File tag
+                            <select value={leaf.study?.tag ?? ''} disabled={!editable} onChange={(e) => mutate((p) => updateLeaf(p, seq.number, leaf.id, { study: { id: leaf.study?.id ?? '', tag: e.target.value } }))}>
+                              <option value="">Choose…</option>
+                              {(FILE_TAGS[moduleOf(leaf.nodeCode)] ?? []).map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                            </select>
+                          </label>
+                        </div>
+                        {editable && tagFromDoc(project, leaf) && leaf.study?.id !== tagFromDoc(project, leaf).id && (
+                          <button className="btn small" style={{ marginTop: '.4rem' }} onClick={() => mutate((p) => updateLeaf(p, seq.number, leaf.id, { study: tagFromDoc(p, leaf) }))}>Use {tagFromDoc(project, leaf).id} from the document</button>
+                        )}
+                      </fieldset>
+                    )}
                   </div>
                   {leafDoc && (
                     <>
+                      <div className="row" style={{ marginTop: '.6rem' }}><button className="btn small" onClick={() => setPreview(leaf)}>Open PDF</button><span className="small muted">Generated stub with the properties below built in.</span></div>
                       <dl>
                         <dt>Belongs in</dt><dd>{leafDoc.section}{leafDoc.section !== leaf.nodeCode && !leafDoc.decoy ? ' (not here)' : ''}</dd>
                         <dt>Pages</dt><dd>{leafDoc.pages}</dd>
@@ -375,6 +407,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
         </div>
       </section>
 
+      {preview && <PdfPreview project={project} seqNumber={seq.number} leaf={preview} onClose={() => setPreview(null)} />}
       {picker && (
         <OperationPicker project={project} seq={seq} code={picker.code} doc={project.documents[picker.docId]} prevState={prevState} expert={expert}
           onCancel={() => setPicker(null)} onConfirm={onPickerConfirm} />

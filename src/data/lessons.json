@@ -1,169 +1,593 @@
 [
   {
-    "id": 1, "title": "What CTD is", "minutes": 8,
+    "id": 1,
+    "title": "What CTD is",
+    "minutes": 8,
     "summary": "ICH M4, the five modules, and why Module 1 is regional while Modules 2–5 are harmonised.",
     "sections": [
-      { "heading": "One format, many agencies",
+      {
+        "heading": "One format, many agencies",
         "body": [
           "Before 2003, every agency wanted a marketing application organised its own way. A company filing in the US, EU and Japan rebuilt the same science three times.",
           "The ICH M4 guideline fixed that with the Common Technical Document (CTD): one agreed structure for the quality, nonclinical and clinical parts of an application. Each agency still adds its own administrative part, but the science is organised the same way everywhere."
-        ] },
-      { "heading": "The five modules",
+        ]
+      },
+      {
+        "heading": "The five modules",
         "body": [
           "Picture the CTD as a triangle. Module 1 sits outside it because it is regional. Module 2 is the tip: the summaries and overviews a reviewer reads first. Modules 3, 4 and 5 are the base: the full data for quality, nonclinical and clinical.",
           "Click each module in the diagram to see what it holds."
         ],
-        "interactive": "modules" },
-      { "heading": "Why Module 1 is regional",
+        "interactive": "modules"
+      },
+      {
+        "heading": "Why Module 1 is regional",
         "body": [
           "Forms, fees, labelling formats, patent rules and local contacts are national matters. So Module 1 differs by region: the US has Form FDA 356h and the prescribing information; the EU has the electronic application form and the SmPC in the QRD template; India has the NDCT Rules application form.",
           "Modules 2 to 5 are harmonised: the same 3.2.P.5.1 specification document can, in principle, be filed in every region."
-        ] },
-      { "heading": "M4Q, M4S, M4E",
+        ]
+      },
+      {
+        "heading": "M4Q, M4S, M4E",
         "body": [
           "ICH M4 has three content guidelines: M4Q for quality (Module 2.3 and Module 3), M4S for safety (Modules 2.4, 2.6 and 4) and M4E for efficacy (Modules 2.5, 2.7 and 5). M4 itself sets the overall structure and the granularity annex."
-        ] }
+        ]
+      }
     ],
     "quiz": [
-      { "q": "Which module is NOT part of the harmonised CTD?", "options": ["Module 1", "Module 2", "Module 3", "Module 5"], "answer": 0,
-        "why": "Module 1 is regional: forms, labelling and administrative documents differ by agency." },
-      { "q": "Where does the Quality Overall Summary live?", "options": ["Module 1.3", "Module 2.3", "Module 3.2", "Module 2.5"], "answer": 1,
-        "why": "2.3 is the Quality Overall Summary; it summarises Module 3." },
-      { "q": "Which ICH guideline covers the content of Modules 2.5, 2.7 and 5?", "options": ["M4Q", "M4S", "M4E", "M2"], "answer": 2,
-        "why": "M4E is the efficacy guideline." },
-      { "q": "A drug product specification goes in…", "options": ["3.2.S.4.1", "3.2.P.5.1", "2.3.P", "1.14"], "answer": 1,
-        "why": "3.2.P is the drug product; P.5 is its control; P.5.1 is the specification." },
-      { "q": "Module 4 contains…", "options": ["Clinical study reports", "Nonclinical study reports", "Quality data", "Labelling"], "answer": 1,
-        "why": "Module 4 holds nonclinical (pharmacology, PK, toxicology) study reports." }
+      {
+        "q": "Which module is NOT part of the harmonised CTD?",
+        "options": [
+          "Module 1",
+          "Module 2",
+          "Module 3",
+          "Module 5"
+        ],
+        "answer": 0,
+        "why": "Module 1 is regional: forms, labelling and administrative documents differ by agency."
+      },
+      {
+        "q": "Where does the Quality Overall Summary live?",
+        "options": [
+          "Module 1.3",
+          "Module 2.3",
+          "Module 3.2",
+          "Module 2.5"
+        ],
+        "answer": 1,
+        "why": "2.3 is the Quality Overall Summary; it summarises Module 3."
+      },
+      {
+        "q": "Which ICH guideline covers the content of Modules 2.5, 2.7 and 5?",
+        "options": [
+          "M4Q",
+          "M4S",
+          "M4E",
+          "M2"
+        ],
+        "answer": 2,
+        "why": "M4E is the efficacy guideline."
+      },
+      {
+        "q": "A drug product specification goes in…",
+        "options": [
+          "3.2.S.4.1",
+          "3.2.P.5.1",
+          "2.3.P",
+          "1.14"
+        ],
+        "answer": 1,
+        "why": "3.2.P is the drug product; P.5 is its control; P.5.1 is the specification."
+      },
+      {
+        "q": "Module 4 contains…",
+        "options": [
+          "Clinical study reports",
+          "Nonclinical study reports",
+          "Quality data",
+          "Labelling"
+        ],
+        "answer": 1,
+        "why": "Module 4 holds nonclinical (pharmacology, PK, toxicology) study reports."
+      }
     ]
   },
   {
-    "id": 2, "title": "CTD vs eCTD vs NeeS", "minutes": 7,
+    "id": 2,
+    "title": "CTD vs eCTD vs NeeS",
+    "minutes": 7,
     "summary": "Paper CTD, non-eCTD electronic submissions, and eCTD with its XML backbone.",
     "sections": [
-      { "heading": "Three ways to deliver the same CTD",
+      {
+        "heading": "Three ways to deliver the same CTD",
         "body": [
           "The CTD is a structure, not a file format. It can be delivered on paper, as a set of PDFs with bookmarks (NeeS), or as an eCTD: PDFs in a fixed folder tree, described by an XML backbone.",
           "The comparison below shows what changes."
         ],
-        "interactive": "compare" },
-      { "heading": "What the backbone adds",
+        "interactive": "compare"
+      },
+      {
+        "heading": "What the backbone adds",
         "body": [
           "In NeeS, a reviewer navigates by tables of contents and bookmarks. In eCTD, the agency's review tool reads the XML backbone, which says for every file: which heading it belongs to, its title, its checksum, and what it does to earlier files (its lifecycle operation).",
           "That last part is the real gain. With lifecycle, the agency can show the current version of every document across years of submissions, without anyone re-sending the whole dossier."
-        ] },
-      { "heading": "Where you will meet each",
+        ]
+      },
+      {
+        "heading": "Where you will meet each",
         "body": [
           "eCTD is mandatory or standard for marketing applications in the US, EU, Japan, Canada, Switzerland and Australia. NeeS survives for some national procedures and older products. Paper CTD still appears in some markets, and India currently takes CTD-structured dossiers through its online portal."
         ],
-        "interactive": "status" }
+        "interactive": "status"
+      }
     ],
     "quiz": [
-      { "q": "What does eCTD have that NeeS does not?", "options": ["Bookmarks", "PDF files", "An XML backbone with lifecycle", "A table of contents"], "answer": 2,
-        "why": "NeeS has PDFs, bookmarks and TOCs, but no XML backbone and no lifecycle." },
-      { "q": "In eCTD, how does the agency's tool know where a document belongs?", "options": ["From its file name", "From the folder it is in", "From the XML backbone", "From the PDF bookmarks"], "answer": 2,
-        "why": "Agencies read the backbone. Folders are a convention; the XML is authoritative." },
-      { "q": "Which is true of lifecycle in eCTD?", "options": ["Each sequence must resend the whole dossier", "Later sequences can replace individual documents", "Documents can never be removed", "Lifecycle is only for Module 1"], "answer": 1,
-        "why": "Lifecycle lets a later sequence replace, append or delete individual leaves." },
-      { "q": "A 'sequence' is…", "options": ["One PDF", "One submission package with its own number", "One CTD module", "One validation run"], "answer": 1,
-        "why": "Each submission is a numbered sequence: 0000, 0001 and so on." }
+      {
+        "q": "What does eCTD have that NeeS does not?",
+        "options": [
+          "Bookmarks",
+          "PDF files",
+          "An XML backbone with lifecycle",
+          "A table of contents"
+        ],
+        "answer": 2,
+        "why": "NeeS has PDFs, bookmarks and TOCs, but no XML backbone and no lifecycle."
+      },
+      {
+        "q": "In eCTD, how does the agency's tool know where a document belongs?",
+        "options": [
+          "From its file name",
+          "From the folder it is in",
+          "From the XML backbone",
+          "From the PDF bookmarks"
+        ],
+        "answer": 2,
+        "why": "Agencies read the backbone. Folders are a convention; the XML is authoritative."
+      },
+      {
+        "q": "Which is true of lifecycle in eCTD?",
+        "options": [
+          "Each sequence must resend the whole dossier",
+          "Later sequences can replace individual documents",
+          "Documents can never be removed",
+          "Lifecycle is only for Module 1"
+        ],
+        "answer": 1,
+        "why": "Lifecycle lets a later sequence replace, append or delete individual leaves."
+      },
+      {
+        "q": "A 'sequence' is…",
+        "options": [
+          "One PDF",
+          "One submission package with its own number",
+          "One CTD module",
+          "One validation run"
+        ],
+        "answer": 1,
+        "why": "Each submission is a numbered sequence: 0000, 0001 and so on."
+      }
     ]
   },
   {
-    "id": 3, "title": "Granularity", "minutes": 8,
+    "id": 3,
+    "title": "Granularity",
+    "minutes": 8,
     "summary": "What one document should hold, which sections can be split, and why it matters for lifecycle.",
     "sections": [
-      { "heading": "One heading, one document (mostly)",
+      {
+        "heading": "One heading, one document (mostly)",
         "body": [
           "Granularity is how much content goes into one file. The ICH M4 granularity annex says, heading by heading, whether a section should be one document or may be several.",
           "The usual rule: one document per lowest-level heading. 3.2.P.5.1 Specification(s) is one document. 3.2.P.5.2 Analytical Procedures may be one document per procedure. 5.3.5.1 holds one document (or a set) per study."
-        ] },
-      { "heading": "Too coarse, too fine",
+        ]
+      },
+      {
+        "heading": "Too coarse, too fine",
         "body": [
           "A whole Module 3.2.P in one 290-page PDF is too coarse: when the specification changes, you would have to replace the whole drug product section to update one page.",
           "One file per test in a specification is too fine: the reviewer can no longer see the specification as a whole, and every change touches many leaves.",
           "Try the exercise: decide for each document whether it is right, too coarse or too fine."
         ],
-        "interactive": "granularity" },
-      { "heading": "Why it matters for lifecycle",
+        "interactive": "granularity"
+      },
+      {
+        "heading": "Why it matters for lifecycle",
         "body": [
           "Lifecycle works at document level. Good granularity means a change in real life maps to one replace operation in eCTD. Bad granularity turns a small change into a large, risky resubmission."
-        ] }
+        ]
+      }
     ],
     "quiz": [
-      { "q": "A 290-page PDF covering all of 3.2.P is…", "options": ["Correct", "Too coarse", "Too fine", "Required by FDA"], "answer": 1,
-        "why": "It spans many subsections; each should be its own document." },
-      { "q": "Why does granularity matter for lifecycle?", "options": ["It sets the checksum type", "Operations act on whole documents", "It decides the sequence number", "It controls the PDF version"], "answer": 1,
-        "why": "Replace, append and delete act on whole leaves, so document size decides how much you resend." },
-      { "q": "Which heading may normally hold one document per analytical procedure?", "options": ["3.2.P.5.1", "3.2.P.5.2", "2.3", "1.2"], "answer": 1,
-        "why": "3.2.P.5.2 Analytical Procedures may be split per procedure." },
-      { "q": "The specification split into one PDF per test is…", "options": ["Too fine", "Too coarse", "Ideal", "Required"], "answer": 0,
-        "why": "The specification should be one document listing all tests and limits." }
+      {
+        "q": "A 290-page PDF covering all of 3.2.P is…",
+        "options": [
+          "Correct",
+          "Too coarse",
+          "Too fine",
+          "Required by FDA"
+        ],
+        "answer": 1,
+        "why": "It spans many subsections; each should be its own document."
+      },
+      {
+        "q": "Why does granularity matter for lifecycle?",
+        "options": [
+          "It sets the checksum type",
+          "Operations act on whole documents",
+          "It decides the sequence number",
+          "It controls the PDF version"
+        ],
+        "answer": 1,
+        "why": "Replace, append and delete act on whole leaves, so document size decides how much you resend."
+      },
+      {
+        "q": "Which heading may normally hold one document per analytical procedure?",
+        "options": [
+          "3.2.P.5.1",
+          "3.2.P.5.2",
+          "2.3",
+          "1.2"
+        ],
+        "answer": 1,
+        "why": "3.2.P.5.2 Analytical Procedures may be split per procedure."
+      },
+      {
+        "q": "The specification split into one PDF per test is…",
+        "options": [
+          "Too fine",
+          "Too coarse",
+          "Ideal",
+          "Required"
+        ],
+        "answer": 0,
+        "why": "The specification should be one document listing all tests and limits."
+      }
     ]
   },
   {
-    "id": 4, "title": "The backbone", "minutes": 10,
+    "id": 4,
+    "title": "The backbone",
+    "minutes": 10,
     "summary": "Folder tree, leaf, node, title, checksum, operation; how agencies read the XML instead of the folders.",
     "sections": [
-      { "heading": "Folders are for people, XML is for machines",
+      {
+        "heading": "Folders are for people, XML is for machines",
         "body": [
           "An eCTD sequence is a folder named with its sequence number (0000). Inside are m1 to m5 and util, following the ICH folder names: m3/32-body-data/32p-drug-prod/…/32p51-spec/specifications.pdf.",
           "Next to them sits index.xml (the ICH backbone), index-md5.txt (its checksum), and for the US, m1/us/us-regional.xml for Module 1. The agency's tool reads the XML; the folders are a convention the validator checks."
-        ] },
-      { "heading": "Anatomy of a leaf",
+        ]
+      },
+      {
+        "heading": "Anatomy of a leaf",
         "body": [
           "Each document is a 'leaf' inside a 'node' (the XML element for its CTD heading). Click the parts of the leaf below."
         ],
-        "interactive": "leaf" },
-      { "heading": "Repeatable sections",
+        "interactive": "leaf"
+      },
+      {
+        "heading": "Repeatable sections",
         "body": [
           "Some nodes repeat with attributes. 3.2.S appears once per drug substance and manufacturer, with substance and manufacturer attributes. 3.2.P appears once per product, with product-name, dosageform and manufacturer attributes. 5.3.5 and 2.7.3 repeat per indication. The attributes, not the folder names, tell the agency which is which."
-        ] }
+        ]
+      },
+      {
+        "heading": "Study tagging files (US)",
+        "body": [
+          "In the US v3.2.2 profile, the documents of each study in Modules 4.2 and 5.3 are grouped by a study tagging file (STF): a small XML file that names the study, gives its ID, and points to each of its files in index.xml with a file tag such as study-report, synopsis or protocol-or-amendment.",
+          "The STF is itself a leaf in the backbone, placed under the same heading as the study. Without it, a reviewer's tool shows the study's files as loose documents. The EU uses node extensions for the same job, and v4.0 replaces both with keywords."
+        ]
+      }
     ],
     "quiz": [
-      { "q": "Which checksum does eCTD v3.2.2 use?", "options": ["SHA-256", "MD5", "CRC32", "None"], "answer": 1,
-        "why": "v3.2.2 uses MD5; v4.0 moves to SHA-256." },
-      { "q": "The leaf title is…", "options": ["The file name", "What the reviewer sees in the viewer", "The folder name", "The node element"], "answer": 1,
-        "why": "The title is human-readable and shown in the agency viewer; it is independent of the file name." },
-      { "q": "Where does US Module 1 metadata live?", "options": ["index.xml", "m1/us/us-regional.xml", "util/dtd", "index-md5.txt"], "answer": 1,
-        "why": "The US regional XML carries the administrative metadata and Module 1 leaves." },
-      { "q": "What tells the agency which 3.2.S is which, when there are two?", "options": ["Folder names", "Substance and manufacturer attributes", "Leaf titles", "Sequence numbers"], "answer": 1,
-        "why": "Attributes on the repeatable node identify each instance." },
-      { "q": "Which file name is valid?", "options": ["Batch Analyses.pdf", "batch_analyses.PDF", "batch-analyses.pdf", "batch-analyses.pdf.pdf"], "answer": 2,
-        "why": "Lowercase a–z, digits and hyphens, one .pdf extension." }
+      {
+        "q": "Which checksum does eCTD v3.2.2 use?",
+        "options": [
+          "SHA-256",
+          "MD5",
+          "CRC32",
+          "None"
+        ],
+        "answer": 1,
+        "why": "v3.2.2 uses MD5; v4.0 moves to SHA-256."
+      },
+      {
+        "q": "The leaf title is…",
+        "options": [
+          "The file name",
+          "What the reviewer sees in the viewer",
+          "The folder name",
+          "The node element"
+        ],
+        "answer": 1,
+        "why": "The title is human-readable and shown in the agency viewer; it is independent of the file name."
+      },
+      {
+        "q": "Where does US Module 1 metadata live?",
+        "options": [
+          "index.xml",
+          "m1/us/us-regional.xml",
+          "util/dtd",
+          "index-md5.txt"
+        ],
+        "answer": 1,
+        "why": "The US regional XML carries the administrative metadata and Module 1 leaves."
+      },
+      {
+        "q": "What tells the agency which 3.2.S is which, when there are two?",
+        "options": [
+          "Folder names",
+          "Substance and manufacturer attributes",
+          "Leaf titles",
+          "Sequence numbers"
+        ],
+        "answer": 1,
+        "why": "Attributes on the repeatable node identify each instance."
+      },
+      {
+        "q": "Which file name is valid?",
+        "options": [
+          "Batch Analyses.pdf",
+          "batch_analyses.PDF",
+          "batch-analyses.pdf",
+          "batch-analyses.pdf.pdf"
+        ],
+        "answer": 2,
+        "why": "Lowercase a–z, digits and hyphens, one .pdf extension."
+      }
     ]
   },
   {
-    "id": 5, "title": "Lifecycle", "minutes": 10,
+    "id": 5,
+    "title": "Lifecycle",
+    "minutes": 10,
     "summary": "Sequences, operations, current vs cumulative view.",
     "sections": [
-      { "heading": "Sequences",
+      {
+        "heading": "Sequences",
         "body": [
           "The first submission to an application is sequence 0000. Every later submission — amendments, responses to questions, supplements, annual reports — is the next number: 0001, 0002 and so on. Published sequences never change."
-        ] },
-      { "heading": "Four operations",
+        ]
+      },
+      {
+        "heading": "Four operations",
         "body": [
           "Each leaf in a sequence carries an operation. New: the document appears for the first time. Replace: it supersedes a named earlier leaf. Append: it adds to an earlier leaf without replacing it. Delete: it removes an earlier leaf from the current view.",
           "Replace, append and delete point to their target with a 'modified file' reference: the earlier sequence and leaf ID. Step through the example below."
         ],
-        "interactive": "lifecycle" },
-      { "heading": "Current and cumulative view",
+        "interactive": "lifecycle"
+      },
+      {
+        "heading": "Current and cumulative view",
         "body": [
           "The current view is what a reviewer sees today: for each heading, the latest live version of each document. The cumulative view is everything ever sent, including replaced and deleted leaves. Both come from applying operations in sequence order.",
           "Common mistakes: using new instead of replace (the reviewer now sees two specifications), replacing a leaf that was already replaced (the target is no longer current), and renaming a file so it no longer links to its history."
-        ] }
+        ]
+      }
     ],
     "quiz": [
-      { "q": "You are sending an updated specification. Which operation?", "options": ["New", "Replace", "Append", "Delete"], "answer": 1,
-        "why": "The updated document supersedes the earlier version: replace." },
-      { "q": "Sequence 0000 contains a leaf with operation 'replace'. This is…", "options": ["Fine", "An error: nothing to replace yet", "Required", "A warning only"], "answer": 1,
-        "why": "The first sequence can only contain new leaves." },
-      { "q": "After 0000 (new spec) and 0001 (replace spec), the current view shows…", "options": ["Both specifications", "Only the 0001 specification", "Only the 0000 specification", "Neither"], "answer": 1,
-        "why": "Replace supersedes the target; only the newest is current." },
-      { "q": "The cumulative view shows…", "options": ["Only current leaves", "Every leaf ever submitted", "Only deleted leaves", "Only Module 1"], "answer": 1,
-        "why": "Cumulative = all leaves across all sequences." },
-      { "q": "A replace leaf points to its target using…", "options": ["The file name", "The modified-file reference (sequence + leaf ID)", "The leaf title", "The checksum"], "answer": 1,
-        "why": "The modified-file attribute names the earlier leaf by its sequence path and ID." }
+      {
+        "q": "You are sending an updated specification. Which operation?",
+        "options": [
+          "New",
+          "Replace",
+          "Append",
+          "Delete"
+        ],
+        "answer": 1,
+        "why": "The updated document supersedes the earlier version: replace."
+      },
+      {
+        "q": "Sequence 0000 contains a leaf with operation 'replace'. This is…",
+        "options": [
+          "Fine",
+          "An error: nothing to replace yet",
+          "Required",
+          "A warning only"
+        ],
+        "answer": 1,
+        "why": "The first sequence can only contain new leaves."
+      },
+      {
+        "q": "After 0000 (new spec) and 0001 (replace spec), the current view shows…",
+        "options": [
+          "Both specifications",
+          "Only the 0001 specification",
+          "Only the 0000 specification",
+          "Neither"
+        ],
+        "answer": 1,
+        "why": "Replace supersedes the target; only the newest is current."
+      },
+      {
+        "q": "The cumulative view shows…",
+        "options": [
+          "Only current leaves",
+          "Every leaf ever submitted",
+          "Only deleted leaves",
+          "Only Module 1"
+        ],
+        "answer": 1,
+        "why": "Cumulative = all leaves across all sequences."
+      },
+      {
+        "q": "A replace leaf points to its target using…",
+        "options": [
+          "The file name",
+          "The modified-file reference (sequence + leaf ID)",
+          "The leaf title",
+          "The checksum"
+        ],
+        "answer": 1,
+        "why": "The modified-file attribute names the earlier leaf by its sequence path and ID."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "v3.2.2 vs v4.0",
+    "minutes": 10,
+    "summary": "What changes with eCTD v4.0: one message, contexts of use, controlled vocabularies, suspend, reuse and SHA-256.",
+    "sections": [
+      {
+        "heading": "Why a new version",
+        "body": [
+          "eCTD v3.2.2 has served since 2008, but its backbone mixes structure, metadata and lifecycle in a way that makes some tasks clumsy: a document filed in two places is sent twice, removed documents cannot come back, and much of the metadata is free text that each region interprets differently.",
+          "eCTD v4.0, based on the HL7 RPS standard and adopted by ICH, separates the document from where it is used. Japan made it mandatory for new applications from April 2026; the US and EU accept it alongside v3.2.2."
+        ]
+      },
+      {
+        "heading": "Side by side",
+        "body": [
+          "The table sets the main concepts next to each other."
+        ],
+        "interactive": "versions"
+      },
+      {
+        "heading": "Contexts of use",
+        "body": [
+          "In v4.0 a document is defined once and then placed by a context of use: the link between the document and a heading, with its own priority, keywords and lifecycle. Replacing the context of use moves or retitles a placement without resending the file; replacing the document updates every place it is used.",
+          "Instead of delete, a context of use is suspended. A suspended context of use can be reactivated later, which v3.2.2 could not do."
+        ]
+      },
+      {
+        "heading": "Controlled vocabularies and checksums",
+        "body": [
+          "Many values that were free text in v3.2.2, such as file roles, study groupings and regional metadata, become codes from controlled vocabularies, including region-specific lists like Japan's. Checksums move from MD5 to SHA-256.",
+          "This app teaches v3.2.2 first because the US and EU still run mostly on it. A later release adds a v4.0 mode modelled on the real submission unit, starting with the Japan pack."
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "In v4.0, what replaces index.xml and the regional XML?",
+        "options": [
+          "Two separate messages",
+          "One submission unit message",
+          "A folder tree only",
+          "A PDF table of contents"
+        ],
+        "answer": 1,
+        "why": "v4.0 uses a single submission unit message."
+      },
+      {
+        "q": "How is a document removed from the current view in v4.0?",
+        "options": [
+          "Delete operation",
+          "Suspend its context of use",
+          "Rename the file",
+          "Resend the sequence"
+        ],
+        "answer": 1,
+        "why": "Contexts of use are suspended, and can be reactivated."
+      },
+      {
+        "q": "Which checksum does v4.0 use?",
+        "options": [
+          "MD5",
+          "CRC32",
+          "SHA-256",
+          "None"
+        ],
+        "answer": 2,
+        "why": "v4.0 moves to SHA-256."
+      },
+      {
+        "q": "Where is v4.0 mandatory for new applications from April 2026?",
+        "options": [
+          "US",
+          "EU",
+          "Japan",
+          "India"
+        ],
+        "answer": 2,
+        "why": "Japan's PMDA requires v4.0 for new applications from 1 April 2026."
+      },
+      {
+        "q": "In v4.0, one document used in two headings is…",
+        "options": [
+          "Sent twice",
+          "Sent once and referenced by two contexts of use",
+          "Not allowed",
+          "Merged into one heading"
+        ],
+        "answer": 1,
+        "why": "Document reuse is a core v4.0 feature."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Regional differences",
+    "minutes": 9,
+    "summary": "What changes in Module 1 between the US, EU, Japan, Canada, Switzerland and India.",
+    "sections": [
+      {
+        "heading": "Same science, different wrapper",
+        "body": [
+          "Modules 2 to 5 can travel between regions largely unchanged. Module 1 cannot: each agency defines its own headings, forms, labelling format, fees and administrative proofs, and its own regional XML and validation criteria.",
+          "When a company files the same product in several regions, the publishing team keeps one core dossier for Modules 2–5 and builds a Module 1 per region."
+        ]
+      },
+      {
+        "heading": "Module 1 by region",
+        "body": [
+          "The table summarises what each region's Module 1 asks for. Select a region to compare."
+        ],
+        "interactive": "regions"
+      },
+      {
+        "heading": "Beyond Module 1",
+        "body": [
+          "Some regional differences reach into the harmonised modules: 3.2.R regional information (for example US executed batch records, or EU-specific certificates), how studies are grouped (US study tagging files, EU node extensions), file-naming and page-size rules, and which validation criteria apply.",
+          "Labelling is the clearest example. The same product has a US prescribing information, an EU SmPC in the QRD template, a Canadian product monograph and a Japanese package insert, each with its own structure."
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "Which part of the CTD changes most between regions?",
+        "options": [
+          "Module 1",
+          "Module 3",
+          "Module 4",
+          "Module 5"
+        ],
+        "answer": 0,
+        "why": "Module 1 is regional by design."
+      },
+      {
+        "q": "Where would you find the SmPC?",
+        "options": [
+          "US Module 1.14",
+          "EU Module 1.3",
+          "Japan Module 2",
+          "Module 3.2.R"
+        ],
+        "answer": 1,
+        "why": "EU 1.3 holds product information, including the SmPC in the QRD template."
+      },
+      {
+        "q": "Canada's equivalent of the US prescribing information is the…",
+        "options": [
+          "SmPC",
+          "Package insert",
+          "Product monograph",
+          "Patient information leaflet"
+        ],
+        "answer": 2,
+        "why": "Canada uses the product monograph."
+      },
+      {
+        "q": "How are India's CTD dossiers currently filed?",
+        "options": [
+          "eCTD v4.0 gateway",
+          "Through the SUGAM portal",
+          "On paper only",
+          "Through the EU gateway"
+        ],
+        "answer": 1,
+        "why": "CDSCO takes CTD-structured dossiers through the SUGAM portal."
+      }
     ]
   }
 ]

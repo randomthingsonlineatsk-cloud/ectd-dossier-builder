@@ -30,8 +30,8 @@ export function parseProjectFile(text, user, existingIds = new Set()) {
   return p;
 }
 
-export function download(filename, text, type = 'application/json') {
-  const blob = new Blob([text], { type });
+export function download(filename, data, type = 'application/json') {
+  const blob = new Blob([data], { type });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = filename;

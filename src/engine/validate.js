@@ -3,6 +3,7 @@ import rulesData from '../data/rules.json' with { type: 'json' };
 import usM1 from '../data/us-m1.json' with { type: 'json' };
 import { INDEX, ancestors } from './tree.js';
 import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences } from './model.js';
+import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
 export const REQUIRED = {
@@ -128,6 +129,16 @@ export function validate(project, seqNumber) {
       add('PDF-05', l.id, `"${name}": ${parts.join('; ')}.`, where);
     }
     if (!doc.textSearchable) add('PDF-06', l.id, `"${name}" is a scanned image without searchable text.`, where);
+
+    // Study grouping (US v3.2.2 study tagging files)
+    if (needsStudyTag(l.nodeCode)) {
+      if (!l.study?.id?.trim()) add('SG-01', l.id, `"${name}" in ${l.nodeCode} has no study ID or file tag.`, where);
+      else {
+        if (!isValidTag(l.nodeCode, l.study.tag)) add('SG-02', l.id, `"${name}" has file tag "${l.study.tag || '(none)'}", which is not valid for Module ${l.nodeCode[0]}.`, where);
+        const sug = suggestedStudy(doc);
+        if (sug && sug !== l.study.id.trim()) add('SG-03', l.id, `"${name}" reports study ${sug} but is tagged as ${l.study.id}.`, where);
+      }
+    }
 
     // Granularity
     if (doc.decoy === 'coarse') add('GR-01', l.id, `"${name}" bundles several CTD subsections into one file.`, where);

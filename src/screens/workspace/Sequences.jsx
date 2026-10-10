@@ -3,9 +3,9 @@ import usM1 from '../../data/us-m1.json' with { type: 'json' };
 import { INDEX } from '../../engine/tree.js';
 import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences } from '../../engine/model.js';
 import { validate } from '../../engine/validate.js';
-import { createSequence, deleteSequence, publish } from '../../engine/ops.js';
+import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 
-export default function Sequences({ project, seq, setSeqNumber, mutate, toast, onPublished }) {
+export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
   const seqs = sortedSequences(project);
   const [form, setForm] = useState({ submissionType: 'original-application', subType: 'amendment', description: '' });
   const [view, setView] = useState('current');
@@ -26,9 +26,12 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, toast, o
     setSeqNumber(num);
     toast(`Sequence ${num} created. Build it in the builder, then publish it here.`);
   };
-  const doPublish = (number) => {
+  const [busy, setBusy] = useState(false);
+  const doPublish = async (number) => {
     let res;
-    mutate((p) => { res = publish(p, number); });
+    setBusy(true);
+    await mutateAsync(async (p) => { res = await publishWithFiles(p, number); });
+    setBusy(false);
     setConfirming(null);
     if (res) toast(`Sequence ${number} published. ${res.result.verdict.text}`, res.result.counts.High ? 'warn' : 'info');
     onPublished?.(number);
@@ -136,10 +139,10 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, toast, o
             <h2 id="pub-title">Publish sequence {confirming.number}?</h2>
             <p className={`verdict ${confirming.v.verdict.level}`}>{confirming.v.verdict.text}</p>
             <p className="small">High {confirming.v.counts.High} · Medium {confirming.v.counts.Medium} · Low {confirming.v.counts.Low}</p>
-            <p className="small muted">Publishing freezes the sequence and computes its checksums. You can publish with findings, as a real team sometimes does by mistake, but high findings mean an agency would likely reject it.</p>
+            <p className="small muted">Publishing generates every PDF in the sequence, records its MD5 checksum and freezes the sequence. You can publish with findings, as a real team sometimes does by mistake, but high findings mean an agency would likely reject it.</p>
             <div className="row" style={{ justifyContent: 'flex-end' }}>
               <button className="btn" onClick={() => setConfirming(null)}>Keep editing</button>
-              <button className="btn primary" onClick={() => doPublish(confirming.number)}>Publish sequence {confirming.number}</button>
+              <button className="btn primary" disabled={busy} onClick={() => doPublish(confirming.number)}>{busy ? 'Generating files and checksums…' : `Publish sequence ${confirming.number}`}</button>
             </div>
           </div>
         </div>
