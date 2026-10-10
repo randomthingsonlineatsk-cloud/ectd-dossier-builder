@@ -5,5 +5,6 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: './',
   plugins: [react()],
-  build: { outDir: 'dist', sourcemap: false },
+  // The PDF generator (pdf-lib + fontkit) is a lazily loaded chunk, so its size does not affect first load.
+  build: { outDir: 'dist', sourcemap: false, chunkSizeWarningLimit: 800 },
 });

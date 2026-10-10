@@ -8,12 +8,15 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 ## What is in this release (Phase 1 · Core)
 
-- **Learn:** lessons 1–5 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle), each with an interactive exercise and a quiz, plus a searchable glossary.
+- **Learn:** lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, plus a searchable glossary.
 - **One fictional product:** Ostrevia (lumiravostat) film-coated tablets, 10 mg and 25 mg, a new chemical entity, with a 106-document library and two granularity decoys.
 - **US pack, eCTD v3.2.2:** the US Module 1 tree (1.1–1.20) with a metadata form, NDA checklist, cover-letter generator and a practice 356h form; the full ICH Modules 2–5 heading tree with repeatable 3.2.S, 3.2.P and 5.3.5 sections.
+- **Real stub PDFs:** every library document is generated in the browser with pdf-lib: a title page, invented content, bookmarks, an optional linked table of contents and relative cross-document links. Defects are built into the file: the PDF version in the header, non-embedded fonts, scanned pages without text, missing bookmarks and broken links (document security is simulated, as pdf-lib cannot encrypt). Open any document in the browser's PDF viewer or download it.
 - **Builder:** drag and drop documents onto headings (with a keyboard alternative: *Pick up*, select a heading, press Enter), misplacement and granularity warnings, a placeholder view (required, optional, not used in eCTD), a dossier map heat map, and a properties panel with "publishing tool" fixes for PDF problems.
-- **Backbone viewer:** live `index.xml`, `m1/us/us-regional.xml` and `index-md5.txt` with MD5 checksums, a reviewer-style rendered view next to the raw XML, the folder tree, and a publishing log.
-- **Validation engine:** 36 core rules across backbone, files and folders, PDF, lifecycle, Module 1, content and granularity; high/medium/low severity; each finding links to its heading with an explanation and a fix; a verdict on whether an agency would likely reject the sequence.
+- **Study tagging files (US):** study ID and file tag on every Module 4.2 and 5.3 leaf, one generated STF per study and heading, listed in the backbone.
+- **Publishing tools:** bookmark editor with auto-bookmarking, table-of-contents generator, hyperlink manager, a broken-link finder and a leaf-title consistency checker.
+- **Backbone viewer:** live `index.xml`, `m1/us/us-regional.xml`, `index-md5.txt` and study tagging files; publishing generates every PDF and records the MD5 of its real bytes, a reviewer-style rendered view next to the raw XML, the folder tree, and a publishing log.
+- **Validation engine:** 39 core rules across backbone, files and folders, PDF, lifecycle, Module 1, study grouping, content and granularity; high/medium/low severity; each finding links to its heading with an explanation and a fix; a verdict on whether an agency would likely reject the sequence; the report downloads as PDF or CSV.
 - **Lifecycle:** sequences 0000, 0001 …, new/replace/append/delete with an operation picker (expert mode allows invalid targets on purpose), publish-and-freeze, current vs cumulative view, per-document history.
 - **Missions 1, 4 and 11** at guided, standard and expert levels: first NDA; answer an information request; rescue a dossier with 25 planted defects in 30 minutes.
 - **Project export and import** as a JSON file.
@@ -37,7 +40,7 @@ Content lives in data files so it can grow without code changes:
 | `src/data/ectd-status.json` | Where eCTD v3.2.2 and v4.0 stand by region (dated) |
 | `src/data/glossary.json` | Glossary terms |
 
-The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
+The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `stf.js` (study tagging files), `pdfgen.js` and `pdfmeta.js` (stub PDFs, loaded only when a PDF is built), `report.js` (validation report), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
 
 ## Run it locally
 
@@ -47,6 +50,7 @@ Requires Node.js 18 or newer.
 npm install
 npm run dev        # http://localhost:5173
 npm test           # engine tests
+node tests/pdf-sample.mjs out/   # write sample stub PDFs to inspect
 npm run build      # production build in dist/
 npm run preview    # serve the build at http://localhost:4173
 ```

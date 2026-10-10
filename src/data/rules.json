@@ -1,124 +1,384 @@
 {
   "_about": "Core validation rule library (Phase 1, US v3.2.2 profile). Rules are modelled on the kinds of checks in public agency validation criteria; IDs are the app's own and do not reproduce any agency's numbering. Severity follows the US high/medium/low convention: any High finding means the sequence would likely be technically rejected.",
   "profiles": {
-    "US-3.2.2": { "label": "US · eCTD v3.2.2", "rules": "all" }
+    "US-3.2.2": {
+      "label": "US · eCTD v3.2.2",
+      "rules": "all"
+    }
   },
-  "families": ["Backbone", "Files and folders", "PDF", "Lifecycle", "Module 1", "Content", "Granularity"],
+  "families": [
+    "Backbone",
+    "Files and folders",
+    "PDF",
+    "Lifecycle",
+    "Module 1",
+    "Content",
+    "Study grouping",
+    "Granularity"
+  ],
   "rules": [
-    { "id": "BB-01", "family": "Backbone", "severity": "High", "title": "Every leaf must reference a file that exists",
+    {
+      "id": "BB-01",
+      "family": "Backbone",
+      "severity": "High",
+      "title": "Every leaf must reference a file that exists",
       "explain": "The backbone points to a document that is no longer in the project's library, so the file would be missing from the package.",
-      "fix": "Remove the leaf or place a document that exists." },
-    { "id": "BB-02", "family": "Backbone", "severity": "High", "title": "No two leaves in a sequence may point to the same file path",
+      "fix": "Remove the leaf or place a document that exists."
+    },
+    {
+      "id": "BB-02",
+      "family": "Backbone",
+      "severity": "High",
+      "title": "No two leaves in a sequence may point to the same file path",
       "explain": "Two leaves resolve to the same folder and file name. One file would overwrite the other in the package.",
-      "fix": "Give one of the documents a distinct file name, or remove the duplicate leaf." },
-    { "id": "BB-04", "family": "Backbone", "severity": "High", "title": "Every leaf needs a title",
+      "fix": "Give one of the documents a distinct file name, or remove the duplicate leaf."
+    },
+    {
+      "id": "BB-04",
+      "family": "Backbone",
+      "severity": "High",
+      "title": "Every leaf needs a title",
       "explain": "The leaf title is what the reviewer sees in the agency viewer. An empty title makes the document unidentifiable.",
-      "fix": "Enter a descriptive leaf title in the properties panel." },
-    { "id": "BB-05", "family": "Backbone", "severity": "Low", "title": "Leaf title should not be the file name",
+      "fix": "Enter a descriptive leaf title in the properties panel."
+    },
+    {
+      "id": "BB-05",
+      "family": "Backbone",
+      "severity": "Low",
+      "title": "Leaf title should not be the file name",
       "explain": "Titles like 'qos_v3_final.pdf' are unhelpful to reviewers and look unprofessional.",
-      "fix": "Use a readable title, normally the CTD heading or the study title." },
-    { "id": "BB-06", "family": "Backbone", "severity": "High", "title": "Regional administrative metadata must be complete",
+      "fix": "Use a readable title, normally the CTD heading or the study title."
+    },
+    {
+      "id": "BB-06",
+      "family": "Backbone",
+      "severity": "High",
+      "title": "Regional administrative metadata must be complete",
       "explain": "The US regional XML needs applicant, application number, submission type, sub-type and sequence number. Missing values make the sequence unprocessable.",
-      "fix": "Complete the fields in Module 1 → Regional metadata." },
-    { "id": "BB-07", "family": "Backbone", "severity": "High", "title": "Repeatable sections need their attributes",
+      "fix": "Complete the fields in Module 1 → Regional metadata."
+    },
+    {
+      "id": "BB-07",
+      "family": "Backbone",
+      "severity": "High",
+      "title": "Repeatable sections need their attributes",
       "explain": "3.2.S needs substance and manufacturer attributes; 3.2.P needs product name, dosage form and manufacturer. Without them the agency cannot tell repeated sections apart.",
-      "fix": "Fill the attributes in Project settings → Repeatable sections." },
-    { "id": "FF-01", "family": "Files and folders", "severity": "High", "title": "File names use lowercase letters, digits and hyphens only",
+      "fix": "Fill the attributes in Project settings → Repeatable sections."
+    },
+    {
+      "id": "FF-01",
+      "family": "Files and folders",
+      "severity": "High",
+      "title": "File names use lowercase letters, digits and hyphens only",
       "explain": "eCTD file names must be lowercase and limited to a-z, 0-9 and hyphen, with a single '.pdf' extension. Spaces, capitals and underscores break the rule.",
-      "fix": "Rename the file, e.g. 'batch-analyses.pdf'." },
-    { "id": "FF-02", "family": "Files and folders", "severity": "Medium", "title": "File names should be 64 characters or fewer",
+      "fix": "Rename the file, e.g. 'batch-analyses.pdf'."
+    },
+    {
+      "id": "FF-02",
+      "family": "Files and folders",
+      "severity": "Medium",
+      "title": "File names should be 64 characters or fewer",
       "explain": "Long file names push folder paths past system limits and are hard to read.",
-      "fix": "Shorten the file name." },
-    { "id": "FF-03", "family": "Files and folders", "severity": "Medium", "title": "Full path should be 180 characters or fewer",
+      "fix": "Shorten the file name."
+    },
+    {
+      "id": "FF-03",
+      "family": "Files and folders",
+      "severity": "Medium",
+      "title": "Full path should be 180 characters or fewer",
       "explain": "The path from the sequence folder to the file is too long and may fail on some systems.",
-      "fix": "Shorten the file name or repeatable-section folder names." },
-    { "id": "FF-04", "family": "Files and folders", "severity": "Medium", "title": "Document is placed under the wrong heading",
+      "fix": "Shorten the file name or repeatable-section folder names."
+    },
+    {
+      "id": "FF-04",
+      "family": "Files and folders",
+      "severity": "Medium",
+      "title": "Document is placed under the wrong heading",
       "explain": "The document's content belongs to a different CTD section from the node it was placed in. Reviewers will not find it where they expect.",
-      "fix": "Drag the document to the heading shown in its properties." },
-    { "id": "FF-05", "family": "Files and folders", "severity": "Medium", "title": "Heading not used in eCTD",
+      "fix": "Drag the document to the heading shown in its properties."
+    },
+    {
+      "id": "FF-05",
+      "family": "Files and folders",
+      "severity": "Medium",
+      "title": "Heading not used in eCTD",
       "explain": "2.1 (CTD table of contents) is not submitted in eCTD: the backbone is the table of contents.",
-      "fix": "Remove the leaf from 2.1." },
-    { "id": "PDF-01", "family": "PDF", "severity": "High", "title": "PDF version must be 1.4 to 1.7 (or PDF/A-1, PDF/A-2)",
+      "fix": "Remove the leaf from 2.1."
+    },
+    {
+      "id": "PDF-01",
+      "family": "PDF",
+      "severity": "High",
+      "title": "PDF version must be 1.4 to 1.7 (or PDF/A-1, PDF/A-2)",
       "explain": "Older or newer PDF versions are outside the accepted range for US eCTD.",
-      "fix": "Re-save the PDF at version 1.7." },
-    { "id": "PDF-02", "family": "PDF", "severity": "High", "title": "No security settings or passwords",
+      "fix": "Re-save the PDF at version 1.7."
+    },
+    {
+      "id": "PDF-02",
+      "family": "PDF",
+      "severity": "High",
+      "title": "No security settings or passwords",
       "explain": "Secured PDFs cannot be opened, copied or annotated by reviewers.",
-      "fix": "Remove the document security." },
-    { "id": "PDF-03", "family": "PDF", "severity": "Medium", "title": "All fonts must be embedded",
+      "fix": "Remove the document security."
+    },
+    {
+      "id": "PDF-03",
+      "family": "PDF",
+      "severity": "Medium",
+      "title": "All fonts must be embedded",
       "explain": "Non-embedded fonts can render incorrectly on the reviewer's machine.",
-      "fix": "Re-render the PDF with all fonts embedded." },
-    { "id": "PDF-04", "family": "PDF", "severity": "Medium", "title": "Documents of 5 pages or more need bookmarks",
+      "fix": "Re-render the PDF with all fonts embedded."
+    },
+    {
+      "id": "PDF-04",
+      "family": "PDF",
+      "severity": "Medium",
+      "title": "Documents of 5 pages or more need bookmarks",
       "explain": "Long documents without bookmarks are hard to navigate in review.",
-      "fix": "Add bookmarks (auto-bookmark from headings)." },
-    { "id": "PDF-05", "family": "PDF", "severity": "Low", "title": "Hyperlinks must resolve",
+      "fix": "Add bookmarks (auto-bookmark from headings)."
+    },
+    {
+      "id": "PDF-05",
+      "family": "PDF",
+      "severity": "Low",
+      "title": "Hyperlinks must resolve",
       "explain": "One or more hyperlinks point to a target that is not in the dossier's current view.",
-      "fix": "Place the target document, or relink the hyperlinks." },
-    { "id": "PDF-06", "family": "PDF", "severity": "Medium", "title": "PDF text must be searchable",
+      "fix": "Place the target document, or relink the hyperlinks."
+    },
+    {
+      "id": "PDF-06",
+      "family": "PDF",
+      "severity": "Medium",
+      "title": "PDF text must be searchable",
       "explain": "Scanned image-only PDFs cannot be searched or copied.",
-      "fix": "Run OCR or produce the PDF from the source document." },
-    { "id": "LC-01", "family": "Lifecycle", "severity": "High", "title": "Sequence numbers are four digits, unique and in order",
+      "fix": "Run OCR or produce the PDF from the source document."
+    },
+    {
+      "id": "LC-01",
+      "family": "Lifecycle",
+      "severity": "High",
+      "title": "Sequence numbers are four digits, unique and in order",
       "explain": "Each sequence must have a unique four-digit number, higher than the previous one.",
-      "fix": "Renumber the sequence." },
-    { "id": "LC-02", "family": "Lifecycle", "severity": "High", "title": "Replace, append and delete need a valid target",
+      "fix": "Renumber the sequence."
+    },
+    {
+      "id": "LC-02",
+      "family": "Lifecycle",
+      "severity": "High",
+      "title": "Replace, append and delete need a valid target",
       "explain": "The leaf points to an earlier leaf that does not exist, is no longer current, or sits in an earlier sequence that was not submitted.",
-      "fix": "Choose a current leaf from an earlier published sequence as the target." },
-    { "id": "LC-03", "family": "Lifecycle", "severity": "High", "title": "Lifecycle target must be under the same heading",
+      "fix": "Choose a current leaf from an earlier published sequence as the target."
+    },
+    {
+      "id": "LC-03",
+      "family": "Lifecycle",
+      "severity": "High",
+      "title": "Lifecycle target must be under the same heading",
       "explain": "A replace, append or delete must act on a leaf in the same CTD heading (and the same repeatable section).",
-      "fix": "Place the new document in the same heading as the leaf it replaces." },
-    { "id": "LC-04", "family": "Lifecycle", "severity": "High", "title": "The first sequence may only use 'new'",
+      "fix": "Place the new document in the same heading as the leaf it replaces."
+    },
+    {
+      "id": "LC-04",
+      "family": "Lifecycle",
+      "severity": "High",
+      "title": "The first sequence may only use 'new'",
       "explain": "There is nothing to replace, append or delete in the first sequence of an application.",
-      "fix": "Change the operation to 'new'." },
-    { "id": "LC-05", "family": "Lifecycle", "severity": "Low", "title": "'New' leaf duplicates a current leaf",
+      "fix": "Change the operation to 'new'."
+    },
+    {
+      "id": "LC-05",
+      "family": "Lifecycle",
+      "severity": "Low",
+      "title": "'New' leaf duplicates a current leaf",
       "explain": "A new leaf with the same title as a current leaf in the same heading usually means 'replace' was intended. The reviewer will now see two versions.",
-      "fix": "Change the operation to 'replace' and target the earlier leaf." },
-    { "id": "LC-06", "family": "Lifecycle", "severity": "High", "title": "A sequence cannot change after it is published",
+      "fix": "Change the operation to 'replace' and target the earlier leaf."
+    },
+    {
+      "id": "LC-06",
+      "family": "Lifecycle",
+      "severity": "High",
+      "title": "A sequence cannot change after it is published",
       "explain": "Published sequences are frozen. Changes need a new sequence.",
-      "fix": "Create a new sequence for the change." },
-    { "id": "M1-01", "family": "Module 1", "severity": "High", "title": "Form FDA 356h is required",
+      "fix": "Create a new sequence for the change."
+    },
+    {
+      "id": "M1-01",
+      "family": "Module 1",
+      "severity": "High",
+      "title": "Form FDA 356h is required",
       "explain": "Every submission to an NDA includes Form FDA 356h in Module 1.1.",
-      "fix": "Place the 356h form in 1.1." },
-    { "id": "M1-02", "family": "Module 1", "severity": "Medium", "title": "A cover letter is expected in 1.2",
+      "fix": "Place the 356h form in 1.1."
+    },
+    {
+      "id": "M1-02",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "A cover letter is expected in 1.2",
       "explain": "The cover letter tells the review division what the sequence contains and why.",
-      "fix": "Generate a cover letter in Module 1 and place it in 1.2." },
-    { "id": "M1-03", "family": "Module 1", "severity": "Medium", "title": "User fee coversheet expected for an original NDA",
+      "fix": "Generate a cover letter in Module 1 and place it in 1.2."
+    },
+    {
+      "id": "M1-03",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "User fee coversheet expected for an original NDA",
       "explain": "Form FDA 3397 accompanies an original application that is subject to a user fee.",
-      "fix": "Place Form FDA 3397 in 1.1." },
-    { "id": "M1-04", "family": "Module 1", "severity": "Medium", "title": "Patent information expected for an original NDA",
+      "fix": "Place Form FDA 3397 in 1.1."
+    },
+    {
+      "id": "M1-04",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Patent information expected for an original NDA",
       "explain": "Form FDA 3542a lists patents claiming the drug and is filed with the NDA in 1.3.5.1.",
-      "fix": "Place the patent information in 1.3.5.1." },
-    { "id": "M1-05", "family": "Module 1", "severity": "Medium", "title": "Debarment certification expected for an original NDA",
+      "fix": "Place the patent information in 1.3.5.1."
+    },
+    {
+      "id": "M1-05",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Debarment certification expected for an original NDA",
       "explain": "The applicant certifies it did not use debarred persons, in 1.3.3.",
-      "fix": "Place the debarment certification in 1.3.3." },
-    { "id": "M1-06", "family": "Module 1", "severity": "Medium", "title": "Financial certification or disclosure expected",
+      "fix": "Place the debarment certification in 1.3.3."
+    },
+    {
+      "id": "M1-06",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Financial certification or disclosure expected",
       "explain": "Clinical investigators' financial interests are certified or disclosed in 1.3.4.",
-      "fix": "Place Form FDA 3454/3455 in 1.3.4." },
-    { "id": "M1-07", "family": "Module 1", "severity": "Medium", "title": "Draft labeling expected for an original NDA",
+      "fix": "Place Form FDA 3454/3455 in 1.3.4."
+    },
+    {
+      "id": "M1-07",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "Draft labeling expected for an original NDA",
       "explain": "Draft prescribing information (1.14.1.3) and carton and container labels (1.14.1.1) are part of an original NDA.",
-      "fix": "Place both draft labeling documents." },
-    { "id": "M1-08", "family": "Module 1", "severity": "Low", "title": "Field copy certification expected for an original NDA",
+      "fix": "Place both draft labeling documents."
+    },
+    {
+      "id": "M1-08",
+      "family": "Module 1",
+      "severity": "Low",
+      "title": "Field copy certification expected for an original NDA",
       "explain": "Certifies that a field copy of Module 3 was sent to the local office.",
-      "fix": "Place the field copy certification in 1.3.2." },
-    { "id": "M1-09", "family": "Module 1", "severity": "Medium", "title": "ClinicalTrials.gov certification expected",
+      "fix": "Place the field copy certification in 1.3.2."
+    },
+    {
+      "id": "M1-09",
+      "family": "Module 1",
+      "severity": "Medium",
+      "title": "ClinicalTrials.gov certification expected",
       "explain": "Form FDA 3674 accompanies applications that contain clinical data.",
-      "fix": "Place Form FDA 3674 in 1.1." },
-    { "id": "M1-10", "family": "Module 1", "severity": "Low", "title": "Environmental analysis expected",
+      "fix": "Place Form FDA 3674 in 1.1."
+    },
+    {
+      "id": "M1-10",
+      "family": "Module 1",
+      "severity": "Low",
+      "title": "Environmental analysis expected",
       "explain": "An environmental assessment or a claim of categorical exclusion goes in 1.12.14.",
-      "fix": "Place the environmental analysis in 1.12.14." },
-    { "id": "CT-01", "family": "Content", "severity": "Medium", "title": "Required heading is empty",
+      "fix": "Place the environmental analysis in 1.12.14."
+    },
+    {
+      "id": "CT-01",
+      "family": "Content",
+      "severity": "Medium",
+      "title": "Required heading is empty",
       "explain": "This heading is expected for the chosen application type and submission, but has no document in the current view.",
-      "fix": "Place the matching document from the library." },
-    { "id": "GR-01", "family": "Granularity", "severity": "Medium", "title": "Document is too coarse",
+      "fix": "Place the matching document from the library."
+    },
+    {
+      "id": "GR-01",
+      "family": "Granularity",
+      "severity": "Medium",
+      "title": "Document is too coarse",
       "explain": "One file covers several CTD subsections. Each subsection should be its own document so it can be replaced alone later.",
-      "fix": "Remove the combined file and place the individual section documents." },
-    { "id": "GR-02", "family": "Granularity", "severity": "Low", "title": "Document is too fine",
+      "fix": "Remove the combined file and place the individual section documents."
+    },
+    {
+      "id": "GR-02",
+      "family": "Granularity",
+      "severity": "Low",
+      "title": "Document is too fine",
       "explain": "The content is split finer than ICH granularity expects, which complicates lifecycle.",
-      "fix": "Use the single complete document for this heading." }
+      "fix": "Use the single complete document for this heading."
+    },
+    {
+      "id": "SG-01",
+      "family": "Study grouping",
+      "severity": "Medium",
+      "title": "Study documents in Modules 4 and 5 need a study tagging file",
+      "explain": "In the US v3.2.2 profile, every study document in 4.2 and 5.3 is grouped by a study tagging file (STF) that names the study and tags each file's role. Untagged files appear loose in the reviewer's study view.",
+      "fix": "Give the leaf a study ID and file tag (properties panel), or use 'Tag studies from documents'."
+    },
+    {
+      "id": "SG-02",
+      "family": "Study grouping",
+      "severity": "Medium",
+      "title": "File tag must be a valid value for the module",
+      "explain": "The STF file tag says what the file is (study report, synopsis, protocol…). Tags come from a controlled list and differ between Module 4 and Module 5.",
+      "fix": "Pick a file tag from the list."
+    },
+    {
+      "id": "SG-03",
+      "family": "Study grouping",
+      "severity": "Low",
+      "title": "Study ID does not match the document",
+      "explain": "The study ID on the leaf differs from the study the document reports, so the file is grouped under the wrong study.",
+      "fix": "Use the study ID shown in the document title."
+    }
   ],
   "required": {
-    "nda:original": ["2.2", "2.3", "2.4", "2.5", "2.6.1", "2.6.2", "2.6.4", "2.6.6", "2.7.1", "2.7.2", "2.7.3", "2.7.4", "2.7.6",
-      "3.2.S.1.1", "3.2.S.1.2", "3.2.S.1.3", "3.2.S.2.1", "3.2.S.2.2", "3.2.S.3.2", "3.2.S.4.1", "3.2.S.4.4", "3.2.S.7.1", "3.2.S.7.3",
-      "3.2.P.1", "3.2.P.2", "3.2.P.3.1", "3.2.P.3.2", "3.2.P.3.3", "3.2.P.5.1", "3.2.P.5.4", "3.2.P.7", "3.2.P.8.1", "3.2.P.8.3",
-      "4.2.3.2", "5.2", "5.3.5.1"],
-    "optional": ["2.6.3", "2.6.5", "2.6.7", "2.7.5", "3.2.A.1", "3.2.R", "3.3", "4.3", "5.4"]
+    "nda:original": [
+      "2.2",
+      "2.3",
+      "2.4",
+      "2.5",
+      "2.6.1",
+      "2.6.2",
+      "2.6.4",
+      "2.6.6",
+      "2.7.1",
+      "2.7.2",
+      "2.7.3",
+      "2.7.4",
+      "2.7.6",
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3",
+      "4.2.3.2",
+      "5.2",
+      "5.3.5.1"
+    ],
+    "optional": [
+      "2.6.3",
+      "2.6.5",
+      "2.6.7",
+      "2.7.5",
+      "3.2.A.1",
+      "3.2.R",
+      "3.3",
+      "4.3",
+      "5.4"
+    ]
   }
 }

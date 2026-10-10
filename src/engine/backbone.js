@@ -4,6 +4,7 @@
 import SparkMD5 from 'spark-md5';
 import { INDEX, ancestors, REGION_PACKS } from './tree.js';
 import { docForLeaf, leafPath, seqByNumber } from './model.js';
+import { studyFiles } from './stf.js';
 
 export const md5 = (s) => SparkMD5.hash(s);
 
@@ -14,9 +15,12 @@ const esc = (s) => String(s ?? '')
 export function fileContentKey(doc) {
   if (!doc) return '';
   return [doc.id, `v${doc.version}`, doc.pdfVersion, doc.fontsEmbedded, doc.secured, doc.textSearchable,
-    doc.bookmarks, doc.pages, doc.brokenLinks, doc.content ?? ''].join('|');
+    doc.bookmarks, (doc.bookmarkList ?? []).join('~'), doc.toc ? 'toc' : '', doc.pages, doc.brokenLinks,
+    (doc.links ?? []).join(','), doc.title, doc.content ?? ''].join('|');
 }
-export const fileChecksum = (doc) => md5(fileContentKey(doc));
+// Real MD5 of the generated PDF once computed (at publish); a preview hash before that.
+export const isRealChecksum = (doc) => !!doc?.md5 && doc.md5Key === fileContentKey(doc);
+export const fileChecksum = (doc) => (isRealChecksum(doc) ? doc.md5 : md5(fileContentKey(doc)));
 
 function leafXml(project, seq, leaf, indent, hrefBase = '') {
   const doc = docForLeaf(project, leaf);
@@ -31,7 +35,8 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
   if (leaf.operation !== 'delete') {
     const full = leafPath(project, leaf);
     const href = hrefBase + (isM1 ? full.replace(/^m1\/us\//, '') : full);
-    attrs.push('checksum-type="md5"', `checksum="${doc ? fileChecksum(doc) : ''}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
+    const sum = leaf.stf ? md5(leaf.xml) : doc ? fileChecksum(doc) : '';
+    attrs.push('checksum-type="md5"', `checksum="${sum}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
     if (doc) attrs.push(`application-version="PDF ${esc(doc.pdfVersion)}"`);
   }
   attrs.push('xml:lang="en"');
@@ -114,7 +119,8 @@ export function buildIndexXml(project, seq, regionalXml) {
   const regionalLeaf = `    <leaf ID="R${seq.number}" operation="new" checksum-type="md5" checksum="${md5(regionalXml)}" xlink:type="simple" xlink:href="${pack.regionalFile}" xml:lang="en">
       <title>US Regional</title>
     </leaf>`;
-  const body = seq.leaves.filter((l) => !INDEX.map[l.nodeCode]?.isM1 && INDEX.map[l.nodeCode]?.element);
+  const stfLeaves = studyFiles(project, seq).map((f) => ({ id: f.id, nodeCode: f.nodeCode, operation: 'new', fileName: f.fileName, title: f.title, stf: true, xml: f.xml }));
+  const body = [...seq.leaves, ...stfLeaves].filter((l) => !INDEX.map[l.nodeCode]?.isM1 && INDEX.map[l.nodeCode]?.element);
   const modules = ['2', '3', '4', '5']
     .map((m) => nestedXml(project, seq, body, m, 2, (l, ind) => leafXml(project, seq, l, ind)))
     .filter(Boolean);
@@ -150,8 +156,10 @@ export function publishSequence(project, seqNumber) {
       leafId: l.id,
     });
   }
+  const stfs = studyFiles(project, seq);
+  for (const f of stfs) log.push({ file: `${seq.number}/${f.path}`, checksum: md5(f.xml), operation: 'new', target: '—', node: `${f.nodeCode} (STF)`, stf: f.id });
   const tree = folderTree(project, seq);
-  return { regional, index, md5txt, log, tree };
+  return { regional, index, md5txt, log, tree, stfs };
 }
 
 // Folder tree (sequence-relative) for the live preview.
@@ -169,6 +177,8 @@ export function folderTree(project, seq) {
   add('m1/us/us-regional.xml', { kind: 'xml' });
   add('util/dtd/ich-ectd-3-2.dtd', { kind: 'dtd' });
   add('util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
+  add('util/dtd/ich-stf-v2-2.dtd', { kind: 'dtd' });
+  for (const f of studyFiles(project, seq)) add(f.path, { kind: 'xml', node: f.nodeCode, op: 'new' });
   for (const l of seq.leaves) if (l.operation !== 'delete') add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
   return root;
 }

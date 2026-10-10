@@ -2,17 +2,14 @@ import React from 'react';
 import lessons from '../data/lessons.json' with { type: 'json' };
 import { useApp } from '../ctx.js';
 
-const LATER = [
-  { id: 6, title: 'v3.2.2 vs v4.0', phase: 3 },
-  { id: 7, title: 'Regional differences', phase: 2 },
-];
+const LATER = [];
 
 export default function Learn() {
   const { lessonProgress } = useApp();
   return (
     <div className="page">
       <h1>Learn</h1>
-      <p>Five short lessons, each ending with a quiz. Work through them in order before you build; they take about 45 minutes together.</p>
+      <p>Seven short lessons, each ending with a quiz. Lessons 1–5 prepare you to build; 6 and 7 look ahead to v4.0 and other regions. Together they take about an hour.</p>
       <div className="lesson-grid" style={{ marginTop: '1.5rem' }}>
         {lessons.map((l) => {
           const pr = lessonProgress[l.id];

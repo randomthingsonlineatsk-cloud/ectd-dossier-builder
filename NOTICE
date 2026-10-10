@@ -16,4 +16,10 @@ form, portal or logo, and its output is not suitable for a real submission.
 Third-party components:
 - React and React DOM (MIT License), Copyright (c) Meta Platforms, Inc. and affiliates.
 - SparkMD5 (WTFPL OR MIT), Copyright (c) André Cruz.
+- pdf-lib and @pdf-lib/fontkit (MIT License), Copyright (c) Andrew Dillon.
+- Public Sans (SIL Open Font License 1.1), Copyright the Public Sans project authors (USWDS).
+- JetBrains Mono (SIL Open Font License 1.1), Copyright 2020 The JetBrains Mono Project Authors.
+- Fonts packaged by Fontsource (MIT License). src/assets/fonts/public-sans-latin-400.ttf is the
+  Fontsource Latin subset of Public Sans converted from WOFF to TTF, with its layout tables removed, for fast PDF embedding
+  (OFL text alongside).
 - Vite and @vitejs/plugin-react (MIT License), build tools only.
