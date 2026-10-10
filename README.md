@@ -6,7 +6,7 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 > **Training only.** Every product, company, document, study and person in the app is fictional. Section codes, form numbers and XML element names follow the public ICH and FDA specifications, but nothing the app produces is suitable for a real submission.
 
-## What is in this release (Phases 1 to 3)
+## What is in this release (Phases 1 to 4)
 
 **Learn.** Lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, eight lifecycle drills, and a searchable glossary.
 
@@ -39,15 +39,24 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 **Missions.** Sixteen missions at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 3 Japan NDA under v4.0; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application; 13 biosimilar application; 14 new drug application in India; 15 renewal and transfer; 16 withdrawal. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
 
+**Region comparison.** The same Module 1 items side by side for the US, EU, Japan, India, Canada and Switzerland; "Where does it go?" and "One document, six regions" exercises; and a CTD to ASEAN ACTD conversion exercise.
+
+**Quiz bank.** Over 120 RAC-style questions tied to every lesson and mission (the written bank plus every lesson quiz, mission quiz and lifecycle drill): practice by topic, or a 30-question, 40-minute mock exam with a topic breakdown.
+
+**Exports.** A zipped eCTD folder per sequence or for every published sequence, with the backbone XML (or the v4.0 submission unit) and watermarked stub PDFs whose checksums match the backbone; plus the project file, the validation report and the planning CSVs.
+
+**Certificate.** A completion certificate PDF, labelled as a portfolio exercise and not an accreditation, once every lesson, all 16 missions, the mock exam and the region comparison exercises are passed (with distinction for 8 or more missions at expert level), with a verification code and a record of results. A statement of progress is available at any time.
+
+**Classroom mode (optional).** An instructor creates a class and shares a join code; students join, start assigned missions with deadlines, and submit their project files; the instructor sees scores and validation results, re-scores each submission in their own browser, comments, and sees a leaderboard; optional email reminders go out through Brevo. It runs on a Cloudflare Worker and a D1 database from the `worker/` folder (see [worker/README.md](worker/README.md)). Without it, the app stays fully browser-only.
+
 **Progress.** Career levels (Associate, Specialist, Senior Specialist, Lead), ten badges, strengths and weak areas, and mission and lesson history.
 
 **Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
 
-Phase 4 will add region comparison exercises, a portfolio certificate, a quiz bank, zip export and classroom mode.
 
 ## How it works
 
-The app is fully static. There is no server and no account: projects are stored in the browser's IndexedDB, and the project file is the way to move work between devices or hand it to a mentor.
+The app is fully static. There is no server and no account: projects are stored in the browser's IndexedDB, and the project file is the way to move work between devices or hand it to a mentor. Classroom mode is the one exception, and it is opt-in: it talks to the small API in `worker/`.
 
 Content lives in data files so it can grow without code changes:
 
@@ -58,6 +67,8 @@ Content lives in data files so it can grow without code changes:
 | `src/data/eu-m1.json` | EU Module 1 headings, folders, envelope values and checklists |
 | `src/data/jp-m1.json` | Japan Module 1 headings (English and Japanese), controlled vocabulary codes and checklists |
 | `src/data/in-m1.json` | India Module 1 headings, forms and checklists |
+| `src/data/compare.json` | Module 1 items across six regions, and the CTD to ACTD map |
+| `src/data/quizbank.json` | The written quiz bank, by topic, linked to lessons and missions |
 | `src/data/review.json` | Gateway stages, review clocks and product weaknesses for the review simulator |
 | `src/data/consistency.json` | Facts compared across modules and the headings that state them |
 | `src/data/drills.json` | Lifecycle drills |
@@ -68,7 +79,7 @@ Content lives in data files so it can grow without code changes:
 | `src/data/ectd-status.json` | Where eCTD v3.2.2 and v4.0 stand by region (dated) |
 | `src/data/glossary.json` | Glossary terms |
 
-The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `stf.js` (study tagging files), `v4.js` and `sha256.js` (eCTD v4.0 submission unit and checksums), `review.js` (gateway, clock and questions), `planning.js` (content plan, critical path, trackers, reuse), `regiondocs.js` (generated regional Module 1 documents), `consistency.js` (cross-module QC), `progress.js` (levels and badges), `pdfgen.js` and `pdfmeta.js` (stub PDFs, loaded only when a PDF is built), `report.js` (validation report), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
+The engine (`src/engine/`) is plain JavaScript with no UI dependencies: `tree.js` (heading index and paths), `model.js` (project model and lifecycle state), `ops.js` (placement, fixes, publishing), `validate.js` (rule engine), `backbone.js` (XML and checksums), `stf.js` (study tagging files), `v4.js` and `sha256.js` (eCTD v4.0 submission unit and checksums), `review.js` (gateway, clock and questions), `planning.js` (content plan, critical path, trackers, reuse), `compare.js` (region comparison), `quiz.js` (quiz bank), `certpdf.js` (certificate), `zipexport.js` (zipped folders), `classroom.js` (classroom client), `regiondocs.js` (generated regional Module 1 documents), `consistency.js` (cross-module QC), `progress.js` (levels and badges), `pdfgen.js` and `pdfmeta.js` (stub PDFs, loaded only when a PDF is built), `report.js` (validation report), `missions.js` (seeds and scoring), `db.js` (IndexedDB) and `io.js` (export and import).
 
 ## Run it locally
 
@@ -113,6 +124,9 @@ Every drag-and-drop action has a keyboard path, tree headings are reachable with
 - CDSCO, guidance on the CTD format for India, and the New Drugs and Clinical Trials Rules, 2019 (Forms CT-18 and CT-21, Rule 101, the Sixth Schedule)
 - EU eCTD harmonised technical guidance (technical validation and resubmission with the same sequence number)
 - FDA, eCTD Module 1 backbone specification and comprehensive table of contents; 21 CFR 314.65 (withdrawal without prejudice to refiling)
+- Health Canada, guidance on organization and document placement for Canadian Module 1
+- Swissmedic, Swiss Module 1 specification for eCTD, version 1.6
+- ASEAN, Common Technical Dossier: organization of the dossier
 
 The review clocks are simplified teaching models of the public procedures, not a statement of any agency's current timelines.
 

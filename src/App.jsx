@@ -74,6 +74,8 @@ export default function App() {
       const next = { ...lessonProgress, [id]: { best: Math.max(score, lessonProgress[id]?.best ?? 0), at: new Date().toISOString(), userId: user?.userId, classId: user?.classId ?? null } };
       setLessonProgress(next); await setMeta('lessons', next);
     },
+    // Classroom mode sets the class ID on the local user, so new work carries it.
+    updateUser: async (patch) => { const next = { ...user, ...patch }; await setMeta('user', next); setUser(next); },
     // Exercises outside missions (region comparison, quiz bank) are stored as attempts.
     saveExercise: async (kind, fields) => {
       const now = new Date().toISOString();
@@ -118,6 +120,7 @@ export default function App() {
             <a href="#/missions" aria-current={section === 'missions' ? 'page' : undefined}>Missions</a>
             <a href="#/progress" aria-current={section === 'progress' ? 'page' : undefined}>Progress</a>
             <a href="#/glossary" aria-current={section === 'glossary' ? 'page' : undefined}>Glossary</a>
+            <a href="#/classroom" aria-current={section === 'classroom' ? 'page' : undefined}>Classroom</a>
           </nav>
           <span className="spacer" />
           <button className="btn small ghost" onClick={cycleTheme} aria-label={`Theme: ${theme}. Change theme`}>
