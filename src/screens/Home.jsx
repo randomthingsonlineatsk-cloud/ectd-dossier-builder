@@ -144,7 +144,7 @@ export default function Home() {
       </form>
 
       <div className="section-head"><h2>Where eCTD stands in 2026</h2></div>
-      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This app teaches v3.2.2 with the US and EU packs, v4.0 with the Japan pack, and India's CTD for its online portal.</p>
+      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This app teaches v3.2.2 with the US, EU, Canada and Switzerland packs, v4.0 with the Japan pack, and India's CTD for its online portal.</p>
       <StatusTable />
     </div>
   );

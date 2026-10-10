@@ -10,7 +10,7 @@ export default function Compare() {
     <div className="page" style={{ maxWidth: 1180 }}>
       <p className="small"><a href="#/learn">Learn</a> / Region comparison</p>
       <h1>Region comparison</h1>
-      <p>Modules 2 to 5 travel; Module 1 does not. These exercises take the same documents and ask where each region wants them, then convert a CTD into the ASEAN format. US, EU, Japan and India use this app's packs; Canada and Switzerland are here for comparison only.</p>
+      <p>Modules 2 to 5 travel; Module 1 does not. These exercises take the same documents and ask where each region wants them, then convert a CTD into the ASEAN format. Every region here is one of this app's packs, so you can also build a dossier for it.</p>
       <div className="seg" role="tablist" aria-label="Exercises" style={{ margin: '1rem 0' }}>
         {VIEWS.map(([k, l]) => <button key={k} role="tab" aria-selected={view === k} aria-pressed={view === k} onClick={() => setView(k)}>{l}</button>)}
       </div>

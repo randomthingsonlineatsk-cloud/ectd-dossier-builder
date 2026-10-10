@@ -112,4 +112,57 @@ await t('mission 22: India clinical trial application passes screening and score
   assert.equal(ev.score, 100, failed(ev).join(', '));
 });
 
+await t('Canada: ca-regional.xml transaction information; documents in 1.2.2 or 1.5 are refused', async () => {
+  const p = createProject({ name: 'ca', region: 'CA', user });
+  buildComplete(p);
+  const xml = publishSequence(p, '0000').regional;
+  assert.match(xml, /<dossier-identifier>e123456<\/dossier-identifier>/);
+  assert.match(xml, /<regulatory-activity-type>NDS<\/regulatory-activity-type>/);
+  placeDoc(p, '0000', 'ca-11', 'ca:1.2.2');
+  assert.ok([...validate(p, '0000').keys].some((k) => k.startsWith('CA-06')));
+  p.settings.ca.dossierId = 'E12345';
+  assert.ok(validate(p, '0000').keys.has('BB-06:dossierId'));
+});
+
+await t('Switzerland: galenic form folder, envelope, and Article 13 needs 1.7', async () => {
+  const p = createProject({ name: 'ch', region: 'CH', user });
+  buildComplete(p);
+  const { leafPath } = await import('../src/engine/model.js');
+  const cover = seqByNumber(p, '0000').leaves.find((l) => l.nodeCode === 'ch:1.0');
+  assert.equal(leafPath(p, cover), 'm1/ch/tablets/10-cover/cover-letter.pdf');
+  const xml = publishSequence(p, '0000').regional;
+  assert.match(xml, /<ch-envelope country="ch">/);
+  assert.match(xml, /<article-13-tpa>no<\/article-13-tpa>/);
+  assert.match(xml, /xlink:href="tablets\/10-cover\/cover-letter.pdf"/);
+  p.settings.ch.article13 = 'yes';
+  assert.ok(validate(p, '0000').keys.has('CH-07:art13'));
+});
+
+await t('mission 23: Canada NDS scores 100', async () => {
+  const p = await seedMission(23, 'standard', user);
+  buildComplete(p); answerAll(p);
+  await publishWithFiles(p, '0000');
+  const ev = evaluateMission(p);
+  assert.equal(ev.score, 100, failed(ev).join(', '));
+});
+
+await t('mission 24: Switzerland under Article 13 scores 100', async () => {
+  const p = await seedMission(24, 'standard', user);
+  buildComplete(p); answerAll(p);
+  p.settings.ch.article13 = 'yes';
+  placeDoc(p, '0000', 'ch-13', 'ch:1.7');
+  await publishWithFiles(p, '0000');
+  const ev = evaluateMission(p);
+  assert.equal(ev.score, 100, failed(ev).join(', '));
+});
+
+await t('comparison exercises now point at the Canada and Switzerland packs', async () => {
+  const { COMPARE, headingsFor } = await import('../src/engine/compare.js');
+  const { INDEX } = await import('../src/engine/tree.js');
+  for (const it of COMPARE.items) for (const r of COMPARE.regions) {
+    const c = it.map[r.id];
+    if (c) { assert.ok(INDEX.map[c]?.region === r.id, `${it.id} ${r.id} ${c}`); assert.ok(headingsFor(r.id).includes(c)); }
+  }
+});
+
 console.log(`\n${pass} phase 5 tests passed`);

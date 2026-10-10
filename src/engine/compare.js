@@ -7,7 +7,7 @@ export const COMPARE = data;
 export const NONE = 'none';
 export const NONE_LABEL = 'No matching heading';
 
-const listFor = (region) => data.headings[region] ?? [];
+const listFor = (region) => (data.headings ?? {})[region] ?? [];
 
 export function headingLabel(region, code) {
   if (code == null || code === NONE) return NONE_LABEL;

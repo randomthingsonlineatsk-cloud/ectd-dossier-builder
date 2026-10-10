@@ -20,6 +20,8 @@ export function buildComplete(project, { exclude = () => false } = {}) {
   if (project.region === 'EU') s.eu.trackingNumber = project.appType === 'asmf' ? 'EMEA/ASMF/01234' : ({ decentralised: 'NL/H/1234/001-002/DC', 'mutual-recognition': 'DE/H/0126/001/MR', national: 'IE/2026/00123' })[s.eu.procedureType] ?? 'EMEA/H/C/006123';
   else if (project.region === 'JP') s.jp.receptionNumber = '2026000123';
   else if (project.region === 'IN') s.in.agentName = 'Kestrel Regulatory Services Pvt. Ltd., Mumbai';
+  else if (project.region === 'CA') s.ca.dossierId = 'e123456';
+  else if (project.region === 'CH') s.ch.applicationNumber = '123456789';
   else s.applicationNumber = project.appType === 'anda' ? '219876' : project.appType.startsWith('bla') ? '761999' : '299001';
   const docs = Object.values(project.documents);
   // Japan: use the Japanese Module 2 where one exists. India: the form that matches the submission type.
@@ -28,7 +30,7 @@ export function buildComplete(project, { exclude = () => false } = {}) {
     || (project.region === 'IN' && d.form === (project.sequences[0].submissionType === 'new-drug-manufacture' ? 'ct-18' : 'ct-21'));
   const seq = project.sequences[0];
   const usLabel = { anda: 'Original ANDA', ind: 'Initial IND', dmf: 'Original Type II DMF', bla: 'Original BLA', 'bla-351k': 'Original BLA' }[project.appType] ?? (prod.basis === '505(b)(2)' ? 'Original 505(b)(2) NDA' : 'Original NDA');
-  seq.description = `${{ EU: 'Initial MAA', JP: 'New drug application', IN: 'New drug application' }[project.region] ?? usLabel} for ${project.appType === 'dmf' || project.appType === 'ind' ? prod.product.inn : `${prod.product.brandName} (${prod.product.inn})`}`;
+  seq.description = `${{ EU: 'Initial MAA', JP: 'New drug application', IN: 'New drug application' }[project.region] ?? ({ CA: 'New drug submission', CH: 'New authorisation (new active substance)' })[project.region] ?? usLabel} for ${project.appType === 'dmf' || project.appType === 'ind' ? prod.product.inn : `${prod.product.brandName} (${prod.product.inn})`}`;
   const leafByDoc = {};
   for (const d of Object.values(project.documents)) {
     if (BASE_EXCLUDE(d) || exclude(d) || regionSkip(d)) continue;
@@ -82,7 +84,7 @@ export async function seedMission(id, difficulty, user) {
     p.settings.eu.cms = [];
     return p;
   }
-  if ([3, 14, 17, 18, 19, 21, 22].includes(m.id)) {
+  if ([3, 14, 17, 18, 19, 21, 22, 23, 24].includes(m.id)) {
     const p = baseMissionProject(m, difficulty, user);
     addExtras(p, m);
     return p;
@@ -167,7 +169,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 22: evalM22, 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 23: evalM23, 24: evalM24, 22: evalM22, 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -488,6 +490,40 @@ function evalM22(p) {
     noHigh: v.counts.High === 0,
     published: pub(p, '0000'),
     gateway: p.review?.submissions?.['0000']?.outcome === 'accepted',
+    quiz: quizOk(p),
+  }, v);
+}
+
+function evalM23(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const s0 = seqByNumber(p, '0000');
+  return finish(23, {
+    meta: !f('BB-06') && p.settings.ca?.dossierId === 'e123456',
+    type: s0.submissionType === 'nds' && s0.subType === 'initial',
+    m1: !['CA-01', 'CA-02', 'CA-03', 'CA-04', 'CA-05'].some((id) => f(id)),
+    empty: !f('CA-06'),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    noMedium: v.counts.Medium === 0,
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+}
+function evalM24(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const s0 = seqByNumber(p, '0000');
+  return finish(24, {
+    meta: !f('BB-06'),
+    type: s0.submissionType === 'na-nas',
+    art13: p.settings.ch?.article13 === 'yes',
+    foreign: hasForm(p, '0000', 'ch:1.7') && !f('CH-07'),
+    other: hasForm(p, '0000', 'ch:1.3.4'),
+    m1: !v.findings.some((x) => x.family.startsWith('Module 1') && x.severity !== 'Low'),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
     quiz: quizOk(p),
   }, v);
 }

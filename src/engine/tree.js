@@ -6,10 +6,12 @@ import usM1 from '../data/us-m1.json' with { type: 'json' };
 import euM1 from '../data/eu-m1.json' with { type: 'json' };
 import jpM1 from '../data/jp-m1.json' with { type: 'json' };
 import inM1 from '../data/in-m1.json' with { type: 'json' };
+import caM1 from '../data/ca-m1.json' with { type: 'json' };
+import chM1 from '../data/ch-m1.json' with { type: 'json' };
 
-export const REGION_PACKS = { US: usM1, EU: euM1, JP: jpM1, IN: inM1 };
-export const M1_ROOT = { US: '1', EU: 'eu:1', JP: 'jp:1', IN: 'in:1' };
-export const REGION_LABEL = { US: 'US', EU: 'EU', JP: 'Japan', IN: 'India' };
+export const REGION_PACKS = { US: usM1, EU: euM1, JP: jpM1, IN: inM1, CA: caM1, CH: chM1 };
+export const M1_ROOT = { US: '1', EU: 'eu:1', JP: 'jp:1', IN: 'in:1', CA: 'ca:1', CH: 'ch:1' };
+export const REGION_LABEL = { US: 'US', EU: 'EU', JP: 'Japan', IN: 'India', CA: 'Canada', CH: 'Switzerland' };
 export const REGIONS = Object.keys(REGION_PACKS);
 
 function indexTree(root, out, parent, module, region) {
@@ -49,7 +51,7 @@ function buildIndex() {
 export const INDEX = buildIndex();
 
 export const nodeOf = (code) => INDEX.map[code];
-export const displayCode = (code) => INDEX.map[code]?.display ?? String(code ?? '').replace(/^(eu|jp|in):/, '');
+export const displayCode = (code) => INDEX.map[code]?.display ?? String(code ?? '').replace(/^(eu|jp|in|ca|ch):/, '');
 export const nodeLabel = (code) => `${displayCode(code)} ${INDEX.map[code]?.title ?? ''}`.trim();
 export const rootsFor = (region) => [M1_ROOT[region] ?? '1', '2', '3', '4', '5'];
 export const inRegion = (code, region) => {
@@ -108,6 +110,11 @@ export function folderPath(code, settings, leaf = null) {
   if (!n) return null;
   if (n.isM1) {
     const pack = REGION_PACKS[n.region];
+    if (n.region === 'CH') {
+      const parts = [pack.folder, settings?.ch?.galenicFolder || 'common'];
+      for (const a of ancestors(code).slice(1)) if (a.folder) parts.push(a.folder);
+      return parts.join('/');
+    }
     if (n.region !== 'EU') return pack.folder;
     const parts = [pack.folder];
     for (const a of ancestors(code).slice(1)) if (a.folder) parts.push(a.folder);

@@ -1,26 +1,158 @@
 [
-  { "term": "CTD", "def": "Common Technical Document: the ICH M4 format that organises a marketing application into five modules." },
-  { "term": "eCTD", "def": "Electronic CTD: the CTD delivered as PDF files in a fixed folder tree, described by an XML backbone that agencies read." },
-  { "term": "NeeS", "def": "Non-eCTD electronic Submission: CTD-structured PDFs with bookmarks and tables of contents but no XML backbone or lifecycle." },
-  { "term": "Backbone", "def": "The XML file (index.xml in v3.2.2) listing every document, where it sits in the CTD, and its lifecycle operation." },
-  { "term": "Regional XML", "def": "The Module 1 XML file for one region, e.g. us-regional.xml, carrying administrative metadata and Module 1 leaves." },
-  { "term": "Leaf", "def": "One document entry in the backbone: a file reference plus its title, checksum, operation and attributes." },
-  { "term": "Node", "def": "A heading in the CTD tree, written as an XML element. Leaves sit inside nodes." },
-  { "term": "Node extension", "def": "An EU v3.2.2 mechanism to add an extra grouping level under a heading, e.g. to group files of one study." },
-  { "term": "Leaf title", "def": "The human-readable title shown to reviewers in the agency viewer. It is not the file name." },
-  { "term": "Checksum", "def": "A fingerprint of a file's bytes (MD5 in v3.2.2, SHA-256 in v4.0) proving the file was not altered in transit." },
-  { "term": "Operation", "def": "What a leaf does to the lifecycle: new, replace, append or delete (v3.2.2)." },
-  { "term": "Modified file", "def": "The pointer from a replace, append or delete leaf to the earlier leaf it acts on, by sequence and leaf ID." },
-  { "term": "Sequence", "def": "One submission package, numbered 0000, 0001, 0002 and so on. Each sequence is a separate folder." },
-  { "term": "Current view", "def": "What a reviewer sees today: the latest version of every document after all operations are applied." },
-  { "term": "Cumulative view", "def": "Every leaf ever submitted, across all sequences, including replaced and deleted ones." },
-  { "term": "Granularity", "def": "How much content goes in one file. ICH M4 granularity rules say which headings may be split into several documents." },
-  { "term": "Study tagging file", "def": "STF: a US v3.2.2 XML file grouping the documents of one study in Modules 4 and 5 and tagging their roles." },
-  { "term": "Context of use", "def": "eCTD v4.0: the placement of a document at a heading, which can be replaced or suspended independently of the document." },
-  { "term": "Submission unit", "def": "eCTD v4.0: the single XML message that replaces index.xml and regional XML." },
-  { "term": "Technical rejection", "def": "An agency refusing a sequence before scientific review because it fails the validation criteria." },
-  { "term": "Form FDA 356h", "def": "The US application form for an NDA, ANDA or BLA, placed in Module 1.1 with every submission to the application." },
-  { "term": "Information request", "def": "IR: a question from the US review team during review, answered by an amendment sequence." },
-  { "term": "Repeatable section", "def": "A heading that appears once per drug substance/manufacturer (3.2.S), drug product (3.2.P) or indication (5.3.5), told apart by attributes." },
-  { "term": "Granularity coach", "def": "The app's helper that flags documents too coarse (whole module in one file) or too fine (one test per file)." }
+  {
+    "term": "CTD",
+    "def": "Common Technical Document: the ICH M4 format that organises a marketing application into five modules."
+  },
+  {
+    "term": "eCTD",
+    "def": "Electronic CTD: the CTD delivered as PDF files in a fixed folder tree, described by an XML backbone that agencies read."
+  },
+  {
+    "term": "NeeS",
+    "def": "Non-eCTD electronic Submission: CTD-structured PDFs with bookmarks and tables of contents but no XML backbone or lifecycle."
+  },
+  {
+    "term": "Backbone",
+    "def": "The XML file (index.xml in v3.2.2) listing every document, where it sits in the CTD, and its lifecycle operation."
+  },
+  {
+    "term": "Regional XML",
+    "def": "The Module 1 XML file for one region, e.g. us-regional.xml, carrying administrative metadata and Module 1 leaves."
+  },
+  {
+    "term": "Leaf",
+    "def": "One document entry in the backbone: a file reference plus its title, checksum, operation and attributes."
+  },
+  {
+    "term": "Node",
+    "def": "A heading in the CTD tree, written as an XML element. Leaves sit inside nodes."
+  },
+  {
+    "term": "Node extension",
+    "def": "An EU v3.2.2 mechanism to add an extra grouping level under a heading, e.g. to group files of one study."
+  },
+  {
+    "term": "Leaf title",
+    "def": "The human-readable title shown to reviewers in the agency viewer. It is not the file name."
+  },
+  {
+    "term": "Checksum",
+    "def": "A fingerprint of a file's bytes (MD5 in v3.2.2, SHA-256 in v4.0) proving the file was not altered in transit."
+  },
+  {
+    "term": "Operation",
+    "def": "What a leaf does to the lifecycle: new, replace, append or delete (v3.2.2)."
+  },
+  {
+    "term": "Modified file",
+    "def": "The pointer from a replace, append or delete leaf to the earlier leaf it acts on, by sequence and leaf ID."
+  },
+  {
+    "term": "Sequence",
+    "def": "One submission package, numbered 0000, 0001, 0002 and so on. Each sequence is a separate folder."
+  },
+  {
+    "term": "Current view",
+    "def": "What a reviewer sees today: the latest version of every document after all operations are applied."
+  },
+  {
+    "term": "Cumulative view",
+    "def": "Every leaf ever submitted, across all sequences, including replaced and deleted ones."
+  },
+  {
+    "term": "Granularity",
+    "def": "How much content goes in one file. ICH M4 granularity rules say which headings may be split into several documents."
+  },
+  {
+    "term": "Study tagging file",
+    "def": "STF: a US v3.2.2 XML file grouping the documents of one study in Modules 4 and 5 and tagging their roles."
+  },
+  {
+    "term": "Context of use",
+    "def": "eCTD v4.0: the placement of a document at a heading, which can be replaced or suspended independently of the document."
+  },
+  {
+    "term": "Submission unit",
+    "def": "eCTD v4.0: the single XML message that replaces index.xml and regional XML."
+  },
+  {
+    "term": "Technical rejection",
+    "def": "An agency refusing a sequence before scientific review because it fails the validation criteria."
+  },
+  {
+    "term": "Form FDA 356h",
+    "def": "The US application form for an NDA, ANDA or BLA, placed in Module 1.1 with every submission to the application."
+  },
+  {
+    "term": "Information request",
+    "def": "IR: a question from the US review team during review, answered by an amendment sequence."
+  },
+  {
+    "term": "Repeatable section",
+    "def": "A heading that appears once per drug substance/manufacturer (3.2.S), drug product (3.2.P) or indication (5.3.5), told apart by attributes."
+  },
+  {
+    "term": "Granularity coach",
+    "def": "The app's helper that flags documents too coarse (whole module in one file) or too fine (one test per file)."
+  },
+  {
+    "term": "IND",
+    "def": "Investigational New Drug application: the US submission that lets a sponsor start clinical trials. It takes effect 30 days after FDA receives it unless FDA places a clinical hold."
+  },
+  {
+    "term": "505(b)(2)",
+    "def": "A US NDA that relies in part on studies the applicant did not conduct and has no right of reference to, such as literature or FDA's finding for a listed drug."
+  },
+  {
+    "term": "DMF",
+    "def": "Drug Master File: confidential information a manufacturer submits to FDA so customers can reference it in their applications. FDA reviews it only when an application references it."
+  },
+  {
+    "term": "Letter of authorization",
+    "def": "A DMF holder's letter permitting FDA to refer to its DMF for a named customer's application."
+  },
+  {
+    "term": "ASMF",
+    "def": "Active Substance Master File (EU): the active substance maker's dossier, split into an applicant's part and a restricted part."
+  },
+  {
+    "term": "Restricted part",
+    "def": "The confidential part of an ASMF, seen only by the authorities."
+  },
+  {
+    "term": "Letter of access",
+    "def": "The ASMF holder's letter allowing the authorities to use the ASMF in assessing a named applicant's marketing authorisation application."
+  },
+  {
+    "term": "Decentralised procedure",
+    "def": "EU route for a product not yet authorised in any member state: a reference member state leads, concerned member states take part, and each grants a national authorisation."
+  },
+  {
+    "term": "Mutual recognition procedure",
+    "def": "EU route that extends an existing national authorisation to other member states, which recognise the reference member state's assessment."
+  },
+  {
+    "term": "RMS / CMS",
+    "def": "Reference member state and concerned member states in a decentralised or mutual recognition procedure."
+  },
+  {
+    "term": "Form CT-04",
+    "def": "India: the application for permission to conduct a clinical trial of a new drug under the NDCT Rules, 2019. Permission is granted in Form CT-06."
+  },
+  {
+    "term": "Product monograph",
+    "def": "Canada's factual document about a drug for health professionals and patients, filed in 1.3.1."
+  },
+  {
+    "term": "Notice of Compliance",
+    "def": "Health Canada's approval of a new drug submission."
+  },
+  {
+    "term": "CPID",
+    "def": "Certified Product Information Document: Canada's summary of quality information certified at approval, filed in 1.3.6."
+  },
+  {
+    "term": "Article 13 TPA",
+    "def": "Swiss provision that lets Swissmedic take into account an authorisation by a country with comparable medicines control."
+  }
 ]

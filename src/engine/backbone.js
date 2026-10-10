@@ -36,7 +36,7 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
   }
   if (!isRetireOp(leaf.operation)) {
     const full = leafPath(project, leaf);
-    const href = hrefBase + (isM1 ? full.replace(/^m1\/(us|eu)\//, '') : full);
+    const href = hrefBase + (isM1 ? full.replace(/^m1\/[a-z]+\//, '') : full);
     const sum = leaf.stf ? md5(leaf.xml) : doc ? fileChecksum(doc) : '';
     attrs.push('checksum-type="md5"', `checksum="${sum}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
     if (doc) attrs.push(`application-version="PDF ${esc(doc.pdfVersion)}"`);
@@ -76,6 +76,8 @@ function nestedXml(project, seq, leaves, rootCode, indent, leafFn, groupFn = nul
 
 export function buildRegionalXml(project, seq) {
   if (project.region === 'EU') return buildEuRegionalXml(project, seq);
+  if (project.region === 'CA') return buildCaRegionalXml(project, seq);
+  if (project.region === 'CH') return buildChRegionalXml(project, seq);
   const s = project.settings;
   const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
   const leafFn = (l, ind) => {
@@ -118,6 +120,66 @@ export function buildRegionalXml(project, seq) {
   </admin>
 ${m1Body}
 </fda-regional:fda-regional>
+`;
+}
+
+// Canada: ca-regional.xml carries the regulatory transaction information.
+function buildCaRegionalXml(project, seq) {
+  const s = project.settings;
+  const ca = s.ca ?? {};
+  const pack = REGION_PACKS.CA;
+  const desc = pack.submissionSubTypes.find((t) => t.value === seq.subType)?.label ?? seq.subType;
+  const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
+  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'ca:1', 2, (l, ind) => leafXml(project, seq, l, ind)) : '  <m1-ca/>';
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRAINING ONLY: fictional content modelled on Health Canada's guidance on the Canadian Module 1 backbone. Element names are simplified. Not for submission. -->
+<ca-regional:ca-regional xmlns:ca-regional="http://www.hc-sc.gc.ca/ectd" xmlns:xlink="http://www.w3c.org/1999/xlink" xml:lang="en">
+  <ectd-regulatory-transaction-information>
+    <applicant>${esc(s.applicant?.name)}</applicant>
+    <product-name>${esc(s.product?.name)}</product-name>
+    <dossier-identifier>${esc(ca.dossierId)}</dossier-identifier>
+    <dossier-type>${esc(ca.dossierType)}</dossier-type>
+    <regulatory-activity-type>${esc(seq.submissionType.toUpperCase())}</regulatory-activity-type>
+    <regulatory-activity-lead>${esc(ca.activityLead)}</regulatory-activity-lead>
+    <sequence-number>${esc(seq.number)}</sequence-number>
+    <sequence-description>${esc(desc)}</sequence-description>
+${seq.relatedSequence ? `    <related-sequence-number>${esc(seq.relatedSequence)}</related-sequence-number>\n` : ''}  </ectd-regulatory-transaction-information>
+${m1Body}
+</ca-regional:ca-regional>
+`;
+}
+
+// Switzerland: ch-regional.xml with the Swiss envelope.
+function buildChRegionalXml(project, seq) {
+  const s = project.settings;
+  const ch = s.ch ?? {};
+  const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
+  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'ch:1', 2, (l, ind) => leafXml(project, seq, l, ind)) : '  <m1-ch/>';
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRAINING ONLY: fictional content modelled on the Swiss Module 1 Specification for eCTD (v1.6). Simplified. Not for submission. -->
+<ch-backbone xmlns:xlink="http://www.w3c.org/1999/xlink" xml:lang="en">
+  <ch-envelope country="ch">
+    <application-number>${esc(ch.applicationNumber || 'pending')}</application-number>
+    <submission-description>${esc(seq.description)}</submission-description>
+    <invented-name>${esc(s.product?.name)}</invented-name>
+    <galenic-form name="${esc(ch.galenicFolder)}">
+      <swissmedic-number>${esc(ch.swissmedicNumber || 'pending')}</swissmedic-number>
+      <galenic-name language="${esc(ch.galenicLang || 'de')}">${esc(ch.galenicName)}</galenic-name>
+    </galenic-form>
+    <dmf-number>n/a</dmf-number>
+    <pmf-number>n/a</pmf-number>
+    <inn>${esc(s.substance?.name)}</inn>
+    <applicant>${esc(s.applicant?.name)}</applicant>
+    <dmf-holder>n/a</dmf-holder>
+    <pmf-holder>n/a</pmf-holder>
+    <agency>Swissmedic</agency>
+    <application type="${esc(seq.submissionType)}"/>
+    <article-13-tpa>${esc(ch.article13 === 'yes' ? 'yes' : 'no')}</article-13-tpa>
+    <ectd-sequence>${esc(seq.number)}</ectd-sequence>
+    <related-ectd-sequence>${esc(seq.relatedSequence || 'none')}</related-ectd-sequence>
+  </ch-envelope>
+${m1Body}
+</ch-backbone>
 `;
 }
 
@@ -265,7 +327,7 @@ export function folderTree(project, seq, { portal = false } = {}) {
   add('index-md5.txt', { kind: 'txt' });
   add(REGION_PACKS[project.region].regionalFile, { kind: 'xml' });
   add('util/dtd/ich-ectd-3-2.dtd', { kind: 'dtd' });
-  add(project.region === 'EU' ? 'util/dtd/eu-regional.dtd' : 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
+  add({ EU: 'util/dtd/eu-regional.dtd', CA: 'util/dtd/ca-regional.dtd', CH: 'util/dtd/ch-regional.dtd' }[project.region] ?? 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
   add('util/dtd/ich-stf-v2-2.dtd', { kind: 'dtd' });
   for (const f of studyFiles(project, seq)) add(f.path, { kind: 'xml', node: f.nodeCode, op: 'new' });
   for (const l of seq.leaves) if (!isRetireOp(l.operation)) add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });

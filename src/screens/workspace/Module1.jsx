@@ -116,11 +116,33 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
   return (
     <div className="stack" style={{ maxWidth: 980 }}>
       <section className="panel">
-        <h2 style={{ fontSize: 'var(--step-1)' }}>{{ EU: 'EU envelope (eu-regional.xml)', JP: 'Submission unit metadata (submissionunit.xml, eCTD v4.0)', IN: 'Application details (CTD for the online portal)' }[region] ?? 'Regional metadata (us-regional.xml)'}</h2>
+        <h2 style={{ fontSize: 'var(--step-1)' }}>{{ EU: 'EU envelope (eu-regional.xml)', JP: 'Submission unit metadata (submissionunit.xml, eCTD v4.0)', IN: 'Application details (CTD for the online portal)', CA: 'Regulatory transaction information (ca-regional.xml)', CH: 'Swiss envelope (ch-regional.xml)' }[region] ?? 'Regional metadata (us-regional.xml)'}</h2>
         <p className="small muted">{ind ? `India takes the CTD as PDF files uploaded to the online portal; there is no backbone XML. These values go into the forms and covering letter for ${seq.number}.` : jp ? `In v4.0 these values sit inside the one submission unit message for unit ${parseInt(seq.number, 10)}. There is no separate regional XML.` : `These values go into the regional XML for sequence ${seq.number}.`} The validator checks they are complete.</p>
         <div className="grid-2">
           <label className="field">Applicant name<input type="text" value={s.applicant.name} onChange={(e) => setSetting('applicant.name', e.target.value)} /></label>
-          {jp ? (
+          {region === 'CA' ? (
+            <>
+              <label className="field">Dossier identifier <small>one lowercase letter and six digits, e.g. e123456; Health Canada assigns it before the first sequence</small><input type="text" value={s.ca.dossierId} onChange={(e) => setSetting('ca.dossierId', e.target.value.trim())} /></label>
+              <label className="field">Dossier type
+                <select value={s.ca.dossierType} onChange={(e) => setSetting('ca.dossierType', e.target.value)}>{['Pharmaceutical Dossier', 'Biologic Dossier', 'Drug Master File Dossier'].map((x) => <option key={x}>{x}</option>)}</select>
+              </label>
+              <label className="field">Regulatory activity lead
+                <select value={s.ca.activityLead} onChange={(e) => setSetting('ca.activityLead', e.target.value)}>{['Pharmaceutical', 'Biological', 'Post-Market Pharmacovigilance', 'Drug Master File'].map((x) => <option key={x}>{x}</option>)}</select>
+              </label>
+            </>
+          ) : region === 'CH' ? (
+            <>
+              <label className="field">Application number <small>nine digits without leading zeros, or "pending"</small><input type="text" value={s.ch.applicationNumber} onChange={(e) => setSetting('ch.applicationNumber', e.target.value.trim())} /></label>
+              <label className="field">Galenic form folder <small>lowercase EU standard term, e.g. tablets; Module 1 files go in m1/ch/&lt;folder&gt;/</small><input type="text" value={s.ch.galenicFolder} onChange={(e) => setSetting('ch.galenicFolder', e.target.value.trim())} /></label>
+              <label className="field">Galenic name <small>in German, French or Italian</small><input type="text" value={s.ch.galenicName} onChange={(e) => setSetting('ch.galenicName', e.target.value)} /></label>
+              <label className="field">Language of the galenic name
+                <select value={s.ch.galenicLang} onChange={(e) => setSetting('ch.galenicLang', e.target.value)}>{['de', 'fr', 'it'].map((x) => <option key={x}>{x}</option>)}</select>
+              </label>
+              <label className="field">Article 13 TPA <small>"yes" when the application relies on an authorisation in a country with comparable medicines control</small>
+                <select value={s.ch.article13} onChange={(e) => setSetting('ch.article13', e.target.value)}><option value="no">no</option><option value="yes">yes</option></select>
+              </label>
+            </>
+          ) : jp ? (
             <>
               <label className="field">Reception number <small>given by the regulator before the first unit; 10 digits in this app, e.g. 2026000123</small><input type="text" inputMode="numeric" value={s.jp.receptionNumber} onChange={(e) => setSetting('jp.receptionNumber', e.target.value.trim())} /></label>
               <label className="field">Brand name<input type="text" value={s.jp.brandName} onChange={(e) => setSetting('jp.brandName', e.target.value)} /></label>
@@ -230,7 +252,7 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
 
       <section className="panel">
         <h2 style={{ fontSize: 'var(--step-1)' }}>Cover letter generator</h2>
-        <p className="small muted">Pulls the applicant, product, {{ EU: 'procedure number', JP: 'reception number', IN: 'agent details' }[region] ?? 'application number'}, sequence and submission type from the project. Update the metadata above first.{jp ? ' In Japan the cover (鑑) is filed as m1/jp/cover.pdf and is not referenced in the submission unit XML.' : ''}</p>
+        <p className="small muted">Pulls the applicant, product, {{ EU: 'procedure number', JP: 'reception number', IN: 'agent details', CA: 'dossier identifier', CH: 'application number' }[region] ?? 'application number'}, sequence and submission type from the project. Update the metadata above first.{jp ? ' In Japan the cover (鑑) is filed as m1/jp/cover.pdf and is not referenced in the submission unit XML.' : ''}</p>
         <pre className="xml" style={{ whiteSpace: 'pre-wrap', maxHeight: 320 }}>{coverLetterText(project, seq)}</pre>
         <div className="row">
           <button className="btn primary" disabled={!editable} onClick={() => { mutate((x) => addCoverLetter(x, seq.number, true)); toast(`Cover letter added to ${dc(coverCode)} in sequence ${seq.number}.`); }}>
@@ -240,7 +262,7 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
         </div>
       </section>
 
-      <section className="panel">
+      {!['CA', 'CH'].includes(region) && <section className="panel">
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>{{ EU: 'Electronic application form practice (fictional)', JP: 'Japanese application form practice (fictional)', IN: `Form ${seq.submissionType === 'clinical-trial' ? 'CT-04' : seq.submissionType === 'new-drug-manufacture' ? 'CT-21' : 'CT-18'} practice (fictional)` }[region] ?? 'Form FDA 356h practice (fictional)'}</h2>
           <button className="btn small" onClick={prefill}>Prefill from project</button>
@@ -253,7 +275,7 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
             </label>
           ))}
         </div>
-      </section>
+      </section>}
     </div>
   );
 }
