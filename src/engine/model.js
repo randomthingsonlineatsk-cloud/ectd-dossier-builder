@@ -6,18 +6,28 @@ import genericTablet from '../data/products/generic-tablet.json' with { type: 'j
 import sterileInjectable from '../data/products/sterile-injectable.json' with { type: 'json' };
 import mabInfusion from '../data/products/mab-infusion.json' with { type: 'json' };
 import biosimilarMab from '../data/products/biosimilar-mab.json' with { type: 'json' };
+import talmisartanEr from '../data/products/talmisartan-er.json' with { type: 'json' };
 import { INDEX, filePath, inRegion } from './tree.js';
-import { regionDocs } from './regiondocs.js';
+import { regionDocs, libraryBase } from './regiondocs.js';
 
 // delete (v3.2.2) and suspend (v4.0) both take a leaf out of the current view.
 export const isRetireOp = (op) => op === 'delete' || op === 'suspend';
 export const SCHEMA_VERSION = 2;
-export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable, 'mab-infusion': mabInfusion, 'biosimilar-mab': biosimilarMab };
+export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable, 'mab-infusion': mabInfusion, 'biosimilar-mab': biosimilarMab, 'talmisartan-er': talmisartanEr };
 export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa', JP: 'nda', IN: 'nda' };
 export const REGION_VERSION = { US: '3.2.2', EU: '3.2.2', JP: '4.0', IN: 'CTD' };
 
 // Which regions and application types each product supports.
 export const productOptions = (productId) => PRODUCTS[productId]?.options ?? [{ region: 'US', appType: 'nda' }];
+export const optionKey = (o) => `${o.region}:${o.appType}${o.variant ? `:${o.variant}` : ''}`;
+// The product option a project was made from. A variant (IND, DMF, DCP, ASMF...) changes the
+// library, settings and requirements while keeping the region's application type.
+export function optionFor(productId, region, appType = null, variant = null) {
+  const opts = productOptions(productId).filter((o) => o.region === region);
+  return opts.find((o) => (!appType || o.appType === appType) && (o.variant ?? null) === (variant ?? null))
+    ?? opts.find((o) => !appType || o.appType === appType) ?? opts[0] ?? null;
+}
+const deepMerge = (a, b) => { for (const [k, v] of Object.entries(b ?? {})) a[k] = v && typeof v === 'object' && !Array.isArray(v) ? deepMerge({ ...(a[k] ?? {}) }, v) : v; return a; };
 
 export function uid(prefix = '') {
   const r = (globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`);
@@ -47,10 +57,11 @@ export function makeDoc(raw) {
 // Region of a library document: explicit, or US for unprefixed Module 1 sections, or shared.
 export const docRegion = (d) => d.region ?? (/^1(\.|$)/.test(String(d.section)) ? 'US' : null);
 
-export function libraryFor(productId, region = 'US') {
+export function libraryFor(productId, region = 'US', opt = null) {
   const p = PRODUCTS[productId];
   const docs = {};
-  for (const raw of [...p.documents, ...regionDocs(p, region)]) {
+  const base = opt?.library ? libraryBase(p, opt.library) : p.documents;
+  for (const raw of [...base, ...regionDocs(p, region, opt)]) {
     const r = docRegion(raw);
     if (r && r !== region) continue;
     if (raw.section && !inRegion(raw.section, region) && !raw.decoy) continue;
@@ -59,10 +70,11 @@ export function libraryFor(productId, region = 'US') {
   return docs;
 }
 
-export function defaultSettings(productId) {
+export function defaultSettings(productId, opt = null) {
   const p = PRODUCTS[productId];
-  return {
-    applicant: { ...p.applicant },
+  const applicant = opt?.applicantFrom === 'substanceManufacturer' ? { ...p.applicant, ...p.substanceManufacturer, duns: '000000003', contact: p.substanceManufacturer.contact ?? 'Regulatory Affairs Manager', email: p.substanceManufacturer.email ?? 'regulatory@corvane.example' } : { ...p.applicant };
+  return deepMerge({
+    applicant,
     applicationNumber: '',
     substance: { name: p.product.inn, manufacturer: p.substanceManufacturer.name },
     product: { name: p.product.brandName, dosageForm: p.product.dosageForm, manufacturer: p.productManufacturer.name },
@@ -81,7 +93,7 @@ export function defaultSettings(productId) {
     // Japan submission unit (eCTD v4.0) and India portal details.
     jp: { receptionNumber: '', brandName: p.product.brandName, janName: p.product.inn, applicantName: p.applicant.name, productCategory: 'jp_1_1' },
     in: { agentName: '', agentAddress: '' },
-  };
+  }, opt?.settings ?? {});
 }
 
 export const SEQ_DEFAULTS = {
@@ -109,11 +121,13 @@ export function newSequence(number, opts = {}, region = 'US') {
   };
 }
 
-export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = null, ectdVersion = null, user, missionId = null, difficulty = null }) {
+export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = null, variant = null, ectdVersion = null, user, missionId = null, difficulty = null }) {
   ectdVersion ??= REGION_VERSION[region] ?? '3.2.2';
-  appType ??= productOptions(productId).find((o) => o.region === region)?.appType ?? DEFAULT_APP_TYPE[region];
+  const opt = optionFor(productId, region, appType, variant);
+  appType ??= opt?.appType ?? DEFAULT_APP_TYPE[region];
+  variant = opt?.appType === appType ? (opt?.variant ?? null) : null;
   const now = new Date().toISOString();
-  const settings = defaultSettings(productId);
+  const settings = defaultSettings(productId, opt);
   if (ectdVersion === '4.0') settings.sequenceStart = '0001';
   return {
     id: uid('p'),
@@ -121,13 +135,13 @@ export function createProject({ name, productId = 'nce-tablet', region = 'US', a
     userId: user?.userId ?? null,
     classId: user?.classId ?? null,
     name: name || 'Untitled dossier',
-    productId, region, appType, ectdVersion,
+    productId, region, appType, variant, ectdVersion,
     missionId, difficulty,
     createdAt: now, updatedAt: now,
     settings,
     forms: {},
-    documents: libraryFor(productId, region),
-    sequences: [newSequence(settings.sequenceStart, {}, region)],
+    documents: libraryFor(productId, region, opt),
+    sequences: [newSequence(settings.sequenceStart, opt?.seq ?? {}, region)],
     log: [],
   };
 }
@@ -242,7 +256,7 @@ export function touch(project) {
   return project;
 }
 
-const APP_LABEL = { nda: 'NDA', anda: 'ANDA', bla: 'BLA', maa: 'MAA' };
+const APP_LABEL = { nda: 'NDA', anda: 'ANDA', bla: 'BLA', 'bla-351k': 'BLA', maa: 'MAA', ind: 'IND', dmf: 'DMF' };
 const lc = (t) => t.charAt(0).toLowerCase() + t.slice(1);
 
 export function coverLetterText(project, seq) {
@@ -296,7 +310,13 @@ export function coverLetterText(project, seq) {
     `eCTD sequence ${seq.number} - ${seq.submissionType} / ${seq.subType}`,
     '', 'Dear Review Division,', ''];
   if (seq.submissionType === 'original-application' && seq.subType === 'application') {
-    if (project.appType === 'anda') {
+    if (project.appType === 'ind') {
+      lines.push(`${s.applicant.name} submits this initial Investigational New Drug application for ${p.product.inn}, to begin the first-in-human study described in the enclosed protocol.`, '', 'The IND is provided in eCTD format (v3.2.2). Forms FDA 1571, 1572 and 3674 are in Module 1.1; the introductory statement and general investigational plan are in 1.20 and the investigator\'s brochure in 1.14.4.1. We understand that the study may not begin until 30 days after FDA receives this IND unless FDA notifies us earlier.');
+    } else if (project.appType === 'dmf') {
+      lines.push(`${s.applicant.name} submits this Type II Drug Master File for the drug substance ${p.product.inn}, manufactured at ${s.applicant.address}.`, '', 'Statement of commitment: we commit to comply with the statements made in this DMF.', '', 'The DMF is provided in eCTD format (v3.2.2) with Module 1, the quality overall summary for the drug substance and Module 3.2.S. Form FDA 3938 is in Module 1.1.');
+    } else if (p.basis === '505(b)(2)') {
+      lines.push(`${s.applicant.name} submits this New Drug Application under section 505(b)(2) of the FD&C Act for ${prod}. It relies in part on FDA's finding of safety and effectiveness for ${p.listedDrug?.name ?? 'the listed drug'} and on published literature, bridged by the enclosed relative bioavailability study.`, '', 'The application is provided in eCTD format (v3.2.2). The patent certification for the listed drug is in Module 1.3.5.2.');
+    } else if (project.appType === 'anda') {
       lines.push(`${s.applicant.name} submits this Abbreviated New Drug Application for ${prod}, referencing ${p.rld?.name ?? 'the reference listed drug'}.`, '', 'The application is provided in eCTD format (v3.2.2). The generic drug user fee cover sheet is included in Module 1.1.');
     } else {
       lines.push(`${s.applicant.name} submits this original New Drug Application for ${prod}, proposed for the ${lc(p.product.indicationText)}.`, '', 'The application is provided in eCTD format (v3.2.2) and contains Modules 1 to 5. The user fee coversheet (Form FDA 3397) is included in Module 1.1.');
@@ -337,6 +357,7 @@ export function makeCoverLetterDoc(project, seq) {
 export function migrateProject(p) {
   if (!p) return p;
   p.region ??= 'US';
+  p.variant ??= null;
   for (const s of p.sequences ?? []) {
     if (s.submissionType === 'original-application' && s.subType === 'original') s.subType = 'application';
     s.submissionMode ??= 'single';

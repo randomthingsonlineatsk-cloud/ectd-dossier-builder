@@ -44,7 +44,7 @@ export function tagFromDoc(project, leaf) {
   const doc = docForLeaf(project, leaf);
   const id = suggestedStudy(doc);
   if (!id || !needsStudyTag(leaf.nodeCode)) return null;
-  return { id, tag: DEFAULT_TAG[moduleOf(leaf.nodeCode)] };
+  return { id, tag: doc?.fileTag ?? DEFAULT_TAG[moduleOf(leaf.nodeCode)] };
 }
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

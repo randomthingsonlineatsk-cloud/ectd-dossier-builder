@@ -1,7 +1,7 @@
 // Rule engine for the eCTD v3.2.2 profiles (US and EU core rules).
 import rulesData from '../data/rules.json' with { type: 'json' };
 import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion } from './tree.js';
-import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, productOptions, isRetireOp } from './model.js';
+import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, optionFor, isRetireOp } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
@@ -15,7 +15,7 @@ const isFirstSeq = (project, seq) => sortedSequences(project)[0]?.id === seq.id;
 const keysFor = (project, seq) => {
   const later = project.region === 'JP' && !isFirstSeq(project, seq) ? ':later' : '';
   const base = [`${project.appType}:${seq.submissionType}:${seq.subType}${later}`, `${project.appType}:${seq.subType}${later}`];
-  const rk = productOptions(project.productId).find((o) => o.region === project.region)?.requiredKey;
+  const rk = optionFor(project.productId, project.region, project.appType, project.variant)?.requiredKey;
   return rk ? [...base.map((k) => `${rk}:${k}`), ...base] : base;
 };
 

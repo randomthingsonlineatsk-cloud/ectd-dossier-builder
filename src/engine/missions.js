@@ -10,7 +10,7 @@ export const MISSIONS = missionsData.missions;
 export const LEVELS = missionsData.levels;
 export const missionById = (id) => MISSIONS.find((m) => m.id === Number(id));
 
-const BASE_EXCLUDE = (d) => d.decoy || d.irOnly || d.defectOnly || d.generated || d.id === 'd-propname';
+const BASE_EXCLUDE = (d) => d.decoy || d.irOnly || d.later || d.defectOnly || d.generated || d.id === 'd-propname';
 
 // Builds a complete, clean sequence 0000 from the library.
 export function buildComplete(project, { exclude = () => false } = {}) {
@@ -26,7 +26,8 @@ export function buildComplete(project, { exclude = () => false } = {}) {
   const regionSkip = (d) => (project.region === 'JP' && hasJa.has(d.id) && d.lang !== 'ja')
     || (project.region === 'IN' && d.form === (project.sequences[0].submissionType === 'new-drug-manufacture' ? 'ct-18' : 'ct-21'));
   const seq = project.sequences[0];
-  seq.description = `${{ EU: 'Initial MAA', JP: 'New drug application', IN: 'New drug application' }[project.region] ?? (project.appType === 'anda' ? 'Original ANDA' : project.appType.startsWith('bla') ? 'Original BLA' : 'Original NDA')} for ${prod.product.brandName} (${prod.product.inn})`;
+  const usLabel = { anda: 'Original ANDA', ind: 'Initial IND', dmf: 'Original Type II DMF', bla: 'Original BLA', 'bla-351k': 'Original BLA' }[project.appType] ?? (prod.basis === '505(b)(2)' ? 'Original 505(b)(2) NDA' : 'Original NDA');
+  seq.description = `${{ EU: 'Initial MAA', JP: 'New drug application', IN: 'New drug application' }[project.region] ?? usLabel} for ${project.appType === 'dmf' || project.appType === 'ind' ? prod.product.inn : `${prod.product.brandName} (${prod.product.inn})`}`;
   const leafByDoc = {};
   for (const d of Object.values(project.documents)) {
     if (BASE_EXCLUDE(d) || exclude(d) || regionSkip(d)) continue;
@@ -43,7 +44,7 @@ export function buildComplete(project, { exclude = () => false } = {}) {
 function baseMissionProject(m, difficulty, user) {
   const p = createProject({
     name: `Mission ${m.id}: ${m.title}`,
-    productId: m.productId, region: m.regionCode ?? (m.region === 'EU' ? 'EU' : 'US'), appType: m.appType, user, missionId: m.id, difficulty,
+    productId: m.productId, region: m.regionCode ?? (m.region === 'EU' ? 'EU' : 'US'), appType: m.appType, variant: m.variant ?? null, user, missionId: m.id, difficulty,
   });
   p.settings.expertMode = difficulty === 'expert';
   p.mission = { id: m.id, difficulty, startedAt: new Date().toISOString(), minutes: m.minutes?.[difficulty] ?? null, submitted: null, answers: {} };
@@ -73,7 +74,7 @@ export async function seedMission(id, difficulty, user) {
     for (const pl of m.plant ?? []) if (p.documents[pl.doc]) p.documents[pl.doc].factOverrides = { ...pl.facts };
     return p;
   }
-  if (m.id === 3 || m.id === 14) {
+  if ([3, 14, 17, 18, 19].includes(m.id)) {
     const p = baseMissionProject(m, difficulty, user);
     addExtras(p, m);
     return p;
@@ -158,7 +159,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -379,6 +380,52 @@ function evalM16(p) {
     published: pub(p, '0001') && noHighIn(p, '0001'),
     quiz: quizOk(p),
   }, s1 ? validate(p, '0001') : null);
+}
+
+// ---------- Phase 5 ----------
+const findingsIn = (p, n) => (seqByNumber(p, n) ? validate(p, n) : null);
+function evalM17(p) {
+  const v = validate(p, '0000');
+  const f = (pre) => v.findings.some((x) => x.ruleId.startsWith(pre));
+  const ls = leavesIn(p, '0000');
+  return finish(17, {
+    meta: !f('BB-06'),
+    forms: ['fda-1571', 'fda-1572', 'fda-3674'].every((fm) => hasForm(p, '0000', '1.1', fm)) && hasForm(p, '0000', '1.2'),
+    no356h: !hasForm(p, '0000', '1.1', 'fda-356h'),
+    plan: hasForm(p, '0000', '1.20'),
+    ib: hasForm(p, '0000', '1.14.4.1'),
+    protocol: ls.some((l) => l.docId === 'ind-protocol' && l.nodeCode === '5.3.3.1' && l.study?.tag === 'protocol-or-amendment' && l.study?.id),
+    required: !f('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+}
+function evalM18(p) {
+  const r = evalBuild(p, 18, {
+    patcert: hasForm(p, '0000', '1.3.5.2'),
+    bridge: has(p, '0000', 'x-ba101', '5.3.1.2'),
+    literature: has(p, '0000', 'x-43', '4.3') && has(p, '0000', 'x-54', '5.4'),
+  });
+  return r;
+}
+function evalM19(p) {
+  const v0 = validate(p, '0000');
+  const s1 = seqByNumber(p, '0001');
+  const l0 = leavesIn(p, '0000');
+  return finish(19, {
+    meta: !v0.findings.some((x) => x.ruleId === 'BB-06') && /corvane/i.test(p.settings.applicant?.name ?? ''),
+    forms: hasForm(p, '0000', '1.1', 'fda-3938') && hasForm(p, '0000', '1.2'),
+    qos: has(p, '0000', 'dmf-qos', '2.3'),
+    onlyS: l0.length > 0 && !l0.some((l) => /^3\.2\.(P|A)/.test(l.nodeCode)),
+    required: !v0.findings.some((x) => x.ruleId === 'CT-01'),
+    published0: pub(p, '0000') && v0.counts.High === 0,
+    amend: s1?.subType === 'amendment',
+    loa: has(p, '0001', 'dmf-loa', '1.4.1'),
+    onlyLoa: onlyIn(p, '0001', ['1.1', '1.2', '1.4.1']),
+    published1: pub(p, '0001') && noHighIn(p, '0001'),
+    quiz: quizOk(p),
+  }, findingsIn(p, '0001') ?? v0);
 }
 
 // ---------- four scoring axes ----------

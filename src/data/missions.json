@@ -1839,6 +1839,331 @@
      "label": "Withdrawal questions answered correctly"
     }
    ]
+  },
+  {
+   "id": 17,
+   "phase": 5,
+   "title": "Initial IND",
+   "region": "US",
+   "regionCode": "US",
+   "variant": "ind",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "ind",
+   "minutes": {
+    "expert": 40
+   },
+   "brief": "Before any phase 3 data exist, Ostrevia (lumiravostat) needs an IND so the first-in-human study can start in the US. Build the initial IND: the IND forms, the general investigational plan, the investigator's brochure, the CMC and toxicology data available now, and the phase 1 protocol with its study tagging file.",
+   "quiz": [
+    {
+     "id": "wait",
+     "q": "When may the first-in-human study start after the IND is sent?",
+     "options": [
+      "Immediately",
+      "30 days after FDA receives the IND, unless FDA places a clinical hold or says it may start sooner",
+      "Only after FDA writes to approve it",
+      "After the first annual report"
+     ],
+     "answer": 1,
+     "why": "An IND goes into effect 30 days after FDA receives it unless FDA notifies the sponsor of a clinical hold, or earlier if FDA says so (21 CFR 312.40(b))."
+    },
+    {
+     "id": "form1572",
+     "q": "Who signs Form FDA 1572?",
+     "options": [
+      "The sponsor's regulatory lead",
+      "Each clinical investigator",
+      "FDA",
+      "The ethics committee"
+     ],
+     "answer": 1,
+     "why": "Form FDA 1572 is the statement of investigator: each investigator commits to follow the protocol and the IND regulations."
+    },
+    {
+     "id": "tag",
+     "q": "Which study tagging file tag does the protocol carry?",
+     "options": [
+      "study-report",
+      "synopsis",
+      "protocol-or-amendment",
+      "legacy-clinical-study-report"
+     ],
+     "answer": 2,
+     "why": "Protocols and their amendments are tagged protocol-or-amendment; the report comes later with study-report."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the IND number (six digits).",
+    "Place Forms FDA 1571, 1572 and 3674 in 1.1, and add a cover letter in 1.2.",
+    "Place the introductory statement and general investigational plan in 1.20 and the investigator's brochure in 1.14.4.1.",
+    "Add the CMC sections and the nonclinical study reports available now.",
+    "Place the HRP-101 protocol in 5.3.3.1 and tag it (Tag studies from documents).",
+    "Leave out anything that belongs to a marketing application. Answer the quiz, validate and publish 0000."
+   ],
+   "hints": [
+    "An IND has its own form. The marketing application form is a trap here.",
+    "Modules 2 summaries are not required for an IND; the investigator's brochure carries the summary."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "IND number and US metadata complete"
+    },
+    {
+     "id": "forms",
+     "label": "Forms FDA 1571, 1572 and 3674 in 1.1"
+    },
+    {
+     "id": "no356h",
+     "label": "No marketing application form"
+    },
+    {
+     "id": "plan",
+     "label": "General investigational plan in 1.20"
+    },
+    {
+     "id": "ib",
+     "label": "Investigator's brochure in 1.14.4.1"
+    },
+    {
+     "id": "protocol",
+     "label": "Protocol in 5.3.3.1 tagged protocol-or-amendment"
+    },
+    {
+     "id": "required",
+     "label": "CMC and nonclinical sections present"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "IND questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "phase": 5,
+   "title": "505(b)(2) application",
+   "region": "US",
+   "regionCode": "US",
+   "version": "3.2.2",
+   "productId": "talmisartan-er",
+   "appType": "nda",
+   "minutes": {
+    "expert": 50
+   },
+   "brief": "Calderon Therapeutics has reformulated talmisartan as a once-daily extended-release capsule, Talvera XR. Instead of repeating every study, the NDA relies on FDA's finding for the listed drug Corvenza and on published literature, bridged by a relative bioavailability study. Build it, certify to the listed drug's patents, and leave out what you have no right to use.",
+   "quiz": [
+    {
+     "id": "basis",
+     "q": "What lets a 505(b)(2) application rely on information it did not generate?",
+     "options": [
+      "A licence from the listed drug's holder is always required",
+      "The statute allows reliance on investigations not conducted by or for the applicant and to which it has no right of reference, such as literature or FDA's finding for a listed drug",
+      "Nothing: every study must be repeated",
+      "Only foreign data"
+     ],
+     "answer": 1,
+     "why": "Section 505(b)(2) of the FD&C Act covers applications whose full reports of safety and effectiveness come at least partly from studies the applicant did not conduct and has no right of reference to."
+    },
+    {
+     "id": "p4",
+     "q": "Talvera XR certifies under Paragraph IV that a listed method-of-use patent is invalid or not infringed. What must follow?",
+     "options": [
+      "Nothing",
+      "Notice to the patent owner and to the listed drug's NDA holder",
+      "A new IND",
+      "A labeling supplement"
+     ],
+     "answer": 1,
+     "why": "A Paragraph IV certification triggers notice to the patent owner and the NDA holder, which can start patent litigation and a 30-month stay."
+    },
+    {
+     "id": "excl",
+     "q": "If the relative bioavailability and clinical studies are essential to approval, what exclusivity could Talvera XR get?",
+     "options": [
+      "5-year new chemical entity exclusivity",
+      "3-year exclusivity for new clinical investigations",
+      "7-year orphan exclusivity",
+      "None is possible for a 505(b)(2)"
+     ],
+     "answer": 1,
+     "why": "Talmisartan is not a new chemical entity, but new clinical investigations essential to approval can earn 3 years of exclusivity for the change."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the application number.",
+    "Build 0000 with the 505(b)(2) Module 1: forms, certifications, the patent certification for Corvenza in 1.3.5.2, the exclusivity claim and the draft labeling.",
+    "Place the scientific bridge: the clinical overview, the relative bioavailability and food-effect studies in 5.3.1.2, and the literature in 4.3 and 5.4.",
+    "Leave out anything you have no right to use.",
+    "Answer the quiz, validate and publish 0000."
+   ],
+   "hints": [
+    "The patent certification is about the listed drug's patents; the patent information form (3542a) is about Talvera XR's own.",
+    "A study report from another company's NDA is not literature."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "US metadata complete"
+    },
+    {
+     "id": "m1",
+     "label": "All mandatory 505(b)(2) Module 1 items placed"
+    },
+    {
+     "id": "patcert",
+     "label": "Patent certification for the listed drug in 1.3.5.2"
+    },
+    {
+     "id": "bridge",
+     "label": "Relative bioavailability bridge in 5.3.1.2"
+    },
+    {
+     "id": "literature",
+     "label": "Literature in 4.3 and 5.4"
+    },
+    {
+     "id": "noDecoys",
+     "label": "No reports you have no right of reference to"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "505(b)(2) questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "phase": 5,
+   "title": "Type II DMF and a letter of authorization",
+   "region": "US",
+   "regionCode": "US",
+   "variant": "dmf",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "dmf",
+   "minutes": {
+    "expert": 40
+   },
+   "brief": "You work for Corvane Fine Chemicals, which makes the drug substance lumiravostat for Halcyon Ridge. Corvane keeps its process confidential, so it files its own Type II DMF. Build the DMF, then authorize Halcyon Ridge to reference it in their NDA.",
+   "quiz": [
+    {
+     "id": "approve",
+     "q": "Does FDA approve a DMF?",
+     "options": [
+      "Yes, like an NDA",
+      "No: FDA reviews it only when an application references it",
+      "Only Type II DMFs",
+      "Only after an inspection"
+     ],
+     "answer": 1,
+     "why": "DMFs are neither approved nor disapproved. FDA reviews the technical content when it reviews an application that references the DMF."
+    },
+    {
+     "id": "type",
+     "q": "What does a Type II DMF cover?",
+     "options": [
+      "Packaging materials",
+      "Drug substance, drug substance intermediates and materials used in their preparation, or drug product",
+      "Excipients and colourants",
+      "Sterile manufacturing sites"
+     ],
+     "answer": 1,
+     "why": "Type II covers drug substance, intermediates and materials used in their preparation, or drug product. Type III is packaging; Type IV excipients; Type V other."
+    },
+    {
+     "id": "loa",
+     "q": "Who sends the letter of authorization to the DMF?",
+     "options": [
+      "The applicant",
+      "The DMF holder",
+      "FDA",
+      "The contract research organisation"
+     ],
+     "answer": 1,
+     "why": "The holder authorizes a named customer to reference the DMF by filing a letter of authorization in its DMF (1.4.1), and gives the customer a copy for its application."
+    }
+   ],
+   "steps": [
+    "In Module 1, check the holder (Corvane) and enter the DMF number (six digits).",
+    "Build 0000: Form FDA 3938 in 1.1, a cover letter with the statement of commitment in 1.2, the quality overall summary for the drug substance in 2.3, and 3.2.S.",
+    "Answer the quiz, validate and publish 0000.",
+    "Create 0001 as an amendment: cover letter, Form FDA 3938, and the letter of authorization for Halcyon Ridge in 1.4.1. Send nothing else. Validate and publish 0001."
+   ],
+   "hints": [
+    "A DMF has no drug product: Module 3.2.P belongs to the customer's NDA.",
+    "The letter of authorization arrives in the library when you start 0001."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "DMF number and holder metadata complete"
+    },
+    {
+     "id": "forms",
+     "label": "0000: Form FDA 3938 and cover letter"
+    },
+    {
+     "id": "qos",
+     "label": "0000: quality overall summary for the drug substance in 2.3"
+    },
+    {
+     "id": "onlyS",
+     "label": "0000: Module 3 is 3.2.S only"
+    },
+    {
+     "id": "required",
+     "label": "Required 3.2.S sections present"
+    },
+    {
+     "id": "published0",
+     "label": "0000 published with no High findings"
+    },
+    {
+     "id": "amend",
+     "label": "0001 is an amendment"
+    },
+    {
+     "id": "loa",
+     "label": "0001: letter of authorization in 1.4.1"
+    },
+    {
+     "id": "onlyLoa",
+     "label": "0001: cover, form and letter only"
+    },
+    {
+     "id": "published1",
+     "label": "0001 published with no High findings"
+    },
+    {
+     "id": "quiz",
+     "label": "DMF questions answered correctly"
+    }
+   ]
   }
  ]
 }
