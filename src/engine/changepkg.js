@@ -22,13 +22,16 @@ export function importChangePackage(project, pkg) {
   const warnings = [];
   if (REGION[pkg.region] !== project.region) throw new Error(`The package is for ${pkg.region}; this project is for ${project.region}.`);
   if (pkg.product?.ectdProductId && pkg.product.ectdProductId !== project.productId) warnings.push(`The package is for ${pkg.product.brandName}, a different product from this project's.`);
-  if (project.appType && pkg.product?.appType && !project.appType.startsWith(pkg.product.appType)) warnings.push(`The package is for an ${pkg.product.appType.toUpperCase()}; this project is an ${project.appType.toUpperCase()}.`);
+  if (pkg.region === 'US' && project.appType && pkg.product?.appType && !project.appType.startsWith(pkg.product.appType)) warnings.push(`The package is for an ${pkg.product.appType.toUpperCase()}; this project is an ${project.appType.toUpperCase()}.`);
   const seq = createSequence(project, {
     submissionType: pkg.submission.ectd.submissionType,
     subType: pkg.submission.ectd.subType,
     description: `${pkg.submission.categoryLabel}: ${pkg.submission.description}`.slice(0, 240),
+    // EU: submission mode (single, grouping, worksharing) and the list of variations for the cover letter.
+    submissionMode: pkg.submission.ectd.submissionMode ?? 'single',
+    changes: pkg.region === 'EU' ? pkg.changes.map((c) => ({ type: c.categoryLabel ?? c.category, scope: `${c.entry?.at ?? ''} - ${c.title}`.trim() })) : [],
   });
-  const todo = [...(pkg.module1 ?? []).map((m) => ({ code: m.code, label: m.label, operation: 'new', why: ['Regional Module 1'] })), ...pkg.ctd]
+  const todo = [...pkg.ctd, ...(pkg.module1 ?? []).map((m) => ({ code: m.code, label: m.label, operation: 'new', why: ['Regional Module 1'] }))]
     .filter((e, i, a) => a.findIndex((x) => x.code === e.code) === i)
     .map((e) => ({ code: e.code, label: e.label, operation: e.operation, why: e.why ?? [], known: !!INDEX.map[e.code] }));
   for (const t of todo) if (!t.known) warnings.push(`Section ${t.code} is not in this app's ${project.region} tree; place it by hand.`);
