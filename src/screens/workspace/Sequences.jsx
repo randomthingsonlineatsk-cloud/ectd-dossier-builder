@@ -3,6 +3,7 @@ import { INDEX, REGION_PACKS, displayCode as dc } from '../../engine/tree.js';
 import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences, isRetireOp } from '../../engine/model.js';
 import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
+import { parseChangePackage, importChangePackage, todoStatus } from '../../engine/changepkg.js';
 
 export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
   const seqs = sortedSequences(project);
@@ -22,6 +23,15 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
     .sort((a, b) => INDEX.order.indexOf(a.leaf.nodeCode) - INDEX.order.indexOf(b.leaf.nodeCode) || a.seq.localeCompare(b.seq));
   const nextNum = nextSequenceNumber(project);
   const drafts = seqs.filter((s) => s.status === 'draft');
+  const importPkg = async (file) => {
+    try {
+      const pkg = parseChangePackage(await file.text());
+      let num; let warns = [];
+      mutate((p) => { const r = importChangePackage(p, pkg); num = r.seq.number; warns = r.warnings; });
+      setSeqNumber(num);
+      toast(`Sequence ${num} started from the change package (${pkg.submission.categoryLabel}). Add the leaves on its to-do list.${warns.length ? ` ${warns.join(' ')}` : ''}`, warns.length ? 'warn' : 'info');
+    } catch (err) { toast(err.message, 'error'); }
+  };
 
   const create = (e) => {
     e.preventDefault();
@@ -85,6 +95,38 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
           </div>
         </section>
       )}
+
+      {seq.changePackage && (
+        <section className="panel">
+          <h2 style={{ fontSize: 'var(--step-1)' }}>Sequence {seq.number}: from the Variations Classifier</h2>
+          <p className="small">{seq.changePackage.categoryLabel}{seq.changePackage.implementation ? ` · ${seq.changePackage.implementation.badge}` : ''}{seq.changePackage.earliestUse ? ` · earliest use ${seq.changePackage.earliestUse}` : ''}. The cover letter for this sequence uses the letter from the package.</p>
+          <ul className="small">{seq.changePackage.changes.map((c) => <li key={c.id}>{c.title}{c.note ? `: ${c.note}` : ''} ({{ CBE30: "CBE-30", CBE0: "CBE-0" }[c.category] ?? c.category}; {c.entry?.at})</li>)}</ul>
+          <div className="table-wrap">
+            <table className="data">
+              <thead><tr><th>Section</th><th>Document</th><th>Operation</th><th>In this sequence</th></tr></thead>
+              <tbody>
+                {todoStatus(seq).map((t) => (
+                  <tr key={t.code}>
+                    <td><strong>{t.code}</strong></td>
+                    <td>{t.label}<div className="small muted">{t.why.join('; ')}</div></td>
+                    <td><span className={`op ${t.operation}`}>{t.operation}</span></td>
+                    <td>{t.placed ? <span className="pill ok">Placed</span> : <span className="pill">To do</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="small muted">"replace" and "append" need the earlier leaf as target; place them in the builder from the current view.</p>
+        </section>
+      )}
+
+      <section className="panel">
+        <h2 style={{ fontSize: 'var(--step-1)' }}>Start a sequence from a change package</h2>
+        <p className="small muted">Classified a change in the Variations Classifier? Import its change package to start a draft sequence of the right type, with the cover letter and a to-do list of leaves.</p>
+        <label className="btn" style={{ width: 'fit-content' }}>Import change package
+          <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importPkg(e.target.files[0]); e.target.value = ''; }} />
+        </label>
+      </section>
 
       <section className="panel">
         <h2 style={{ fontSize: 'var(--step-1)' }}>Create sequence {nextNum}</h2>
