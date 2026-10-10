@@ -4,9 +4,12 @@
 import ctd from '../data/ctd-tree.json' with { type: 'json' };
 import usM1 from '../data/us-m1.json' with { type: 'json' };
 import euM1 from '../data/eu-m1.json' with { type: 'json' };
+import jpM1 from '../data/jp-m1.json' with { type: 'json' };
+import inM1 from '../data/in-m1.json' with { type: 'json' };
 
-export const REGION_PACKS = { US: usM1, EU: euM1 };
-export const M1_ROOT = { US: '1', EU: 'eu:1' };
+export const REGION_PACKS = { US: usM1, EU: euM1, JP: jpM1, IN: inM1 };
+export const M1_ROOT = { US: '1', EU: 'eu:1', JP: 'jp:1', IN: 'in:1' };
+export const REGION_LABEL = { US: 'US', EU: 'EU', JP: 'Japan', IN: 'India' };
 export const REGIONS = Object.keys(REGION_PACKS);
 
 function indexTree(root, out, parent, module, region) {
@@ -14,6 +17,8 @@ function indexTree(root, out, parent, module, region) {
     code: root.code,
     display: root.display ?? root.code,
     title: root.title,
+    titleJa: root.titleJa ?? null,
+    cou: root.cou ?? null,
     element: root.element ?? null,
     folder: root.folder ?? null,
     country: root.country ?? null,
@@ -44,7 +49,7 @@ function buildIndex() {
 export const INDEX = buildIndex();
 
 export const nodeOf = (code) => INDEX.map[code];
-export const displayCode = (code) => INDEX.map[code]?.display ?? String(code ?? '').replace(/^eu:/, '');
+export const displayCode = (code) => INDEX.map[code]?.display ?? String(code ?? '').replace(/^(eu|jp|in):/, '');
 export const nodeLabel = (code) => `${displayCode(code)} ${INDEX.map[code]?.title ?? ''}`.trim();
 export const rootsFor = (region) => [M1_ROOT[region] ?? '1', '2', '3', '4', '5'];
 export const inRegion = (code, region) => {
@@ -90,7 +95,7 @@ export function folderPath(code, settings) {
   if (!n) return null;
   if (n.isM1) {
     const pack = REGION_PACKS[n.region];
-    if (n.region === 'US') return pack.folder;
+    if (n.region !== 'EU') return pack.folder;
     const parts = [pack.folder];
     for (const a of ancestors(code).slice(1)) if (a.folder) parts.push(a.folder);
     if (n.country) parts.push(n.country);

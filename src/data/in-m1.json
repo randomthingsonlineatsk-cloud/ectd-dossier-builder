@@ -1,0 +1,273 @@
+{
+  "_about": "India Module 1 headings modelled on CDSCO's CTD guidance for new drug applications (2010 draft), updated for the forms of the New Drugs and Clinical Trials Rules, 2019 (CT-18 import, CT-21 manufacture). Sub-items under 1.2.3 and 1.3 are kept as single headings in this app. The dossier is a CTD, filed as PDFs through the online portal, without an eCTD backbone. Codes carry an 'in:' prefix in the app.",
+  "region": "IN",
+  "regionalFile": null,
+  "folder": "m1/in",
+  "version": "CTD",
+  "tree": {
+    "code": "in:1",
+    "display": "1",
+    "title": "Module 1 (India)",
+    "element": null,
+    "children": [
+      {
+        "code": "in:1.1",
+        "display": "1.1",
+        "title": "Covering Letter and Comprehensive Table of Contents (Modules 1 to 5)",
+        "element": null
+      },
+      {
+        "code": "in:1.2",
+        "display": "1.2",
+        "title": "Administrative Information",
+        "element": null,
+        "children": [
+          {
+            "code": "in:1.2.1",
+            "display": "1.2.1",
+            "title": "Brief Introduction about the Applicant Company",
+            "element": null
+          },
+          {
+            "code": "in:1.2.2",
+            "display": "1.2.2",
+            "title": "Application Form and Fee Receipt",
+            "element": null,
+            "help": "Under the New Drugs and Clinical Trials Rules, 2019: Form CT-18 to import a new drug for sale or distribution, Form CT-21 to manufacture one, with the fee paid through the portal. (The 2010 CTD guidance named Form 44, which the 2019 Rules replaced.)"
+          },
+          {
+            "code": "in:1.2.3",
+            "display": "1.2.3",
+            "title": "Legal and Critical Documents",
+            "element": null,
+            "help": "Authorisation of the Indian agent, import or manufacturing licences, certificate of pharmaceutical product or free sale certificate, GMP certificates, undertakings."
+          },
+          {
+            "code": "in:1.2.4",
+            "display": "1.2.4",
+            "title": "Coordinates Related to the Application",
+            "element": null,
+            "help": "Contacts: responsible official, batch release, authorised agent in India (for imports), manufacturing premises."
+          }
+        ]
+      },
+      {
+        "code": "in:1.3",
+        "display": "1.3",
+        "title": "General Information on the Drug Product",
+        "element": null,
+        "help": "Prescribing information (package insert), labels and carton drafts complying with the Drugs Rules, and product particulars."
+      },
+      {
+        "code": "in:1.4",
+        "display": "1.4",
+        "title": "Summary of Testing Protocol(s) for Quality Control Testing",
+        "element": null
+      },
+      {
+        "code": "in:1.5",
+        "display": "1.5",
+        "title": "Regulatory Status in Other Countries",
+        "element": null,
+        "help": "Approvals, withdrawals and restrictions elsewhere. A request to waive the local clinical trial (where the drug is approved in specified countries) is argued with this evidence."
+      },
+      {
+        "code": "in:1.6",
+        "display": "1.6",
+        "title": "Domestic Price of the Drug in the Country of Origin (INR)",
+        "element": null
+      },
+      {
+        "code": "in:1.7",
+        "display": "1.7",
+        "title": "Profile of the Manufacturer's Research Activity",
+        "element": null
+      },
+      {
+        "code": "in:1.8",
+        "display": "1.8",
+        "title": "Profile of the Manufacturer's Business Activity",
+        "element": null
+      },
+      {
+        "code": "in:1.9",
+        "display": "1.9",
+        "title": "Information Regarding Involvement of Experts",
+        "element": null
+      },
+      {
+        "code": "in:1.10",
+        "display": "1.10",
+        "title": "Samples of Drug Product",
+        "element": null
+      },
+      {
+        "code": "in:1.11",
+        "display": "1.11",
+        "title": "Promotional Materials",
+        "element": null
+      },
+      {
+        "code": "in:query",
+        "display": "Q",
+        "title": "Query Responses",
+        "element": null,
+        "help": "Responses to the regulator's query letters, uploaded through the portal."
+      }
+    ]
+  },
+  "submissionTypes": [
+    {
+      "value": "new-drug-import",
+      "label": "Import of a new drug for sale or distribution (Form CT-18)"
+    },
+    {
+      "value": "new-drug-manufacture",
+      "label": "Manufacture of a new drug for sale or distribution (Form CT-21)"
+    }
+  ],
+  "submissionSubTypes": [
+    {
+      "value": "application",
+      "label": "Application",
+      "help": "The initial dossier."
+    },
+    {
+      "value": "query-response",
+      "label": "Query response",
+      "help": "Answers to a query letter from the regulator."
+    }
+  ],
+  "applicationTypes": [
+    {
+      "value": "nda",
+      "label": "New drug application (India)",
+      "phase": 3
+    }
+  ],
+  "forms": [
+    {
+      "id": "ct-18",
+      "label": "Form CT-18 — application to import a new drug for sale or distribution",
+      "section": "in:1.2.2"
+    },
+    {
+      "id": "ct-21",
+      "label": "Form CT-21 — application to manufacture a new drug for sale or distribution",
+      "section": "in:1.2.2"
+    },
+    {
+      "id": "fee",
+      "label": "Fee payment receipt",
+      "section": "in:1.2.2"
+    }
+  ],
+  "checklist": {
+    "nda:new-drug-import:application": [
+      {
+        "section": "in:1.1",
+        "label": "Covering letter and table of contents",
+        "level": "mandatory",
+        "rule": "IN-01"
+      },
+      {
+        "section": "in:1.2.1",
+        "label": "Introduction to the applicant",
+        "level": "mandatory",
+        "rule": "IN-02"
+      },
+      {
+        "section": "in:1.2.2",
+        "form": "ct-18",
+        "label": "Form CT-18 (import)",
+        "level": "mandatory",
+        "rule": "IN-03"
+      },
+      {
+        "section": "in:1.2.2",
+        "form": "fee",
+        "label": "Fee payment receipt",
+        "level": "mandatory",
+        "rule": "IN-04"
+      },
+      {
+        "section": "in:1.2.3",
+        "label": "Legal documents: Indian agent authorisation, CoPP, GMP",
+        "level": "mandatory",
+        "rule": "IN-02"
+      },
+      {
+        "section": "in:1.2.4",
+        "label": "Coordinates, including the authorised agent in India",
+        "level": "mandatory",
+        "rule": "IN-02"
+      },
+      {
+        "section": "in:1.3",
+        "label": "Prescribing information, labels and cartons",
+        "level": "mandatory",
+        "rule": "IN-05"
+      },
+      {
+        "section": "in:1.4",
+        "label": "Summary of QC testing protocols",
+        "level": "mandatory",
+        "rule": "IN-02"
+      },
+      {
+        "section": "in:1.5",
+        "label": "Regulatory status in other countries",
+        "level": "mandatory",
+        "rule": "IN-02"
+      },
+      {
+        "section": "in:1.6",
+        "label": "Price in the country of origin",
+        "level": "mandatory",
+        "rule": "IN-02"
+      }
+    ],
+    "nda:new-drug-manufacture:application": [
+      {
+        "section": "in:1.1",
+        "label": "Covering letter and table of contents",
+        "level": "mandatory",
+        "rule": "IN-01"
+      },
+      {
+        "section": "in:1.2.2",
+        "form": "ct-21",
+        "label": "Form CT-21 (manufacture)",
+        "level": "mandatory",
+        "rule": "IN-03"
+      },
+      {
+        "section": "in:1.2.2",
+        "form": "fee",
+        "label": "Fee payment receipt",
+        "level": "mandatory",
+        "rule": "IN-04"
+      },
+      {
+        "section": "in:1.3",
+        "label": "Prescribing information, labels and cartons",
+        "level": "mandatory",
+        "rule": "IN-05"
+      }
+    ],
+    "nda:new-drug-import:query-response": [
+      {
+        "section": "in:1.1",
+        "label": "Covering letter",
+        "level": "mandatory",
+        "rule": "IN-01"
+      },
+      {
+        "section": "in:query",
+        "label": "Query response document",
+        "level": "mandatory",
+        "rule": "IN-06"
+      }
+    ]
+  }
+}

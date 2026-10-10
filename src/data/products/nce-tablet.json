@@ -894,10 +894,20 @@
     {
       "region": "EU",
       "appType": "maa"
+    },
+    {
+      "region": "JP",
+      "appType": "nda"
+    },
+    {
+      "region": "IN",
+      "appType": "nda"
     }
   ],
   "generateRegionDocs": {
-    "EU": true
+    "EU": true,
+    "JP": true,
+    "IN": true
   },
   "facts": {
     "strengths": "10 mg and 25 mg",

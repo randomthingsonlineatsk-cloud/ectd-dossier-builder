@@ -4,12 +4,15 @@
 import nceTablet from '../data/products/nce-tablet.json' with { type: 'json' };
 import genericTablet from '../data/products/generic-tablet.json' with { type: 'json' };
 import sterileInjectable from '../data/products/sterile-injectable.json' with { type: 'json' };
+import mabInfusion from '../data/products/mab-infusion.json' with { type: 'json' };
+import biosimilarMab from '../data/products/biosimilar-mab.json' with { type: 'json' };
 import { INDEX, filePath, inRegion } from './tree.js';
 import { regionDocs } from './regiondocs.js';
 
 export const SCHEMA_VERSION = 2;
-export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable };
-export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa' };
+export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable, 'mab-infusion': mabInfusion, 'biosimilar-mab': biosimilarMab };
+export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa', JP: 'nda', IN: 'nda' };
+export const REGION_VERSION = { US: '3.2.2', EU: '3.2.2', JP: '4.0', IN: 'CTD' };
 
 // Which regions and application types each product supports.
 export const productOptions = (productId) => PRODUCTS[productId]?.options ?? [{ region: 'US', appType: 'nda' }];
@@ -73,12 +76,17 @@ export function defaultSettings(productId) {
       inventedName: p.product.brandName,
       inn: p.product.inn,
     },
+    // Japan submission unit (eCTD v4.0) and India portal details.
+    jp: { receptionNumber: '', brandName: p.product.brandName, janName: p.product.inn, applicantName: p.applicant.name, productCategory: 'jp_1_1' },
+    in: { agentName: '', agentAddress: '' },
   };
 }
 
 export const SEQ_DEFAULTS = {
   US: { submissionType: 'original-application', subType: 'application' },
   EU: { submissionType: 'maa', subType: 'initial' },
+  JP: { submissionType: 'jp_original', subType: 'jp_ctd' },
+  IN: { submissionType: 'new-drug-import', subType: 'application' },
 };
 
 // For the EU, subType holds the submission unit type; submissionMode and relatedSequence are EU-only.
@@ -99,10 +107,12 @@ export function newSequence(number, opts = {}, region = 'US') {
   };
 }
 
-export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = null, ectdVersion = '3.2.2', user, missionId = null, difficulty = null }) {
+export function createProject({ name, productId = 'nce-tablet', region = 'US', appType = null, ectdVersion = null, user, missionId = null, difficulty = null }) {
+  ectdVersion ??= REGION_VERSION[region] ?? '3.2.2';
   appType ??= productOptions(productId).find((o) => o.region === region)?.appType ?? DEFAULT_APP_TYPE[region];
   const now = new Date().toISOString();
   const settings = defaultSettings(productId);
+  if (ectdVersion === '4.0') settings.sequenceStart = '0001';
   return {
     id: uid('p'),
     schema: SCHEMA_VERSION,
@@ -162,9 +172,10 @@ export function lifecycleState(project, uptoNumber = null) {
       const tKey = leaf.target ? `${leaf.target.seq}:${leaf.target.leafId}` : null;
       const tgt = tKey ? entries.get(tKey) : null;
       if (leaf.operation === 'replace' && tgt && tgt.status === 'current') { tgt.status = 'replaced'; tgt.by = key; }
-      if (leaf.operation === 'delete') {
-        if (tgt && tgt.status === 'current') { tgt.status = 'deleted'; tgt.by = key; }
-        entry.status = 'delete-op';
+      if (leaf.operation === 'delete' || leaf.operation === 'suspend') {
+        const st = leaf.operation === 'suspend' ? 'suspended' : 'deleted';
+        if (tgt && tgt.status === 'current') { tgt.status = st; tgt.by = key; }
+        entry.status = `${leaf.operation}-op`;
       }
       entries.set(key, entry);
     }
@@ -238,6 +249,26 @@ export function coverLetterText(project, seq) {
   const prod = `${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(' and ')}`;
   const contact = ['', `Contact: ${s.applicant.contact}, ${s.applicant.phone}, ${s.applicant.email}`, '', 'Sincerely,', '', s.applicant.contact, '', 'TRAINING ONLY - fictional product and company, not for submission.'];
   const head = [s.applicant.name, s.applicant.address, '', 'Date: [date of dispatch]', ''];
+  if (project.region === 'JP') {
+    const jp = s.jp ?? {};
+    return [...head,
+      '[In practice this letter is written in Japanese. English is shown for training.]', '',
+      `To: Pharmaceuticals and Medical Devices Agency`,
+      `Re: eCTD reception number ${jp.receptionNumber || '[reception number]'} - ${jp.brandName} (${jp.janName})`,
+      `Submission unit ${seqIntLocal(seq.number)} - ${seq.description || seq.subType}`, '',
+      `${jp.applicantName || s.applicant.name} submits this eCTD v4.0 submission unit for ${prod}.`,
+      ...contact].join('\n');
+  }
+  if (project.region === 'IN') {
+    const form = seq.submissionType === 'new-drug-manufacture' ? 'Form CT-21' : 'Form CT-18';
+    return [...head,
+      'To: The Central Licensing Authority',
+      `Re: ${seq.subType === 'query-response' ? 'Response to query' : `Application in ${form}`} - ${prod}`, '',
+      seq.subType === 'query-response'
+        ? `${s.applicant.name}, through its authorised agent in India${s.in?.agentName ? ` (${s.in.agentName})` : ''}, submits responses to the query letter. ${seq.description || ''}`.trim()
+        : `${s.applicant.name}, through its authorised agent in India${s.in?.agentName ? ` (${s.in.agentName})` : ''}, applies for permission to ${seq.submissionType === 'new-drug-manufacture' ? 'manufacture' : 'import'} ${prod} for sale or distribution under the New Drugs and Clinical Trials Rules, 2019. The dossier follows the CTD format with the India Module 1 and is uploaded through the online portal.`,
+      ...contact].join('\n');
+  }
   if (project.region === 'EU') {
     const eu = s.eu ?? {};
     const unit = seq.subType;
@@ -276,14 +307,24 @@ export function coverLetterText(project, seq) {
   return [...lines, ...contact].join('\n');
 }
 
+const COVER = {
+  US: { section: '1.2', fileName: 'cover-letter.pdf' },
+  EU: { section: 'eu:1.0', fileName: 'ema-cover.pdf' },
+  JP: { section: 'jp:cover', fileName: 'cover.pdf', lang: 'ja' },
+  IN: { section: 'in:1.1', fileName: 'covering-letter.pdf' },
+};
+export const coverSection = (region) => COVER[region]?.section ?? '1.2';
+const seqIntLocal = (n) => String(parseInt(n, 10));
+
 export function makeCoverLetterDoc(project, seq) {
-  const eu = project.region === 'EU';
+  const c = COVER[project.region] ?? COVER.US;
   return makeDoc({
     id: `gen-cl-${seq.number}-${uid().slice(0, 4)}`,
-    section: eu ? 'eu:1.0' : '1.2',
+    section: c.section,
     region: project.region,
-    title: `Cover Letter - Sequence ${seq.number}`,
-    fileName: eu ? 'ema-cover.pdf' : 'cover-letter.pdf',
+    lang: c.lang,
+    title: `Cover Letter - ${project.ectdVersion === '4.0' ? 'Submission Unit' : 'Sequence'} ${project.ectdVersion === '4.0' ? seqIntLocal(seq.number) : seq.number}`,
+    fileName: c.fileName,
     pages: 2,
     generated: true,
     content: coverLetterText(project, seq),
@@ -299,6 +340,11 @@ export function migrateProject(p) {
     s.submissionMode ??= 'single';
     s.relatedSequence ??= '';
     s.changes ??= [];
+  }
+  if (p.settings && !p.settings.jp) {
+    const prod = PRODUCTS[p.productId];
+    p.settings.jp = { receptionNumber: '', brandName: prod?.product.brandName ?? '', janName: prod?.product.inn ?? '', applicantName: prod?.applicant.name ?? '', productCategory: 'jp_1_1' };
+    p.settings.in = { agentName: '', agentAddress: '' };
   }
   if (p.settings && !p.settings.eu) {
     const prod = PRODUCTS[p.productId];

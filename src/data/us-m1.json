@@ -761,19 +761,19 @@
       "phase": 2
     },
     {
-      "value": "ind",
-      "label": "IND",
-      "phase": 3
-    },
-    {
       "value": "bla",
       "label": "BLA 351(a)",
       "phase": 3
     },
     {
       "value": "bla-351k",
-      "label": "BLA 351(k)",
+      "label": "BLA 351(k) biosimilar",
       "phase": 3
+    },
+    {
+      "value": "ind",
+      "label": "IND",
+      "phase": 4
     }
   ],
   "forms": [
@@ -810,6 +810,11 @@
     {
       "id": "fda-2252",
       "label": "Form FDA 2252 — Transmittal of Periodic Reports for Drugs for Human Use",
+      "section": "1.1"
+    },
+    {
+      "id": "fda-3792",
+      "label": "Form FDA 3792 — Biosimilar User Fee Cover Sheet",
       "section": "1.1"
     }
   ],
@@ -1141,6 +1146,124 @@
         "label": "Cover letter",
         "level": "mandatory",
         "rule": "M1-02"
+      }
+    ],
+    "bla:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3397",
+        "label": "User fee coversheet (FDA 3397)",
+        "level": "mandatory",
+        "rule": "M1-03"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3674",
+        "label": "ClinicalTrials.gov certification (FDA 3674)",
+        "level": "mandatory",
+        "rule": "M1-09"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      },
+      {
+        "section": "1.3.3",
+        "label": "Debarment certification",
+        "level": "mandatory",
+        "rule": "M1-05"
+      },
+      {
+        "section": "1.3.4",
+        "label": "Financial certification and disclosure",
+        "level": "mandatory",
+        "rule": "M1-06"
+      },
+      {
+        "section": "1.12.14",
+        "label": "Environmental analysis",
+        "level": "mandatory",
+        "rule": "M1-10"
+      },
+      {
+        "section": "1.14.1.1",
+        "label": "Draft carton and container labels",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.14.1.3",
+        "label": "Draft labeling text",
+        "level": "mandatory",
+        "rule": "M1-07"
+      }
+    ],
+    "bla-351k:application": [
+      {
+        "section": "1.1",
+        "form": "fda-356h",
+        "label": "Form FDA 356h",
+        "level": "mandatory",
+        "rule": "M1-01"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3792",
+        "label": "Biosimilar user fee cover sheet (FDA 3792)",
+        "level": "mandatory",
+        "rule": "M1-17"
+      },
+      {
+        "section": "1.1",
+        "form": "fda-3674",
+        "label": "ClinicalTrials.gov certification (FDA 3674)",
+        "level": "mandatory",
+        "rule": "M1-09"
+      },
+      {
+        "section": "1.2",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "M1-02"
+      },
+      {
+        "section": "1.3.3",
+        "label": "Debarment certification",
+        "level": "mandatory",
+        "rule": "M1-05"
+      },
+      {
+        "section": "1.3.4",
+        "label": "Financial certification and disclosure",
+        "level": "mandatory",
+        "rule": "M1-06"
+      },
+      {
+        "section": "1.12.14",
+        "label": "Environmental analysis",
+        "level": "mandatory",
+        "rule": "M1-10"
+      },
+      {
+        "section": "1.14.1.1",
+        "label": "Draft carton and container labels",
+        "level": "mandatory",
+        "rule": "M1-07"
+      },
+      {
+        "section": "1.14.1.3",
+        "label": "Draft labeling text",
+        "level": "mandatory",
+        "rule": "M1-07"
       }
     ]
   },

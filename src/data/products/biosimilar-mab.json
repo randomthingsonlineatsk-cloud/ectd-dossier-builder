@@ -1,0 +1,586 @@
+{
+ "id": "biosimilar-mab",
+ "label": "Biosimilar of a reference antibody (351(k) / MAA)",
+ "fictional": true,
+ "options": [
+  {
+   "region": "US",
+   "appType": "bla-351k",
+   "requiredKey": "biosimilar"
+  },
+  {
+   "region": "EU",
+   "appType": "maa",
+   "requiredKey": "biosimilar"
+  }
+ ],
+ "generateRegionDocs": {
+  "EU": true
+ },
+ "euExtras": [
+  {
+   "id": "eu-152",
+   "section": "eu:1.5.2",
+   "title": "Information for Biosimilar Applications: Reference Medicinal Product and Comparability Overview",
+   "fileName": "biosimilar.pdf",
+   "pages": 12,
+   "bookmarks": 5
+  }
+ ],
+ "reference": {
+  "name": "Arventa (olvecitamab)",
+  "holder": "Lumenfield Biologics Inc."
+ },
+ "product": {
+  "brandName": "Selvanta",
+  "inn": "olvecitamab-kzrt",
+  "dosageForm": "concentrate for solution for infusion",
+  "route": "intravenous",
+  "strengths": [
+   "100 mg/10 mL"
+  ],
+  "indication": "ulcerative colitis",
+  "indicationText": "Treatment of adults with moderately to severely active ulcerative colitis",
+  "shelfLife": "30 months",
+  "storage": "Store at 2°C to 8°C; protect from light"
+ },
+ "applicant": {
+  "name": "Brightmere Biosimilars Ltd.",
+  "address": "3 Orchard Science Park, Exampletown, Ireland",
+  "duns": "000000005",
+  "contact": "Niamh Doyle, Head of Regulatory Operations",
+  "phone": "+353 00 000 0000",
+  "email": "regops@brightmere.example"
+ },
+ "substanceManufacturer": {
+  "name": "Brightmere Biosimilars Ltd., Orchard site",
+  "address": "3 Orchard Science Park, Exampletown, Ireland"
+ },
+ "productManufacturer": {
+  "name": "Brightmere Biosimilars Ltd., Orchard site",
+  "address": "3 Orchard Science Park, Exampletown, Ireland"
+ },
+ "facts": {
+  "strengths": "100 mg/10 mL (10 mg/mL) single-dose vial",
+  "dosageForm": "concentrate for solution for infusion",
+  "shelfLife": "30 months",
+  "storage": "Store at 2°C to 8°C; protect from light",
+  "dsManufacturer": "Brightmere Biosimilars Ltd., Exampletown, Ireland",
+  "dpManufacturer": "Brightmere Biosimilars Ltd., Exampletown, Ireland",
+  "dissolution": "Relative potency 80-125% of reference standard",
+  "assay": "Protein content 9.0-11.0 mg/mL",
+  "excipients": "L-histidine, sucrose, polysorbate 80, water for injections",
+  "batches": "BM-DS-2501, BM-DS-2502, BM-DS-2503",
+  "patients": "Comparative PK: 210 healthy subjects; comparative efficacy: 602 patients",
+  "indication": "Treatment of adults with moderately to severely active ulcerative colitis"
+ },
+ "studies": {
+  "BMB-101": "Comparative PK study in healthy subjects",
+  "BMB-301": "Comparative efficacy and safety study"
+ },
+ "documents": [
+  {
+   "id": "b-356h",
+   "section": "1.1",
+   "title": "Form FDA 356h",
+   "fileName": "fda-356h.pdf",
+   "pages": 4,
+   "form": "fda-356h",
+   "region": "US"
+  },
+  {
+   "id": "b-3792",
+   "section": "1.1",
+   "title": "Form FDA 3792 Biosimilar User Fee Cover Sheet",
+   "fileName": "fda-3792.pdf",
+   "pages": 1,
+   "form": "fda-3792",
+   "region": "US"
+  },
+  {
+   "id": "b-3674",
+   "section": "1.1",
+   "title": "Form FDA 3674 Certification of Compliance",
+   "fileName": "fda-3674.pdf",
+   "pages": 2,
+   "form": "fda-3674",
+   "region": "US"
+  },
+  {
+   "id": "b-debar",
+   "section": "1.3.3",
+   "title": "Debarment Certification",
+   "fileName": "debarment-certification.pdf",
+   "pages": 1,
+   "region": "US"
+  },
+  {
+   "id": "b-findisc",
+   "section": "1.3.4",
+   "title": "Financial Certification (Form FDA 3454)",
+   "fileName": "financial-certification.pdf",
+   "pages": 3,
+   "region": "US"
+  },
+  {
+   "id": "b-envir",
+   "section": "1.12.14",
+   "title": "Claim of Categorical Exclusion from Environmental Assessment",
+   "fileName": "environmental-analysis.pdf",
+   "pages": 2,
+   "region": "US"
+  },
+  {
+   "id": "b-carton",
+   "section": "1.14.1.1",
+   "title": "Draft Carton and Container Labels",
+   "fileName": "draft-carton-container-labels.pdf",
+   "pages": 4,
+   "region": "US"
+  },
+  {
+   "id": "b-pi",
+   "section": "1.14.1.3",
+   "title": "Draft Prescribing Information",
+   "fileName": "draft-labeling-text.pdf",
+   "pages": 24,
+   "bookmarks": 17,
+   "region": "US"
+  },
+  {
+   "id": "b-intro",
+   "section": "2.2",
+   "title": "Introduction",
+   "fileName": "introduction.pdf",
+   "pages": 3
+  },
+  {
+   "id": "b-qos",
+   "section": "2.3",
+   "title": "Quality Overall Summary (including analytical similarity)",
+   "fileName": "quality-overall-summary.pdf",
+   "pages": 96,
+   "bookmarks": 48,
+   "links": [
+    "3.2.R"
+   ]
+  },
+  {
+   "id": "b-ncover",
+   "section": "2.4",
+   "title": "Nonclinical Overview",
+   "fileName": "nonclinical-overview.pdf",
+   "pages": 18,
+   "bookmarks": 10
+  },
+  {
+   "id": "b-cover",
+   "section": "2.5",
+   "title": "Clinical Overview: Totality of the Evidence",
+   "fileName": "clinical-overview.pdf",
+   "pages": 48,
+   "bookmarks": 26,
+   "links": [
+    "5.3.3.1",
+    "5.3.5.1"
+   ]
+  },
+  {
+   "id": "b-261",
+   "section": "2.6.1",
+   "title": "Introduction",
+   "fileName": "introduction-nonclinical.pdf",
+   "pages": 2
+  },
+  {
+   "id": "b-262",
+   "section": "2.6.2",
+   "title": "Pharmacology Written Summary (comparative in vitro studies)",
+   "fileName": "pharmacology-written-summary.pdf",
+   "pages": 14,
+   "bookmarks": 8
+  },
+  {
+   "id": "b-271",
+   "section": "2.7.1",
+   "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods",
+   "fileName": "summary-biopharm.pdf",
+   "pages": 18,
+   "bookmarks": 9
+  },
+  {
+   "id": "b-272",
+   "section": "2.7.2",
+   "title": "Summary of Clinical Pharmacology Studies (comparative PK, immunogenicity)",
+   "fileName": "summary-clin-pharm.pdf",
+   "pages": 30,
+   "bookmarks": 16
+  },
+  {
+   "id": "b-273",
+   "section": "2.7.3",
+   "title": "Summary of Clinical Efficacy - Comparative Efficacy",
+   "fileName": "summary-clin-efficacy.pdf",
+   "pages": 40,
+   "bookmarks": 22
+  },
+  {
+   "id": "b-274",
+   "section": "2.7.4",
+   "title": "Summary of Clinical Safety",
+   "fileName": "summary-clin-safety.pdf",
+   "pages": 44,
+   "bookmarks": 24
+  },
+  {
+   "id": "b-276",
+   "section": "2.7.6",
+   "title": "Synopses of Individual Studies",
+   "fileName": "synopses-individual-studies.pdf",
+   "pages": 10,
+   "bookmarks": 3
+  },
+  {
+   "id": "b-s11",
+   "section": "3.2.S.1.1",
+   "title": "Nomenclature",
+   "fileName": "nomenclature.pdf",
+   "pages": 2
+  },
+  {
+   "id": "b-s12",
+   "section": "3.2.S.1.2",
+   "title": "Structure",
+   "fileName": "structure.pdf",
+   "pages": 4
+  },
+  {
+   "id": "b-s13",
+   "section": "3.2.S.1.3",
+   "title": "General Properties",
+   "fileName": "general-properties.pdf",
+   "pages": 6
+  },
+  {
+   "id": "b-s21",
+   "section": "3.2.S.2.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "b-s22",
+   "section": "3.2.S.2.2",
+   "title": "Description of Manufacturing Process and Process Controls (cell culture, harvest, purification)",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 34
+  },
+  {
+   "id": "b-s23",
+   "section": "3.2.S.2.3",
+   "title": "Control of Materials (cell banks, raw materials)",
+   "fileName": "control-of-materials.pdf",
+   "pages": 28
+  },
+  {
+   "id": "b-s24",
+   "section": "3.2.S.2.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 16
+  },
+  {
+   "id": "b-s25",
+   "section": "3.2.S.2.5",
+   "title": "Process Validation and/or Evaluation (including viral clearance)",
+   "fileName": "process-validation.pdf",
+   "pages": 44
+  },
+  {
+   "id": "b-s26",
+   "section": "3.2.S.2.6",
+   "title": "Manufacturing Process Development and Comparability",
+   "fileName": "process-development.pdf",
+   "pages": 38
+  },
+  {
+   "id": "b-s31",
+   "section": "3.2.S.3.1",
+   "title": "Elucidation of Structure and Other Characteristics",
+   "fileName": "characterisation.pdf",
+   "pages": 52
+  },
+  {
+   "id": "b-s32",
+   "section": "3.2.S.3.2",
+   "title": "Impurities (product- and process-related)",
+   "fileName": "impurities.pdf",
+   "pages": 22
+  },
+  {
+   "id": "b-s41",
+   "section": "3.2.S.4.1",
+   "title": "Specification",
+   "fileName": "specification.pdf",
+   "pages": 3
+  },
+  {
+   "id": "b-s42",
+   "section": "3.2.S.4.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 40
+  },
+  {
+   "id": "b-s43",
+   "section": "3.2.S.4.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 46
+  },
+  {
+   "id": "b-s44",
+   "section": "3.2.S.4.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 10
+  },
+  {
+   "id": "b-s45",
+   "section": "3.2.S.4.5",
+   "title": "Justification of Specification",
+   "fileName": "justification-of-specification.pdf",
+   "pages": 9
+  },
+  {
+   "id": "b-s5",
+   "section": "3.2.S.5",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 8
+  },
+  {
+   "id": "b-s6",
+   "section": "3.2.S.6",
+   "title": "Container Closure System",
+   "fileName": "container-closure-system.pdf",
+   "pages": 4
+  },
+  {
+   "id": "b-s71",
+   "section": "3.2.S.7.1",
+   "title": "Stability Summary and Conclusions",
+   "fileName": "stability-summary.pdf",
+   "pages": 7
+  },
+  {
+   "id": "b-s73",
+   "section": "3.2.S.7.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 40
+  },
+  {
+   "id": "b-p1",
+   "section": "3.2.P.1",
+   "title": "Description and Composition of the Drug Product",
+   "fileName": "description-composition.pdf",
+   "pages": 3
+  },
+  {
+   "id": "b-p2",
+   "section": "3.2.P.2",
+   "title": "Pharmaceutical Development (formulation, container closure integrity, compatibility with infusion sets)",
+   "fileName": "pharmaceutical-development.pdf",
+   "pages": 66
+  },
+  {
+   "id": "b-p31",
+   "section": "3.2.P.3.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "b-p32",
+   "section": "3.2.P.3.2",
+   "title": "Batch Formula",
+   "fileName": "batch-formula.pdf",
+   "pages": 2
+  },
+  {
+   "id": "b-p33",
+   "section": "3.2.P.3.3",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 18
+  },
+  {
+   "id": "b-p34",
+   "section": "3.2.P.3.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 8
+  },
+  {
+   "id": "b-p35",
+   "section": "3.2.P.3.5",
+   "title": "Process Validation: Aseptic Filling and Media Fills",
+   "fileName": "process-validation.pdf",
+   "pages": 60
+  },
+  {
+   "id": "b-p41",
+   "section": "3.2.P.4.1",
+   "title": "Specifications - Excipients",
+   "fileName": "excipient-specifications.pdf",
+   "pages": 5
+  },
+  {
+   "id": "b-p51",
+   "section": "3.2.P.5.1",
+   "title": "Specification(s)",
+   "fileName": "specifications.pdf",
+   "pages": 3
+  },
+  {
+   "id": "b-p52",
+   "section": "3.2.P.5.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 30
+  },
+  {
+   "id": "b-p53",
+   "section": "3.2.P.5.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 34
+  },
+  {
+   "id": "b-p54",
+   "section": "3.2.P.5.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 9
+  },
+  {
+   "id": "b-p55",
+   "section": "3.2.P.5.5",
+   "title": "Characterisation of Impurities",
+   "fileName": "characterisation-impurities.pdf",
+   "pages": 10
+  },
+  {
+   "id": "b-p56",
+   "section": "3.2.P.5.6",
+   "title": "Justification of Specification(s)",
+   "fileName": "justification-of-specifications.pdf",
+   "pages": 9
+  },
+  {
+   "id": "b-p6",
+   "section": "3.2.P.6",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 4
+  },
+  {
+   "id": "b-p7",
+   "section": "3.2.P.7",
+   "title": "Container Closure System (Type I vial, stopper)",
+   "fileName": "container-closure-system.pdf",
+   "pages": 8
+  },
+  {
+   "id": "b-p81",
+   "section": "3.2.P.8.1",
+   "title": "Stability Summary and Conclusion",
+   "fileName": "stability-summary.pdf",
+   "pages": 7
+  },
+  {
+   "id": "b-p82",
+   "section": "3.2.P.8.2",
+   "title": "Post-approval Stability Protocol and Stability Commitment",
+   "fileName": "stability-protocol-commitment.pdf",
+   "pages": 4
+  },
+  {
+   "id": "b-p83",
+   "section": "3.2.P.8.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 48
+  },
+  {
+   "id": "b-a1",
+   "section": "3.2.A.1",
+   "title": "Facilities and Equipment",
+   "fileName": "facilities-equipment.pdf",
+   "pages": 12
+  },
+  {
+   "id": "b-a2",
+   "section": "3.2.A.2",
+   "title": "Adventitious Agents Safety Evaluation (viral safety)",
+   "fileName": "adventitious-agents.pdf",
+   "pages": 38
+  },
+  {
+   "id": "b-a3",
+   "section": "3.2.A.3",
+   "title": "Excipients",
+   "fileName": "excipients.pdf",
+   "pages": 4
+  },
+  {
+   "id": "b-r",
+   "section": "3.2.R",
+   "title": "Comparative Analytical Assessment with the Reference Product",
+   "fileName": "comparative-analytical-assessment.pdf",
+   "pages": 180,
+   "bookmarks": 40
+  },
+  {
+   "id": "b-4211",
+   "section": "4.2.1.1",
+   "title": "Study BMN-0101: Comparative in vitro binding and functional studies",
+   "fileName": "bmn-0101.pdf",
+   "pages": 60,
+   "bookmarks": 16
+  },
+  {
+   "id": "b-52",
+   "section": "5.2",
+   "title": "Tabular Listing of All Clinical Studies",
+   "fileName": "tabular-listing.pdf",
+   "pages": 3
+  },
+  {
+   "id": "b-5314",
+   "section": "5.3.1.4",
+   "title": "PK and anti-drug antibody assay validation",
+   "fileName": "assay-validation-bmb.pdf",
+   "pages": 48,
+   "bookmarks": 14,
+   "study": "BMB-ASY-01"
+  },
+  {
+   "id": "b-5331",
+   "section": "5.3.3.1",
+   "title": "Study BMB-101: Comparative PK study in healthy subjects (proposed biosimilar vs reference product)",
+   "fileName": "bmb-101-csr.pdf",
+   "pages": 220,
+   "bookmarks": 44
+  },
+  {
+   "id": "b-5351",
+   "section": "5.3.5.1",
+   "title": "Study BMB-301: Comparative efficacy and safety study in ulcerative colitis",
+   "fileName": "bmb-301-csr.pdf",
+   "pages": 380,
+   "bookmarks": 66
+  }
+ ]
+}
