@@ -53,7 +53,7 @@ export async function certificatePdf({ name, userId, status, date = new Date().t
   const lines = [
     `completed every lesson, all ${status.missionScores.length} dossier missions, the mock exam and the region comparison exercises`,
     'in the eCTD Dossier Builder, a browser-based practice platform for regulatory publishing:',
-    'CTD structure, eCTD v3.2.2 and v4.0, lifecycle, validation, and US, EU, Japan and India Module 1.',
+    'CTD structure, eCTD v3.2.2 and v4.0, lifecycle, validation, and Module 1 for six regions.',
   ];
   lines.forEach((t, i) => centre(page, t, font, 11.5, H - 268 - i * 17));
   if (status.distinction) centre(page, `With distinction: ${status.expertCount} missions scored at expert level.`, bold, 11.5, H - 330, ACCENT);
@@ -74,16 +74,19 @@ function pageTwo(pdf, font, bold, { name, status, code, date }) {
   const { width: W, height: H } = page.getSize();
   page.drawText('Record of results', { x: 60, y: H - 70, size: 18, font: bold, color: INK });
   page.drawText(`${name.trim()} · ${date} · verification code ${code}`, { x: 60, y: H - 92, size: 10, font, color: MUTED });
-  let y = H - 125;
-  const col = (x, t, f = font, c = INK) => page.drawText(String(t), { x, y, size: 10, font: f, color: c });
+  let y = H - 120;
+  const n = status.missionScores.length;
+  const step = Math.min(15, Math.floor(300 / Math.max(1, n)));
+  const size = step < 13 ? 8.5 : 10;
+  const col = (x, t, f = font, c = INK) => page.drawText(String(t), { x, y, size, font: f, color: c });
   col(60, 'Mission', bold); col(560, 'Best score', bold); col(650, 'Level', bold);
-  y -= 16;
+  y -= step + 2;
   for (const m of status.missionScores) {
     col(60, `${m.id}. ${m.title}`); col(560, m.score == null ? '-' : `${m.score}%`); col(650, m.difficulty ?? '-');
-    y -= 15;
+    y -= step;
   }
-  y -= 10;
-  for (const c of status.criteria) { col(60, `${c.met ? '[x]' : '[ ]'} ${c.label}${c.detail ? ` (${c.detail})` : ''}`); y -= 15; }
+  y -= 8;
+  for (const c of status.criteria) { col(60, `${c.met ? '[x]' : '[ ]'} ${c.label}${c.detail ? ` (${c.detail})` : ''}`); y -= step; }
   page.drawText('Portfolio exercise. Not an accreditation. Results come from the holder\'s own browser and can be checked against an exported project file.', { x: 60, y: 44, size: 9, font, color: MUTED });
 }
 
@@ -97,7 +100,8 @@ export async function progressStatementPdf({ name, status, date = new Date().toI
   let y = H - 125;
   for (const c of status.criteria) { page.drawText(`${c.met ? '[x]' : '[ ]'} ${c.label}${c.detail ? ` (${c.detail})` : ''}`, { x: 60, y, size: 11, font, color: INK }); y -= 18; }
   y -= 8;
-  for (const m of status.missionScores) { page.drawText(`${m.id}. ${m.title}: ${m.score == null ? '-' : `${m.score}% (${m.difficulty})`}`, { x: 60, y, size: 10, font, color: INK }); y -= 14; }
+  const step = Math.min(14, Math.floor(330 / Math.max(1, status.missionScores.length)));
+  for (const m of status.missionScores) { page.drawText(`${m.id}. ${m.title}: ${m.score == null ? '-' : `${m.score}% (${m.difficulty})`}`, { x: 60, y, size: step < 12 ? 8.5 : 10, font, color: INK }); y -= step; }
   page.drawText('Portfolio exercise. Not an accreditation.', { x: 60, y: 44, size: 9, font, color: MUTED });
   return pdf.save();
 }

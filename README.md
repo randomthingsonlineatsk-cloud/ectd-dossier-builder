@@ -6,26 +6,33 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 > **Training only.** Every product, company, document, study and person in the app is fictional. Section codes, form numbers and XML element names follow the public ICH and FDA specifications, but nothing the app produces is suitable for a real submission.
 
-## What is in this release (Phases 1 to 4)
+## What is in this release (Phases 1 to 5)
 
 **Learn.** Lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, eight lifecycle drills, and a searchable glossary.
 
-**Products.** Five fictional products, each with its own document library and structured facts:
+**Products.** Six fictional products, each with its own document library and structured facts:
 - Ostrevia (lumiravostat) film-coated tablets: a new chemical entity (US NDA or EU MAA), with two granularity decoys.
 - Talmisartan tablets: a generic referencing a fictional listed drug (US ANDA), with bioequivalence studies and a biowaiver request.
 - Nelvaprox (velnaprozine) solution for injection in vials (US NDA or EU MAA), with sterile-product documents.
 - Arventa (olvecitamab) concentrate for infusion: a monoclonal antibody (US BLA under 351(a) or EU MAA), with cell bank, viral safety and immunogenicity documents.
 - Selvanta (olvecitamab-kzrt): a proposed biosimilar to Arventa (US 351(k) BLA or EU MAA with 1.5.2), with comparative analytical, PK and efficacy studies.
+- Talvera XR (talmisartan) extended-release capsules: a 505(b)(2) NDA relying on a listed drug and literature, bridged by a relative bioavailability study.
+
+Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API maker's side), an EU decentralised or national procedure, an EU ASMF with applicant's and restricted parts, an India clinical trial application (Form CT-04), a Canadian new drug submission and a Swiss new active substance application.
 
 **Regions.** The engine is region-neutral; each region is a data pack.
 - US: the full Module 1 heading list from FDA's Comprehensive Table of Contents (v2.3.5), the us-regional.xml metadata, FDA submission types and sub-types (from the Module 1 backbone specification v2.6), checklists for NDA and ANDA applications, supplements, amendments, annual reports and periodic safety reports, and study tagging files for Modules 4 and 5.
 - EU: the Module 1 tree, folders and file-naming conventions from the EU M1 specification, the eu-regional.xml envelope (UUID, tracking number, submission type and mode, submission unit, related sequence), centralised MAA, response, variation, renewal and transfer checklists, and an eAF practice form.
 - Japan (eCTD v4.0): Module 1 headings 1.1 to 1.13 in English and Japanese, the cover filed outside the XML, Japanese Module 1 and Module 2 documents, and submission unit metadata (reception number, brand name, JAN, applicant, product category).
-- India: the CTD Module 1 for the online portal (no backbone XML), Form CT-18 for import and CT-21 for manufacture, the fee receipt, the authorised agent's documents and the request to waive the local clinical trial.
+- India: the CTD Module 1 for the online portal (no backbone XML), Form CT-18 for import and CT-21 for manufacture, the fee receipt, the authorised agent's documents and the request to waive the local clinical trial; and the clinical trial application in Form CT-04 with the protocol, investigator's brochure, informed consent documents and investigators' undertakings.
+- Canada: the Canadian Module 1 from Health Canada's placement guidance, ca-regional.xml with the regulatory transaction information (dossier identifier, regulatory activity, sequence description), and NDS checklists (product monograph, labels, CPID, risk management plan, empty 1.2.2 and 1.5).
+- Switzerland: the Swiss Module 1 and its folders under m1/ch/<galenic form>/, ch-regional.xml with the Swiss envelope (including article-13-tpa), and checklists for a new active substance.
+- EU procedures beyond centralised: decentralised, mutual recognition and national, with one envelope per receiving member state, country and language folders for product information, and the procedure number formats; and the ASMF, one sequence with 2.3.S and 3.2.S split into AP and RP.
+- US application types beyond NDA, ANDA and BLA: the initial IND (Forms 1571, 1572 and 3674, the general investigational plan in 1.20, the investigator's brochure, the protocol tagged protocol-or-amendment), the 505(b)(2) NDA (patent certification for the listed drug) and the Type II DMF (Form FDA 3938, letters of authorization).
 
 **Builder and publishing.** Drag and drop (or Pick up and Enter) into the CTD tree; misplacement and granularity warnings; required/optional view and a dossier map; real stub PDFs generated with pdf-lib (title page, bookmarks, linked table of contents, cross-document links, key facts, defects built into the file); a publishing tab with a bookmark editor, TOC generator, hyperlink manager, broken-link finder and leaf-title consistency checker.
 
-**Backbone and validation.** index.xml, the regional XML, index-md5.txt and study tagging files, shown raw and rendered, with a folder tree and publishing log; publishing records the MD5 of every file's real bytes. 74 rules across backbone, files and folders, PDF, lifecycle, eCTD v4.0, US, EU, Japan and India Module 1, study grouping, content and granularity, with a verdict line and PDF/CSV report download.
+**Backbone and validation.** index.xml, the regional XML, index-md5.txt and study tagging files, shown raw and rendered, with a folder tree and publishing log; publishing records the MD5 of every file's real bytes. 104 rules across backbone, files and folders, PDF, lifecycle, eCTD v4.0, US, EU, Japan, India, Canada and Switzerland Module 1, study grouping, content and granularity, with a verdict line and PDF/CSV report download.
 
 **eCTD v4.0.** One submissionunit.xml per unit, modelled on the ICH and PMDA v4.0 implementation guides: units numbered 1, 2, 3; documents placed by contexts of use with priority numbers; replacementOf for replace; statusCode "suspended" in place of delete; document reuse by reference (the file is not sent again); study keywords in place of study tagging files; SHA-256 checksums and sha256.txt.
 
@@ -37,7 +44,7 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 **Cross-module consistency QC.** Every document states structured facts (strengths, dosage form, shelf life, storage, manufacturers, limits, excipients, batches, patient numbers, indication). A matrix compares each fact wherever it is stated and highlights contradictions; reviewer's eye mode hides the highlights so you hunt first; corrections revise a draft document or create a new version to send with replace.
 
-**Missions.** Sixteen missions at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 3 Japan NDA under v4.0; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application; 13 biosimilar application; 14 new drug application in India; 15 renewal and transfer; 16 withdrawal. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
+**Missions.** Twenty-four missions at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 3 Japan NDA under v4.0; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application; 13 biosimilar application; 14 new drug application in India; 15 renewal and transfer; 16 withdrawal; 17 initial IND; 18 505(b)(2) application; 19 Type II DMF and a letter of authorization; 20 decentralised procedure; 21 active substance master file; 22 clinical trial application in India; 23 new drug submission in Canada; 24 Switzerland under Article 13. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
 
 **Region comparison.** The same Module 1 items side by side for the US, EU, Japan, India, Canada and Switzerland; "Where does it go?" and "One document, six regions" exercises; and a CTD to ASEAN ACTD conversion exercise.
 
@@ -45,9 +52,9 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 **Exports.** A zipped eCTD folder per sequence or for every published sequence, with the backbone XML (or the v4.0 submission unit) and watermarked stub PDFs whose checksums match the backbone; plus the project file, the validation report and the planning CSVs.
 
-**Certificate.** A completion certificate PDF, labelled as a portfolio exercise and not an accreditation, once every lesson, all 16 missions, the mock exam and the region comparison exercises are passed (with distinction for 8 or more missions at expert level), with a verification code and a record of results. A statement of progress is available at any time.
+**Certificate.** A completion certificate PDF, labelled as a portfolio exercise and not an accreditation, once every lesson, every mission, the mock exam and the region comparison exercises are passed (with distinction for 8 or more missions at expert level), with a verification code and a record of results. A statement of progress is available at any time.
 
-**Classroom mode (optional).** An instructor creates a class and shares a join code; students join, start assigned missions with deadlines, and submit their project files; the instructor sees scores and validation results, re-scores each submission in their own browser, comments, and sees a leaderboard; optional email reminders go out through Brevo. It runs on a Cloudflare Worker and a D1 database from the `worker/` folder (see [worker/README.md](worker/README.md)). Without it, the app stays fully browser-only.
+**Classroom mode (optional).** An instructor creates a class and shares a join code; students join, start assigned missions with deadlines, and submit their project files; the instructor sees scores and validation results, re-scores each submission in their own browser, comments, and sees a leaderboard; optional email reminders go out through Brevo. It runs on a Cloudflare Worker and a D1 database from the `worker/` folder: add two Cloudflare secrets to the repository and run the "Deploy classroom server" action, which deploys it and rebuilds the site with it built in (see [worker/README.md](worker/README.md)). Without it, the app stays fully browser-only.
 
 **Progress.** Career levels (Associate, Specialist, Senior Specialist, Lead), ten badges, strengths and weak areas, and mission and lesson history.
 
@@ -67,6 +74,8 @@ Content lives in data files so it can grow without code changes:
 | `src/data/eu-m1.json` | EU Module 1 headings, folders, envelope values and checklists |
 | `src/data/jp-m1.json` | Japan Module 1 headings (English and Japanese), controlled vocabulary codes and checklists |
 | `src/data/in-m1.json` | India Module 1 headings, forms and checklists |
+| `src/data/ca-m1.json` | Canada Module 1 headings, transaction values and checklists |
+| `src/data/ch-m1.json` | Swiss Module 1 headings, folders, envelope values and checklists |
 | `src/data/compare.json` | Module 1 items across six regions, and the CTD to ACTD map |
 | `src/data/quizbank.json` | The written quiz bank, by topic, linked to lessons and missions |
 | `src/data/review.json` | Gateway stages, review clocks and product weaknesses for the review simulator |

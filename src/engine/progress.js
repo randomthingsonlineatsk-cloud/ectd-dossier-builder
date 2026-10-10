@@ -77,7 +77,7 @@ export const CERT = { lessonMin: 80, missionMin: 80, examMin: 70, compareMin: 80
 export function certificateStatus({ attempts, lessonProgress, lessonCount }) {
   const best = bestByMission(attempts);
   const lessonsOk = lessonCount > 0 && Array.from({ length: lessonCount }, (_, i) => lessonProgress[i + 1]?.best ?? 0).every((b) => b >= CERT.lessonMin);
-  const missionScores = MISSIONS.map((m) => ({ id: m.id, title: m.title, score: best[m.id]?.score ?? null, difficulty: best[m.id]?.difficulty ?? null }));
+  const missionScores = [...MISSIONS].sort((a, b) => a.id - b.id).map((m) => ({ id: m.id, title: m.title, score: best[m.id]?.score ?? null, difficulty: best[m.id]?.difficulty ?? null }));
   const missionsDone = missionScores.filter((m) => (m.score ?? 0) >= CERT.missionMin);
   const exam = attempts.filter((a) => a.kind === 'quiz' && a.mode === 'exam').sort((a, b) => b.score - a.score)[0] ?? null;
   const compare = attempts.filter((a) => a.kind === 'compare');
