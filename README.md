@@ -58,6 +58,8 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **Progress.** Career levels (Associate, Specialist, Senior Specialist, Lead), ten badges, strengths and weak areas, and mission and lesson history.
 
+**Change packages from the Variations Classifier.** The [Variations Classifier](https://github.com/randomthingsonlineatsk-cloud/variations-classifier), a separate app, classifies post-approval changes and exports a `change-package.json`. On the Sequences tab, **Import change package** starts a draft sequence of the right submission type, uses the package's cover letter, and lists the leaves to add with their operations as a to-do list.
+
 **Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
 
 

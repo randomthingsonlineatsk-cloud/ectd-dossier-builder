@@ -271,6 +271,8 @@ const APP_LABEL = { nda: 'NDA', anda: 'ANDA', bla: 'BLA', 'bla-351k': 'BLA', maa
 const lc = (t) => t.charAt(0).toLowerCase() + t.slice(1);
 
 export function coverLetterText(project, seq) {
+  // A sequence started from a Variations Classifier change package uses that letter.
+  if (seq.changePackage?.coverLetter) return `${seq.changePackage.coverLetter}\n\neCTD sequence ${seq.number} - ${seq.submissionType} / ${seq.subType}`;
   const p = PRODUCTS[project.productId];
   const s = project.settings;
   const prod = `${p.product.brandName} (${p.product.inn}) ${p.product.dosageForm}, ${p.product.strengths.join(' and ')}`;
