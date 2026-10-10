@@ -16,6 +16,14 @@
     "IN-CTD": {
       "label": "India · CTD (portal upload)",
       "rules": "all"
+    },
+    "CA-3.2.2": {
+      "label": "Canada · eCTD v3.2.2",
+      "rules": "all"
+    },
+    "CH-3.2.2": {
+      "label": "Switzerland · eCTD v3.2.2",
+      "rules": "all"
     }
   },
   "families": [
@@ -760,6 +768,110 @@
       "title": "The investigator's undertaking is expected",
       "explain": "Each investigator signs an undertaking to conduct the trial under the protocol and the rules.",
       "fix": "Place the investigator's undertaking."
+    },
+    {
+      "id": "CA-01",
+      "family": "Module 1 (Canada)",
+      "severity": "High",
+      "title": "Cover letter required in 1.0.1",
+      "explain": "Health Canada places the cover letter in 1.0.1.",
+      "fix": "Add a cover letter to 1.0.1."
+    },
+    {
+      "id": "CA-02",
+      "family": "Module 1 (Canada)",
+      "severity": "High",
+      "title": "Product monograph required in 1.3.1",
+      "explain": "The product monograph is Canada's prescribing information.",
+      "fix": "Place the product monograph in 1.3.1."
+    },
+    {
+      "id": "CA-03",
+      "family": "Module 1 (Canada)",
+      "severity": "Medium",
+      "title": "Inner and outer labels expected in 1.3.2",
+      "explain": "Label text and mock-ups go in 1.3.2.",
+      "fix": "Place the labels in 1.3.2."
+    },
+    {
+      "id": "CA-04",
+      "family": "Module 1 (Canada)",
+      "severity": "Medium",
+      "title": "Certified product information document expected in 1.3.6",
+      "explain": "The certified product information document summarises the quality information Health Canada certifies at approval.",
+      "fix": "Place the CPID in 1.3.6."
+    },
+    {
+      "id": "CA-05",
+      "family": "Module 1 (Canada)",
+      "severity": "Medium",
+      "title": "Risk management plan expected in 1.3.8.2",
+      "explain": "A new drug submission for a new active substance includes a risk management plan.",
+      "fix": "Place the RMP in 1.3.8.2."
+    },
+    {
+      "id": "CA-06",
+      "family": "Module 1 (Canada)",
+      "severity": "High",
+      "title": "No documents may be placed in 1.2.2 or 1.5",
+      "explain": "Health Canada's guidance says to place no documents under fee forms (1.2.2) or the environmental assessment statement (1.5); that information goes in the regulatory transaction.",
+      "fix": "Remove the document."
+    },
+    {
+      "id": "CH-01",
+      "family": "Module 1 (Switzerland)",
+      "severity": "High",
+      "title": "Cover letter required in 1.0",
+      "explain": "Every Swiss sequence opens with a cover letter in 1.0.",
+      "fix": "Add a cover letter to 1.0."
+    },
+    {
+      "id": "CH-02",
+      "family": "Module 1 (Switzerland)",
+      "severity": "High",
+      "title": "Application form required in 1.2.1",
+      "explain": "The Swissmedic application form sits in 1.2.1.",
+      "fix": "Place the application form in 1.2.1."
+    },
+    {
+      "id": "CH-03",
+      "family": "Module 1 (Switzerland)",
+      "severity": "High",
+      "title": "Product information required in 1.3.1 and 1.3.2",
+      "explain": "Information for professionals and patient information are filed in 1.3.1 and 1.3.2.",
+      "fix": "Place both."
+    },
+    {
+      "id": "CH-04",
+      "family": "Module 1 (Switzerland)",
+      "severity": "Medium",
+      "title": "Packaging information expected in 1.3.3",
+      "explain": "Packaging texts and mock-ups go in 1.3.3.",
+      "fix": "Place the packaging information in 1.3.3."
+    },
+    {
+      "id": "CH-05",
+      "family": "Module 1 (Switzerland)",
+      "severity": "Medium",
+      "title": "Information about the experts expected in 1.4",
+      "explain": "Signed expert information for quality, nonclinical and clinical sits in 1.4.1 to 1.4.3.",
+      "fix": "Place the expert information."
+    },
+    {
+      "id": "CH-06",
+      "family": "Module 1 (Switzerland)",
+      "severity": "Medium",
+      "title": "Risk management plan expected in 1.8.2",
+      "explain": "A new active substance includes a risk management plan in 1.8.2.",
+      "fix": "Place the RMP in 1.8.2."
+    },
+    {
+      "id": "CH-07",
+      "family": "Module 1 (Switzerland)",
+      "severity": "High",
+      "title": "Article 13 needs the foreign decisions in 1.7",
+      "explain": "When the envelope says article-13-tpa 'yes', the application relies on a foreign authorisation, so the decisions and assessment documents of that authority go in 1.7.",
+      "fix": "Place the foreign decisions in 1.7, or set article-13-tpa to 'no'."
     }
   ],
   "required": {
@@ -1201,6 +1313,82 @@
       "4.2.1.1",
       "4.2.3.1",
       "4.2.3.2"
+    ],
+    "nds:nds:initial": [
+      "2.2",
+      "2.3",
+      "2.4",
+      "2.5",
+      "2.6.1",
+      "2.6.2",
+      "2.6.4",
+      "2.6.6",
+      "2.7.1",
+      "2.7.2",
+      "2.7.3",
+      "2.7.4",
+      "2.7.6",
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3",
+      "4.2.3.2",
+      "5.2",
+      "5.3.5.1"
+    ],
+    "na:na-nas:initial": [
+      "2.2",
+      "2.3",
+      "2.4",
+      "2.5",
+      "2.6.1",
+      "2.6.2",
+      "2.6.4",
+      "2.6.6",
+      "2.7.1",
+      "2.7.2",
+      "2.7.3",
+      "2.7.4",
+      "2.7.6",
+      "3.2.S.1.1",
+      "3.2.S.1.2",
+      "3.2.S.1.3",
+      "3.2.S.2.1",
+      "3.2.S.2.2",
+      "3.2.S.3.2",
+      "3.2.S.4.1",
+      "3.2.S.4.4",
+      "3.2.S.7.1",
+      "3.2.S.7.3",
+      "3.2.P.1",
+      "3.2.P.2",
+      "3.2.P.3.1",
+      "3.2.P.3.2",
+      "3.2.P.3.3",
+      "3.2.P.5.1",
+      "3.2.P.5.4",
+      "3.2.P.7",
+      "3.2.P.8.1",
+      "3.2.P.8.3",
+      "4.2.3.2",
+      "5.2",
+      "5.3.5.1"
     ]
   }
 }

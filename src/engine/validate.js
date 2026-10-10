@@ -70,7 +70,7 @@ export function validate(project, seqNumber) {
   const jpR = project.region === 'JP';
   const inR = project.region === 'IN';
   const v4 = project.ectdVersion === '4.0';
-  const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1' }[project.region] ?? '1';
+  const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1', CA: 'ca:1', CH: 'ch:1' }[project.region] ?? '1';
   const meta = jpR ? [
     ['receptionNumber', s.jp?.receptionNumber, 'eCTD reception number'],
     ['brandName', s.jp?.brandName, 'Brand name'],
@@ -83,6 +83,20 @@ export function validate(project, seqNumber) {
     ['agentName', s.in?.agentName, 'Authorised agent in India'],
     ['submissionType', seq.submissionType, 'Application type'],
     ['subType', seq.subType, 'Submission type'],
+  ] : project.region === 'CA' ? [
+    ['applicant', s.applicant?.name, 'Applicant'],
+    ['productName', s.product?.name, 'Product name'],
+    ['dossierId', /^[a-z]\d{6}$/.test(s.ca?.dossierId || '') ? 'ok' : '', 'Dossier identifier (one lowercase letter and six digits, e.g. e123456)'],
+    ['dossierType', s.ca?.dossierType, 'Dossier type'],
+    ['submissionType', seq.submissionType, 'Regulatory activity type'],
+    ['subType', seq.subType, 'Sequence description'],
+  ] : project.region === 'CH' ? [
+    ['applicant', s.applicant?.name, 'Applicant'],
+    ['applicationNumber', /^(pending|[1-9]\d{8})$/.test(s.ch?.applicationNumber || '') ? 'ok' : '', 'Application number (nine digits without leading zeros, or "pending")'],
+    ['galenicFolder', /^[a-z]+$/.test(s.ch?.galenicFolder || '') ? 'ok' : '', 'Galenic form folder (lowercase, no hyphens)'],
+    ['galenicName', s.ch?.galenicName, 'Galenic name'],
+    ['inn', s.substance?.name, 'INN'],
+    ['submissionType', seq.submissionType, 'Application type'],
   ] : eu ? [
     ['applicant', s.applicant?.name, 'Applicant name'],
     ['trackingNumber', trackingOk(project, seq) ? 'ok' : '', trackingLabel(project, seq)],
@@ -133,6 +147,8 @@ export function validate(project, seqNumber) {
   }
 
   const leaves = seq.leaves;
+  if (project.region === 'CA') for (const l of leaves) if (!isRetireOp(l.operation) && ['ca:1.2.2', 'ca:1.5'].includes(l.nodeCode)) add('CA-06', l.id, `"${l.title}" is in ${dc(l.nodeCode)}, where no documents may be placed.`, { leafId: l.id, nodeCode: l.nodeCode });
+  if (project.region === 'CH' && s.ch?.article13 === 'yes' && seq.subType === 'initial' && !leaves.some((l) => l.nodeCode === 'ch:1.7' && !isRetireOp(l.operation))) add('CH-07', 'art13', 'The envelope says Article 13, but 1.7 has no decisions of foreign authorities.', { nodeCode: 'ch:1.7' });
   if (leaves.some((l) => l.nodeCode.startsWith('3.2.S'))) {
     if (!s.substance?.name?.trim() || !s.substance?.manufacturer?.trim()) add('BB-07', 'substance', '3.2.S is missing its substance or manufacturer attribute.', { nodeCode: '3.2.S' });
   }

@@ -1,0 +1,326 @@
+{
+ "_about": "Swiss Module 1 headings and folders from the Swiss Module 1 Specification for eCTD (v1.6); the ch-regional.xml envelope follows its DTD, simplified for training. Module 1 files sit in m1/ch/<galenic form>/. Codes carry a 'ch:' prefix in the app.",
+ "region": "CH",
+ "regionalFile": "m1/ch/ch-regional.xml",
+ "folder": "m1/ch",
+ "version": "3.2.2",
+ "tree": {
+  "code": "ch:1",
+  "display": "1",
+  "title": "Module 1 (Switzerland)",
+  "element": "m1-ch",
+  "children": [
+   {
+    "code": "ch:1.0",
+    "title": "Cover Letter",
+    "element": "m1-0-cover-letter",
+    "folder": "10-cover"
+   },
+   {
+    "code": "ch:1.2",
+    "title": "Application for Marketing Authorisation and Variation",
+    "element": "m1-2-application-for-marketing-authorisation",
+    "folder": "12-foapplvar",
+    "children": [
+     {
+      "code": "ch:1.2.1",
+      "title": "Form - Application",
+      "element": "m1-2-1-form-application",
+      "folder": "121-foapplvar"
+     },
+     {
+      "code": "ch:1.2.2",
+      "title": "Forms - Additional",
+      "element": "m1-2-2-forms-additional",
+      "folder": "122-form-add"
+     },
+     {
+      "code": "ch:1.2.3",
+      "title": "Annexes - Documents on Drug Quality",
+      "element": "m1-2-3-annexes-documents-on-drug-quality",
+      "folder": "123-quality"
+     },
+     {
+      "code": "ch:1.2.4",
+      "title": "Annexes - Manufacturing",
+      "element": "m1-2-4-annexes-manufacturing",
+      "folder": "124-manufacturing"
+     },
+     {
+      "code": "ch:1.2.5",
+      "title": "Annexes - Others",
+      "element": "m1-2-5-annexes-others",
+      "folder": "125-others"
+     }
+    ]
+   },
+   {
+    "code": "ch:1.3",
+    "title": "Product Information and Packaging Material",
+    "element": "m1-3-product-information-and-packaging-materi",
+    "folder": "13-pipackaging",
+    "children": [
+     {
+      "code": "ch:1.3.1",
+      "title": "Information for Professionals",
+      "element": "m1-3-1-information-for-professionals",
+      "folder": "131-prof"
+     },
+     {
+      "code": "ch:1.3.2",
+      "title": "Patient Information",
+      "element": "m1-3-2-patient-information",
+      "folder": "132-patient"
+     },
+     {
+      "code": "ch:1.3.3",
+      "title": "Packaging Information",
+      "element": "m1-3-3-packaging-information",
+      "folder": "133-packaging"
+     },
+     {
+      "code": "ch:1.3.4",
+      "title": "Information for Professionals from Other Countries",
+      "element": "m1-3-4-information-for-professionals-from-other",
+      "folder": "134-profother"
+     }
+    ]
+   },
+   {
+    "code": "ch:1.4",
+    "title": "Information about the Expert",
+    "element": "m1-4-information-about-the-expert",
+    "folder": "14-expert",
+    "children": [
+     {
+      "code": "ch:1.4.1",
+      "title": "Quality",
+      "element": "m1-4-1-quality",
+      "folder": "141-quality"
+     },
+     {
+      "code": "ch:1.4.2",
+      "title": "Nonclinical",
+      "element": "m1-4-2-nonclinical",
+      "folder": "142-nonclinical"
+     },
+     {
+      "code": "ch:1.4.3",
+      "title": "Clinical",
+      "element": "m1-4-3-clinical",
+      "folder": "143-clinical"
+     }
+    ]
+   },
+   {
+    "code": "ch:1.5",
+    "title": "Data of Bioavailability Studies",
+    "element": "m1-5-data-of-bioavailability-studies",
+    "folder": "15-bioavailability"
+   },
+   {
+    "code": "ch:1.6",
+    "title": "Environmental Risk Assessment",
+    "element": "m1-6-environmental-risk-assessment",
+    "folder": "16-environrisk",
+    "children": [
+     {
+      "code": "ch:1.6.1",
+      "title": "Non-GMO",
+      "element": "m1-6-1-non-gmo",
+      "folder": "161-nongmo"
+     },
+     {
+      "code": "ch:1.6.2",
+      "title": "GMO",
+      "element": "m1-6-2-gmo",
+      "folder": "162-gmo"
+     }
+    ]
+   },
+   {
+    "code": "ch:1.7",
+    "title": "Decisions of Foreign Authorities",
+    "element": "m1-7-decisions-of-foreign-authorities",
+    "folder": "17-decisionsauthorities",
+    "help": "Includes the documentation for applications under Article 13 of the Therapeutic Products Act, which lets Swissmedic take into account a decision of a country with comparable medicines control."
+   },
+   {
+    "code": "ch:1.8",
+    "title": "Information Relating to Pharmacovigilance",
+    "element": "m1-8-information-relating-to-pharmacovigilanc",
+    "folder": "18-phvig",
+    "children": [
+     {
+      "code": "ch:1.8.1",
+      "title": "Pharmacovigilance System",
+      "element": "m1-8-1-pharmacovigilance-system",
+      "folder": "181-phvig-system"
+     },
+     {
+      "code": "ch:1.8.2",
+      "title": "Risk-Management System",
+      "element": "m1-8-2-risk-management-system",
+      "folder": "182-riskmgt-system"
+     }
+    ]
+   },
+   {
+    "code": "ch:1.9",
+    "title": "Fast Track Status Decision",
+    "element": "m1-9-fast-track-status-decision",
+    "folder": "19-fasttrack"
+   },
+   {
+    "code": "ch:1.10",
+    "title": "Information Relating to Paediatrics",
+    "element": "m1-10-information-relating-to-paediatrics",
+    "folder": "110-paediatrics"
+   },
+   {
+    "code": "ch:1.11",
+    "title": "Orphan Drug Status Decision",
+    "element": "m1-11-orphan-drug-status-decision",
+    "folder": "111-orphandrug"
+   },
+   {
+    "code": "ch:1.12",
+    "title": "Art. 14 Sec. 1 let. abis-quater TPA Documents",
+    "element": "m1-12-art-14-sec-1-let-abis-quater-tpa-documen",
+    "folder": "112-art14"
+   },
+   {
+    "code": "ch:responses",
+    "display": "Responses",
+    "title": "Responses to Swissmedic LoQ",
+    "element": "m1-responses",
+    "folder": "responses"
+   },
+   {
+    "code": "ch:additional-info",
+    "display": "Additional",
+    "title": "Additional Information",
+    "element": "m1-additional-info",
+    "folder": "additionalinfo"
+   }
+  ]
+ },
+ "submissionTypes": [
+  {
+   "value": "na-nas",
+   "label": "na-nas (new authorisation, new active substance)"
+  },
+  {
+   "value": "na-bws",
+   "label": "na-bws (new authorisation, known active substance)"
+  },
+  {
+   "value": "var-type2",
+   "label": "var-type2 (type II variation)"
+  },
+  {
+   "value": "var-type1b",
+   "label": "var-type1b (type IB variation)"
+  },
+  {
+   "value": "extension",
+   "label": "extension"
+  },
+  {
+   "value": "renewal",
+   "label": "renewal"
+  },
+  {
+   "value": "supplemental-info",
+   "label": "supplemental-info"
+  }
+ ],
+ "submissionSubTypes": [
+  {
+   "value": "initial",
+   "label": "Initial",
+   "help": "The first sequence of the regulatory activity; related sequence 'none'."
+  },
+  {
+   "value": "response",
+   "label": "Response to LoQ",
+   "help": "Answers to Swissmedic's list of questions; the related sequence is the first sequence of the activity."
+  }
+ ],
+ "applicationTypes": [
+  {
+   "value": "na",
+   "label": "New authorisation",
+   "phase": 5
+  }
+ ],
+ "forms": [],
+ "checklist": {
+  "na:na-nas:initial": [
+   {
+    "section": "ch:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CH-01"
+   },
+   {
+    "section": "ch:1.2.1",
+    "label": "Application form",
+    "level": "mandatory",
+    "rule": "CH-02"
+   },
+   {
+    "section": "ch:1.3.1",
+    "label": "Information for professionals",
+    "level": "mandatory",
+    "rule": "CH-03"
+   },
+   {
+    "section": "ch:1.3.2",
+    "label": "Patient information",
+    "level": "mandatory",
+    "rule": "CH-03"
+   },
+   {
+    "section": "ch:1.3.3",
+    "label": "Packaging information",
+    "level": "mandatory",
+    "rule": "CH-04"
+   },
+   {
+    "section": "ch:1.4.1",
+    "label": "Information about the expert (quality)",
+    "level": "mandatory",
+    "rule": "CH-05"
+   },
+   {
+    "section": "ch:1.4.2",
+    "label": "Information about the expert (nonclinical)",
+    "level": "mandatory",
+    "rule": "CH-05"
+   },
+   {
+    "section": "ch:1.4.3",
+    "label": "Information about the expert (clinical)",
+    "level": "mandatory",
+    "rule": "CH-05"
+   },
+   {
+    "section": "ch:1.8.2",
+    "label": "Risk management plan",
+    "level": "mandatory",
+    "rule": "CH-06"
+   },
+   {
+    "section": "ch:1.7",
+    "label": "Decisions of foreign authorities (required with Article 13)",
+    "level": "conditional"
+   },
+   {
+    "section": "ch:1.3.4",
+    "label": "Information for professionals from other countries (with Article 13)",
+    "level": "conditional"
+   }
+  ]
+ }
+}

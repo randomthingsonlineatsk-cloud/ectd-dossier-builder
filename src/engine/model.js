@@ -14,8 +14,8 @@ import { regionDocs, libraryBase } from './regiondocs.js';
 export const isRetireOp = (op) => op === 'delete' || op === 'suspend';
 export const SCHEMA_VERSION = 2;
 export const PRODUCTS = { 'nce-tablet': nceTablet, 'generic-tablet': genericTablet, 'sterile-injectable': sterileInjectable, 'mab-infusion': mabInfusion, 'biosimilar-mab': biosimilarMab, 'talmisartan-er': talmisartanEr };
-export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa', JP: 'nda', IN: 'nda' };
-export const REGION_VERSION = { US: '3.2.2', EU: '3.2.2', JP: '4.0', IN: 'CTD' };
+export const DEFAULT_APP_TYPE = { US: 'nda', EU: 'maa', JP: 'nda', IN: 'nda', CA: 'nds', CH: 'na' };
+export const REGION_VERSION = { US: '3.2.2', EU: '3.2.2', JP: '4.0', IN: 'CTD', CA: '3.2.2', CH: '3.2.2' };
 
 // Which regions and application types each product supports.
 export const productOptions = (productId) => PRODUCTS[productId]?.options ?? [{ region: 'US', appType: 'nda' }];
@@ -93,6 +93,9 @@ export function defaultSettings(productId, opt = null) {
     // Japan submission unit (eCTD v4.0) and India portal details.
     jp: { receptionNumber: '', brandName: p.product.brandName, janName: p.product.inn, applicantName: p.applicant.name, productCategory: 'jp_1_1' },
     in: { agentName: '', agentAddress: '' },
+    // Canada transaction information and the Swiss envelope.
+    ca: { dossierId: '', dossierType: 'Pharmaceutical Dossier', activityLead: 'Pharmaceutical' },
+    ch: { applicationNumber: '', swissmedicNumber: 'pending', galenicFolder: 'tablets', galenicName: 'Filmtabletten', galenicLang: 'de', article13: 'no' },
   }, opt?.settings ?? {});
   if (!out.eu.rms) out.eu.rms = '';
   out.eu.cms ??= [];
@@ -104,6 +107,8 @@ export const SEQ_DEFAULTS = {
   EU: { submissionType: 'maa', subType: 'initial' },
   JP: { submissionType: 'jp_original', subType: 'jp_ctd' },
   IN: { submissionType: 'new-drug-import', subType: 'application' },
+  CA: { submissionType: 'nds', subType: 'initial' },
+  CH: { submissionType: 'na-nas', subType: 'initial' },
 };
 
 // For the EU, subType holds the submission unit type; submissionMode and relatedSequence are EU-only.
@@ -281,6 +286,28 @@ export function coverLetterText(project, seq) {
       `${jp.applicantName || s.applicant.name} submits this eCTD v4.0 submission unit for ${prod}.`,
       ...contact].join('\n');
   }
+  if (project.region === 'CA') {
+    const ca = s.ca ?? {};
+    return [...head,
+      'To: Health Canada',
+      `Re: ${seq.submissionType.toUpperCase()} - ${prod} - dossier ${ca.dossierId || '[dossier identifier]'}`,
+      `eCTD sequence ${seq.number} - ${seq.subType === 'initial' ? 'Initial' : seq.subType}`, '',
+      seq.submissionType === 'nds' && seq.subType === 'initial'
+        ? `${s.applicant.name} files this New Drug Submission for ${prod}, proposed for the ${lc(p.product.indicationText)}. The submission is in eCTD format with the Canadian Module 1; the product monograph is in 1.3.1 and the certified product information document in 1.3.6.`
+        : `${s.applicant.name} files this sequence for ${prod}. ${seq.description || ''}`.trim(),
+      ...contact].join('\n');
+  }
+  if (project.region === 'CH') {
+    const ch = s.ch ?? {};
+    return [...head,
+      'To: Swissmedic, Swiss Agency for Therapeutic Products',
+      `Re: ${seq.submissionType} - ${p.product.brandName} (${p.product.inn}) - application ${ch.applicationNumber || 'pending'}`,
+      `eCTD sequence ${seq.number}`, '',
+      seq.submissionType === 'na-nas'
+        ? `${s.applicant.name} applies for the authorisation of ${prod}, a new active substance${ch.article13 === 'yes' ? ', under Article 13 of the Therapeutic Products Act, on the basis of its authorisation by a country with comparable medicines control (see Module 1.7)' : ''}.`
+        : `${s.applicant.name} submits this sequence for ${prod}. ${seq.description || ''}`.trim(),
+      ...contact].join('\n');
+  }
   if (project.region === 'IN' && seq.submissionType === 'clinical-trial') {
     return [...head,
       'To: The Central Licensing Authority',
@@ -351,6 +378,8 @@ const COVER = {
   EU: { section: 'eu:1.0', fileName: 'ema-cover.pdf' },
   JP: { section: 'jp:cover', fileName: 'cover.pdf', lang: 'ja' },
   IN: { section: 'in:1.1', fileName: 'covering-letter.pdf' },
+  CA: { section: 'ca:1.0.1', fileName: 'cover-letter.pdf' },
+  CH: { section: 'ch:1.0', fileName: 'cover-letter.pdf' },
 };
 export const coverSection = (region) => COVER[region]?.section ?? '1.2';
 const seqIntLocal = (n) => String(parseInt(n, 10));
@@ -375,6 +404,11 @@ export function migrateProject(p) {
   if (!p) return p;
   p.region ??= 'US';
   p.variant ??= null;
+  if (p.settings) {
+    p.settings.ca ??= { dossierId: '', dossierType: 'Pharmaceutical Dossier', activityLead: 'Pharmaceutical' };
+    p.settings.ch ??= { applicationNumber: '', swissmedicNumber: 'pending', galenicFolder: 'tablets', galenicName: 'Filmtabletten', galenicLang: 'de', article13: 'no' };
+    if (p.settings.eu) { p.settings.eu.rms ??= ''; p.settings.eu.cms ??= []; }
+  }
   for (const s of p.sequences ?? []) {
     if (s.submissionType === 'original-application' && s.subType === 'original') s.subType = 'application';
     s.submissionMode ??= 'single';

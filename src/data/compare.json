@@ -1,83 +1,247 @@
 {
-  "_about": "Where the same Module 1 item lives in each region, and how ICH CTD maps onto the ASEAN ACTD. US, EU, Japan and India codes point at this app's region packs; Canada and Switzerland headings come from Health Canada's guidance on Canadian Module 1 and the Swiss Module 1 specification v1.6. A null entry means the region has no matching heading.",
-  "regions": [
-    { "id": "US", "label": "US", "pack": true },
-    { "id": "EU", "label": "EU", "pack": true },
-    { "id": "JP", "label": "Japan", "pack": true },
-    { "id": "IN", "label": "India", "pack": true },
-    { "id": "CA", "label": "Canada", "pack": false },
-    { "id": "CH", "label": "Switzerland", "pack": false }
-  ],
-  "headings": {
-    "CA": [
-      ["1.0.1", "Cover Letter"], ["1.0.2", "Life Cycle Management Table"], ["1.0.4", "Health Canada Solicited Information"], ["1.0.5", "Meeting Information"],
-      ["1.2.1", "Application Forms"], ["1.2.2", "Fee Forms"], ["1.2.3", "Certification and Attestation Forms"], ["1.2.4.1", "Patent Information"], ["1.2.4.2", "Data Protection Information"],
-      ["1.2.5", "Compliance and Site Information"], ["1.2.7", "International Information"], ["1.3.1", "Product Monograph"], ["1.3.2", "Inner and Outer Labels"], ["1.3.3", "Non-Canadian Labelling"],
-      ["1.3.6", "Certified Product Information Document"], ["1.3.8.2", "Risk Management Plan"], ["1.4.3", "Multidisciplinary Tabular Summaries"], ["1.5", "Environmental Assessment Statement"], ["1.6.1", "Comparative Bioavailability Information"]
-    ],
-    "CH": [
-      ["1.0", "Cover Letter"], ["1.2.1", "Form - Application"], ["1.2.2", "Forms - Additional"], ["1.2.5", "Annexes - Others"], ["1.3.1", "Information for Professionals"], ["1.3.2", "Patient Information"],
-      ["1.3.3", "Packaging Information"], ["1.3.4", "Information for Professionals from Other Countries"], ["1.4", "Information about the Expert"], ["1.5", "Data of Bioavailability Studies"],
-      ["1.6", "Environmental Risk Assessment"], ["1.7", "Decisions of Foreign Authorities"], ["1.8.2", "Risk-Management System"], ["1.9", "Fast Track Status Decision"], ["1.10", "Information Relating to Paediatrics"],
-      ["1.11", "Orphan Drug Status Decision"], ["responses", "Responses to Swissmedic LoQ"]
-    ]
+ "_about": "Where the same Module 1 item lives in each region, and how ICH CTD maps onto the ASEAN ACTD. US, EU, Japan and India codes point at this app's region packs; Canada and Switzerland point at this app's packs, built from Health Canada's guidance on Canadian Module 1 and the Swiss Module 1 specification v1.6. A null entry means the region has no matching heading.",
+ "regions": [
+  {
+   "id": "US",
+   "label": "US",
+   "pack": true
   },
-  "items": [
-    { "id": "cover", "label": "Cover letter", "map": { "US": "1.2", "EU": "eu:1.0", "JP": "jp:cover", "IN": "in:1.1", "CA": "1.0.1", "CH": "1.0" },
-      "note": "Every region opens with a letter. Japan files it as m1/jp/cover.pdf outside the XML; India combines it with the comprehensive table of contents." },
-    { "id": "form", "label": "Main application form", "map": { "US": "1.1", "EU": "eu:1.2", "JP": "jp:1.2", "IN": "in:1.2.2", "CA": "1.2.1", "CH": "1.2.1" },
-      "note": "Form FDA 356h, the EU eAF, a copy of the Japanese application form, Form CT-18 or CT-21, Canada's regulatory transaction details (the RT XML under the Regulatory Enrolment Process), and the Swiss application form." },
-    { "id": "pi", "label": "Prescribing information for health professionals", "map": { "US": "1.14.1.3", "EU": "eu:1.3.1", "JP": "jp:1.8", "IN": "in:1.3", "CA": "1.3.1", "CH": "1.3.1" },
-      "note": "Prescribing information, SmPC, package insert, product monograph and Fachinformation: one product, five formats." },
-    { "id": "labels", "label": "Carton and container labels", "map": { "US": "1.14.1.1", "EU": "eu:1.3.2", "JP": null, "IN": "in:1.3", "CA": "1.3.2", "CH": "1.3.3" },
-      "note": "The EU calls them mock-ups. India files labels and cartons with the prescribing information." },
-    { "id": "rmp", "label": "Risk management plan", "map": { "US": "1.16", "EU": "eu:1.8.2", "JP": "jp:1.11", "IN": null, "CA": "1.3.8.2", "CH": "1.8.2" },
-      "note": "The US asks for a REMS only when FDA decides one is needed; the EU, Japan, Canada and Switzerland expect a risk management plan with a new active substance." },
-    { "id": "env", "label": "Environmental assessment", "map": { "US": "1.12.14", "EU": "eu:1.6", "JP": null, "IN": null, "CA": "1.5", "CH": "1.6" },
-      "note": "The US often files a claim of categorical exclusion. Canada's guidance says to place no documents in 1.5." },
-    { "id": "foreign", "label": "Status or decisions in other countries", "map": { "US": null, "EU": null, "JP": "jp:1.6", "IN": "in:1.5", "CA": "1.2.7", "CH": "1.7" },
-      "note": "Agencies that rely on others' decisions ask for them up front: India for its waiver of local trials, Switzerland under Article 13 of its Therapeutic Products Act." },
-    { "id": "paed", "label": "Paediatric plan or waiver", "map": { "US": "1.9", "EU": "eu:1.10", "JP": null, "IN": null, "CA": null, "CH": "1.10" },
-      "note": "The US pediatric study plan and waivers, the EU PIP decision and compliance, and Switzerland's paediatric information." },
-    { "id": "responses", "label": "Responses to the agency's questions", "map": { "US": "1.11", "EU": "eu:responses", "JP": "jp:1.13.3", "IN": "in:query", "CA": "1.0.4", "CH": "responses" },
-      "note": "The US files responses as information amendments; the EU and Switzerland have a responses element; Canada calls it solicited information." },
-    { "id": "patent", "label": "Patent information", "map": { "US": "1.3.5.1", "EU": null, "JP": "jp:1.4", "IN": null, "CA": "1.2.4.1", "CH": null },
-      "note": "Patent listing links to generic entry in the US (Orange Book) and Canada (patent register)." },
-    { "id": "expert", "label": "Information about the experts", "map": { "US": null, "EU": "eu:1.4", "JP": null, "IN": null, "CA": null, "CH": "1.4" },
-      "note": "The EU and Switzerland ask for the signed expert information behind the Module 2 overviews." }
-  ],
-  "actd": {
-    "_source": "ASEAN Common Technical Dossier, Organization of the Dossier (Revision 1).",
-    "targets": [
-      "Part I: Table of Contents, Administrative Data and Product Information",
-      "Part II Section B: Quality Overall Summary",
-      "Part II Section C: Body of Data",
-      "Part III Section B: Nonclinical Overview",
-      "Part III Section C: Nonclinical Written and Tabulated Summaries",
-      "Part III Section D: Nonclinical Study Reports",
-      "Part IV Section B: Clinical Overview",
-      "Part IV Section C: Clinical Summary",
-      "Part IV Section D: Tabular Listing of All Clinical Studies",
-      "Part IV Section E: Clinical Study Reports",
-      "Part IV Section F: List of Key Literature References"
-    ],
-    "pairs": [
-      { "ctd": "Module 1 (regional administrative information)", "answer": 0 },
-      { "ctd": "2.3 Quality Overall Summary", "answer": 1 },
-      { "ctd": "3.2 Body of Data", "answer": 2 },
-      { "ctd": "2.4 Nonclinical Overview", "answer": 3 },
-      { "ctd": "2.6 Nonclinical Written and Tabulated Summaries", "answer": 4 },
-      { "ctd": "Module 4 study reports", "answer": 5 },
-      { "ctd": "2.5 Clinical Overview", "answer": 6 },
-      { "ctd": "2.7 Clinical Summary", "answer": 7 },
-      { "ctd": "5.2 Tabular Listing of All Clinical Studies", "answer": 8 },
-      { "ctd": "5.3 Clinical Study Reports", "answer": 9 },
-      { "ctd": "5.4 Literature References", "answer": 10 }
-    ],
-    "notes": [
-      "ACTD has four parts, not five modules: the overviews and summaries sit at the front of the part they summarise, instead of in a separate Module 2.",
-      "Parts III and IV are not required for generics and some variations; member states may waive study reports when a reference country has approved the product.",
-      "ACTD is a paper or PDF format; it has no eCTD backbone."
-    ]
+  {
+   "id": "EU",
+   "label": "EU",
+   "pack": true
+  },
+  {
+   "id": "JP",
+   "label": "Japan",
+   "pack": true
+  },
+  {
+   "id": "IN",
+   "label": "India",
+   "pack": true
+  },
+  {
+   "id": "CA",
+   "label": "Canada",
+   "pack": true
+  },
+  {
+   "id": "CH",
+   "label": "Switzerland",
+   "pack": true
   }
+ ],
+ "items": [
+  {
+   "id": "cover",
+   "label": "Cover letter",
+   "map": {
+    "US": "1.2",
+    "EU": "eu:1.0",
+    "JP": "jp:cover",
+    "IN": "in:1.1",
+    "CA": "ca:1.0.1",
+    "CH": "ch:1.0"
+   },
+   "note": "Every region opens with a letter. Japan files it as m1/jp/cover.pdf outside the XML; India combines it with the comprehensive table of contents."
+  },
+  {
+   "id": "form",
+   "label": "Main application form",
+   "map": {
+    "US": "1.1",
+    "EU": "eu:1.2",
+    "JP": "jp:1.2",
+    "IN": "in:1.2.2",
+    "CA": "ca:1.2.1",
+    "CH": "ch:1.2.1"
+   },
+   "note": "Form FDA 356h, the EU eAF, a copy of the Japanese application form, Form CT-18 or CT-21, Canada's regulatory transaction details (the RT XML under the Regulatory Enrolment Process), and the Swiss application form."
+  },
+  {
+   "id": "pi",
+   "label": "Prescribing information for health professionals",
+   "map": {
+    "US": "1.14.1.3",
+    "EU": "eu:1.3.1",
+    "JP": "jp:1.8",
+    "IN": "in:1.3",
+    "CA": "ca:1.3.1",
+    "CH": "ch:1.3.1"
+   },
+   "note": "Prescribing information, SmPC, package insert, product monograph and Fachinformation: one product, five formats."
+  },
+  {
+   "id": "labels",
+   "label": "Carton and container labels",
+   "map": {
+    "US": "1.14.1.1",
+    "EU": "eu:1.3.2",
+    "JP": null,
+    "IN": "in:1.3",
+    "CA": "ca:1.3.2",
+    "CH": "ch:1.3.3"
+   },
+   "note": "The EU calls them mock-ups. India files labels and cartons with the prescribing information."
+  },
+  {
+   "id": "rmp",
+   "label": "Risk management plan",
+   "map": {
+    "US": "1.16",
+    "EU": "eu:1.8.2",
+    "JP": "jp:1.11",
+    "IN": null,
+    "CA": "ca:1.3.8.2",
+    "CH": "ch:1.8.2"
+   },
+   "note": "The US asks for a REMS only when FDA decides one is needed; the EU, Japan, Canada and Switzerland expect a risk management plan with a new active substance."
+  },
+  {
+   "id": "env",
+   "label": "Environmental assessment",
+   "map": {
+    "US": "1.12.14",
+    "EU": "eu:1.6",
+    "JP": null,
+    "IN": null,
+    "CA": "ca:1.5",
+    "CH": "ch:1.6"
+   },
+   "note": "The US often files a claim of categorical exclusion. Canada's guidance says to place no documents in 1.5."
+  },
+  {
+   "id": "foreign",
+   "label": "Status or decisions in other countries",
+   "map": {
+    "US": null,
+    "EU": null,
+    "JP": "jp:1.6",
+    "IN": "in:1.5",
+    "CA": "ca:1.2.7",
+    "CH": "ch:1.7"
+   },
+   "note": "Agencies that rely on others' decisions ask for them up front: India for its waiver of local trials, Switzerland under Article 13 of its Therapeutic Products Act."
+  },
+  {
+   "id": "paed",
+   "label": "Paediatric plan or waiver",
+   "map": {
+    "US": "1.9",
+    "EU": "eu:1.10",
+    "JP": null,
+    "IN": null,
+    "CA": null,
+    "CH": "ch:1.10"
+   },
+   "note": "The US pediatric study plan and waivers, the EU PIP decision and compliance, and Switzerland's paediatric information."
+  },
+  {
+   "id": "responses",
+   "label": "Responses to the agency's questions",
+   "map": {
+    "US": "1.11",
+    "EU": "eu:responses",
+    "JP": "jp:1.13.3",
+    "IN": "in:query",
+    "CA": "ca:1.0.4",
+    "CH": "ch:responses"
+   },
+   "note": "The US files responses as information amendments; the EU and Switzerland have a responses element; Canada calls it solicited information."
+  },
+  {
+   "id": "patent",
+   "label": "Patent information",
+   "map": {
+    "US": "1.3.5.1",
+    "EU": null,
+    "JP": "jp:1.4",
+    "IN": null,
+    "CA": "ca:1.2.4.1",
+    "CH": null
+   },
+   "note": "Patent listing links to generic entry in the US (Orange Book) and Canada (patent register)."
+  },
+  {
+   "id": "expert",
+   "label": "Information about the experts",
+   "map": {
+    "US": null,
+    "EU": "eu:1.4",
+    "JP": null,
+    "IN": null,
+    "CA": null,
+    "CH": "ch:1.4"
+   },
+   "note": "The EU and Switzerland ask for the signed expert information behind the Module 2 overviews."
+  }
+ ],
+ "actd": {
+  "_source": "ASEAN Common Technical Dossier, Organization of the Dossier (Revision 1).",
+  "targets": [
+   "Part I: Table of Contents, Administrative Data and Product Information",
+   "Part II Section B: Quality Overall Summary",
+   "Part II Section C: Body of Data",
+   "Part III Section B: Nonclinical Overview",
+   "Part III Section C: Nonclinical Written and Tabulated Summaries",
+   "Part III Section D: Nonclinical Study Reports",
+   "Part IV Section B: Clinical Overview",
+   "Part IV Section C: Clinical Summary",
+   "Part IV Section D: Tabular Listing of All Clinical Studies",
+   "Part IV Section E: Clinical Study Reports",
+   "Part IV Section F: List of Key Literature References"
+  ],
+  "pairs": [
+   {
+    "ctd": "Module 1 (regional administrative information)",
+    "answer": 0
+   },
+   {
+    "ctd": "2.3 Quality Overall Summary",
+    "answer": 1
+   },
+   {
+    "ctd": "3.2 Body of Data",
+    "answer": 2
+   },
+   {
+    "ctd": "2.4 Nonclinical Overview",
+    "answer": 3
+   },
+   {
+    "ctd": "2.6 Nonclinical Written and Tabulated Summaries",
+    "answer": 4
+   },
+   {
+    "ctd": "Module 4 study reports",
+    "answer": 5
+   },
+   {
+    "ctd": "2.5 Clinical Overview",
+    "answer": 6
+   },
+   {
+    "ctd": "2.7 Clinical Summary",
+    "answer": 7
+   },
+   {
+    "ctd": "5.2 Tabular Listing of All Clinical Studies",
+    "answer": 8
+   },
+   {
+    "ctd": "5.3 Clinical Study Reports",
+    "answer": 9
+   },
+   {
+    "ctd": "5.4 Literature References",
+    "answer": 10
+   }
+  ],
+  "notes": [
+   "ACTD has four parts, not five modules: the overviews and summaries sit at the front of the part they summarise, instead of in a separate Module 2.",
+   "Parts III and IV are not required for generics and some variations; member states may waive study reports when a reference country has approved the product.",
+   "ACTD is a paper or PDF format; it has no eCTD backbone."
+  ]
+ }
 }

@@ -183,7 +183,48 @@ export function asmfDocs(p) {
   ];
 }
 
+// Canada: the Canadian Module 1 for a new drug submission.
+export function caDocs(p) {
+  return [
+    ['ca:1.0.2', 'Life Cycle Management Table', 'life-cycle-management-table.pdf', 2],
+    ['ca:1.2.4.1', 'Patent List (Form IV)', 'patent-list.pdf', 3],
+    ['ca:1.2.4.2', 'Data Protection Information (innovative drug)', 'data-protection.pdf', 2],
+    ['ca:1.2.5', 'Compliance and Site Information (manufacturing and testing sites)', 'site-information.pdf', 8],
+    ['ca:1.2.7', 'International Information (decisions of other regulators)', 'international-information.pdf', 6],
+    ['ca:1.3.1', `Product Monograph - ${p.product.brandName}`, 'product-monograph.pdf', 48, { bookmarks: 20 }],
+    ['ca:1.3.2', 'Inner and Outer Labels (English and French)', 'labels.pdf', 6],
+    ['ca:1.3.3', 'Non-Canadian Labelling (US prescribing information and EU SmPC)', 'non-canadian-labelling.pdf', 60],
+    ['ca:1.3.6', 'Certified Product Information Document - Chemical Entities (CPID-CE)', 'cpid-ce.pdf', 22, { bookmarks: 8 }],
+    ['ca:1.3.8.2', 'Risk Management Plan (with Canadian addendum)', 'risk-management-plan.pdf', 70, { bookmarks: 18 }],
+    ['ca:1.2.2', 'Fee Form for Drug Submissions', 'fee-form.pdf', 2, { decoy: 'no-docs', coach: "Health Canada's guidance says to place no documents in 1.2.2: the fee form is part of the regulatory transaction." }],
+    ['ca:1.5', 'Environmental Assessment Statement', 'environmental-assessment.pdf', 2, { decoy: 'no-docs', coach: "Health Canada's guidance says to place no documents in 1.5." }],
+  ].map(([section, title, fileName, pages, extra], i) => ({ id: `ca-${i + 1}`, section, title, fileName, pages, region: 'CA', ...(extra ?? {}) }));
+}
+
+// Switzerland: the Swiss Module 1 for a new active substance.
+export function chDocs(p) {
+  return [
+    ['ch:1.2.1', 'Application Form (new authorisation)', 'application-form.pdf', 8],
+    ['ch:1.2.2', 'Additional Forms (full declaration, manufacturer information)', 'additional-forms.pdf', 10],
+    ['ch:1.2.4', 'Annexes - Manufacturing (GMP certificates)', 'gmp-certificates.pdf', 6],
+    ['ch:1.3.1', 'Information for Professionals (German)', 'information-professionals-de.pdf', 30, { bookmarks: 12 }],
+    ['ch:1.3.1', 'Information for Professionals (French)', 'information-professionals-fr.pdf', 30, { bookmarks: 12 }],
+    ['ch:1.3.2', 'Patient Information (German, French, Italian)', 'patient-information.pdf', 18],
+    ['ch:1.3.3', 'Packaging Information', 'packaging-information.pdf', 6],
+    ['ch:1.3.4', 'Information for Professionals from Other Countries (EU SmPC, US prescribing information)', 'information-other-countries.pdf', 60],
+    ['ch:1.4.1', 'Information about the Expert - Quality', 'expert-quality.pdf', 3],
+    ['ch:1.4.2', 'Information about the Expert - Nonclinical', 'expert-nonclinical.pdf', 3],
+    ['ch:1.4.3', 'Information about the Expert - Clinical', 'expert-clinical.pdf', 3],
+    ['ch:1.6.1', 'Environmental Risk Assessment (non-GMO)', 'environmental-risk.pdf', 12],
+    ['ch:1.7', 'Decisions of Foreign Authorities (EU and US approvals, assessment reports)', 'foreign-decisions.pdf', 140, { bookmarks: 10, later: true, note: 'Needed when the application relies on a foreign authorisation (Article 13).' }],
+    ['ch:1.8.2', 'Risk Management Plan', 'risk-management-plan.pdf', 64, { bookmarks: 18 }],
+    ['ch:1.10', 'Information Relating to Paediatrics', 'paediatrics.pdf', 4],
+  ].map(([section, title, fileName, pages, extra], i) => ({ id: `ch-${i + 1}`, section, title, fileName, pages, region: 'CH', ...(extra ?? {}) }));
+}
+
 export function regionDocs(p, region, opt = null) {
+  if (region === 'CA' && (p.generateRegionDocs ?? {}).CA) return caDocs(p);
+  if (region === 'CH' && (p.generateRegionDocs ?? {}).CH) return chDocs(p);
   if (region === 'EU' && opt?.library === 'asmf') return [];
   if (region === 'EU' && opt?.settings?.eu?.procedureType && opt.settings.eu.procedureType !== 'centralised') return euNationalDocs(p, opt.settings.eu).map((d) => ({ ...d, region: 'EU' }));
   if (region === 'US' && opt?.library === 'ind') return usIndDocs(p);

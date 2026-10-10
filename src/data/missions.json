@@ -2486,6 +2486,210 @@
      "label": "Clinical trial questions answered correctly"
     }
    ]
+  },
+  {
+   "id": 23,
+   "phase": 5,
+   "title": "New drug submission in Canada",
+   "region": "Canada",
+   "regionCode": "CA",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nds",
+   "minutes": {
+    "expert": 45
+   },
+   "brief": "Ostrevia goes to Health Canada as a new drug submission. Health Canada has issued the dossier identifier e123456. Build sequence 0000 with the Canadian Module 1: the product monograph, the labels, the certified product information document and the risk management plan, and keep documents out of the headings that must stay empty.",
+   "quiz": [
+    {
+     "id": "pm",
+     "q": "What is Canada's equivalent of the US prescribing information or the EU SmPC?",
+     "options": [
+      "The CPID",
+      "The product monograph",
+      "The company core data sheet",
+      "The Notice of Compliance"
+     ],
+     "answer": 1,
+     "why": "The product monograph, in 1.3.1, is the factual document on the drug for health professionals and patients."
+    },
+    {
+     "id": "noc",
+     "q": "What does Health Canada issue when it approves a new drug submission?",
+     "options": [
+      "A Notice of Compliance (NOC)",
+      "A marketing authorisation number only",
+      "A Certificate of Pharmaceutical Product",
+      "An EPAR"
+     ],
+     "answer": 0,
+     "why": "Approval is a Notice of Compliance, with a Drug Identification Number for each product."
+    },
+    {
+     "id": "data",
+     "q": "How long is data protection for an innovative drug in Canada?",
+     "options": [
+      "5 years",
+      "8 years, with no generic filing in the first 6 years",
+      "10 years",
+      "12 years"
+     ],
+     "answer": 1,
+     "why": "An innovative drug has 8 years of data protection; a generic submission cannot be filed during the first 6."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the dossier identifier e123456, with dossier type Pharmaceutical Dossier and lead Pharmaceutical.",
+    "Build 0000 (NDS, Initial): cover letter in 1.0.1, the product monograph, labels, CPID and risk management plan, and the intellectual property, site and international information.",
+    "Leave 1.2.2 and 1.5 empty: Health Canada's guidance says no documents go there.",
+    "Add Modules 2 to 5. Answer the quiz, validate and publish 0000."
+   ],
+   "hints": [
+    "The fee form and the environmental assessment statement in the library are traps.",
+    "The non-Canadian labelling (US and EU texts) goes in 1.3.3."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "Dossier identifier and transaction information complete"
+    },
+    {
+     "id": "type",
+     "label": "Regulatory activity NDS, sequence description Initial"
+    },
+    {
+     "id": "m1",
+     "label": "Cover letter, product monograph, labels, CPID and RMP"
+    },
+    {
+     "id": "empty",
+     "label": "Nothing in 1.2.2 or 1.5"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "Canada questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "phase": 5,
+   "title": "Switzerland under Article 13",
+   "region": "Switzerland",
+   "regionCode": "CH",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "na",
+   "minutes": {
+    "expert": 45
+   },
+   "brief": "Ostrevia is authorised in the EU and the US. Halcyon Ridge applies to Swissmedic for a new active substance under Article 13 of the Therapeutic Products Act, which lets Swissmedic take the foreign authorisation into account. Build sequence 0000 with the Swiss Module 1 in the galenic form folder, the Swiss product information, and the foreign decisions the Article 13 route depends on.",
+   "quiz": [
+    {
+     "id": "art13",
+     "q": "What does an Article 13 application rely on?",
+     "options": [
+      "A Swiss clinical trial",
+      "The results of the assessment by a country with comparable medicines control that has already authorised the product",
+      "The EU centralised procedure directly",
+      "Nothing different from a normal application"
+     ],
+     "answer": 1,
+     "why": "Article 13 TPA lets Swissmedic take into account the results of tests carried out for an authorisation in a country with comparable medicines control."
+    },
+    {
+     "id": "folder",
+     "q": "Where do the Swiss Module 1 files sit?",
+     "options": [
+      "m1/ch/ directly",
+      "m1/ch/<galenic form>/ (or common), then the heading folders",
+      "m1/eu/",
+      "In a separate dossier"
+     ],
+     "answer": 1,
+     "why": "The Swiss specification uses a folder per galenic form, such as tablets, with a common folder for files that apply to all forms."
+    },
+    {
+     "id": "envelope",
+     "q": "How does the envelope show that the application uses Article 13?",
+     "options": [
+      "In the cover letter only",
+      "The article-13-tpa element is 'yes'",
+      "The application type is 'art13'",
+      "It cannot"
+     ],
+     "answer": 1,
+     "why": "ch-regional.xml carries an article-13-tpa element with the value yes or no."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the application number 123456789, check the galenic form folder (tablets) and set Article 13 TPA to yes.",
+    "Build 0000 (na-nas): cover letter, application form and annexes, the information for professionals and patient information, packaging, the expert information, the risk management plan and the environmental risk assessment.",
+    "For Article 13, place the decisions of the foreign authorities in 1.7 and the foreign product information in 1.3.4.",
+    "Add Modules 2 to 5. Answer the quiz, validate and publish 0000. Look at the folder tree: m1/ch/tablets/."
+   ],
+   "hints": [
+    "The foreign decisions document is in the library, but it is not part of a normal application.",
+    "Without 1.7, an Article 13 envelope is a High finding."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "Swiss envelope complete"
+    },
+    {
+     "id": "type",
+     "label": "Application type na-nas"
+    },
+    {
+     "id": "art13",
+     "label": "Article 13 TPA set to yes"
+    },
+    {
+     "id": "foreign",
+     "label": "Decisions of foreign authorities in 1.7"
+    },
+    {
+     "id": "other",
+     "label": "Foreign product information in 1.3.4"
+    },
+    {
+     "id": "m1",
+     "label": "Mandatory Swiss Module 1 items placed"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "Switzerland questions answered correctly"
+    }
+   ]
   }
  ]
 }

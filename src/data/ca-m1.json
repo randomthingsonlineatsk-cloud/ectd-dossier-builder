@@ -1,0 +1,371 @@
+{
+ "_about": "Canadian Module 1 headings from Health Canada's guidance on organization and document placement for Canadian Module 1, and the ca-regional.xml transaction information from its guidance on creating the Canadian Module 1 backbone. Element names and folders are simplified for training; Module 1 files sit in m1/ca. Codes carry a 'ca:' prefix in the app.",
+ "region": "CA",
+ "regionalFile": "m1/ca/ca-regional.xml",
+ "folder": "m1/ca",
+ "version": "3.2.2",
+ "tree": {
+  "code": "ca:1",
+  "display": "1",
+  "title": "Module 1 (Canada)",
+  "element": "m1-ca",
+  "children": [
+   {
+    "code": "ca:1.0",
+    "title": "Correspondence",
+    "element": "m1-0-correspondence",
+    "children": [
+     {
+      "code": "ca:1.0.1",
+      "title": "Cover Letter",
+      "element": "m1-0-1-cover-letter"
+     },
+     {
+      "code": "ca:1.0.2",
+      "title": "Life Cycle Management Table",
+      "element": "m1-0-2-life-cycle-management-table"
+     },
+     {
+      "code": "ca:1.0.3",
+      "title": "Copy of Health Canada Issued Correspondence",
+      "element": "m1-0-3-copy-of-health-canada-issued-corresponde"
+     },
+     {
+      "code": "ca:1.0.4",
+      "title": "Health Canada Solicited Information",
+      "element": "m1-0-4-health-canada-solicited-information"
+     },
+     {
+      "code": "ca:1.0.5",
+      "title": "Meeting Information",
+      "element": "m1-0-5-meeting-information"
+     },
+     {
+      "code": "ca:1.0.6",
+      "title": "Request for Reconsideration Documentation",
+      "element": "m1-0-6-request-for-reconsideration-documentatio"
+     },
+     {
+      "code": "ca:1.0.7",
+      "title": "General Note to Reviewer",
+      "element": "m1-0-7-general-note-to-reviewer"
+     }
+    ]
+   },
+   {
+    "code": "ca:1.2",
+    "title": "Administrative Information",
+    "element": "m1-2-administrative-information",
+    "children": [
+     {
+      "code": "ca:1.2.1",
+      "title": "Application Forms",
+      "element": "m1-2-1-application-forms",
+      "help": "Clinical trial application forms. For drug submissions under the Regulatory Enrolment Process, the regulatory transaction (RT) XML replaces the application form."
+     },
+     {
+      "code": "ca:1.2.2",
+      "title": "Fee Forms",
+      "element": "m1-2-2-fee-forms",
+      "note": "Health Canada's guidance says to place no documents here; under the Regulatory Enrolment Process the fee form is built into the regulatory transaction (RT) XML."
+     },
+     {
+      "code": "ca:1.2.3",
+      "title": "Certification and Attestation Forms",
+      "element": "m1-2-3-certification-and-attestation-forms"
+     },
+     {
+      "code": "ca:1.2.4",
+      "title": "Intellectual Property Information",
+      "element": "m1-2-4-intellectual-property-information",
+      "children": [
+       {
+        "code": "ca:1.2.4.1",
+        "title": "Patent Information",
+        "element": "m1-2-4-1-patent-information"
+       },
+       {
+        "code": "ca:1.2.4.2",
+        "title": "Data Protection Information",
+        "element": "m1-2-4-2-data-protection-information"
+       }
+      ]
+     },
+     {
+      "code": "ca:1.2.5",
+      "title": "Compliance and Site Information",
+      "element": "m1-2-5-compliance-and-site-information"
+     },
+     {
+      "code": "ca:1.2.6",
+      "title": "Authorization for Sharing Information",
+      "element": "m1-2-6-authorization-for-sharing-information"
+     },
+     {
+      "code": "ca:1.2.7",
+      "title": "International Information",
+      "element": "m1-2-7-international-information"
+     },
+     {
+      "code": "ca:1.2.8",
+      "title": "Post-Authorization Information",
+      "element": "m1-2-8-post-authorization-information"
+     },
+     {
+      "code": "ca:1.2.9",
+      "title": "Other Administrative Information",
+      "element": "m1-2-9-other-administrative-information"
+     }
+    ]
+   },
+   {
+    "code": "ca:1.3",
+    "title": "Product Information",
+    "element": "m1-3-product-information",
+    "children": [
+     {
+      "code": "ca:1.3.1",
+      "title": "Product Monograph",
+      "element": "m1-3-1-product-monograph"
+     },
+     {
+      "code": "ca:1.3.2",
+      "title": "Inner and Outer Labels",
+      "element": "m1-3-2-inner-and-outer-labels"
+     },
+     {
+      "code": "ca:1.3.3",
+      "title": "Non-Canadian Labelling",
+      "element": "m1-3-3-non-canadian-labelling"
+     },
+     {
+      "code": "ca:1.3.4",
+      "title": "Investigator's Brochure",
+      "element": "m1-3-4-investigator-s-brochure"
+     },
+     {
+      "code": "ca:1.3.5",
+      "title": "Reference Product Labelling",
+      "element": "m1-3-5-reference-product-labelling"
+     },
+     {
+      "code": "ca:1.3.6",
+      "title": "Certified Product Information Document",
+      "element": "m1-3-6-certified-product-information-document"
+     },
+     {
+      "code": "ca:1.3.7",
+      "title": "Look-alike/Sound-alike Assessment",
+      "element": "m1-3-7-look-alike-sound-alike-assessment"
+     },
+     {
+      "code": "ca:1.3.8",
+      "title": "Pharmacovigilance Information",
+      "element": "m1-3-8-pharmacovigilance-information",
+      "children": [
+       {
+        "code": "ca:1.3.8.1",
+        "title": "Pharmacovigilance Plan",
+        "element": "m1-3-8-1-pharmacovigilance-plan"
+       },
+       {
+        "code": "ca:1.3.8.2",
+        "title": "Risk Management Plan",
+        "element": "m1-3-8-2-risk-management-plan"
+       },
+       {
+        "code": "ca:1.3.8.3",
+        "title": "Risk Communications",
+        "element": "m1-3-8-3-risk-communications"
+       },
+       {
+        "code": "ca:1.3.8.4",
+        "title": "Other Pharmacovigilance Information",
+        "element": "m1-3-8-4-other-pharmacovigilance-information"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "code": "ca:1.4",
+    "title": "Health Canada Summaries",
+    "element": "m1-4-health-canada-summaries",
+    "children": [
+     {
+      "code": "ca:1.4.1",
+      "title": "PSEAT-CTA",
+      "element": "m1-4-1-pseat-cta"
+     },
+     {
+      "code": "ca:1.4.2",
+      "title": "Comprehensive Summary: Bioequivalence",
+      "element": "m1-4-2-comprehensive-summary-bioequivalence"
+     },
+     {
+      "code": "ca:1.4.3",
+      "title": "Multidisciplinary Tabular Summaries",
+      "element": "m1-4-3-multidisciplinary-tabular-summaries"
+     }
+    ]
+   },
+   {
+    "code": "ca:1.5",
+    "title": "Environmental Assessment Statement",
+    "element": "m1-5-environmental-assessment-statement",
+    "note": "Health Canada's guidance says to place no documents here; the statement is given in the transaction information."
+   },
+   {
+    "code": "ca:1.6",
+    "title": "Regional Clinical Information",
+    "element": "m1-6-regional-clinical-information",
+    "children": [
+     {
+      "code": "ca:1.6.1",
+      "title": "Comparative Bioavailability Information",
+      "element": "m1-6-1-comparative-bioavailability-information"
+     },
+     {
+      "code": "ca:1.6.2",
+      "title": "Company Core Data Sheets",
+      "element": "m1-6-2-company-core-data-sheets"
+     },
+     {
+      "code": "ca:1.6.3",
+      "title": "Priority Review Requests",
+      "element": "m1-6-3-priority-review-requests"
+     },
+     {
+      "code": "ca:1.6.4",
+      "title": "Notice of Compliance with Conditions",
+      "element": "m1-6-4-notice-of-compliance-with-conditions"
+     }
+    ]
+   },
+   {
+    "code": "ca:1.7",
+    "title": "Clinical Trial Information",
+    "element": "m1-7-clinical-trial-information",
+    "children": [
+     {
+      "code": "ca:1.7.1",
+      "title": "Study Protocol",
+      "element": "m1-7-1-study-protocol"
+     },
+     {
+      "code": "ca:1.7.2",
+      "title": "Informed Consent Forms",
+      "element": "m1-7-2-informed-consent-forms"
+     },
+     {
+      "code": "ca:1.7.3",
+      "title": "Canadian Research Ethics Board Refusals",
+      "element": "m1-7-3-canadian-research-ethics-board-refusals"
+     },
+     {
+      "code": "ca:1.7.4",
+      "title": "Information on Prior-related Applications",
+      "element": "m1-7-4-information-on-prior-related-application"
+     }
+    ]
+   }
+  ]
+ },
+ "submissionTypes": [
+  {
+   "value": "nds",
+   "label": "NDS (new drug submission)"
+  },
+  {
+   "value": "snds",
+   "label": "SNDS (supplement to a new drug submission)"
+  },
+  {
+   "value": "ands",
+   "label": "ANDS (abbreviated new drug submission)"
+  },
+  {
+   "value": "nc",
+   "label": "NC (notifiable change)"
+  }
+ ],
+ "submissionSubTypes": [
+  {
+   "value": "initial",
+   "label": "Initial",
+   "help": "Sequence description: the first sequence of the regulatory activity."
+  },
+  {
+   "value": "response-clarification",
+   "label": "Response to Clarification Request",
+   "help": "Answers to a clarification request; names the request date in the description."
+  },
+  {
+   "value": "response-screening",
+   "label": "Response to Screening Deficiency Notice",
+   "help": "Answers to deficiencies found at screening."
+  },
+  {
+   "value": "unsolicited",
+   "label": "Unsolicited Information",
+   "help": "Information sent without a request."
+  }
+ ],
+ "applicationTypes": [
+  {
+   "value": "nds",
+   "label": "NDS",
+   "phase": 5
+  }
+ ],
+ "forms": [],
+ "checklist": {
+  "nds:nds:initial": [
+   {
+    "section": "ca:1.0.1",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CA-01"
+   },
+   {
+    "section": "ca:1.3.1",
+    "label": "Product monograph",
+    "level": "mandatory",
+    "rule": "CA-02"
+   },
+   {
+    "section": "ca:1.3.2",
+    "label": "Inner and outer labels",
+    "level": "mandatory",
+    "rule": "CA-03"
+   },
+   {
+    "section": "ca:1.3.6",
+    "label": "Certified product information document",
+    "level": "mandatory",
+    "rule": "CA-04"
+   },
+   {
+    "section": "ca:1.3.8.2",
+    "label": "Risk management plan",
+    "level": "mandatory",
+    "rule": "CA-05"
+   },
+   {
+    "section": "ca:1.2.4.2",
+    "label": "Data protection information (when innovative drug status is claimed)",
+    "level": "conditional"
+   },
+   {
+    "section": "ca:1.2.7",
+    "label": "International information (decisions elsewhere)",
+    "level": "conditional"
+   },
+   {
+    "section": "ca:1.3.3",
+    "label": "Non-Canadian labelling",
+    "level": "conditional"
+   }
+  ]
+ }
+}

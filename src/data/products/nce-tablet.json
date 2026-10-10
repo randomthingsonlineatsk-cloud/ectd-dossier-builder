@@ -972,12 +972,24 @@
     "submissionType": "clinical-trial",
     "subType": "application"
    }
+  },
+  {
+   "region": "CA",
+   "appType": "nds",
+   "label": "Canada — new drug submission (NDS, eCTD v3.2.2)"
+  },
+  {
+   "region": "CH",
+   "appType": "na",
+   "label": "Switzerland — new active substance (eCTD v3.2.2)"
   }
  ],
  "generateRegionDocs": {
   "EU": true,
   "JP": true,
-  "IN": true
+  "IN": true,
+  "CA": true,
+  "CH": true
  },
  "facts": {
   "strengths": "10 mg and 25 mg",
