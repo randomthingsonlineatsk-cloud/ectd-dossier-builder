@@ -9,7 +9,15 @@ Optional deadline reminders go out by email through Brevo.
 Tables are prefixed `ectd_` and every route sits under `/ectd/v1`, so the Worker and its D1
 database can be shared with other apps.
 
-## Deploy
+## Deploy with one click (GitHub Actions)
+
+1. Create a Cloudflare API token (My Profile > API Tokens > Create Token) with **Workers Scripts: Edit** and **D1: Edit** permissions, and note your **Account ID** (Workers & Pages overview).
+2. In the GitHub repository, open **Settings > Secrets and variables > Actions** and add the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (and `BREVO_API_KEY` if you want email reminders).
+3. Open **Actions > Deploy classroom server > Run workflow**.
+
+The workflow creates the D1 database if it does not exist, creates the tables, deploys the Worker, then rebuilds the site with the classroom server built in and publishes it to GitHub Pages. The run summary shows the API address.
+
+## Deploy by hand
 
 You need a Cloudflare account (the free plan is enough) and Node.js 18 or newer.
 

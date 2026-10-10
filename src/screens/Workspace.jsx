@@ -132,7 +132,7 @@ export default function Workspace({ id }) {
       <div className="ws-head">
         <div className="ws-title">
           <div>
-            <p className="small muted" style={{ margin: 0 }}><a href="#/">Projects</a> / {p.product.brandName} ({p.product.inn}) · {REGION_LABEL[project.region]} {project.appType.toUpperCase()} · {project.ectdVersion === 'CTD' ? 'CTD (portal)' : `eCTD ${project.ectdVersion}`}</p>
+            <p className="small muted" style={{ margin: 0 }}><a href="#/">Projects</a> / {p.product.brandName} ({p.product.inn}) · {REGION_LABEL[project.region]} {({ na: 'new authorisation', cta: 'clinical trial application' })[project.appType] ?? project.appType.toUpperCase()}{project.region === 'EU' && project.appType === 'maa' && project.settings.eu?.procedureType !== 'centralised' ? ` (${project.settings.eu?.procedureType})` : ''} · {project.ectdVersion === 'CTD' ? 'CTD (portal)' : `eCTD ${project.ectdVersion}`}</p>
             <h1>{project.name}</h1>
           </div>
           <label className="field" style={{ minWidth: 220 }}>{project.ectdVersion === '4.0' ? 'Working on submission unit' : 'Working on sequence'}
