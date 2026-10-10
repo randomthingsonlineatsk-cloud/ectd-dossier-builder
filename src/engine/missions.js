@@ -17,12 +17,19 @@ export function buildComplete(project, { exclude = () => false } = {}) {
   const s = project.settings;
   const prod = PRODUCTS[project.productId];
   if (project.region === 'EU') s.eu.trackingNumber = 'EMEA/H/C/006123';
-  else s.applicationNumber = project.appType === 'anda' ? '219876' : '299001';
+  else if (project.region === 'JP') s.jp.receptionNumber = '2026000123';
+  else if (project.region === 'IN') s.in.agentName = 'Kestrel Regulatory Services Pvt. Ltd., Mumbai';
+  else s.applicationNumber = project.appType === 'anda' ? '219876' : project.appType.startsWith('bla') ? '761999' : '299001';
+  const docs = Object.values(project.documents);
+  // Japan: use the Japanese Module 2 where one exists. India: the form that matches the submission type.
+  const hasJa = new Set(docs.filter((d) => d.lang === 'ja').map((d) => d.id.replace(/-ja$/, '')));
+  const regionSkip = (d) => (project.region === 'JP' && hasJa.has(d.id) && d.lang !== 'ja')
+    || (project.region === 'IN' && d.form === (project.sequences[0].submissionType === 'new-drug-manufacture' ? 'ct-18' : 'ct-21'));
   const seq = project.sequences[0];
-  seq.description = `${project.region === 'EU' ? 'Initial MAA' : project.appType === 'anda' ? 'Original ANDA' : 'Original NDA'} for ${prod.product.brandName} (${prod.product.inn})`;
+  seq.description = `${{ EU: 'Initial MAA', JP: 'New drug application', IN: 'New drug application' }[project.region] ?? (project.appType === 'anda' ? 'Original ANDA' : project.appType.startsWith('bla') ? 'Original BLA' : 'Original NDA')} for ${prod.product.brandName} (${prod.product.inn})`;
   const leafByDoc = {};
   for (const d of Object.values(project.documents)) {
-    if (BASE_EXCLUDE(d) || exclude(d)) continue;
+    if (BASE_EXCLUDE(d) || exclude(d) || regionSkip(d)) continue;
     const leaf = placeDoc(project, seq.number, d.id, d.section);
     const tag = tagFromDoc(project, leaf);
     if (tag) leaf.study = tag;

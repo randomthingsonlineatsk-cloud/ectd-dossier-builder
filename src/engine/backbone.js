@@ -5,6 +5,7 @@ import SparkMD5 from 'spark-md5';
 import { INDEX, ancestors, REGION_PACKS } from './tree.js';
 import { docForLeaf, leafPath, seqByNumber } from './model.js';
 import { studyFiles } from './stf.js';
+import { buildSubmissionUnit, v4FolderTree, seqInt } from './v4.js';
 
 export const md5 = (s) => SparkMD5.hash(s);
 
@@ -16,7 +17,7 @@ export function fileContentKey(doc) {
   if (!doc) return '';
   return [doc.id, `v${doc.version}`, doc.pdfVersion, doc.fontsEmbedded, doc.secured, doc.textSearchable,
     doc.bookmarks, (doc.bookmarkList ?? []).join('~'), doc.toc ? 'toc' : '', doc.pages, doc.brokenLinks,
-    (doc.links ?? []).join(','), doc.title, JSON.stringify(doc.factOverrides ?? {}), doc.content ?? ''].join('|');
+    (doc.links ?? []).join(','), doc.title, doc.lang ?? 'en', JSON.stringify(doc.factOverrides ?? {}), doc.content ?? ''].join('|');
 }
 // Real MD5 of the generated PDF once computed (at publish); a preview hash before that.
 export const isRealChecksum = (doc) => !!doc?.md5 && doc.md5Key === fileContentKey(doc);
@@ -173,6 +174,25 @@ ${modules.join('\n')}
 
 export function publishSequence(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
+  if (project.ectdVersion === '4.0') {
+    const unit = buildSubmissionUnit(project, seq);
+    const log = [
+      { file: `${seqInt(seq.number)}/submissionunit.xml`, checksum: unit.xmlSum, operation: '—', target: '—', node: 'submission unit' },
+      ...unit.files.map((f) => {
+        const l = seq.leaves.find((x) => x.id === f.leafId);
+        return { file: f.path.startsWith('(') ? f.path : `${seqInt(seq.number)}/${f.path}`, checksum: f.sha256, operation: l?.operation ?? f.op, target: l?.target ? `${seqInt(l.target.seq)} · ${l.target.leafId}` : '—', node: f.node, leafId: f.leafId };
+      }),
+      ...seq.leaves.filter((l) => l.operation === 'suspend').map((l) => ({ file: '(no file — suspend)', checksum: '—', operation: 'suspend', target: `${seqInt(l.target?.seq ?? '0')} · ${l.target?.leafId ?? ''}`, node: l.nodeCode, leafId: l.id })),
+    ];
+    return { v4: true, unit, index: unit.xml, regional: '', md5txt: unit.shaTxt, log, tree: v4FolderTree(project, seq, unit), stfs: [] };
+  }
+  if (project.region === 'IN') {
+    const log = seq.leaves.filter((l) => l.operation !== 'delete').map((l) => {
+      const doc = docForLeaf(project, l);
+      return { file: `${seq.number}/${leafPath(project, l)}`, checksum: doc ? fileChecksum(doc) : '—', operation: 'upload', target: '—', node: l.nodeCode, leafId: l.id };
+    });
+    return { portal: true, index: '', regional: '', md5txt: '', log, tree: folderTree(project, seq, { portal: true }), stfs: [] };
+  }
   const regional = buildRegionalXml(project, seq);
   const index = buildIndexXml(project, seq, regional);
   const md5txt = `${md5(index)}\n`;
@@ -198,7 +218,7 @@ export function publishSequence(project, seqNumber) {
 }
 
 // Folder tree (sequence-relative) for the live preview.
-export function folderTree(project, seq) {
+export function folderTree(project, seq, { portal = false } = {}) {
   const root = { name: seq.number, children: {}, files: [] };
   const add = (path, meta) => {
     const parts = path.split('/');
@@ -207,6 +227,10 @@ export function folderTree(project, seq) {
     for (const p of parts) cur = (cur.children[p] ??= { name: p, children: {}, files: [] });
     cur.files.push({ name: file, ...meta });
   };
+  if (portal) {
+    for (const l of seq.leaves) if (l.operation !== 'delete') add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
+    return root;
+  }
   add('index.xml', { kind: 'xml' });
   add('index-md5.txt', { kind: 'txt' });
   add(REGION_PACKS[project.region].regionalFile, { kind: 'xml' });

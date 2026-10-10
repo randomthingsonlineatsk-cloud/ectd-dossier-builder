@@ -16,7 +16,9 @@ function statesFact(doc, entry) {
 
 export function factsForDoc(project, doc) {
   if (!doc || doc.decoy) return {};
-  const facts = PRODUCTS[project.productId]?.facts ?? {};
+  const prod = PRODUCTS[project.productId];
+  const facts = { ...(prod?.facts ?? {}) };
+  facts.holder ??= project.settings?.applicant?.name ?? prod?.applicant?.name;
   const out = {};
   for (const f of FACTS) {
     if (!facts[f.key] || doc.factExclude?.includes(f.key)) continue;
@@ -82,7 +84,7 @@ export function correctFact(project, seqNumber, cell) {
   if (!doc) throw new Error('The document is not in the library.');
   if (seq && seq.status !== 'published' && cell.seq === seqNumber) {
     doc.factOverrides = { ...(doc.factOverrides ?? {}) };
-    if (PRODUCTS[project.productId].facts[cell.fact.key] === cell.expected) delete doc.factOverrides[cell.fact.key];
+    if ((PRODUCTS[project.productId].facts ?? {})[cell.fact.key] === cell.expected) delete doc.factOverrides[cell.fact.key];
     else doc.factOverrides[cell.fact.key] = cell.expected;
     touch(project);
     return { revised: doc.id, message: `Revised "${doc.title}" in sequence ${seqNumber}.` };

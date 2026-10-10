@@ -472,6 +472,11 @@
         "section": "eu:1.5.5",
         "label": "Conditional MA justification",
         "level": "conditional"
+      },
+      {
+        "section": "eu:1.5.2",
+        "label": "Biosimilar information (biosimilar applications only)",
+        "level": "conditional"
       }
     ],
     "maa:maa:response": [
@@ -529,6 +534,42 @@
         "section": "eu:1.2",
         "form": "eaf",
         "label": "Variation application form",
+        "level": "mandatory",
+        "rule": "EU-02"
+      }
+    ],
+    "maa:renewal:initial": [
+      {
+        "section": "eu:1.0",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "EU-01"
+      },
+      {
+        "section": "eu:1.2",
+        "form": "eaf",
+        "label": "Renewal application form",
+        "level": "mandatory",
+        "rule": "EU-02"
+      },
+      {
+        "section": "eu:1.3.1",
+        "label": "Updated product information",
+        "level": "mandatory",
+        "rule": "EU-03"
+      }
+    ],
+    "maa:transfer-ma:initial": [
+      {
+        "section": "eu:1.0",
+        "label": "Cover letter",
+        "level": "mandatory",
+        "rule": "EU-01"
+      },
+      {
+        "section": "eu:1.2",
+        "form": "eaf",
+        "label": "Transfer application form",
         "level": "mandatory",
         "rule": "EU-02"
       }

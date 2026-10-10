@@ -1,0 +1,621 @@
+{
+ "id": "mab-infusion",
+ "label": "Monoclonal antibody for infusion (BLA / MAA)",
+ "fictional": true,
+ "options": [
+  {
+   "region": "US",
+   "appType": "bla"
+  },
+  {
+   "region": "EU",
+   "appType": "maa"
+  }
+ ],
+ "generateRegionDocs": {
+  "EU": true
+ },
+ "product": {
+  "brandName": "Arventa",
+  "inn": "olvecitamab",
+  "dosageForm": "concentrate for solution for infusion",
+  "route": "intravenous",
+  "strengths": [
+   "100 mg/10 mL"
+  ],
+  "indication": "ulcerative colitis",
+  "indicationText": "Treatment of adults with moderately to severely active ulcerative colitis",
+  "shelfLife": "36 months",
+  "storage": "Store in a refrigerator (2°C to 8°C); do not freeze; protect from light"
+ },
+ "applicant": {
+  "name": "Lumenfield Biologics Inc.",
+  "address": "9 Brightwater Parkway, Fictionville, NC 27000, USA",
+  "duns": "000000004",
+  "contact": "Imani Clarke, Vice President, Regulatory Affairs",
+  "phone": "+1 555 0100 440",
+  "email": "regulatory@lumenfield.example"
+ },
+ "substanceManufacturer": {
+  "name": "Lumenfield Biologics Inc., Brightwater site",
+  "address": "9 Brightwater Parkway, Fictionville, NC, USA"
+ },
+ "productManufacturer": {
+  "name": "Sterivault Fill-Finish SA",
+  "address": "Rue Imaginaire 5, Exempleville, Belgium"
+ },
+ "facts": {
+  "strengths": "100 mg/10 mL (10 mg/mL) single-dose vial",
+  "dosageForm": "concentrate for solution for infusion",
+  "shelfLife": "36 months",
+  "storage": "Store at 2°C to 8°C; protect from light",
+  "dsManufacturer": "Lumenfield Biologics Inc., Brightwater, NC, USA",
+  "dpManufacturer": "Sterivault Fill-Finish SA, Exempleville, Belgium",
+  "dissolution": "Relative potency 80-125% of reference standard",
+  "assay": "Protein content 9.0-11.0 mg/mL",
+  "excipients": "L-histidine, sucrose, polysorbate 80, water for injections",
+  "batches": "LB-DS-2401, LB-DS-2402, LB-DS-2403",
+  "patients": "1,312 patients randomised (LUMEN-1: 648; LUMEN-2: 664)",
+  "indication": "Treatment of adults with moderately to severely active ulcerative colitis"
+ },
+ "studies": {
+  "LBX-101": "First-in-human study",
+  "LBX-201": "Phase 2 induction study",
+  "LBX-301": "Phase 3 induction study (LUMEN-1)",
+  "LBX-302": "Phase 3 maintenance study (LUMEN-2)"
+ },
+ "documents": [
+  {
+   "id": "m-356h",
+   "section": "1.1",
+   "title": "Form FDA 356h",
+   "fileName": "fda-356h.pdf",
+   "pages": 4,
+   "form": "fda-356h",
+   "region": "US"
+  },
+  {
+   "id": "m-3397",
+   "section": "1.1",
+   "title": "Form FDA 3397 User Fee Coversheet",
+   "fileName": "fda-3397.pdf",
+   "pages": 1,
+   "form": "fda-3397",
+   "region": "US"
+  },
+  {
+   "id": "m-3674",
+   "section": "1.1",
+   "title": "Form FDA 3674 Certification of Compliance",
+   "fileName": "fda-3674.pdf",
+   "pages": 2,
+   "form": "fda-3674",
+   "region": "US"
+  },
+  {
+   "id": "m-debar",
+   "section": "1.3.3",
+   "title": "Debarment Certification",
+   "fileName": "debarment-certification.pdf",
+   "pages": 1,
+   "region": "US"
+  },
+  {
+   "id": "m-findisc",
+   "section": "1.3.4",
+   "title": "Financial Certification (Form FDA 3454)",
+   "fileName": "financial-certification.pdf",
+   "pages": 3,
+   "region": "US"
+  },
+  {
+   "id": "m-envir",
+   "section": "1.12.14",
+   "title": "Claim of Categorical Exclusion from Environmental Assessment",
+   "fileName": "environmental-analysis.pdf",
+   "pages": 2,
+   "region": "US"
+  },
+  {
+   "id": "m-carton",
+   "section": "1.14.1.1",
+   "title": "Draft Carton and Container Labels",
+   "fileName": "draft-carton-container-labels.pdf",
+   "pages": 4,
+   "region": "US"
+  },
+  {
+   "id": "m-pi",
+   "section": "1.14.1.3",
+   "title": "Draft Prescribing Information",
+   "fileName": "draft-labeling-text.pdf",
+   "pages": 26,
+   "bookmarks": 18,
+   "region": "US"
+  },
+  {
+   "id": "m-intro",
+   "section": "2.2",
+   "title": "Introduction",
+   "fileName": "introduction.pdf",
+   "pages": 3
+  },
+  {
+   "id": "m-qos",
+   "section": "2.3",
+   "title": "Quality Overall Summary",
+   "fileName": "quality-overall-summary.pdf",
+   "pages": 110,
+   "bookmarks": 52,
+   "links": [
+    "3.2.S.2.5",
+    "3.2.A.2"
+   ]
+  },
+  {
+   "id": "m-ncover",
+   "section": "2.4",
+   "title": "Nonclinical Overview",
+   "fileName": "nonclinical-overview.pdf",
+   "pages": 30,
+   "bookmarks": 18
+  },
+  {
+   "id": "m-cover",
+   "section": "2.5",
+   "title": "Clinical Overview",
+   "fileName": "clinical-overview.pdf",
+   "pages": 60,
+   "bookmarks": 32,
+   "links": [
+    "5.3.5.1"
+   ]
+  },
+  {
+   "id": "m-262",
+   "section": "2.6.2",
+   "title": "Pharmacology Written Summary",
+   "fileName": "pharmacology-written-summary.pdf",
+   "pages": 16,
+   "bookmarks": 10
+  },
+  {
+   "id": "m-264",
+   "section": "2.6.4",
+   "title": "Pharmacokinetics Written Summary",
+   "fileName": "pk-written-summary.pdf",
+   "pages": 14,
+   "bookmarks": 8
+  },
+  {
+   "id": "m-266",
+   "section": "2.6.6",
+   "title": "Toxicology Written Summary",
+   "fileName": "toxicology-written-summary.pdf",
+   "pages": 20,
+   "bookmarks": 12
+  },
+  {
+   "id": "m-261",
+   "section": "2.6.1",
+   "title": "Introduction",
+   "fileName": "introduction-nonclinical.pdf",
+   "pages": 2
+  },
+  {
+   "id": "m-271",
+   "section": "2.7.1",
+   "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods",
+   "fileName": "summary-biopharm.pdf",
+   "pages": 22,
+   "bookmarks": 10
+  },
+  {
+   "id": "m-272",
+   "section": "2.7.2",
+   "title": "Summary of Clinical Pharmacology Studies (including immunogenicity)",
+   "fileName": "summary-clin-pharm.pdf",
+   "pages": 34,
+   "bookmarks": 18
+  },
+  {
+   "id": "m-273",
+   "section": "2.7.3",
+   "title": "Summary of Clinical Efficacy - Ulcerative Colitis",
+   "fileName": "summary-clin-efficacy-uc.pdf",
+   "pages": 70,
+   "bookmarks": 38
+  },
+  {
+   "id": "m-274",
+   "section": "2.7.4",
+   "title": "Summary of Clinical Safety",
+   "fileName": "summary-clin-safety.pdf",
+   "pages": 76,
+   "bookmarks": 40
+  },
+  {
+   "id": "m-276",
+   "section": "2.7.6",
+   "title": "Synopses of Individual Studies",
+   "fileName": "synopses-individual-studies.pdf",
+   "pages": 24,
+   "bookmarks": 6
+  },
+  {
+   "id": "m-s11",
+   "section": "3.2.S.1.1",
+   "title": "Nomenclature",
+   "fileName": "nomenclature.pdf",
+   "pages": 2
+  },
+  {
+   "id": "m-s12",
+   "section": "3.2.S.1.2",
+   "title": "Structure",
+   "fileName": "structure.pdf",
+   "pages": 4
+  },
+  {
+   "id": "m-s13",
+   "section": "3.2.S.1.3",
+   "title": "General Properties",
+   "fileName": "general-properties.pdf",
+   "pages": 6
+  },
+  {
+   "id": "m-s21",
+   "section": "3.2.S.2.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "m-s22",
+   "section": "3.2.S.2.2",
+   "title": "Description of Manufacturing Process and Process Controls (cell culture, harvest, purification)",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 34
+  },
+  {
+   "id": "m-s23",
+   "section": "3.2.S.2.3",
+   "title": "Control of Materials (cell banks, raw materials)",
+   "fileName": "control-of-materials.pdf",
+   "pages": 28
+  },
+  {
+   "id": "m-s24",
+   "section": "3.2.S.2.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 16
+  },
+  {
+   "id": "m-s25",
+   "section": "3.2.S.2.5",
+   "title": "Process Validation and/or Evaluation (including viral clearance)",
+   "fileName": "process-validation.pdf",
+   "pages": 44
+  },
+  {
+   "id": "m-s26",
+   "section": "3.2.S.2.6",
+   "title": "Manufacturing Process Development and Comparability",
+   "fileName": "process-development.pdf",
+   "pages": 38
+  },
+  {
+   "id": "m-s31",
+   "section": "3.2.S.3.1",
+   "title": "Elucidation of Structure and Other Characteristics",
+   "fileName": "characterisation.pdf",
+   "pages": 52
+  },
+  {
+   "id": "m-s32",
+   "section": "3.2.S.3.2",
+   "title": "Impurities (product- and process-related)",
+   "fileName": "impurities.pdf",
+   "pages": 22
+  },
+  {
+   "id": "m-s41",
+   "section": "3.2.S.4.1",
+   "title": "Specification",
+   "fileName": "specification.pdf",
+   "pages": 3
+  },
+  {
+   "id": "m-s42",
+   "section": "3.2.S.4.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 40
+  },
+  {
+   "id": "m-s43",
+   "section": "3.2.S.4.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 46
+  },
+  {
+   "id": "m-s44",
+   "section": "3.2.S.4.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 10
+  },
+  {
+   "id": "m-s45",
+   "section": "3.2.S.4.5",
+   "title": "Justification of Specification",
+   "fileName": "justification-of-specification.pdf",
+   "pages": 9
+  },
+  {
+   "id": "m-s5",
+   "section": "3.2.S.5",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 8
+  },
+  {
+   "id": "m-s6",
+   "section": "3.2.S.6",
+   "title": "Container Closure System",
+   "fileName": "container-closure-system.pdf",
+   "pages": 4
+  },
+  {
+   "id": "m-s71",
+   "section": "3.2.S.7.1",
+   "title": "Stability Summary and Conclusions",
+   "fileName": "stability-summary.pdf",
+   "pages": 7
+  },
+  {
+   "id": "m-s73",
+   "section": "3.2.S.7.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 40
+  },
+  {
+   "id": "m-p1",
+   "section": "3.2.P.1",
+   "title": "Description and Composition of the Drug Product",
+   "fileName": "description-composition.pdf",
+   "pages": 3
+  },
+  {
+   "id": "m-p2",
+   "section": "3.2.P.2",
+   "title": "Pharmaceutical Development (formulation, container closure integrity, compatibility with infusion sets)",
+   "fileName": "pharmaceutical-development.pdf",
+   "pages": 66
+  },
+  {
+   "id": "m-p31",
+   "section": "3.2.P.3.1",
+   "title": "Manufacturer(s)",
+   "fileName": "manufacturers.pdf",
+   "pages": 2
+  },
+  {
+   "id": "m-p32",
+   "section": "3.2.P.3.2",
+   "title": "Batch Formula",
+   "fileName": "batch-formula.pdf",
+   "pages": 2
+  },
+  {
+   "id": "m-p33",
+   "section": "3.2.P.3.3",
+   "title": "Description of Manufacturing Process and Process Controls",
+   "fileName": "manufacturing-process.pdf",
+   "pages": 18
+  },
+  {
+   "id": "m-p34",
+   "section": "3.2.P.3.4",
+   "title": "Controls of Critical Steps and Intermediates",
+   "fileName": "controls-critical-steps.pdf",
+   "pages": 8
+  },
+  {
+   "id": "m-p35",
+   "section": "3.2.P.3.5",
+   "title": "Process Validation: Aseptic Filling and Media Fills",
+   "fileName": "process-validation.pdf",
+   "pages": 60
+  },
+  {
+   "id": "m-p41",
+   "section": "3.2.P.4.1",
+   "title": "Specifications - Excipients",
+   "fileName": "excipient-specifications.pdf",
+   "pages": 5
+  },
+  {
+   "id": "m-p51",
+   "section": "3.2.P.5.1",
+   "title": "Specification(s)",
+   "fileName": "specifications.pdf",
+   "pages": 3
+  },
+  {
+   "id": "m-p52",
+   "section": "3.2.P.5.2",
+   "title": "Analytical Procedures",
+   "fileName": "analytical-procedures.pdf",
+   "pages": 30
+  },
+  {
+   "id": "m-p53",
+   "section": "3.2.P.5.3",
+   "title": "Validation of Analytical Procedures",
+   "fileName": "validation-analytical-procedures.pdf",
+   "pages": 34
+  },
+  {
+   "id": "m-p54",
+   "section": "3.2.P.5.4",
+   "title": "Batch Analyses",
+   "fileName": "batch-analyses.pdf",
+   "pages": 9
+  },
+  {
+   "id": "m-p55",
+   "section": "3.2.P.5.5",
+   "title": "Characterisation of Impurities",
+   "fileName": "characterisation-impurities.pdf",
+   "pages": 10
+  },
+  {
+   "id": "m-p56",
+   "section": "3.2.P.5.6",
+   "title": "Justification of Specification(s)",
+   "fileName": "justification-of-specifications.pdf",
+   "pages": 9
+  },
+  {
+   "id": "m-p6",
+   "section": "3.2.P.6",
+   "title": "Reference Standards or Materials",
+   "fileName": "reference-standards.pdf",
+   "pages": 4
+  },
+  {
+   "id": "m-p7",
+   "section": "3.2.P.7",
+   "title": "Container Closure System (Type I vial, stopper)",
+   "fileName": "container-closure-system.pdf",
+   "pages": 8
+  },
+  {
+   "id": "m-p81",
+   "section": "3.2.P.8.1",
+   "title": "Stability Summary and Conclusion",
+   "fileName": "stability-summary.pdf",
+   "pages": 7
+  },
+  {
+   "id": "m-p82",
+   "section": "3.2.P.8.2",
+   "title": "Post-approval Stability Protocol and Stability Commitment",
+   "fileName": "stability-protocol-commitment.pdf",
+   "pages": 4
+  },
+  {
+   "id": "m-p83",
+   "section": "3.2.P.8.3",
+   "title": "Stability Data",
+   "fileName": "stability-data.pdf",
+   "pages": 48
+  },
+  {
+   "id": "m-a1",
+   "section": "3.2.A.1",
+   "title": "Facilities and Equipment",
+   "fileName": "facilities-equipment.pdf",
+   "pages": 12
+  },
+  {
+   "id": "m-a2",
+   "section": "3.2.A.2",
+   "title": "Adventitious Agents Safety Evaluation (viral safety)",
+   "fileName": "adventitious-agents.pdf",
+   "pages": 38
+  },
+  {
+   "id": "m-a3",
+   "section": "3.2.A.3",
+   "title": "Excipients",
+   "fileName": "excipients.pdf",
+   "pages": 4
+  },
+  {
+   "id": "m-r",
+   "section": "3.2.R",
+   "title": "Regional Information: Executed Batch Records and Method Validation Package",
+   "fileName": "regional-information.pdf",
+   "pages": 140,
+   "bookmarks": 16,
+   "region": "US"
+  },
+  {
+   "id": "m-4211",
+   "section": "4.2.1.1",
+   "title": "Study LBN-0101: Binding and functional characterisation in vitro",
+   "fileName": "lbn-0101.pdf",
+   "pages": 40,
+   "bookmarks": 12
+  },
+  {
+   "id": "m-4232",
+   "section": "4.2.3.2",
+   "title": "Study LBN-0326: 26-week toxicity study in cynomolgus monkeys",
+   "fileName": "lbn-0326.pdf",
+   "pages": 230,
+   "bookmarks": 40
+  },
+  {
+   "id": "m-4235",
+   "section": "4.2.3.5.2",
+   "title": "Study LBN-0620: Enhanced pre- and postnatal development study in cynomolgus monkeys",
+   "fileName": "lbn-0620.pdf",
+   "pages": 160,
+   "bookmarks": 30
+  },
+  {
+   "id": "m-52",
+   "section": "5.2",
+   "title": "Tabular Listing of All Clinical Studies",
+   "fileName": "tabular-listing.pdf",
+   "pages": 5
+  },
+  {
+   "id": "m-5314",
+   "section": "5.3.1.4",
+   "title": "Immunogenicity and PK assay validation report",
+   "fileName": "assay-validation-lbx.pdf",
+   "pages": 56,
+   "bookmarks": 16,
+   "study": "LBX-ASY-01"
+  },
+  {
+   "id": "m-5331",
+   "section": "5.3.3.1",
+   "title": "Study LBX-101: First-in-human single and multiple dose study",
+   "fileName": "lbx-101-csr.pdf",
+   "pages": 180,
+   "bookmarks": 38
+  },
+  {
+   "id": "m-5351a",
+   "section": "5.3.5.1",
+   "title": "Study LBX-201: Phase 2 induction study",
+   "fileName": "lbx-201-csr.pdf",
+   "pages": 280,
+   "bookmarks": 56
+  },
+  {
+   "id": "m-5351b",
+   "section": "5.3.5.1",
+   "title": "Study LBX-301 (LUMEN-1): Phase 3 induction study",
+   "fileName": "lbx-301-csr.pdf",
+   "pages": 520,
+   "bookmarks": 80
+  },
+  {
+   "id": "m-5351c",
+   "section": "5.3.5.1",
+   "title": "Study LBX-302 (LUMEN-2): Phase 3 maintenance study",
+   "fileName": "lbx-302-csr.pdf",
+   "pages": 540,
+   "bookmarks": 82
+  }
+ ]
+}

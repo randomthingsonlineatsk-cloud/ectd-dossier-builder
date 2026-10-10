@@ -1,7 +1,7 @@
 // Rule engine for the eCTD v3.2.2 profiles (US and EU core rules).
 import rulesData from '../data/rules.json' with { type: 'json' };
 import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion } from './tree.js';
-import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences } from './model.js';
+import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, productOptions } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
@@ -10,7 +10,14 @@ export const SEVERITY_ORDER = { High: 0, Medium: 1, Low: 2 };
 const PDF_OK = new Set(['1.4', '1.5', '1.6', '1.7', 'A-1', 'A-2']);
 const FILE_RE = /^[a-z0-9][a-z0-9-]*\.pdf$/;
 
-const keysFor = (project, seq) => [`${project.appType}:${seq.submissionType}:${seq.subType}`, `${project.appType}:${seq.subType}`];
+// Japan uses one submission unit code for every unit, so later units are keyed separately.
+const isFirstSeq = (project, seq) => sortedSequences(project)[0]?.id === seq.id;
+const keysFor = (project, seq) => {
+  const later = project.region === 'JP' && !isFirstSeq(project, seq) ? ':later' : '';
+  const base = [`${project.appType}:${seq.submissionType}:${seq.subType}${later}`, `${project.appType}:${seq.subType}${later}`];
+  const rk = productOptions(project.productId).find((o) => o.region === project.region)?.requiredKey;
+  return rk ? [...base.map((k) => `${rk}:${k}`), ...base] : base;
+};
 
 export function requiredFor(project, seq) {
   for (const k of keysFor(project, seq)) if (REQUIRED[k]) return REQUIRED[k];
@@ -23,7 +30,7 @@ export function m1Checklist(project, seq) {
   return [];
 }
 
-export const profileLabel = (project) => rulesData.profiles[`${project.region}-3.2.2`]?.label ?? project.region;
+export const profileLabel = (project) => rulesData.profiles[`${project.region}-${project.ectdVersion}`]?.label ?? `${project.region} · ${project.ectdVersion}`;
 
 export function validate(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
@@ -48,8 +55,23 @@ export function validate(project, seqNumber) {
   if (seq.status !== 'published' && seqs.slice(idx + 1).some((x) => x.status === 'published')) add('LC-01', 'order', `A later sequence is already published; ${seq.number} would arrive out of order.`);
 
   const eu = project.region === 'EU';
-  const m1Root = eu ? 'eu:1' : '1';
-  const meta = eu ? [
+  const jpR = project.region === 'JP';
+  const inR = project.region === 'IN';
+  const v4 = project.ectdVersion === '4.0';
+  const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1' }[project.region] ?? '1';
+  const meta = jpR ? [
+    ['receptionNumber', s.jp?.receptionNumber, 'eCTD reception number'],
+    ['brandName', s.jp?.brandName, 'Brand name'],
+    ['janName', s.jp?.janName, 'JAN (non-proprietary name)'],
+    ['applicantName', s.jp?.applicantName, 'Applicant name'],
+    ['submissionType', seq.submissionType, 'Submission code'],
+    ['subType', seq.subType, 'Submission unit code'],
+  ] : inR ? [
+    ['applicant', s.applicant?.name, 'Applicant name'],
+    ['agentName', s.in?.agentName, 'Authorised agent in India'],
+    ['submissionType', seq.submissionType, 'Application type'],
+    ['subType', seq.subType, 'Submission type'],
+  ] : eu ? [
     ['applicant', s.applicant?.name, 'Applicant name'],
     ['trackingNumber', /^EMEA\/H\/C\/\d{6}$/.test(s.eu?.trackingNumber || '') ? 'ok' : '', 'Procedure tracking number (EMEA/H/C/ plus six digits)'],
     ['uuid', s.eu?.uuid, 'Envelope identifier (UUID)'],
@@ -66,6 +88,10 @@ export function validate(project, seqNumber) {
     ['duns', s.applicant?.duns, 'D-U-N-S number'],
   ];
   for (const [k, v, label] of meta) if (!String(v ?? '').trim()) add('BB-06', k, `${label} is missing from the regional metadata.`, { nodeCode: m1Root });
+
+  if (v4 && !(/^\d{4}$/.test(seq.number) && parseInt(seq.number, 10) >= 1)) add('V4-02', 'number', `Sequence ${seq.number} would be numbered 0; v4.0 starts at 1.`, { nodeCode: m1Root });
+  if (jpR && s.jp?.brandName && s.jp.brandName !== PRODUCTS[project.productId]?.product.brandName) add('JP-07', 'brand', `Brand name "${s.jp.brandName}" does not match the application form ("${PRODUCTS[project.productId]?.product.brandName}").`, { nodeCode: m1Root });
+  if (jpR && s.jp?.applicantName && s.jp.applicantName !== PRODUCTS[project.productId]?.applicant.name) add('JP-07', 'applicant', `Applicant "${s.jp.applicantName}" does not match the application form ("${PRODUCTS[project.productId]?.applicant.name}").`, { nodeCode: m1Root });
 
   if (eu) {
     const needsRelated = !['initial', 'reformat'].includes(seq.subType);
@@ -107,6 +133,8 @@ export function validate(project, seqNumber) {
     if (seq.status === 'published' && !l.frozenDoc && l.operation !== 'delete') add('LC-06', l.id, `"${name}" changed after sequence ${seq.number} was published.`, where);
 
     // Lifecycle
+    if (v4 && (l.operation === 'delete' || l.operation === 'append')) add('V4-01', l.id, `"${name}" uses "${l.operation}", which eCTD v4.0 does not have.`, where);
+    if (inR && l.operation !== 'new') add('IN-07', l.id, `"${name}" uses "${l.operation}"; India CTD filings have no eCTD lifecycle.`, where);
     if (isFirst && l.operation !== 'new') add('LC-04', l.id, `"${name}" uses "${l.operation}" in the first sequence.`, where);
     if (l.operation !== 'new') {
       const t = l.target;
@@ -119,11 +147,11 @@ export function validate(project, seqNumber) {
       else if (tEntry.leaf.nodeCode !== l.nodeCode) add('LC-03', l.id, `"${name}" is in ${dc(l.nodeCode)} but its target is in ${dc(tEntry.leaf.nodeCode)}.`, where);
     }
     // Forms and cover letters are sent new with every sequence, so they are exempt.
-    if (l.operation === 'new' && !isFirst && !['1.1', '1.2', 'eu:1.0', 'eu:1.2'].includes(l.nodeCode)) {
+    if (l.operation === 'new' && !isFirst && !['1.1', '1.2', 'eu:1.0', 'eu:1.2', 'jp:cover', 'in:1.1'].includes(l.nodeCode)) {
       const dup = (before.byNode[l.nodeCode] ?? []).find((e) => e.status === 'current' && e.leaf.title.trim().toLowerCase() === l.title.trim().toLowerCase());
       if (dup) add('LC-05', l.id, `"${name}" is new but a current leaf with the same title exists from sequence ${dup.seq}.`, where);
     }
-    if (l.operation === 'delete') continue;
+    if (l.operation === 'delete' || l.operation === 'suspend') continue;
 
     // Backbone
     if (!doc) { add('BB-01', l.id, `Leaf "${name}" points to a document that is not in the library.`, where); continue; }
@@ -155,14 +183,17 @@ export function validate(project, seqNumber) {
     if (!doc.textSearchable) add('PDF-06', l.id, `"${name}" is a scanned image without searchable text.`, where);
 
     // Study grouping (US v3.2.2 study tagging files)
-    if (!eu && needsStudyTag(l.nodeCode)) {
-      if (!l.study?.id?.trim()) add('SG-01', l.id, `"${name}" in ${dc(l.nodeCode)} has no study ID or file tag.`, where);
+    if ((project.region === 'US' || v4) && needsStudyTag(l.nodeCode)) {
+      if (!l.study?.id?.trim()) add('SG-01', l.id, v4 ? `"${name}" in ${dc(l.nodeCode)} has no study ID keyword.` : `"${name}" in ${dc(l.nodeCode)} has no study ID or file tag.`, where);
       else {
-        if (!isValidTag(l.nodeCode, l.study.tag)) add('SG-02', l.id, `"${name}" has file tag "${l.study.tag || '(none)'}", which is not valid for Module ${l.nodeCode[0]}.`, where);
+        if (!v4 && !isValidTag(l.nodeCode, l.study.tag)) add('SG-02', l.id, `"${name}" has file tag "${l.study.tag || '(none)'}", which is not valid for Module ${l.nodeCode[0]}.`, where);
         const sug = suggestedStudy(doc);
         if (sug && sug !== l.study.id.trim()) add('SG-03', l.id, `"${name}" reports study ${sug} but is tagged as ${l.study.id}.`, where);
       }
     }
+
+    // Japan: Modules 1 and 2 in Japanese
+    if (jpR && (node?.isM1 || l.nodeCode.startsWith('2.')) && doc.lang !== 'ja') add('JP-06', l.id, `"${name}" in ${dc(l.nodeCode)} is not the Japanese version.`, where);
 
     // EU Module 1 file naming: country folder code first (ema-..., common-...)
     if (eu && node?.isM1 && node.country) {

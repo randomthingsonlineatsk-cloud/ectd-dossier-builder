@@ -14,6 +14,7 @@ import { INDEX, filePath, displayCode } from './tree.js';
 import { lifecycleState, PRODUCTS, docForLeaf, seqByNumber } from './model.js';
 import { fileContentKey } from './backbone.js';
 import { factsForDoc, FACTS } from './consistency.js';
+import { sha256Bytes } from './sha256.js';
 
 import { fontBytes, defaultHeadings, bookmarkTitles } from './pdfmeta.js';
 export { setFontLoader, defaultHeadings, bookmarkTitles } from './pdfmeta.js';
@@ -169,6 +170,7 @@ export async function generateStubPdf(project, doc, opts = {}) {
   text(tp, `Version ${doc.version ?? 1}`, 50, y, 11, font, grey);
   y -= 18;
   text(tp, `File: ${doc.fileName}`, 50, y, 11, font, grey);
+  if (doc.lang === 'ja') { y -= 18; text(tp, 'Japanese-language document (stub content shown in English for training)', 50, y, 10, font, rgb(0.42, 0.36, 0.65)); }
   if (doc.secured) {
     tp.drawRectangle({ x: 45, y: 120, width: 520, height: 46, color: rgb(0.98, 0.9, 0.88) });
     text(tp, 'Simulated document security: a password is set to restrict editing and copying.', 55, 148, 10, bold, rgb(0.72, 0.2, 0.16));
@@ -269,12 +271,13 @@ export async function leafPdf(project, seqNumber, leaf) {
 export async function computeSequenceChecksums(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
   for (const leaf of seq.leaves) {
-    if (leaf.operation === 'delete' || leaf.frozenDoc) continue;
+    if (leaf.operation === 'delete' || leaf.operation === 'suspend' || leaf.frozenDoc) continue;
     const doc = project.documents[leaf.docId];
     if (!doc) continue;
     const bytes = await leafPdf(project, seqNumber, leaf);
     doc.md5 = md5Bytes(bytes);
     doc.md5Key = fileContentKey(doc);
+    if (project.ectdVersion === '4.0') { doc.sha256 = sha256Bytes(bytes); doc.sha256Key = doc.md5Key; }
     doc.byteSize = bytes.length;
   }
 }
