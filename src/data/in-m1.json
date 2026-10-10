@@ -168,6 +168,14 @@
   {
    "value": "clinical-trial",
    "label": "Permission to conduct a clinical trial of a new drug (Form CT-04)"
+  },
+  {
+   "value": "post-approval-change",
+   "label": "Post-approval change application (SUGAM)"
+  },
+  {
+   "value": "annual-notification",
+   "label": "Annual notification of minor changes"
   }
  ],
  "submissionSubTypes": [
