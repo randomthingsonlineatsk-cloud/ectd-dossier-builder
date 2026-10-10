@@ -1,4 +1,4 @@
-// Mission seeds and scoring (Phase 1: missions 1, 4, 11; Phase 2: 2, 5, 6, 7, 8, 9, 10, 12).
+// Mission seeds and scoring (Phase 1: missions 1, 4, 11; Phase 2: 2, 5-10, 12; Phase 3: 3, 13-16).
 import missionsData from '../data/missions.json' with { type: 'json' };
 import { createProject, docForLeaf, makeDoc, seqByNumber, PRODUCTS, isRetireOp } from './model.js';
 import { tagFromDoc } from './stf.js';
@@ -43,7 +43,7 @@ export function buildComplete(project, { exclude = () => false } = {}) {
 function baseMissionProject(m, difficulty, user) {
   const p = createProject({
     name: `Mission ${m.id}: ${m.title}`,
-    productId: m.productId, region: m.region === 'EU' ? 'EU' : 'US', appType: m.appType, user, missionId: m.id, difficulty,
+    productId: m.productId, region: m.regionCode ?? (m.region === 'EU' ? 'EU' : 'US'), appType: m.appType, user, missionId: m.id, difficulty,
   });
   p.settings.expertMode = difficulty === 'expert';
   p.mission = { id: m.id, difficulty, startedAt: new Date().toISOString(), minutes: m.minutes?.[difficulty] ?? null, submitted: null, answers: {} };
@@ -73,6 +73,19 @@ export async function seedMission(id, difficulty, user) {
     for (const pl of m.plant ?? []) if (p.documents[pl.doc]) p.documents[pl.doc].factOverrides = { ...pl.facts };
     return p;
   }
+  if (m.id === 3 || m.id === 14) {
+    const p = baseMissionProject(m, difficulty, user);
+    addExtras(p, m);
+    return p;
+  }
+  if (m.id === 13) {
+    const p = baseMissionProject(m, difficulty, user);
+    addExtras(p, m);
+    for (const pl of m.plant ?? []) if (p.documents[pl.doc]) p.documents[pl.doc].factOverrides = { ...pl.facts };
+    return p;
+  }
+  if (m.id === 15) return seedMission15(m, difficulty, user);
+  if (m.id === 16) return seedPublished(m, difficulty, user);
   if (m.id === 10) {
     const p = baseMissionProject(m, difficulty, user);
     p.sequences[0].submissionType = 'none';
@@ -81,6 +94,19 @@ export async function seedMission(id, difficulty, user) {
     return p;
   }
   throw new Error(`Mission ${id} arrives in a later phase.`);
+}
+
+// The holder is written into each holder document explicitly, so changing the envelope
+// applicant later does not silently rewrite what earlier sequences said.
+async function seedMission15(m, difficulty, user) {
+  const p = baseMissionProject(m, difficulty, user);
+  buildComplete(p);
+  const old = p.settings.applicant.name;
+  for (const id of ['eu-eaf', 'eu-pi', 'eu-pv']) if (p.documents[id]) p.documents[id].factOverrides = { ...(p.documents[id].factOverrides ?? {}), holder: old };
+  await publishWithFiles(p, '0000');
+  addExtras(p, m);
+  for (const id of ['eu-eaf-renewal', 'eu-pi-renewal', 'd-co-renewal']) if (p.documents[id] && id !== 'd-co-renewal') p.documents[id].factOverrides = { ...(p.documents[id].factOverrides ?? {}), holder: old };
+  return p;
 }
 
 async function seedMission4(m, difficulty, user) {
@@ -132,7 +158,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -272,6 +298,87 @@ function evalM10(p) {
     noHigh: v.counts.High === 0,
     published: s0.status === 'published',
   }, v);
+}
+
+// ---------- Phase 3 ----------
+const noHighIn = (p, n) => !!seqByNumber(p, n) && validate(p, n).counts.High === 0;
+const evalM13 = (p) => evalBuild(p, 13);
+
+function evalM3(p) {
+  const v1 = seqByNumber(p, '0001') ? validate(p, '0001') : null;
+  const f1 = (pre) => !!v1 && v1.findings.some((f) => f.ruleId.startsWith(pre));
+  const u1 = leavesIn(p, '0001');
+  const u2 = leavesIn(p, '0002');
+  const interim = u1.find((l) => l.docId === 'jp-p83-interim');
+  return finish(3, {
+    meta: !!v1 && !f1('BB-06') && !f1('JP-07'),
+    m1: !!v1 && !v1.findings.some((f) => f.family.startsWith('Module 1') && f.severity !== 'Low') && u1.some((l) => l.nodeCode === 'jp:cover'),
+    ja: !!v1 && !f1('JP-06'),
+    keywords: !!v1 && !f1('SG-') && u1.some((l) => l.study?.id),
+    noHigh1: !!v1 && v1.counts.High === 0,
+    published1: pub(p, '0001'),
+    replace: replaced(p, '0002', 'jp-p83-v2', 'd-p83', '3.2.P.8.3', '0001'),
+    suspend: !!interim && u2.some((l) => l.operation === 'suspend' && l.target?.leafId === interim.id),
+    reuse: u1.some((l) => l.docId === 'jp-lit-moa') && u2.some((l) => l.docId === 'jp-lit-moa' && l.nodeCode === '5.4' && !isRetireOp(l.operation)),
+    response: u2.some((l) => l.nodeCode === 'jp:cover') && has(p, '0002', 'jp-resp-1', 'jp:1.13.3'),
+    published2: pub(p, '0002') && noHighIn(p, '0002'),
+    quiz: quizOk(p),
+  }, seqByNumber(p, '0002') ? validate(p, '0002') : v1);
+}
+
+function evalM14(p) {
+  const s0 = seqByNumber(p, '0000');
+  const v = validate(p, '0000');
+  const hasF = (pre) => v.findings.some((f) => f.ruleId.startsWith(pre));
+  return finish(14, {
+    meta: !hasF('BB-06'),
+    type: s0.submissionType === 'new-drug-import',
+    ct18: hasForm(p, '0000', 'in:1.2.2', 'ct-18') && hasForm(p, '0000', 'in:1.2.2', 'fee'),
+    noCt21: !hasForm(p, '0000', 'in:1.2.2', 'ct-21'),
+    agent: has(p, '0000', 'in-5', 'in:1.2.3') && has(p, '0000', 'in-6', 'in:1.2.3'),
+    waiver: has(p, '0000', 'in-10', 'in:1.5'),
+    required: !hasF('CT-01'),
+    noHigh: v.counts.High === 0,
+    published: s0.status === 'published',
+    gateway: p.review?.submissions?.['0000']?.outcome === 'accepted',
+    quiz: quizOk(p),
+  }, v);
+}
+
+function evalM15(p) {
+  const m = missionById(15);
+  const s1 = seqByNumber(p, '0001');
+  const s2 = seqByNumber(p, '0002');
+  const holderIssue = s2 ? consistencyMatrix(p, '0002').issues.some((i) => i.fact.key === 'holder') : true;
+  return finish(15, {
+    renewal: s1?.submissionType === 'renewal' && s1?.subType === 'initial' && !s1?.relatedSequence,
+    renewalDocs: hasForm(p, '0001', 'eu:1.0') && has(p, '0001', 'eu-eaf-renewal', 'eu:1.2') && has(p, '0001', 'd-co-renewal', '2.5'),
+    renewalPi: replaced(p, '0001', 'eu-pi-renewal', 'eu-pi', 'eu:1.3.1'),
+    published1: pub(p, '0001') && noHighIn(p, '0001'),
+    transfer: s2?.submissionType === 'transfer-ma' && s2?.subType === 'initial',
+    transferDocs: hasForm(p, '0002', 'eu:1.0') && has(p, '0002', 'eu-eaf-transfer', 'eu:1.2'),
+    transferPi: replaced(p, '0002', 'eu-pi-transfer', 'eu-pi-renewal', 'eu:1.3.1', '0001'),
+    transferPv: replaced(p, '0002', 'eu-pv-transfer', 'eu-pv', 'eu:1.8.1'),
+    envelope: (p.settings.applicant?.name ?? '').trim().toLowerCase().startsWith(m.newHolder.split(',')[0].toLowerCase()),
+    holder: !!s2 && !holderIssue,
+    published2: pub(p, '0002') && noHighIn(p, '0002'),
+    quiz: quizOk(p),
+  }, s2 ? validate(p, '0002') : s1 ? validate(p, '0001') : null);
+}
+
+function evalM16(p) {
+  const s1 = seqByNumber(p, '0001');
+  const ls = leavesIn(p, '0001');
+  return finish(16, {
+    seq: s1?.submissionType === 'original-application' && s1?.subType === 'amendment',
+    forms: hasForm(p, '0001', '1.2') && hasForm(p, '0001', '1.1', 'fda-356h'),
+    letter: has(p, '0001', 'd-withdraw', '1.5.5'),
+    wrong: !!s1 && !ls.some((l) => l.nodeCode === '1.5.7'),
+    noDelete: !!s1 && !ls.some((l) => isRetireOp(l.operation)),
+    onlyLetter: onlyIn(p, '0001', ['1.1', '1.2', '1.5.5']),
+    published: pub(p, '0001') && noHighIn(p, '0001'),
+    quiz: quizOk(p),
+  }, s1 ? validate(p, '0001') : null);
 }
 
 // ---------- four scoring axes ----------

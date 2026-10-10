@@ -29,8 +29,8 @@ function MissionCard({ m }) {
       <div className="row" style={{ justifyContent: 'space-between' }}>
         <h2 id={`m${m.id}`} style={{ fontSize: 'var(--step-1)', margin: 0 }}>Mission {m.id}: {m.title}</h2>
         <span className="row small">
-          <span className="pill">{m.region}, eCTD v{m.version}</span>
-          {m.phase === 2 && <span className="pill">New</span>}
+          <span className="pill">{m.region}, {m.version === 'CTD' ? 'CTD (portal)' : `eCTD v${m.version}`}</span>
+          {m.phase === 3 && <span className="pill">New</span>}
           {mine.length > 0 && <span className={`pill ${best >= 80 ? 'ok' : 'medium'}`}>Best {best}%</span>}
         </span>
       </div>
@@ -49,8 +49,8 @@ function MissionCard({ m }) {
 }
 
 export default function Missions() {
-  const available = MISSIONS.filter((m) => m.phase <= 2).sort((a, b) => a.id - b.id);
-  const later = MISSIONS.filter((m) => m.phase > 2).sort((a, b) => a.id - b.id);
+  const available = MISSIONS.filter((m) => m.phase <= 3).sort((a, b) => a.id - b.id);
+  const later = MISSIONS.filter((m) => m.phase > 3).sort((a, b) => a.id - b.id);
   return (
     <div className="page">
       <h1>Missions</h1>
@@ -58,13 +58,13 @@ export default function Missions() {
       <div className="stack" style={{ marginTop: '1.5rem' }}>
         {available.map((m) => <MissionCard key={m.id} m={m} />)}
       </div>
-      <div className="section-head"><h2>Coming in later releases</h2></div>
+      {later.length > 0 && <><div className="section-head"><h2>Coming in later releases</h2></div>
       <div className="table-wrap">
         <table className="data">
           <thead><tr><th>Mission</th><th>Region</th><th>Release</th></tr></thead>
           <tbody>{later.map((m) => <tr key={m.id}><td>{m.id}. {m.title}</td><td>{m.region}</td><td>Phase {m.phase}</td></tr>)}</tbody>
         </table>
-      </div>
+      </div></>}
     </div>
   );
 }
