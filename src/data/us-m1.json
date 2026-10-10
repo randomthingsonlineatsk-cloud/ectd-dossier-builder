@@ -1,0 +1,138 @@
+{
+  "_about": "US Module 1 heading tree, modelled on the public FDA eCTD Module 1 specification (v2.3 headings). Section codes and element names follow the public spec; all content placed here in the app is fictional. Leaves are stored in m1/us/.",
+  "region": "US",
+  "regionalFile": "m1/us/us-regional.xml",
+  "folder": "m1/us",
+  "tree": {
+    "code": "1", "title": "Administrative Information and Prescribing Information (US)", "element": "m1-regional",
+    "children": [
+      { "code": "1.1", "title": "Forms", "element": "m1-1-forms",
+        "help": "Agency forms. In the regional XML each form leaf carries a form-type attribute such as FDA 356h, FDA 3397 or FDA 3674." },
+      { "code": "1.2", "title": "Cover Letters", "element": "m1-2-cover-letters",
+        "help": "Every sequence should open with a cover letter describing what is being sent and why." },
+      { "code": "1.3", "title": "Administrative Information", "element": "m1-3-administrative-information",
+        "children": [
+          { "code": "1.3.1", "title": "Contact/Sponsor/Applicant Information", "element": "m1-3-1-contact-sponsor-applicant-information" },
+          { "code": "1.3.2", "title": "Field Copy Certification", "element": "m1-3-2-field-copy-certification",
+            "help": "For NDAs: certifies that a field copy of Module 3 was sent to the local district office." },
+          { "code": "1.3.3", "title": "Debarment Certification", "element": "m1-3-3-debarment-certification" },
+          { "code": "1.3.4", "title": "Financial Certification and Disclosure", "element": "m1-3-4-financial-certification-and-disclosure",
+            "help": "Forms FDA 3454 (certification) and/or 3455 (disclosure) for clinical investigators." },
+          { "code": "1.3.5", "title": "Patent and Exclusivity", "element": "m1-3-5-patent-and-exclusivity",
+            "children": [
+              { "code": "1.3.5.1", "title": "Patent Information", "element": "m1-3-5-1-patent-information", "help": "Form FDA 3542a submitted with an NDA." },
+              { "code": "1.3.5.2", "title": "Patent Certification", "element": "m1-3-5-2-patent-certification" },
+              { "code": "1.3.5.3", "title": "Exclusivity Claim", "element": "m1-3-5-3-exclusivity-claim" }
+            ] }
+        ] },
+      { "code": "1.4", "title": "References", "element": "m1-4-references",
+        "children": [
+          { "code": "1.4.1", "title": "Letter of Authorization", "element": "m1-4-1-letter-authorization", "help": "Letters authorising FDA to refer to a drug master file." },
+          { "code": "1.4.2", "title": "Statement of Right of Reference", "element": "m1-4-2-statement-right-reference" },
+          { "code": "1.4.3", "title": "List of Authorized Persons to Incorporate by Reference", "element": "m1-4-3-list-authorized-person-incorporate-reference" },
+          { "code": "1.4.4", "title": "Cross-Reference to Previously Submitted Information", "element": "m1-4-4-cross-reference-other-applications" }
+        ] },
+      { "code": "1.5", "title": "Application Status", "element": "m1-5-application-status" },
+      { "code": "1.6", "title": "Meetings", "element": "m1-6-meetings",
+        "children": [
+          { "code": "1.6.1", "title": "Meeting Request", "element": "m1-6-1-meeting-request" },
+          { "code": "1.6.2", "title": "Meeting Background Materials", "element": "m1-6-2-meeting-background-materials" },
+          { "code": "1.6.3", "title": "Correspondence Regarding Meetings", "element": "m1-6-3-correspondence-regarding-meetings" }
+        ] },
+      { "code": "1.7", "title": "Fast Track", "element": "m1-7-fast-track" },
+      { "code": "1.8", "title": "Special Protocol Assessment Request", "element": "m1-8-special-protocol-assessment-request" },
+      { "code": "1.9", "title": "Pediatric Administrative Information", "element": "m1-9-pediatric-administrative-information" },
+      { "code": "1.10", "title": "Dispute Resolution", "element": "m1-10-dispute-resolution" },
+      { "code": "1.11", "title": "Information Amendment: Information not Covered under Modules 2 to 5", "element": "m1-11-information-amendment",
+        "children": [
+          { "code": "1.11.1", "title": "Quality Information Amendment", "element": "m1-11-1-quality-information-amendment", "help": "Commonly used for the response document to a quality (CMC) information request." },
+          { "code": "1.11.2", "title": "Nonclinical Information Amendment", "element": "m1-11-2-nonclinical-information-amendment" },
+          { "code": "1.11.3", "title": "Clinical Information Amendment", "element": "m1-11-3-clinical-information-amendment" },
+          { "code": "1.11.4", "title": "Multiple Module Information Amendment", "element": "m1-11-4-multiple-module-information-amendment" }
+        ] },
+      { "code": "1.12", "title": "Other Correspondence", "element": "m1-12-other-correspondence",
+        "children": [
+          { "code": "1.12.4", "title": "Request for Comments and Advice", "element": "m1-12-4-request-comments-advice" },
+          { "code": "1.12.14", "title": "Environmental Analysis", "element": "m1-12-14-environmental-analysis", "help": "Environmental assessment or a claim of categorical exclusion." },
+          { "code": "1.12.15", "title": "Request for Waiver of In Vivo Bioavailability Studies", "element": "m1-12-15-request-waiver-in-vivo-bioavailability-studies" }
+        ] },
+      { "code": "1.13", "title": "Annual Report", "element": "m1-13-annual-report" },
+      { "code": "1.14", "title": "Labeling", "element": "m1-14-labeling",
+        "children": [
+          { "code": "1.14.1", "title": "Draft Labeling", "element": "m1-14-1-draft-labeling",
+            "children": [
+              { "code": "1.14.1.1", "title": "Draft Carton and Container Labels", "element": "m1-14-1-1-draft-carton-container-labels" },
+              { "code": "1.14.1.2", "title": "Annotated Draft Labeling Text", "element": "m1-14-1-2-annotated-draft-labeling-text" },
+              { "code": "1.14.1.3", "title": "Draft Labeling Text", "element": "m1-14-1-3-draft-labeling-text", "help": "Prescribing information; structured product labeling (SPL) is also provided here in practice." },
+              { "code": "1.14.1.4", "title": "Label Comprehension Studies", "element": "m1-14-1-4-label-comprehension-studies" },
+              { "code": "1.14.1.5", "title": "Labeling History", "element": "m1-14-1-5-labeling-history" }
+            ] },
+          { "code": "1.14.2", "title": "Final Labeling", "element": "m1-14-2-final-labeling" },
+          { "code": "1.14.3", "title": "Listed Drug Labeling", "element": "m1-14-3-listed-drug-labeling" },
+          { "code": "1.14.4", "title": "Investigational Drug Labeling", "element": "m1-14-4-investigational-drug-labeling" },
+          { "code": "1.14.5", "title": "Foreign Labeling", "element": "m1-14-5-foreign-labeling" }
+        ] },
+      { "code": "1.15", "title": "Promotional Material", "element": "m1-15-promotional-material" },
+      { "code": "1.16", "title": "Risk Management Plans", "element": "m1-16-risk-management-plan" },
+      { "code": "1.17", "title": "Postmarketing Studies", "element": "m1-17-postmarketing-studies" },
+      { "code": "1.18", "title": "Proprietary Names", "element": "m1-18-proprietary-names" },
+      { "code": "1.19", "title": "Pre-EUA and EUA", "element": "m1-19-pre-eua-and-eua" },
+      { "code": "1.20", "title": "General Investigational Plan for Initial IND", "element": "m1-20-general-investigational-plan" }
+    ]
+  },
+  "submissionTypes": [
+    { "value": "original-application", "label": "Original application" },
+    { "value": "efficacy-supplement", "label": "Efficacy supplement" },
+    { "value": "chemistry-manufacturing-controls-supplement", "label": "CMC supplement" },
+    { "value": "labeling-supplement", "label": "Labeling supplement" },
+    { "value": "annual-report", "label": "Annual report" },
+    { "value": "product-correspondence", "label": "Product correspondence" }
+  ],
+  "submissionSubTypes": [
+    { "value": "presubmission", "label": "Presubmission" },
+    { "value": "original", "label": "Original" },
+    { "value": "amendment", "label": "Amendment" },
+    { "value": "resubmission", "label": "Resubmission" },
+    { "value": "report", "label": "Report" },
+    { "value": "correspondence", "label": "Correspondence" }
+  ],
+  "applicationTypes": [
+    { "value": "nda", "label": "NDA", "phase": 1 },
+    { "value": "ind", "label": "IND", "phase": 2 },
+    { "value": "anda", "label": "ANDA", "phase": 2 },
+    { "value": "nda-505b2", "label": "505(b)(2) NDA", "phase": 2 },
+    { "value": "bla", "label": "BLA 351(a)", "phase": 3 },
+    { "value": "bla-351k", "label": "BLA 351(k)", "phase": 3 },
+    { "value": "dmf", "label": "Type II DMF", "phase": 2 }
+  ],
+  "forms": [
+    { "id": "fda-356h", "label": "Form FDA 356h — Application to Market a New or Abbreviated New Drug or Biologic for Human Use", "section": "1.1" },
+    { "id": "fda-3397", "label": "Form FDA 3397 — Prescription Drug User Fee Coversheet", "section": "1.1" },
+    { "id": "fda-3674", "label": "Form FDA 3674 — Certification of Compliance (ClinicalTrials.gov)", "section": "1.1" },
+    { "id": "fda-3542a", "label": "Form FDA 3542a — Patent Information Submitted with the Filing of an NDA", "section": "1.3.5.1" },
+    { "id": "fda-3454", "label": "Form FDA 3454 — Certification: Financial Interests of Clinical Investigators", "section": "1.3.4" }
+  ],
+  "checklist": {
+    "nda:original": [
+      { "section": "1.1", "form": "fda-356h", "label": "Form FDA 356h", "level": "mandatory", "rule": "M1-01" },
+      { "section": "1.1", "form": "fda-3397", "label": "User fee coversheet (FDA 3397)", "level": "mandatory", "rule": "M1-03" },
+      { "section": "1.1", "form": "fda-3674", "label": "ClinicalTrials.gov certification (FDA 3674)", "level": "mandatory", "rule": "M1-09" },
+      { "section": "1.2", "label": "Cover letter", "level": "mandatory", "rule": "M1-02" },
+      { "section": "1.3.2", "label": "Field copy certification", "level": "mandatory", "rule": "M1-08" },
+      { "section": "1.3.3", "label": "Debarment certification", "level": "mandatory", "rule": "M1-05" },
+      { "section": "1.3.4", "label": "Financial certification and disclosure", "level": "mandatory", "rule": "M1-06" },
+      { "section": "1.3.5.1", "label": "Patent information (FDA 3542a)", "level": "mandatory", "rule": "M1-04" },
+      { "section": "1.3.5.3", "label": "Exclusivity claim", "level": "optional" },
+      { "section": "1.12.14", "label": "Environmental analysis", "level": "mandatory", "rule": "M1-10" },
+      { "section": "1.14.1.1", "label": "Draft carton and container labels", "level": "mandatory", "rule": "M1-07" },
+      { "section": "1.14.1.3", "label": "Draft labeling text (prescribing information)", "level": "mandatory", "rule": "M1-07" },
+      { "section": "1.4.1", "label": "Letter of authorization (if a DMF is referenced)", "level": "conditional" },
+      { "section": "1.18", "label": "Proprietary name request", "level": "optional" }
+    ],
+    "nda:amendment": [
+      { "section": "1.2", "label": "Cover letter", "level": "mandatory", "rule": "M1-02" },
+      { "section": "1.1", "form": "fda-356h", "label": "Form FDA 356h", "level": "mandatory", "rule": "M1-01" },
+      { "section": "1.11", "label": "Information amendment / response document", "level": "conditional" }
+    ]
+  }
+}
