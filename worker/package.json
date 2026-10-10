@@ -1,0 +1,19 @@
+{
+  "name": "ectd-classroom",
+  "version": "1.0.0",
+  "description": "Classroom mode API (Cloudflare Worker + D1) for the eCTD Dossier Builder",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "db:local": "wrangler d1 execute ectd-classroom --local --file=schema.sql",
+    "db:remote": "wrangler d1 execute ectd-classroom --remote --file=schema.sql",
+    "deploy": "wrangler deploy",
+    "test": "node test/api.test.mjs"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "wrangler": "^3.99.0"
+  },
+  "private": true,
+  "type": "module"
+}

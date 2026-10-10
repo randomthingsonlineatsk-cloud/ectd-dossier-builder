@@ -1,0 +1,23 @@
+# Classroom API for the eCTD Dossier Builder.
+# Deploy steps are in worker/README.md. Replace database_id with your own D1 database.
+name = "ectd-classroom"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+PREFIX = "/ectd/v1"
+ALLOWED_ORIGINS = "https://randomthingsonlineatsk-cloud.github.io"
+APP_URL = "https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/"
+REMINDER_HOURS = "48"
+# BREVO_SENDER_EMAIL = "classes@example.org"   # set to enable email reminders
+# BREVO_SENDER_NAME = "eCTD Dossier Builder"
+# Secret, set with: npx wrangler secret put BREVO_API_KEY
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ectd-classroom"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# Email reminders once an hour (they only go out when Brevo is configured).
+[triggers]
+crons = ["17 * * * *"]

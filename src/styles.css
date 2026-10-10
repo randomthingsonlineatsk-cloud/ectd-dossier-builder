@@ -342,3 +342,11 @@ table.compare td.none { background: var(--surface-2); }
 .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .3rem .8rem; }
 .cert-list { list-style: none; padding: 0; display: grid; gap: .35rem; }
 .cert-list li { display: flex; gap: .5rem; align-items: baseline; }
+
+/* Classroom */
+.join-code { font-family: var(--mono, monospace); letter-spacing: .12em; font-size: 1.15em; }
+.assignment { border-top: 1px solid var(--line); padding: .75rem 0; }
+.assignment:first-of-type { border-top: 0; }
+.sub-row { margin-top: .5rem; padding: .45rem .6rem; background: var(--surface-2); border-radius: var(--radius-s); }
+.comment { margin-top: .3rem; padding-left: .5rem; border-left: 3px solid var(--line); }
+table.data tr.me td { font-weight: 600; }

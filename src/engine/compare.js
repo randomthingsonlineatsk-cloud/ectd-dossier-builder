@@ -15,7 +15,8 @@ export function headingLabel(region, code) {
   if (pack) {
     const n = INDEX.map[code];
     if (!n) return code;
-    return n.code === 'eu:responses' ? 'Responses to Questions (responses element)' : `${displayCode(code)} ${n.title}`;
+    const dc = displayCode(code);
+    return /^\d/.test(dc) ? `${dc} ${n.title}` : n.title;
   }
   const h = listFor(region).find(([c]) => c === code);
   return h ? (h[0] === 'responses' ? h[1] : `${h[0]} ${h[1]}`) : code;

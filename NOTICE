@@ -12,7 +12,9 @@ Training content notice: every product, company, document, study and person in
 this application is fictional. Section codes, form numbers and XML element names
 follow public ICH, FDA, EU, PMDA and CDSCO specifications; the app does not reproduce any agency
 form, portal, gateway or logo, and its output is not suitable for a real submission.
-The gateway and review clock are simulations.
+The gateway and review clock are simulations. The completion certificate is a portfolio
+exercise, not an accreditation. Canada, Switzerland and ASEAN ACTD headings in the region
+comparison come from Health Canada, Swissmedic and ASEAN public guidance.
 
 Third-party components:
 - React and React DOM (MIT License), Copyright (c) Meta Platforms, Inc. and affiliates.
@@ -23,4 +25,7 @@ Third-party components:
 - Fonts packaged by Fontsource (MIT License). src/assets/fonts/public-sans-latin-400.ttf is the
   Fontsource Latin subset of Public Sans converted from WOFF to TTF, with its layout tables removed, for fast PDF embedding
   (OFL text alongside).
+- fflate (MIT License), Copyright (c) 2023 Arjun Barrett.
 - Vite and @vitejs/plugin-react (MIT License), build tools only.
+- Wrangler (MIT OR Apache-2.0), Cloudflare, Inc.: development and deploy tool for the optional
+  classroom server in worker/; not part of the app bundle.
