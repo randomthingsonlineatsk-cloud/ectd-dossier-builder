@@ -961,6 +961,17 @@
   {
    "region": "IN",
    "appType": "nda"
+  },
+  {
+   "region": "IN",
+   "appType": "cta",
+   "variant": "cta",
+   "library": "cta",
+   "label": "India — clinical trial application (Form CT-04)",
+   "seq": {
+    "submissionType": "clinical-trial",
+    "subType": "application"
+   }
   }
  ],
  "generateRegionDocs": {

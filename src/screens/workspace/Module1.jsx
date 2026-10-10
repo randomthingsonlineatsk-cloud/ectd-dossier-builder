@@ -242,7 +242,7 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
 
       <section className="panel">
         <div className="row" style={{ justifyContent: 'space-between' }}>
-          <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>{{ EU: 'Electronic application form practice (fictional)', JP: 'Japanese application form practice (fictional)', IN: `Form ${seq.submissionType === 'new-drug-manufacture' ? 'CT-21' : 'CT-18'} practice (fictional)` }[region] ?? 'Form FDA 356h practice (fictional)'}</h2>
+          <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>{{ EU: 'Electronic application form practice (fictional)', JP: 'Japanese application form practice (fictional)', IN: `Form ${seq.submissionType === 'clinical-trial' ? 'CT-04' : seq.submissionType === 'new-drug-manufacture' ? 'CT-21' : 'CT-18'} practice (fictional)` }[region] ?? 'Form FDA 356h practice (fictional)'}</h2>
           <button className="btn small" onClick={prefill}>Prefill from project</button>
         </div>
         <p className="small muted">A practice version of key fields, with field-level help. It is not the official form; the form in the library is what goes into {{ EU: '1.2', JP: '1.2', IN: '1.2.2' }[region] ?? '1.1'}. Check that each field agrees with Modules 2 and 3 and the product information.</p>

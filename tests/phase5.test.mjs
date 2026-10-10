@@ -101,4 +101,15 @@ await t('mission 21: ASMF with AP and RP scores 100; restricted detail in the AP
   assert.equal(ev.score, 100, failed(ev).join(', '));
 });
 
+await t('mission 22: India clinical trial application passes screening and scores 100', async () => {
+  const { gatewaySubmit } = await import('../src/engine/review.js');
+  const p = await seedMission(22, 'standard', user);
+  assert.equal(p.sequences[0].submissionType, 'clinical-trial');
+  buildComplete(p); answerAll(p);
+  await publishWithFiles(p, '0000');
+  assert.equal(gatewaySubmit(p, '0000').outcome, 'accepted');
+  const ev = evaluateMission(p);
+  assert.equal(ev.score, 100, failed(ev).join(', '));
+});
+
 console.log(`\n${pass} phase 5 tests passed`);

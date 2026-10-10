@@ -720,6 +720,46 @@
       "title": "Information about the quality expert expected",
       "explain": "An ASMF includes information about the expert in Module 1.4.1.",
       "fix": "Place the expert information in 1.4.1."
+    },
+    {
+      "id": "IN-08",
+      "family": "Module 1 (India)",
+      "severity": "High",
+      "title": "Form CT-04 is required for a clinical trial application",
+      "explain": "Under the NDCT Rules, 2019, permission to conduct a clinical trial of a new drug is applied for in Form CT-04 (it replaced Form 44); permission is granted in Form CT-06.",
+      "fix": "Place Form CT-04 in 1.2.2. CT-18 and CT-21 are for marketing a new drug."
+    },
+    {
+      "id": "IN-09",
+      "family": "Module 1 (India)",
+      "severity": "High",
+      "title": "The clinical trial protocol is required",
+      "explain": "The application carries the protocol the trial will follow.",
+      "fix": "Place the protocol."
+    },
+    {
+      "id": "IN-10",
+      "family": "Module 1 (India)",
+      "severity": "Medium",
+      "title": "The investigator's brochure is expected",
+      "explain": "The investigator's brochure summarises what is known about the drug for the investigators.",
+      "fix": "Place the investigator's brochure."
+    },
+    {
+      "id": "IN-11",
+      "family": "Module 1 (India)",
+      "severity": "Medium",
+      "title": "Informed consent documents are expected",
+      "explain": "The participant information sheet and consent form are part of the application.",
+      "fix": "Place the informed consent documents."
+    },
+    {
+      "id": "IN-12",
+      "family": "Module 1 (India)",
+      "severity": "Medium",
+      "title": "The investigator's undertaking is expected",
+      "explain": "Each investigator signs an undertaking to conduct the trial under the protocol and the rules.",
+      "fix": "Place the investigator's undertaking."
     }
   ],
   "required": {
@@ -1151,6 +1191,16 @@
       "3.2.S.4.1",
       "3.2.S.4.4",
       "3.2.S.7.1"
+    ],
+    "cta:clinical-trial:application": [
+      "3.2.S.1.1",
+      "3.2.S.4.1",
+      "3.2.P.1",
+      "3.2.P.5.1",
+      "3.2.P.8.1",
+      "4.2.1.1",
+      "4.2.3.1",
+      "4.2.3.2"
     ]
   }
 }
