@@ -1,0 +1,110 @@
+{
+  "_about": "Mock gateway stages, review clocks and product weaknesses for the review simulator. Clocks are simplified teaching models of the public procedures; all products, questions and answers are fictional.",
+  "gateway": {
+    "US": [
+      { "id": "ack1", "label": "Gateway receipt", "detail": "The transmission arrived and the package checksum matched." },
+      { "id": "ack2", "label": "Routed to the review centre", "detail": "The package was delivered to the centre that reviews this application." },
+      { "id": "ack3", "label": "Technical validation and load", "detail": "Validation against the technical rules; a High finding rejects the sequence." }
+    ],
+    "EU": [
+      { "id": "ack1", "label": "Gateway receipt", "detail": "The transmission arrived and the package checksum matched." },
+      { "id": "ack2", "label": "Routed to the agency", "detail": "The envelope was read and the sequence routed to the procedure." },
+      { "id": "ack3", "label": "Technical validation (pass or fail)", "detail": "A failed criterion makes the sequence technically invalid." }
+    ],
+    "JP": [
+      { "id": "ack1", "label": "Receipt of the submission unit", "detail": "The unit arrived and its SHA-256 checksums matched." },
+      { "id": "ack3", "label": "Technical validation", "detail": "The submission unit message and files are validated; an error stops the unit." }
+    ],
+    "IN": [
+      { "id": "ack1", "label": "Upload received", "detail": "The files were uploaded to the online portal." },
+      { "id": "ack2", "label": "Form and fee check", "detail": "The application form and fee receipt were found." },
+      { "id": "ack3", "label": "Screening", "detail": "The dossier was screened for completeness before review." }
+    ]
+  },
+  "rejection": {
+    "US": "Correct the problem and resubmit the sequence. This app reopens it with the same sequence number.",
+    "EU": "The EU harmonised technical guidance says a technically invalid sequence is not accepted, and the corrected sequence is resubmitted with the same sequence number.",
+    "JP": "Correct the problem and resubmit the unit. This app reopens it with the same unit number.",
+    "IN": "Upload the missing items. This app reopens the upload as a draft."
+  },
+  "clocks": {
+    "US": {
+      "label": "US review clock (NME NDA or BLA, standard review)",
+      "unit": "day",
+      "stops": false,
+      "milestones": [
+        { "id": "receipt", "day": 0, "label": "Application received", "help": "The review clock starts on receipt of an accepted original application." },
+        { "id": "filing", "day": 60, "label": "Filing decision", "help": "The agency decides within 60 days whether the application is complete enough to review. A seriously incomplete one is refused (refuse to file).", "rtf": true },
+        { "id": "day74", "day": 74, "label": "Day-74 letter: review issues", "help": "Issues found during the filing review are sent to the applicant. Information requests can follow at any time; the clock keeps running.", "questions": "new" },
+        { "id": "midcycle", "day": 150, "label": "Mid-cycle communication", "help": "The review team tells the applicant about significant issues so far.", "questions": "outstanding" },
+        { "id": "action", "day": 365, "label": "Action on the goal date", "help": "For a new molecular entity under standard review the goal is 10 months after the 60-day filing date. The outcome is an approval letter or a complete response letter.", "final": true }
+      ],
+      "positive": "Approval letter issued.",
+      "negative": "Complete response letter issued: the application cannot be approved in its present form."
+    },
+    "EU": {
+      "label": "EU centralised procedure clock",
+      "unit": "day",
+      "stops": true,
+      "milestones": [
+        { "id": "start", "day": 1, "label": "Procedure starts", "help": "The clock starts after validation of the application." },
+        { "id": "d120", "day": 120, "label": "Day 120 list of questions", "help": "The committee adopts the list of questions. The clock stops until the applicant responds (usually up to 3 months, extendable).", "questions": "new" },
+        { "id": "d180", "day": 180, "label": "Day 180 list of outstanding issues", "help": "Issues not resolved by the responses. The clock stops again; an oral explanation can follow.", "questions": "outstanding" },
+        { "id": "d210", "day": 210, "label": "Day 210 opinion", "help": "The committee adopts its opinion. The European Commission decision follows within 67 days.", "final": true }
+      ],
+      "positive": "Positive opinion adopted; the Commission decision follows.",
+      "negative": "Major objections remain: in practice the applicant faces a negative opinion or withdraws."
+    },
+    "JP": {
+      "label": "Japan review timeline (new active ingredient, standard review)",
+      "unit": "day",
+      "stops": true,
+      "milestones": [
+        { "id": "receipt", "day": 0, "label": "Application received", "help": "The review starts on receipt of the first submission unit." },
+        { "id": "inq1", "day": 60, "label": "First inquiries", "help": "The reviewers send inquiries. The applicant answers, often with revised documents in a new unit.", "questions": "new" },
+        { "id": "inq2", "day": 180, "label": "Further inquiries", "help": "Points still open after the first answers.", "questions": "outstanding" },
+        { "id": "expert", "day": 270, "label": "Expert discussion", "help": "The review team discusses the conclusions with external experts." },
+        { "id": "approval", "day": 365, "label": "Decision", "help": "The target total review time for standard review is about 12 months.", "final": true }
+      ],
+      "positive": "Approval granted.",
+      "negative": "Approval not granted: inquiries remain unresolved."
+    },
+    "IN": {
+      "label": "India new drug application clock (working days)",
+      "unit": "working day",
+      "stops": true,
+      "milestones": [
+        { "id": "receipt", "day": 0, "label": "Application received", "help": "The clock counts working days from receipt." },
+        { "id": "query", "day": 30, "label": "Query letter", "help": "Deficiencies are sent to the applicant, who answers with a query response.", "questions": "new" },
+        { "id": "decision", "day": 90, "label": "Decision", "help": "The rules set a decision within 90 working days for a new drug already approved in another country.", "final": true }
+      ],
+      "positive": "Permission granted.",
+      "negative": "Application rejected; the reasons are given in writing and the applicant may appeal."
+    }
+  },
+  "responseNode": { "US": "1.11.4", "EU": "eu:responses", "JP": "jp:1.13.3", "IN": "in:query" },
+  "weaknesses": {
+    "nce-tablet": [
+      { "id": "nce-diss", "module": "Quality", "section": "3.2.P.2", "text": "The dissolution method has not been shown to discriminate between batches made with different drug substance particle sizes. Provide data showing the method is discriminating.", "fixTitle": "Pharmaceutical Development (updated: discriminating power of the dissolution method)", "fixFile": "pharmaceutical-development.pdf", "pages": 46, "answer": "Dissolution profiles of batches made with fine, nominal and coarse drug substance are provided; the method separates them (f2 below 50 for the coarse batch)." },
+      { "id": "nce-stab", "module": "Quality", "section": "3.2.P.8.3", "text": "Only 6 months of long-term stability data are provided for the registration batches. Provide the 12-month data.", "fixTitle": "Stability Data (12-month update)", "fixFile": "stability-data.pdf", "pages": 64, "answer": "12-month long-term and 6-month accelerated data for the three registration batches are provided; all results are within specification." },
+      { "id": "nce-renal", "module": "Clinical", "section": "5.3.5.3", "text": "Provide an analysis of efficacy and safety by baseline renal function across the phase 3 studies.", "fixTitle": "Integrated Analysis of Efficacy and Safety by Renal Function", "fixFile": "renal-subgroup-analysis.pdf", "pages": 38, "answer": "The pooled analysis shows a consistent effect across renal function categories; no dose adjustment is proposed for mild or moderate impairment." }
+    ],
+    "generic-tablet": [
+      { "id": "gen-diss", "module": "Quality", "section": "3.2.P.2", "text": "Provide comparative dissolution data against the reference product at pH 1.2, 4.5 and 6.8.", "fixTitle": "Pharmaceutical Development (updated: comparative dissolution in three media)", "fixFile": "pharmaceutical-development.pdf", "pages": 30, "answer": "Comparative profiles at pH 1.2, 4.5 and 6.8 are provided; f2 is above 50 in all media." },
+      { "id": "gen-imp", "module": "Quality", "section": "3.2.P.5.6", "text": "The limit for an unspecified degradation product is above the qualification threshold. Justify the limit or tighten it.", "fixTitle": "Justification of Specifications (revised impurity limit)", "fixFile": "justification-of-specifications.pdf", "pages": 12, "answer": "The limit has been tightened to the qualification threshold; the revised specification is provided." }
+    ],
+    "sterile-injectable": [
+      { "id": "ster-cci", "module": "Quality", "section": "3.2.P.2", "text": "Provide container closure integrity data for the vial and stopper over the proposed shelf life.", "fixTitle": "Pharmaceutical Development (updated: container closure integrity)", "fixFile": "pharmaceutical-development.pdf", "pages": 40, "answer": "Deterministic container closure integrity testing at release and end of shelf life is provided; all units passed." },
+      { "id": "ster-steril", "module": "Quality", "section": "3.2.P.3.5", "text": "Provide the media fill and filter validation data supporting the aseptic process.", "fixTitle": "Process Validation (aseptic process: media fills and filter validation)", "fixFile": "process-validation.pdf", "pages": 36, "answer": "Three consecutive media fills with no contaminated units and the bacterial retention study for the sterilising filter are provided." }
+    ],
+    "mab-infusion": [
+      { "id": "mab-viral", "module": "Quality", "section": "3.2.A.2", "text": "Provide viral clearance data for the low-pH hold step, including the effect of hold time.", "fixTitle": "Adventitious Agents Safety Evaluation (updated: low-pH viral clearance)", "fixFile": "adventitious-agents.pdf", "pages": 28, "answer": "Viral clearance studies at the minimum hold time and pH are provided; the step gives robust clearance of enveloped viruses." },
+      { "id": "mab-charge", "module": "Quality", "section": "3.2.S.3.1", "text": "Provide characterisation of the acidic and basic charge variants, including their potency.", "fixTitle": "Elucidation of Structure (updated: charge variant characterisation)", "fixFile": "elucidation-of-structure.pdf", "pages": 44, "answer": "Isolated charge variant fractions were characterised; all retain binding and potency within the range of the main peak." },
+      { "id": "mab-ada", "module": "Clinical", "section": "5.3.1.4", "text": "Provide validation of the anti-drug antibody assay, including drug tolerance.", "fixTitle": "Validation of the Anti-Drug Antibody Assay", "fixFile": "ada-assay-validation.pdf", "pages": 34, "answer": "The validation report is provided; the assay detects 100 ng/mL of positive control in the presence of expected trough drug levels." }
+    ],
+    "biosimilar-mab": [
+      { "id": "bs-glyco", "module": "Quality", "section": "3.2.S.3.1", "text": "The afucosylated glycan level is higher than in the reference product. Discuss its effect on FcγRIIIa binding and ADCC.", "fixTitle": "Elucidation of Structure (updated: afucosylation and ADCC)", "fixFile": "elucidation-of-structure.pdf", "pages": 40, "answer": "FcγRIIIa binding and ADCC fall within the reference product range; the difference has no effect on the mechanism of action." },
+      { "id": "bs-extrap", "module": "Clinical", "section": "2.5", "text": "Justify extrapolation to the indications not studied in the comparative clinical study.", "fixTitle": "Clinical Overview (updated: justification of extrapolation)", "fixFile": "clinical-overview.pdf", "pages": 42, "answer": "The mechanism of action, receptors and target tissues are the same across indications; analytical and clinical similarity supports extrapolation." }
+    ]
+  }
+}

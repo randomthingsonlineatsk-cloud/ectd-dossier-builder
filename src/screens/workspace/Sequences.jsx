@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { INDEX, REGION_PACKS, displayCode as dc } from '../../engine/tree.js';
-import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences } from '../../engine/model.js';
+import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences, isRetireOp } from '../../engine/model.js';
 import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 
@@ -17,7 +17,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
   const [confirming, setConfirming] = useState(null);
   const state = useMemo(() => lifecycleState(project), [project]);
   const rows = [...state.entries.values()]
-    .filter((e) => e.leaf.operation !== 'delete' || view === 'cumulative')
+    .filter((e) => !isRetireOp(e.leaf.operation) || view === 'cumulative')
     .filter((e) => view === 'cumulative' || e.status === 'current')
     .sort((a, b) => INDEX.order.indexOf(a.leaf.nodeCode) - INDEX.order.indexOf(b.leaf.nodeCode) || a.seq.localeCompare(b.seq));
   const nextNum = nextSequenceNumber(project);

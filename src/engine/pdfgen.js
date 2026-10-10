@@ -11,7 +11,7 @@ import { PDFDocument, StandardFonts, PDFName, PDFHexString, PDFString, rgb, degr
 import fontkit from '@pdf-lib/fontkit';
 import SparkMD5 from 'spark-md5';
 import { INDEX, filePath, displayCode } from './tree.js';
-import { lifecycleState, PRODUCTS, docForLeaf, seqByNumber } from './model.js';
+import { lifecycleState, PRODUCTS, docForLeaf, seqByNumber, isRetireOp } from './model.js';
 import { fileContentKey } from './backbone.js';
 import { factsForDoc, FACTS } from './consistency.js';
 import { sha256Bytes } from './sha256.js';
@@ -48,7 +48,7 @@ function relativePath(fromDir, to) {
 // Resolves a document's hyperlinks against the current view of the dossier for a sequence.
 export function linkTargets(project, doc, seqNumber, sourcePath) {
   const st = lifecycleState(project, seqNumber);
-  const current = [...st.entries.values()].filter((e) => e.status === 'current' && e.leaf.operation !== 'delete');
+  const current = [...st.entries.values()].filter((e) => e.status === 'current' && !isRetireOp(e.leaf.operation));
   const fromDir = sourcePath ? sourcePath.split('/').slice(0, -1).join('/') : `${seqNumber}`;
   const out = [];
   for (const code of doc.links ?? []) {

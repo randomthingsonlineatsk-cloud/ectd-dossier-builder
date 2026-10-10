@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { publishSequence } from '../../engine/backbone.js';
-import { INDEX, REGION_PACKS } from '../../engine/tree.js';
+import { INDEX, REGION_PACKS, nodeLabel, displayCode } from '../../engine/tree.js';
+import { couCode, seqInt } from '../../engine/v4.js';
 import { download } from '../../engine/io.js';
 import { modColor } from '../../ctx.js';
 
@@ -74,8 +75,103 @@ function FolderTree({ node }) {
   );
 }
 
+// eCTD v4.0: one submission unit message, contexts of use, SHA-256, document reuse.
+function V4View({ project, seq, pkg }) {
+  const [view, setView] = useState('xml');
+  const n = seqInt(seq.number);
+  const unit = pkg.unit;
+  const byNode = {};
+  for (const l of seq.leaves) (byNode[l.nodeCode] ??= []).push(l);
+  const views = [['xml', 'submissionunit.xml'], ['sha', 'sha256.txt'], ['cou', 'Contexts of use'], ['files', `Files (${unit.reused} reused)`], ['folders', 'Folder tree'], ['log', 'Publishing log']];
+  return (
+    <div className="stack">
+      <div className="row" style={{ justifyContent: 'space-between' }}>
+        <div className="seg" role="tablist" aria-label="Submission unit files">
+          {views.map(([k, l]) => <button key={k} role="tab" aria-selected={view === k} aria-pressed={view === k} onClick={() => setView(k)}>{l}</button>)}
+        </div>
+        <button className="btn small" onClick={() => download(`${n}-submissionunit.xml`, unit.xml, 'application/xml')}>Download submissionunit.xml</button>
+      </div>
+      <p className="small muted">
+        {seq.status === 'published' ? `Unit ${n} is published; this is its frozen message.` : `Live preview of submission unit ${n}. Until you publish, checksums are preview hashes; publishing generates each PDF and records the SHA-256 of its real bytes.`}
+        {' '}eCTD v4.0 has one XML message per unit (no index.xml, no regional XML), numbers units 1, 2, 3…, places each document by a context of use, and reuses documents already sent by reference. Modelled on the ICH and PMDA v4.0 implementation guides, simplified. Training only.
+      </p>
+      {view === 'xml' && <Xml text={unit.xml} />}
+      {view === 'sha' && <div className="panel"><p className="small">sha256.txt lists the SHA-256 checksum of submissionunit.xml and of every file sent in this unit. Reused documents are not sent again, so they are not listed.</p><pre className="xml">{unit.shaTxt}</pre></div>}
+      {view === 'cou' && (
+        <div className="table-wrap panel">
+          <table className="data">
+            <thead><tr><th>Heading</th><th>CoU code</th><th>Document</th><th>Status</th><th>Lifecycle</th></tr></thead>
+            <tbody>{Object.entries(byNode).sort(([a], [b]) => INDEX.order.indexOf(a) - INDEX.order.indexOf(b)).flatMap(([code, ls]) => ls.map((l) => {
+              const f = unit.files.find((x) => x.leafId === l.id);
+              return (
+                <tr key={l.id}>
+                  <td>{nodeLabel(code)}</td>
+                  <td className="mono">{code === 'jp:cover' ? '(not in XML)' : couCode(code)}</td>
+                  <td>{l.title || '(no title)'}{f?.op === 'reuse' && <span className="pill ok" style={{ marginLeft: '.3rem' }}>reused</span>}</td>
+                  <td>{l.operation === 'suspend' ? <span className="op suspend">suspended</span> : 'active'}</td>
+                  <td className="small">{l.operation === 'replace' ? `replacementOf ${seqInt(l.target?.seq ?? '0')} · ${displayCode(code)}` : l.operation === 'suspend' ? `suspends CoU from unit ${seqInt(l.target?.seq ?? '0')}` : l.operation}</td>
+                </tr>
+              );
+            }))}</tbody>
+          </table>
+        </div>
+      )}
+      {view === 'files' && (
+        <div className="table-wrap panel">
+          <p className="small">A document already sent in an earlier unit is placed again by its document ID. No file is sent and no checksum is listed.</p>
+          <table className="data">
+            <thead><tr><th>File</th><th>SHA-256</th><th>Heading</th><th>How</th></tr></thead>
+            <tbody>{unit.files.map((f, i) => <tr key={i}><td className="mono" style={{ wordBreak: 'break-all' }}>{f.path}</td><td className="mono" style={{ wordBreak: 'break-all', fontSize: '.72rem' }}>{f.sha256}</td><td>{displayCode(f.node)}</td><td>{f.op}</td></tr>)}</tbody>
+          </table>
+        </div>
+      )}
+      {view === 'folders' && <div className="panel ftree"><ul><FolderTree node={pkg.tree} /></ul></div>}
+      {view === 'log' && <Log pkg={pkg} label="SHA-256 checksum" />}
+    </div>
+  );
+}
+
+// India: the CTD goes to the online portal as PDF uploads with no backbone XML.
+function PortalView({ project, seq, pkg }) {
+  const [view, setView] = useState('list');
+  return (
+    <div className="stack">
+      <div className="seg" role="tablist" aria-label="Portal upload">
+        {[['list', `Upload list (${pkg.log.length})`], ['folders', 'Folder tree']].map(([k, l]) => <button key={k} role="tab" aria-selected={view === k} aria-pressed={view === k} onClick={() => setView(k)}>{l}</button>)}
+      </div>
+      <p className="small muted">India takes the CTD as PDF files uploaded to the regulator's online portal, arranged by the CTD headings. There is no backbone XML, so lifecycle is handled by uploading revised files with the query response and listing them in the covering letter. Training only; the portal itself is not reproduced.</p>
+      {view === 'list' && (
+        <div className="table-wrap panel">
+          <table className="data">
+            <thead><tr><th>Heading</th><th>File</th><th>MD5 (for your records)</th></tr></thead>
+            <tbody>{pkg.log.map((r, i) => <tr key={i}><td>{nodeLabel(r.node)}</td><td className="mono" style={{ wordBreak: 'break-all' }}>{r.file}</td><td className="mono">{r.checksum}</td></tr>)}</tbody>
+          </table>
+        </div>
+      )}
+      {view === 'folders' && <div className="panel ftree"><ul><FolderTree node={pkg.tree} /></ul></div>}
+    </div>
+  );
+}
+
+function Log({ pkg, label = 'MD5 checksum' }) {
+  return (
+    <div className="table-wrap panel">
+      <table className="data">
+        <thead><tr><th>File</th><th>{label}</th><th>Operation</th><th>Target</th><th>Heading</th></tr></thead>
+        <tbody>{pkg.log.map((r, i) => <tr key={i}><td className="mono" style={{ wordBreak: 'break-all' }}>{r.file}</td><td className="mono" style={{ wordBreak: 'break-all' }}>{r.checksum}</td><td>{r.operation}</td><td className="mono">{r.target}</td><td>{displayCode(r.node)}</td></tr>)}</tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function Backbone({ project, seq }) {
   const pkg = useMemo(() => publishSequence(project, seq.number), [project, seq.number]);
+  if (pkg.v4) return <V4View project={project} seq={seq} pkg={pkg} />;
+  if (pkg.portal) return <PortalView project={project} seq={seq} pkg={pkg} />;
+  return <V3View project={project} seq={seq} pkg={pkg} />;
+}
+
+function V3View({ project, seq, pkg }) {
   const [view, setView] = useState('index');
   const regionalName = REGION_PACKS[project.region].regionalFile.split('/').pop();
   const [stfId, setStfId] = useState(null);

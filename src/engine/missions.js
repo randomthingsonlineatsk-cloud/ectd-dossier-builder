@@ -1,6 +1,6 @@
 // Mission seeds and scoring (Phase 1: missions 1, 4, 11; Phase 2: 2, 5, 6, 7, 8, 9, 10, 12).
 import missionsData from '../data/missions.json' with { type: 'json' };
-import { createProject, docForLeaf, makeDoc, seqByNumber, PRODUCTS } from './model.js';
+import { createProject, docForLeaf, makeDoc, seqByNumber, PRODUCTS, isRetireOp } from './model.js';
 import { tagFromDoc } from './stf.js';
 import { addCoverLetter, placeDoc, publishWithFiles, updateLeaf } from './ops.js';
 import { validate } from './validate.js';
@@ -142,7 +142,7 @@ export function evaluateMission(project) {
 // ---------- helpers for Phase 2 checks ----------
 const leavesIn = (p, n) => seqByNumber(p, n)?.leaves ?? [];
 const has = (p, n, docId, code, ops = ['new']) => leavesIn(p, n).some((l) => l.docId === docId && l.nodeCode === code && ops.includes(l.operation));
-const hasForm = (p, n, code, form) => leavesIn(p, n).some((l) => l.nodeCode === code && l.operation !== 'delete' && (!form || docForLeaf(p, l)?.form === form));
+const hasForm = (p, n, code, form) => leavesIn(p, n).some((l) => l.nodeCode === code && !isRetireOp(l.operation) && (!form || docForLeaf(p, l)?.form === form));
 function replaced(p, n, newDoc, oldDoc, code, seq0 = '0000') {
   const old = leavesIn(p, seq0).find((l) => l.docId === oldDoc);
   return !!old && leavesIn(p, n).some((l) => l.docId === newDoc && l.nodeCode === code && l.operation === 'replace' && l.target?.seq === seq0 && l.target?.leafId === old.id);

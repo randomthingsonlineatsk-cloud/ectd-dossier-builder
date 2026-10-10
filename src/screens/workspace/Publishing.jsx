@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { INDEX, isPlaceable, displayCode as dc } from '../../engine/tree.js';
-import { docForLeaf, lifecycleState, sortedSequences } from '../../engine/model.js';
+import { docForLeaf, lifecycleState, sortedSequences, isRetireOp } from '../../engine/model.js';
 import { updateLeaf, fixDoc } from '../../engine/ops.js';
 import { bookmarkTitles, defaultHeadings } from '../../engine/pdfmeta.js';
 import { suggestedStudy, needsStudyTag, STUDY_ID_RE } from '../../engine/stf.js';
@@ -13,7 +13,7 @@ const TOC_PAGES = 50;
 function titleIssues(project, seq) {
   const issues = [];
   const st = lifecycleState(project, seq.number);
-  const cur = [...st.entries.values()].filter((e) => e.status === 'current' && e.leaf.operation !== 'delete');
+  const cur = [...st.entries.values()].filter((e) => e.status === 'current' && !isRetireOp(e.leaf.operation));
   const mine = new Set(seq.leaves.map((l) => l.id));
   const byNode = {};
   for (const e of cur) (byNode[e.leaf.nodeCode] ??= []).push(e);
@@ -56,7 +56,7 @@ export default function Publishing({ project, seq, mutate, validation, toast, fo
   const [allMarks, setAllMarks] = useState(false);
   const editable = seq.status !== 'published';
 
-  const leaves = seq.leaves.filter((l) => l.operation !== 'delete');
+  const leaves = seq.leaves.filter((l) => !isRetireOp(l.operation));
   const st = useMemo(() => lifecycleState(project, seq.number), [project, seq.number]);
   const currentCodes = useMemo(() => new Set([...st.entries.values()].filter((e) => e.status === 'current').map((e) => e.leaf.nodeCode)), [st]);
   const placedCodes = [...currentCodes].sort((a, b) => INDEX.order.indexOf(a) - INDEX.order.indexOf(b));

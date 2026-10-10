@@ -1,7 +1,7 @@
 // Rule engine for the eCTD v3.2.2 profiles (US and EU core rules).
 import rulesData from '../data/rules.json' with { type: 'json' };
 import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion } from './tree.js';
-import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, productOptions } from './model.js';
+import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, productOptions, isRetireOp } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
@@ -113,7 +113,7 @@ export function validate(project, seqNumber) {
   // Duplicate paths
   const paths = {};
   for (const l of leaves) {
-    if (l.operation === 'delete') continue;
+    if (isRetireOp(l.operation)) continue;
     const p = leafPath(project, l);
     (paths[p] ??= []).push(l);
   }
@@ -130,7 +130,7 @@ export function validate(project, seqNumber) {
     const where = { nodeCode: l.nodeCode, leafId: l.id };
     const name = l.title || l.fileName || l.id;
 
-    if (seq.status === 'published' && !l.frozenDoc && l.operation !== 'delete') add('LC-06', l.id, `"${name}" changed after sequence ${seq.number} was published.`, where);
+    if (seq.status === 'published' && !l.frozenDoc && !isRetireOp(l.operation)) add('LC-06', l.id, `"${name}" changed after sequence ${seq.number} was published.`, where);
 
     // Lifecycle
     if (v4 && (l.operation === 'delete' || l.operation === 'append')) add('V4-01', l.id, `"${name}" uses "${l.operation}", which eCTD v4.0 does not have.`, where);
@@ -210,7 +210,7 @@ export function validate(project, seqNumber) {
   for (const item of m1Checklist(project, seq)) {
     if (!item.rule) continue;
     const ok = leaves.some((l) => {
-      if (l.operation === 'delete' || l.nodeCode !== item.section) return false;
+      if (isRetireOp(l.operation) || l.nodeCode !== item.section) return false;
       if (!item.form) return true;
       const d = docForLeaf(project, l);
       return d?.form === item.form;
@@ -218,7 +218,7 @@ export function validate(project, seqNumber) {
     if (!ok) add(item.rule, `${item.section}${item.form ? '/' + item.form : ''}`, `${item.label} is missing from ${dc(item.section)}.`, { nodeCode: item.section });
   }
 
-  if (eu && seq.subType === 'response' && !leaves.some((l) => l.nodeCode === 'eu:responses' && l.operation !== 'delete')) {
+  if (eu && seq.subType === 'response' && !leaves.some((l) => l.nodeCode === 'eu:responses' && !isRetireOp(l.operation))) {
     add('EU-09', 'responses', 'This response sequence has no responses document.', { nodeCode: 'eu:responses' });
   }
 
