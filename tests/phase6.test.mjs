@@ -36,4 +36,12 @@ assert.equal(r2.seq.submissionType, 'var-type1b'); assert.equal(r2.seq.submissio
 assert.equal(r2.seq.changes[0].type, 'Type IB'); assert.match(r2.seq.changes[0].scope, /Q\.II\.b\.1\(e\)/);
 assert.deepEqual(r2.warnings, []);
 assert.ok(r2.seq.changePackage.todo.every((t) => t.known), 'EU codes exist in the EU tree');
+// India package: post-approval change application.
+const inPkg = { ...pkg, region: 'IN', submission: { ...pkg.submission, category: 'L2', categoryLabel: 'Level II: notifiable change', ectd: { submissionType: 'post-approval-change', subType: 'application' } },
+  module1: [{ code: 'in:1.1', label: 'Covering letter' }, { code: 'in:1.2.2', label: 'Application and fee' }, { code: 'in:1.5', label: 'Approval in country of origin' }],
+  ctd: [{ code: '3.2.P.3.1', label: 'Manufacturers', operation: 'replace', why: [] }] };
+const pin = createProject({ name: 'in', productId: 'nce-tablet', region: 'IN', user: { userId: 'u-1' } });
+const r3 = importChangePackage(pin, parseChangePackage(inPkg));
+assert.equal(r3.seq.submissionType, 'post-approval-change');
+assert.ok(r3.seq.changePackage.todo.every((t) => t.known));
 console.log('phase 6 tests: change package import passed');
