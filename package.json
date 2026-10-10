@@ -1,0 +1,24 @@
+{
+  "name": "ectd-dossier-builder",
+  "version": "0.1.0",
+  "description": "Browser-based eCTD practice platform: build, publish and validate a fictional regulatory dossier.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node tests/engine.test.mjs"
+  },
+  "author": "Khan Gulrez Shagufa Fazal Ahmed",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "spark-md5": "^3.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "vite": "^5.4.21"
+  },
+  "private": true,
+  "type": "module"
+}

@@ -1,0 +1,225 @@
+{
+  "_about": "ICH CTD Modules 2-5 heading tree for eCTD v3.2.2. Each node: code, title, element (index.xml element name), folder (path segment), children. Leaves can only be placed on nodes without children. 'repeat' marks repeatable sections whose attributes come from project settings.",
+  "modules": [
+    {
+      "code": "2", "title": "Common Technical Document Summaries", "element": "m2-common-technical-document-summaries", "folder": "m2",
+      "children": [
+        { "code": "2.1", "title": "CTD Table of Contents", "element": null, "folder": null, "notInEctd": true,
+          "note": "Not submitted in eCTD: the XML backbone itself is the table of contents. Leaves placed here are an error." },
+        { "code": "2.2", "title": "Introduction", "element": "m2-2-introduction", "folder": "22-intro" },
+        { "code": "2.3", "title": "Quality Overall Summary", "element": "m2-3-quality-overall-summary", "folder": "23-qos" },
+        { "code": "2.4", "title": "Nonclinical Overview", "element": "m2-4-nonclinical-overview", "folder": "24-nonclin-over" },
+        { "code": "2.5", "title": "Clinical Overview", "element": "m2-5-clinical-overview", "folder": "25-clin-over" },
+        { "code": "2.6", "title": "Nonclinical Written and Tabulated Summaries", "element": "m2-6-nonclinical-written-and-tabulated-summaries", "folder": "26-nonclin-sum",
+          "children": [
+            { "code": "2.6.1", "title": "Introduction", "element": "m2-6-1-introduction", "folder": "" },
+            { "code": "2.6.2", "title": "Pharmacology Written Summary", "element": "m2-6-2-pharmacology-written-summary", "folder": "" },
+            { "code": "2.6.3", "title": "Pharmacology Tabulated Summary", "element": "m2-6-3-pharmacology-tabulated-summary", "folder": "" },
+            { "code": "2.6.4", "title": "Pharmacokinetics Written Summary", "element": "m2-6-4-pharmacokinetics-written-summary", "folder": "" },
+            { "code": "2.6.5", "title": "Pharmacokinetics Tabulated Summary", "element": "m2-6-5-pharmacokinetics-tabulated-summary", "folder": "" },
+            { "code": "2.6.6", "title": "Toxicology Written Summary", "element": "m2-6-6-toxicology-written-summary", "folder": "" },
+            { "code": "2.6.7", "title": "Toxicology Tabulated Summary", "element": "m2-6-7-toxicology-tabulated-summary", "folder": "" }
+          ] },
+        { "code": "2.7", "title": "Clinical Summary", "element": "m2-7-clinical-summary", "folder": "27-clin-sum",
+          "children": [
+            { "code": "2.7.1", "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods", "element": "m2-7-1-summary-of-biopharmaceutic-studies-and-associated-analytical-methods", "folder": "" },
+            { "code": "2.7.2", "title": "Summary of Clinical Pharmacology Studies", "element": "m2-7-2-summary-of-clinical-pharmacology-studies", "folder": "" },
+            { "code": "2.7.3", "title": "Summary of Clinical Efficacy", "element": "m2-7-3-summary-of-clinical-efficacy", "folder": "", "repeat": "indication" },
+            { "code": "2.7.4", "title": "Summary of Clinical Safety", "element": "m2-7-4-summary-of-clinical-safety", "folder": "" },
+            { "code": "2.7.5", "title": "Literature References", "element": "m2-7-5-literature-references", "folder": "" },
+            { "code": "2.7.6", "title": "Synopses of Individual Studies", "element": "m2-7-6-synopses-of-individual-studies", "folder": "" }
+          ] }
+      ]
+    },
+    {
+      "code": "3", "title": "Quality", "element": "m3-quality", "folder": "m3",
+      "children": [
+        { "code": "3.2", "title": "Body of Data", "element": "m3-2-body-of-data", "folder": "32-body-data",
+          "children": [
+            { "code": "3.2.S", "title": "Drug Substance", "element": "m3-2-s-drug-substance", "folder": "32s-drug-sub", "repeat": "substance",
+              "children": [
+                { "code": "3.2.S.1", "title": "General Information", "element": "m3-2-s-1-general-information", "folder": "32s1-gen-info",
+                  "children": [
+                    { "code": "3.2.S.1.1", "title": "Nomenclature", "element": "m3-2-s-1-1-nomenclature", "folder": "" },
+                    { "code": "3.2.S.1.2", "title": "Structure", "element": "m3-2-s-1-2-structure", "folder": "" },
+                    { "code": "3.2.S.1.3", "title": "General Properties", "element": "m3-2-s-1-3-general-properties", "folder": "" }
+                  ] },
+                { "code": "3.2.S.2", "title": "Manufacture", "element": "m3-2-s-2-manufacture", "folder": "32s2-manuf",
+                  "children": [
+                    { "code": "3.2.S.2.1", "title": "Manufacturer(s)", "element": "m3-2-s-2-1-manufacturer", "folder": "" },
+                    { "code": "3.2.S.2.2", "title": "Description of Manufacturing Process and Process Controls", "element": "m3-2-s-2-2-description-of-manufacturing-process-and-process-controls", "folder": "" },
+                    { "code": "3.2.S.2.3", "title": "Control of Materials", "element": "m3-2-s-2-3-control-of-materials", "folder": "" },
+                    { "code": "3.2.S.2.4", "title": "Controls of Critical Steps and Intermediates", "element": "m3-2-s-2-4-controls-of-critical-steps-and-intermediates", "folder": "" },
+                    { "code": "3.2.S.2.5", "title": "Process Validation and/or Evaluation", "element": "m3-2-s-2-5-process-validation-and-or-evaluation", "folder": "" },
+                    { "code": "3.2.S.2.6", "title": "Manufacturing Process Development", "element": "m3-2-s-2-6-manufacturing-process-development", "folder": "" }
+                  ] },
+                { "code": "3.2.S.3", "title": "Characterisation", "element": "m3-2-s-3-characterisation", "folder": "32s3-charac",
+                  "children": [
+                    { "code": "3.2.S.3.1", "title": "Elucidation of Structure and Other Characteristics", "element": "m3-2-s-3-1-elucidation-of-structure-and-other-characteristics", "folder": "" },
+                    { "code": "3.2.S.3.2", "title": "Impurities", "element": "m3-2-s-3-2-impurities", "folder": "" }
+                  ] },
+                { "code": "3.2.S.4", "title": "Control of Drug Substance", "element": "m3-2-s-4-control-of-drug-substance", "folder": "32s4-contr-drug-sub",
+                  "children": [
+                    { "code": "3.2.S.4.1", "title": "Specification", "element": "m3-2-s-4-1-specification", "folder": "32s41-spec" },
+                    { "code": "3.2.S.4.2", "title": "Analytical Procedures", "element": "m3-2-s-4-2-analytical-procedures", "folder": "32s42-analyt-proc" },
+                    { "code": "3.2.S.4.3", "title": "Validation of Analytical Procedures", "element": "m3-2-s-4-3-validation-of-analytical-procedures", "folder": "32s43-val-analyt-proc" },
+                    { "code": "3.2.S.4.4", "title": "Batch Analyses", "element": "m3-2-s-4-4-batch-analyses", "folder": "32s44-batch-analys" },
+                    { "code": "3.2.S.4.5", "title": "Justification of Specification", "element": "m3-2-s-4-5-justification-of-specification", "folder": "32s45-justif-spec" }
+                  ] },
+                { "code": "3.2.S.5", "title": "Reference Standards or Materials", "element": "m3-2-s-5-reference-standards-or-materials", "folder": "32s5-ref-stand" },
+                { "code": "3.2.S.6", "title": "Container Closure System", "element": "m3-2-s-6-container-closure-system", "folder": "32s6-cont-closure-sys" },
+                { "code": "3.2.S.7", "title": "Stability", "element": "m3-2-s-7-stability", "folder": "32s7-stab",
+                  "children": [
+                    { "code": "3.2.S.7.1", "title": "Stability Summary and Conclusions", "element": "m3-2-s-7-1-stability-summary-and-conclusions", "folder": "" },
+                    { "code": "3.2.S.7.2", "title": "Post-approval Stability Protocol and Stability Commitment", "element": "m3-2-s-7-2-post-approval-stability-protocol-and-stability-commitment", "folder": "" },
+                    { "code": "3.2.S.7.3", "title": "Stability Data", "element": "m3-2-s-7-3-stability-data", "folder": "" }
+                  ] }
+              ] },
+            { "code": "3.2.P", "title": "Drug Product", "element": "m3-2-p-drug-product", "folder": "32p-drug-prod", "repeat": "product",
+              "children": [
+                { "code": "3.2.P.1", "title": "Description and Composition of the Drug Product", "element": "m3-2-p-1-description-and-composition-of-the-drug-product", "folder": "32p1-desc-comp" },
+                { "code": "3.2.P.2", "title": "Pharmaceutical Development", "element": "m3-2-p-2-pharmaceutical-development", "folder": "32p2-pharm-dev" },
+                { "code": "3.2.P.3", "title": "Manufacture", "element": "m3-2-p-3-manufacture", "folder": "32p3-manuf",
+                  "children": [
+                    { "code": "3.2.P.3.1", "title": "Manufacturer(s)", "element": "m3-2-p-3-1-manufacturers", "folder": "" },
+                    { "code": "3.2.P.3.2", "title": "Batch Formula", "element": "m3-2-p-3-2-batch-formula", "folder": "" },
+                    { "code": "3.2.P.3.3", "title": "Description of Manufacturing Process and Process Controls", "element": "m3-2-p-3-3-description-of-manufacturing-process-and-process-controls", "folder": "" },
+                    { "code": "3.2.P.3.4", "title": "Controls of Critical Steps and Intermediates", "element": "m3-2-p-3-4-controls-of-critical-steps-and-intermediates", "folder": "" },
+                    { "code": "3.2.P.3.5", "title": "Process Validation and/or Evaluation", "element": "m3-2-p-3-5-process-validation-and-or-evaluation", "folder": "" }
+                  ] },
+                { "code": "3.2.P.4", "title": "Control of Excipients", "element": "m3-2-p-4-control-of-excipients", "folder": "32p4-contr-excip", "repeat": "excipient",
+                  "children": [
+                    { "code": "3.2.P.4.1", "title": "Specifications", "element": "m3-2-p-4-1-specifications", "folder": "" },
+                    { "code": "3.2.P.4.2", "title": "Analytical Procedures", "element": "m3-2-p-4-2-analytical-procedures", "folder": "" },
+                    { "code": "3.2.P.4.3", "title": "Validation of Analytical Procedures", "element": "m3-2-p-4-3-validation-of-analytical-procedures", "folder": "" },
+                    { "code": "3.2.P.4.4", "title": "Justification of Specifications", "element": "m3-2-p-4-4-justification-of-specifications", "folder": "" },
+                    { "code": "3.2.P.4.5", "title": "Excipients of Human or Animal Origin", "element": "m3-2-p-4-5-excipients-of-human-or-animal-origin", "folder": "" },
+                    { "code": "3.2.P.4.6", "title": "Novel Excipients", "element": "m3-2-p-4-6-novel-excipients", "folder": "" }
+                  ] },
+                { "code": "3.2.P.5", "title": "Control of Drug Product", "element": "m3-2-p-5-control-of-drug-product", "folder": "32p5-contr-drug-prod",
+                  "children": [
+                    { "code": "3.2.P.5.1", "title": "Specification(s)", "element": "m3-2-p-5-1-specifications", "folder": "32p51-spec" },
+                    { "code": "3.2.P.5.2", "title": "Analytical Procedures", "element": "m3-2-p-5-2-analytical-procedures", "folder": "32p52-analyt-proc" },
+                    { "code": "3.2.P.5.3", "title": "Validation of Analytical Procedures", "element": "m3-2-p-5-3-validation-of-analytical-procedures", "folder": "32p53-val-analyt-proc" },
+                    { "code": "3.2.P.5.4", "title": "Batch Analyses", "element": "m3-2-p-5-4-batch-analyses", "folder": "32p54-batch-analys" },
+                    { "code": "3.2.P.5.5", "title": "Characterisation of Impurities", "element": "m3-2-p-5-5-characterisation-of-impurities", "folder": "32p55-charac-imp" },
+                    { "code": "3.2.P.5.6", "title": "Justification of Specification(s)", "element": "m3-2-p-5-6-justification-of-specifications", "folder": "32p56-justif-spec" }
+                  ] },
+                { "code": "3.2.P.6", "title": "Reference Standards or Materials", "element": "m3-2-p-6-reference-standards-or-materials", "folder": "32p6-ref-stand" },
+                { "code": "3.2.P.7", "title": "Container Closure System", "element": "m3-2-p-7-container-closure-system", "folder": "32p7-cont-closure-sys" },
+                { "code": "3.2.P.8", "title": "Stability", "element": "m3-2-p-8-stability", "folder": "32p8-stab",
+                  "children": [
+                    { "code": "3.2.P.8.1", "title": "Stability Summary and Conclusion", "element": "m3-2-p-8-1-stability-summary-and-conclusion", "folder": "" },
+                    { "code": "3.2.P.8.2", "title": "Post-approval Stability Protocol and Stability Commitment", "element": "m3-2-p-8-2-post-approval-stability-protocol-and-stability-commitment", "folder": "" },
+                    { "code": "3.2.P.8.3", "title": "Stability Data", "element": "m3-2-p-8-3-stability-data", "folder": "" }
+                  ] }
+              ] },
+            { "code": "3.2.A", "title": "Appendices", "element": "m3-2-a-appendices", "folder": "32a-app",
+              "children": [
+                { "code": "3.2.A.1", "title": "Facilities and Equipment", "element": "m3-2-a-1-facilities-and-equipment", "folder": "32a1-fac-equip" },
+                { "code": "3.2.A.2", "title": "Adventitious Agents Safety Evaluation", "element": "m3-2-a-2-adventitious-agents-safety-evaluation", "folder": "32a2-advent-agent" },
+                { "code": "3.2.A.3", "title": "Excipients", "element": "m3-2-a-3-excipients", "folder": "32a3-excip" }
+              ] },
+            { "code": "3.2.R", "title": "Regional Information", "element": "m3-2-r-regional-information", "folder": "32r-reg-info" }
+          ] },
+        { "code": "3.3", "title": "Literature References", "element": "m3-3-literature-references", "folder": "33-lit-ref" }
+      ]
+    },
+    {
+      "code": "4", "title": "Nonclinical Study Reports", "element": "m4-nonclinical-study-reports", "folder": "m4",
+      "children": [
+        { "code": "4.2", "title": "Study Reports", "element": "m4-2-study-reports", "folder": "42-stud-rep",
+          "children": [
+            { "code": "4.2.1", "title": "Pharmacology", "element": "m4-2-1-pharmacology", "folder": "421-pharmacol",
+              "children": [
+                { "code": "4.2.1.1", "title": "Primary Pharmacodynamics", "element": "m4-2-1-1-primary-pharmacodynamics", "folder": "4211-prim-pd" },
+                { "code": "4.2.1.2", "title": "Secondary Pharmacodynamics", "element": "m4-2-1-2-secondary-pharmacodynamics", "folder": "4212-sec-pd" },
+                { "code": "4.2.1.3", "title": "Safety Pharmacology", "element": "m4-2-1-3-safety-pharmacology", "folder": "4213-safety-pharmacol" },
+                { "code": "4.2.1.4", "title": "Pharmacodynamic Drug Interactions", "element": "m4-2-1-4-pharmacodynamic-drug-interactions", "folder": "4214-pd-drug-interact" }
+              ] },
+            { "code": "4.2.2", "title": "Pharmacokinetics", "element": "m4-2-2-pharmacokinetics", "folder": "422-pk",
+              "children": [
+                { "code": "4.2.2.1", "title": "Analytical Methods and Validation Reports", "element": "m4-2-2-1-analytical-methods-and-validation-reports", "folder": "4221-analyt-met-val" },
+                { "code": "4.2.2.2", "title": "Absorption", "element": "m4-2-2-2-absorption", "folder": "4222-absorp" },
+                { "code": "4.2.2.3", "title": "Distribution", "element": "m4-2-2-3-distribution", "folder": "4223-distrib" },
+                { "code": "4.2.2.4", "title": "Metabolism", "element": "m4-2-2-4-metabolism", "folder": "4224-metab" },
+                { "code": "4.2.2.5", "title": "Excretion", "element": "m4-2-2-5-excretion", "folder": "4225-excr" },
+                { "code": "4.2.2.6", "title": "Pharmacokinetic Drug Interactions (nonclinical)", "element": "m4-2-2-6-pharmacokinetic-drug-interactions", "folder": "4226-pk-drug-interact" },
+                { "code": "4.2.2.7", "title": "Other Pharmacokinetic Studies", "element": "m4-2-2-7-other-pharmacokinetic-studies", "folder": "4227-other-pk-stud" }
+              ] },
+            { "code": "4.2.3", "title": "Toxicology", "element": "m4-2-3-toxicology", "folder": "423-tox",
+              "children": [
+                { "code": "4.2.3.1", "title": "Single-Dose Toxicity", "element": "m4-2-3-1-single-dose-toxicity", "folder": "4231-single-dose-tox" },
+                { "code": "4.2.3.2", "title": "Repeat-Dose Toxicity", "element": "m4-2-3-2-repeat-dose-toxicity", "folder": "4232-repeat-dose-tox" },
+                { "code": "4.2.3.3", "title": "Genotoxicity", "element": "m4-2-3-3-genotoxicity", "folder": "4233-genotox",
+                  "children": [
+                    { "code": "4.2.3.3.1", "title": "In vitro", "element": "m4-2-3-3-1-in-vitro", "folder": "42331-in-vitro" },
+                    { "code": "4.2.3.3.2", "title": "In vivo", "element": "m4-2-3-3-2-in-vivo", "folder": "42332-in-vivo" }
+                  ] },
+                { "code": "4.2.3.4", "title": "Carcinogenicity", "element": "m4-2-3-4-carcinogenicity", "folder": "4234-carcigen",
+                  "children": [
+                    { "code": "4.2.3.4.1", "title": "Long-term studies", "element": "m4-2-3-4-1-long-term-studies", "folder": "42341-lt-stud" },
+                    { "code": "4.2.3.4.2", "title": "Short- or medium-term studies", "element": "m4-2-3-4-2-short-or-medium-term-studies", "folder": "42342-smt-stud" },
+                    { "code": "4.2.3.4.3", "title": "Other studies", "element": "m4-2-3-4-3-other-studies", "folder": "42343-other-stud" }
+                  ] },
+                { "code": "4.2.3.5", "title": "Reproductive and Developmental Toxicity", "element": "m4-2-3-5-reproductive-and-developmental-toxicity", "folder": "4235-repro-dev-tox",
+                  "children": [
+                    { "code": "4.2.3.5.1", "title": "Fertility and early embryonic development", "element": "m4-2-3-5-1-fertility-and-early-embryonic-development", "folder": "42351-fert-embryo-dev" },
+                    { "code": "4.2.3.5.2", "title": "Embryo-fetal development", "element": "m4-2-3-5-2-embryo-fetal-development", "folder": "42352-embryo-fetal-dev" },
+                    { "code": "4.2.3.5.3", "title": "Prenatal and postnatal development, including maternal function", "element": "m4-2-3-5-3-prenatal-and-postnatal-development-including-maternal-function", "folder": "42353-pre-postnatal-dev" },
+                    { "code": "4.2.3.5.4", "title": "Studies in which the offspring are dosed and/or further evaluated", "element": "m4-2-3-5-4-studies-in-which-the-offspring-juvenile-animals-are-dosed-and-or-further-evaluated", "folder": "42354-juv" }
+                  ] },
+                { "code": "4.2.3.6", "title": "Local Tolerance", "element": "m4-2-3-6-local-tolerance", "folder": "4236-loc-tol" },
+                { "code": "4.2.3.7", "title": "Other Toxicity Studies", "element": "m4-2-3-7-other-toxicity-studies", "folder": "4237-other-tox-stud" }
+              ] }
+          ] },
+        { "code": "4.3", "title": "Literature References", "element": "m4-3-literature-references", "folder": "43-lit-ref" }
+      ]
+    },
+    {
+      "code": "5", "title": "Clinical Study Reports", "element": "m5-clinical-study-reports", "folder": "m5",
+      "children": [
+        { "code": "5.2", "title": "Tabular Listing of all Clinical Studies", "element": "m5-2-tabular-listing-of-all-clinical-studies", "folder": "52-tab-list" },
+        { "code": "5.3", "title": "Clinical Study Reports", "element": "m5-3-clinical-study-reports-and-related-information", "folder": "53-clin-stud-rep",
+          "children": [
+            { "code": "5.3.1", "title": "Reports of Biopharmaceutic Studies", "element": "m5-3-1-reports-of-biopharmaceutic-studies", "folder": "531-rep-biopharm-stud",
+              "children": [
+                { "code": "5.3.1.1", "title": "Bioavailability (BA) Study Reports", "element": "m5-3-1-1-bioavailability-study-reports", "folder": "5311-ba-stud-rep" },
+                { "code": "5.3.1.2", "title": "Comparative BA and Bioequivalence (BE) Study Reports", "element": "m5-3-1-2-comparative-ba-and-bioequivalence-study-reports", "folder": "5312-compar-ba-be-stud-rep" },
+                { "code": "5.3.1.3", "title": "In Vitro-In Vivo Correlation Study Reports", "element": "m5-3-1-3-in-vitro-in-vivo-correlation-study-reports", "folder": "5313-in-vitro-in-vivo-corr-rep" },
+                { "code": "5.3.1.4", "title": "Reports of Bioanalytical and Analytical Methods for Human Studies", "element": "m5-3-1-4-reports-of-bioanalytical-and-analytical-methods-for-human-studies", "folder": "5314-bioanalyt-analyt-met" }
+              ] },
+            { "code": "5.3.2", "title": "Reports of Studies Pertinent to Pharmacokinetics using Human Biomaterials", "element": "m5-3-2-reports-of-studies-pertinent-to-pharmacokinetics-using-human-biomaterials", "folder": "532-rep-stud-pk-human-biomat",
+              "children": [
+                { "code": "5.3.2.1", "title": "Plasma Protein Binding Study Reports", "element": "m5-3-2-1-plasma-protein-binding-study-reports", "folder": "5321-plasma-prot-bind-stud-rep" },
+                { "code": "5.3.2.2", "title": "Reports of Hepatic Metabolism and Drug Interaction Studies", "element": "m5-3-2-2-reports-of-hepatic-metabolism-and-drug-interaction-studies", "folder": "5322-rep-hep-metab-interact-stud" },
+                { "code": "5.3.2.3", "title": "Reports of Studies Using Other Human Biomaterials", "element": "m5-3-2-3-reports-of-studies-using-other-human-biomaterials", "folder": "5323-stud-other-human-biomat" }
+              ] },
+            { "code": "5.3.3", "title": "Reports of Human Pharmacokinetic (PK) Studies", "element": "m5-3-3-reports-of-human-pharmacokinetics-pk-studies", "folder": "533-rep-human-pk-stud",
+              "children": [
+                { "code": "5.3.3.1", "title": "Healthy Subject PK and Initial Tolerability Study Reports", "element": "m5-3-3-1-healthy-subject-pk-and-initial-tolerability-study-reports", "folder": "5331-healthy-subj-pk-init-tol-stud-rep" },
+                { "code": "5.3.3.2", "title": "Patient PK and Initial Tolerability Study Reports", "element": "m5-3-3-2-patient-pk-and-initial-tolerability-study-reports", "folder": "5332-patient-pk-init-tol-stud-rep" },
+                { "code": "5.3.3.3", "title": "Intrinsic Factor PK Study Reports", "element": "m5-3-3-3-intrinsic-factor-pk-study-reports", "folder": "5333-intrin-factor-pk-stud-rep" },
+                { "code": "5.3.3.4", "title": "Extrinsic Factor PK Study Reports", "element": "m5-3-3-4-extrinsic-factor-pk-study-reports", "folder": "5334-extrin-factor-pk-stud-rep" },
+                { "code": "5.3.3.5", "title": "Population PK Study Reports", "element": "m5-3-3-5-population-pk-study-reports", "folder": "5335-popul-pk-stud-rep" }
+              ] },
+            { "code": "5.3.4", "title": "Reports of Human Pharmacodynamic (PD) Studies", "element": "m5-3-4-reports-of-human-pharmacodynamics-pd-studies", "folder": "534-rep-human-pd-stud",
+              "children": [
+                { "code": "5.3.4.1", "title": "Healthy Subject PD and PK/PD Study Reports", "element": "m5-3-4-1-healthy-subject-pd-and-pk-pd-study-reports", "folder": "5341-healthy-subj-pd-stud-rep" },
+                { "code": "5.3.4.2", "title": "Patient PD and PK/PD Study Reports", "element": "m5-3-4-2-patient-pd-and-pk-pd-study-reports", "folder": "5342-patient-pd-stud-rep" }
+              ] },
+            { "code": "5.3.5", "title": "Reports of Efficacy and Safety Studies", "element": "m5-3-5-reports-of-efficacy-and-safety-studies", "folder": "535-rep-effic-safety-stud", "repeat": "indication",
+              "children": [
+                { "code": "5.3.5.1", "title": "Study Reports of Controlled Clinical Studies Pertinent to the Claimed Indication", "element": "m5-3-5-1-study-reports-of-controlled-clinical-studies-pertinent-to-the-claimed-indication", "folder": "5351-stud-rep-contr" },
+                { "code": "5.3.5.2", "title": "Study Reports of Uncontrolled Clinical Studies", "element": "m5-3-5-2-study-reports-of-uncontrolled-clinical-studies", "folder": "5352-stud-rep-uncontr" },
+                { "code": "5.3.5.3", "title": "Reports of Analyses of Data from More than One Study", "element": "m5-3-5-3-reports-of-analyses-of-data-from-more-than-one-study", "folder": "5353-rep-analys-data-more-one-stud" },
+                { "code": "5.3.5.4", "title": "Other Clinical Study Reports", "element": "m5-3-5-4-other-study-reports", "folder": "5354-other-stud-rep" }
+              ] },
+            { "code": "5.3.6", "title": "Reports of Post-Marketing Experience", "element": "m5-3-6-reports-of-postmarketing-experience", "folder": "536-postmark-exp" },
+            { "code": "5.3.7", "title": "Case Report Forms and Individual Patient Listings", "element": "m5-3-7-case-report-forms-and-individual-patient-listings", "folder": "537-crf-ipl" }
+          ] },
+        { "code": "5.4", "title": "Literature References", "element": "m5-4-literature-references", "folder": "54-lit-ref" }
+      ]
+    }
+  ]
+}

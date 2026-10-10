@@ -1,0 +1,19 @@
+eCTD Dossier Builder
+Copyright 2026 Khan Gulrez Shagufa Fazal Ahmed
+
+This product includes software developed by Khan Gulrez Shagufa Fazal Ahmed
+(ORCID 0009-0009-6195-0329, https://github.com/randomthingsonlineatsk-cloud).
+
+Licensed under the Apache License, Version 2.0. If you redistribute this work
+or a derivative of it, you must keep this NOTICE file (or its contents) with it,
+as section 4(d) of the License requires, so the original author stays credited.
+
+Training content notice: every product, company, document, study and person in
+this application is fictional. Section codes, form numbers and XML element names
+follow public ICH and FDA specifications; the app does not reproduce any agency
+form, portal or logo, and its output is not suitable for a real submission.
+
+Third-party components:
+- React and React DOM (MIT License), Copyright (c) Meta Platforms, Inc. and affiliates.
+- SparkMD5 (WTFPL OR MIT), Copyright (c) André Cruz.
+- Vite and @vitejs/plugin-react (MIT License), build tools only.

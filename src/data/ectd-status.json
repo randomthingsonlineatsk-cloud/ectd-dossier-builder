@@ -1,0 +1,12 @@
+{
+  "_about": "Where eCTD stands by region. Kept as data so dates can be updated as agencies announce them. Last reviewed 2026-10-10.",
+  "lastReviewed": "2026-10-10",
+  "rows": [
+    { "region": "Japan (PMDA)", "v322": "No longer accepted for new applications", "v40": "Mandatory for new applications from 1 April 2026", "app": "v4.0 only", "source": "https://meddeviceguide.com/blog/pmda-ectd-v4-0-medical-device-submission-guide" },
+    { "region": "US (FDA)", "v322": "Standard", "v40": "Voluntary for new applications since 16 September 2024; no mandatory date announced", "app": "Both, user chooses", "source": "https://www.productlifegroup.com/?p=12581" },
+    { "region": "EU (EMA)", "v322": "Standard", "v40": "Optional for centralised MAAs since 22 December 2025; EU v4.0 validation criteria v1.1 applicable from 15 July 2026", "app": "Both, user chooses", "source": "https://esubmission.ema.europa.eu/eCTD%20NMV/eCTD.html" },
+    { "region": "Switzerland", "v322": "Standard, Swiss Module 1", "v40": "Technical implementation by end of 2026", "app": "v3.2.2, v4.0 noted", "source": "https://www.gmp-compliance.org/gmp-news/swissmedic-ectd-v4-0" },
+    { "region": "Canada, Australia", "v322": "Standard", "v40": "Voluntary adoption planned from 2026; mandatory dates still being set", "app": "v3.2.2", "source": null },
+    { "region": "India (CDSCO)", "v322": "CTD dossiers filed through the SUGAM portal", "v40": "Industry reports of eCTD pilots; no confirmed mandate found", "app": "CTD structure with India Module 1", "source": "https://www.freyrsolutions.com/blog/indias-transition-toward-mandatory-ectd-submissions-what-pharma-manufacturers-must-prepare-for-in-2026" }
+  ]
+}
