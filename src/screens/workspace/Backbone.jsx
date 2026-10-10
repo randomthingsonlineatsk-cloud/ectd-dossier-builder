@@ -164,11 +164,37 @@ function Log({ pkg, label = 'MD5 checksum' }) {
   );
 }
 
-export default function Backbone({ project, seq }) {
+export default function Backbone({ project, seq, toast }) {
   const pkg = useMemo(() => publishSequence(project, seq.number), [project, seq.number]);
-  if (pkg.v4) return <V4View project={project} seq={seq} pkg={pkg} />;
-  if (pkg.portal) return <PortalView project={project} seq={seq} pkg={pkg} />;
-  return <V3View project={project} seq={seq} pkg={pkg} />;
+  return (
+    <>
+      <ZipBar project={project} seq={seq} toast={toast} />
+      {pkg.v4 ? <V4View project={project} seq={seq} pkg={pkg} /> : pkg.portal ? <PortalView project={project} seq={seq} pkg={pkg} /> : <V3View project={project} seq={seq} pkg={pkg} />}
+    </>
+  );
+}
+
+// Zipped folder export: this sequence, or every published one.
+function ZipBar({ project, seq, toast }) {
+  const [busy, setBusy] = useState(null);
+  const unit = project.ectdVersion === '4.0' ? `unit ${parseInt(seq.number, 10)}` : `sequence ${seq.number}`;
+  const published = project.sequences.filter((s) => s.status === 'published').length;
+  const go = async (which) => {
+    setBusy('Preparing…');
+    try {
+      const { dossierZip } = await import('../../engine/zipexport.js');
+      const r = await dossierZip(project, { sequences: which === 'one' ? [seq.number] : null, onProgress: (i, n, num) => setBusy(`Building ${i} of ${n} (${num})…`) });
+      download(r.name, r.zip, 'application/zip');
+      toast?.(r.notes.length ? `Zip ready with ${r.count} files. ${r.notes.length} checksum note${r.notes.length > 1 ? 's' : ''} in the README.` : `Zip ready with ${r.count} files; every checksum matches.`);
+    } catch (e) { toast?.(`Could not build the zip: ${e.message}`, 'error'); } finally { setBusy(null); }
+  };
+  return (
+    <div className="row zipbar" style={{ justifyContent: 'flex-end', marginBottom: '.75rem' }}>
+      <span className="small muted">Zipped folder with the {project.ectdVersion === '4.0' ? 'submission unit' : project.region === 'IN' ? 'portal files' : 'backbone'} and watermarked stub PDFs. Training only.</span>
+      <button className="btn small" disabled={!!busy} onClick={() => go('one')}>{busy ?? `Download ${unit} as zip`}</button>
+      {published > 1 && <button className="btn small" disabled={!!busy} onClick={() => go('all')}>All {published} published as one zip</button>}
+    </div>
+  );
 }
 
 function V3View({ project, seq, pkg }) {

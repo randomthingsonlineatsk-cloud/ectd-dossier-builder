@@ -168,7 +168,7 @@ export default function Workspace({ id }) {
         {tab === 'publishing' && <Publishing project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} focusNode={focusNode} setTab={setTab} />}
         {tab === 'consistency' && <Consistency project={project} seq={seq} mutate={mutate} toast={toast} />}
         {tab === 'sequences' && <Sequences project={project} seq={seq} setSeqNumber={setSeqNumber} mutate={mutate} mutateAsync={mutateAsync} toast={toast} />}
-        {tab === 'backbone' && <Backbone project={project} seq={seq} />}
+        {tab === 'backbone' && <Backbone project={project} seq={seq} toast={toast} />}
         {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
         {tab === 'review' && <ReviewView project={project} seq={seq} mutate={mutate} toast={toast} setSeqNumber={setSeqNumber} setTab={setTab} focusNode={focusNode} />}
         {tab === 'planning' && <PlanningView project={project} seq={seq} mutate={mutate} toast={toast} focusNode={focusNode} setTab={setTab} />}

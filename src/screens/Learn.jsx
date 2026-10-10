@@ -32,6 +32,8 @@ export default function Learn() {
         ))}
         <a className="lesson-card" href="#/glossary"><span className="n">8</span><strong>Glossary</strong><span className="small muted">Every term used in the app, searchable.</span></a>
         <a className="lesson-card" href="#/drills"><span className="n">+</span><strong>Lifecycle drills</strong><span className="small muted">Eight quick situations built on the most common lifecycle mistakes.</span></a>
+        <a className="lesson-card" href="#/compare"><span className="n">+</span><strong>Region comparison</strong><span className="small muted">Where the same document goes in the US, EU, Japan, India, Canada and Switzerland, and how a CTD becomes an ASEAN ACTD.</span></a>
+        <a className="lesson-card" href="#/quiz"><span className="n">+</span><strong>Quiz bank</strong><span className="small muted">RAC-style questions tied to every lesson and mission: practise by topic or sit a timed exam.</span></a>
       </div>
     </div>
   );

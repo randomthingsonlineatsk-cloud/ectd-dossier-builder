@@ -335,3 +335,10 @@ table.data tr.late td:first-child { box-shadow: inset 3px 0 0 var(--high); }
 .g-bar.crit { background: var(--accent); }
 .g-slack { position: absolute; top: 8px; height: 2px; background: var(--ink-3); opacity: .5; }
 @media (max-width: 640px) { .g-row { grid-template-columns: 1fr; } }
+
+/* Region comparison */
+table.compare td { vertical-align: top; font-size: .85rem; min-width: 120px; }
+table.compare td.none { background: var(--surface-2); }
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .3rem .8rem; }
+.cert-list { list-style: none; padding: 0; display: grid; gap: .35rem; }
+.cert-list li { display: flex; gap: .5rem; align-items: baseline; }

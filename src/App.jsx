@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AppCtx } from './ctx.js';
-import { db, getUser, getMeta, setMeta, saveProject } from './engine/db.js';
+import { db, getUser, getMeta, setMeta, saveProject, saveAttempt } from './engine/db.js';
 import Home from './screens/Home.jsx';
 import Learn from './screens/Learn.jsx';
 import Lesson from './screens/Lesson.jsx';
 import Missions from './screens/Missions.jsx';
 import Workspace from './screens/Workspace.jsx';
+import Compare from './screens/Compare.jsx';
+import QuizBank from './screens/QuizBank.jsx';
+import Classroom from './screens/Classroom.jsx';
 import Glossary from './screens/Glossary.jsx';
 import Progress from './screens/Progress.jsx';
 import Drills from './screens/Drills.jsx';
@@ -71,6 +74,12 @@ export default function App() {
       const next = { ...lessonProgress, [id]: { best: Math.max(score, lessonProgress[id]?.best ?? 0), at: new Date().toISOString(), userId: user?.userId, classId: user?.classId ?? null } };
       setLessonProgress(next); await setMeta('lessons', next);
     },
+    // Exercises outside missions (region comparison, quiz bank) are stored as attempts.
+    saveExercise: async (kind, fields) => {
+      const now = new Date().toISOString();
+      await saveAttempt({ id: `a-${kind}-${Date.now().toString(36)}`, kind, userId: user?.userId ?? null, classId: user?.classId ?? null, startedAt: now, finishedAt: now, ...fields });
+      await reload();
+    },
   }), [user, projects, attempts, lessonProgress, toast, reload]);
 
   const [section, arg] = route;
@@ -82,6 +91,9 @@ export default function App() {
   else if (section === 'glossary') screen = <Glossary />;
   else if (section === 'progress') screen = <Progress />;
   else if (section === 'drills') screen = <Drills />;
+  else if (section === 'compare') screen = <Compare />;
+  else if (section === 'quiz') screen = <QuizBank />;
+  else if (section === 'classroom') screen = <Classroom />;
   else if (section === 'project' && arg) screen = <Workspace key={arg} id={arg} />;
   else screen = <div className="page"><h1>Page not found</h1><p><a href="#/">Go to the start page</a></p></div>;
 
