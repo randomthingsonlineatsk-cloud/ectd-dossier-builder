@@ -453,7 +453,7 @@
         "heading": "Controlled vocabularies and checksums",
         "body": [
           "Many values that were free text in v3.2.2, such as file roles, study groupings and regional metadata, become codes from controlled vocabularies, including region-specific lists like Japan's. Checksums move from MD5 to SHA-256.",
-          "This app teaches v3.2.2 first because the US and EU still run mostly on it. A later release adds a v4.0 mode modelled on the real submission unit, starting with the Japan pack."
+          "This app teaches v3.2.2 first because the US and EU still run mostly on it. Its v4.0 mode is modelled on the real submission unit and comes with the Japan pack: create a Japan project, or try mission 3, and open the Submission unit tab to see contexts of use, suspension, reuse and sha256.txt."
         ]
       }
     ],

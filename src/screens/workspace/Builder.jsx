@@ -9,6 +9,7 @@ import PdfPreview from '../../components/PdfPreview.jsx';
 import { FILE_TAGS, needsStudyTag, moduleOf, tagFromDoc, DEFAULT_TAG } from '../../engine/stf.js';
 import rulesData from '../../data/rules.json' with { type: 'json' };
 import { isV4, deliveredBefore, seqInt } from '../../engine/v4.js';
+import { missionById } from '../../engine/missions.js';
 
 const isRetire = (op) => op === 'delete' || op === 'suspend';
 
@@ -166,9 +167,10 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
   const leafFindings = leaf ? validation.findings.filter((f) => f.leafId === leaf.id) : [];
   const nodeFindings = selectedCode ? validation.findings.filter((f) => f.nodeCode === selectedCode && !f.leafId) : [];
 
-  // Library
+  // Library: response-pack documents appear only in the mission that supplies them.
+  const missionDocIds = new Set((missionById(project.mission?.id)?.extraDocuments ?? []).map((d) => d.id));
   const docs = Object.values(project.documents)
-    .filter((d) => !d.irOnly || project.mission?.id === 4)
+    .filter((d) => !d.irOnly || project.mission?.id === 4 || missionDocIds.has(d.id))
     .filter((d) => (d.title + ' ' + d.section + ' ' + d.fileName).toLowerCase().includes(q.toLowerCase()))
     .filter((d) => !unplacedOnly || !usedDocs.has(d.id))
     .sort((a, b) => a.section.localeCompare(b.section, undefined, { numeric: true }));

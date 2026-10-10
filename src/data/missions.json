@@ -1,1142 +1,1844 @@
 {
-  "levels": [
+ "levels": [
+  {
+   "id": "guided",
+   "label": "Guided",
+   "about": "Hints on, no timer."
+  },
+  {
+   "id": "standard",
+   "label": "Standard",
+   "about": "No hints, no timer pressure except where the mission sets one."
+  },
+  {
+   "id": "expert",
+   "label": "Expert",
+   "about": "No hints, timed, and the operation picker lets you make mistakes."
+  }
+ ],
+ "missions": [
+  {
+   "id": 1,
+   "phase": 1,
+   "title": "First new drug application",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 60
+   },
+   "brief": "Halcyon Ridge Pharmaceuticals is ready to file its first NDA for Ostrevia (lumiravostat) tablets, 10 mg and 25 mg. You are the publisher. Build sequence 0000 end to end: complete the regional metadata, assemble Module 1 and the Modules 2–5 tree from the document library, clear the validator, and publish.",
+   "steps": [
+    "Fill the US regional metadata (application number, submission type, sub-type).",
+    "Place every mandatory Module 1 item: forms in 1.1, cover letter in 1.2, administrative items in 1.3, labeling in 1.14.",
+    "Place documents into every required Module 2–5 heading, and tag the study reports in Modules 4 and 5 (one click in the builder). Watch for the two granularity decoys in the library.",
+    "Run validation until there are no High or Medium findings.",
+    "Publish sequence 0000."
+   ],
+   "hints": [
+    "The cover letter is not in the library: generate it in Module 1 → Cover letter, then add it to 1.2.",
+    "Repeatable section attributes (substance, manufacturer, product) come from Project settings.",
+    "The library holds a 290-page 'complete 3.2.P' file and a one-test specification. Neither belongs in a good dossier.",
+    "Required headings show a red dot in the tree; the Dossier map shows completeness at a glance."
+   ],
+   "checks": [
     {
-      "id": "guided",
-      "label": "Guided",
-      "about": "Hints on, no timer."
+     "id": "meta",
+     "label": "Regional metadata complete"
     },
     {
-      "id": "standard",
-      "label": "Standard",
-      "about": "No hints, no timer pressure except where the mission sets one."
+     "id": "m1",
+     "label": "All mandatory Module 1 items placed"
     },
     {
-      "id": "expert",
-      "label": "Expert",
-      "about": "No hints, timed, and the operation picker lets you make mistakes."
+     "id": "required",
+     "label": "All required Module 2–5 headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "noDecoys",
+     "label": "No granularity decoys in the dossier"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
     }
-  ],
-  "missions": [
+   ]
+  },
+  {
+   "id": 4,
+   "phase": 1,
+   "title": "Answer an information request",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 30
+   },
+   "brief": "Sequence 0000 for Ostrevia was filed and is under review. The review team has sent an information request about the drug product. Build sequence 0001 as an amendment that answers it: a response document, an updated specification and updated stability data, each with the correct lifecycle operation.",
+   "letter": {
+    "from": "Office of Product Quality (fictional review team)",
+    "date": "Day 74 of review",
+    "subject": "NDA 299001 — Information Request: Ostrevia (lumiravostat) tablets",
+    "body": [
+     "We are reviewing the chemistry, manufacturing and controls sections of your NDA and request the following information.",
+     "1. Your drug product specification (3.2.P.5.1) sets the dissolution acceptance criterion at Q = 70% in 45 minutes. Based on the batch data in 3.2.P.5.4, tighten the criterion or justify the proposed limit. Provide the revised specification.",
+     "2. Provide the 12-month long-term and 6-month accelerated stability data for the three primary stability batches, which were not available at filing (3.2.P.8.3).",
+     "Submit your response as an amendment to this application within 10 business days."
+    ]
+   },
+   "extraDocuments": [
     {
-      "id": 1,
-      "phase": 1,
-      "title": "First new drug application",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 60
-      },
-      "brief": "Halcyon Ridge Pharmaceuticals is ready to file its first NDA for Ostrevia (lumiravostat) tablets, 10 mg and 25 mg. You are the publisher. Build sequence 0000 end to end: complete the regional metadata, assemble Module 1 and the Modules 2–5 tree from the document library, clear the validator, and publish.",
-      "steps": [
-        "Fill the US regional metadata (application number, submission type, sub-type).",
-        "Place every mandatory Module 1 item: forms in 1.1, cover letter in 1.2, administrative items in 1.3, labeling in 1.14.",
-        "Place documents into every required Module 2–5 heading, and tag the study reports in Modules 4 and 5 (one click in the builder). Watch for the two granularity decoys in the library.",
-        "Run validation until there are no High or Medium findings.",
-        "Publish sequence 0000."
-      ],
-      "hints": [
-        "The cover letter is not in the library: generate it in Module 1 → Cover letter, then add it to 1.2.",
-        "Repeatable section attributes (substance, manufacturer, product) come from Project settings.",
-        "The library holds a 290-page 'complete 3.2.P' file and a one-test specification. Neither belongs in a good dossier.",
-        "Required headings show a red dot in the tree; the Dossier map shows completeness at a glance."
-      ],
-      "checks": [
-        {
-          "id": "meta",
-          "label": "Regional metadata complete"
-        },
-        {
-          "id": "m1",
-          "label": "All mandatory Module 1 items placed"
-        },
-        {
-          "id": "required",
-          "label": "All required Module 2–5 headings filled"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "noMedium",
-          "label": "No Medium findings"
-        },
-        {
-          "id": "noDecoys",
-          "label": "No granularity decoys in the dossier"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0000 published"
-        }
-      ]
+     "id": "d-ir-resp",
+     "section": "1.11.1",
+     "title": "Response to Information Request dated Day 74",
+     "fileName": "response-to-ir-quality.pdf",
+     "pages": 6,
+     "bookmarks": 3,
+     "irOnly": true
     },
     {
-      "id": 4,
-      "phase": 1,
-      "title": "Answer an information request",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 30
-      },
-      "brief": "Sequence 0000 for Ostrevia was filed and is under review. The review team has sent an information request about the drug product. Build sequence 0001 as an amendment that answers it: a response document, an updated specification and updated stability data, each with the correct lifecycle operation.",
-      "letter": {
-        "from": "Office of Product Quality (fictional review team)",
-        "date": "Day 74 of review",
-        "subject": "NDA 299001 — Information Request: Ostrevia (lumiravostat) tablets",
-        "body": [
-          "We are reviewing the chemistry, manufacturing and controls sections of your NDA and request the following information.",
-          "1. Your drug product specification (3.2.P.5.1) sets the dissolution acceptance criterion at Q = 70% in 45 minutes. Based on the batch data in 3.2.P.5.4, tighten the criterion or justify the proposed limit. Provide the revised specification.",
-          "2. Provide the 12-month long-term and 6-month accelerated stability data for the three primary stability batches, which were not available at filing (3.2.P.8.3).",
-          "Submit your response as an amendment to this application within 10 business days."
-        ]
-      },
-      "extraDocuments": [
-        {
-          "id": "d-ir-resp",
-          "section": "1.11.1",
-          "title": "Response to Information Request dated Day 74",
-          "fileName": "response-to-ir-quality.pdf",
-          "pages": 6,
-          "bookmarks": 3,
-          "irOnly": true
-        },
-        {
-          "id": "d-p51-v2",
-          "section": "3.2.P.5.1",
-          "title": "Specification(s)",
-          "fileName": "specifications.pdf",
-          "pages": 2,
-          "version": 2,
-          "irOnly": true,
-          "note": "Revised: dissolution Q = 80% in 30 minutes.",
-          "factOverrides": {
-            "dissolution": "Q = 80% in 30 minutes"
-          }
-        },
-        {
-          "id": "d-p83-v2",
-          "section": "3.2.P.8.3",
-          "title": "Stability Data",
-          "fileName": "stability-data.pdf",
-          "pages": 81,
-          "bookmarks": 34,
-          "version": 2,
-          "irOnly": true,
-          "note": "Updated with 12-month long-term and 6-month accelerated data."
-        },
-        {
-          "id": "d-p56-v2",
-          "section": "3.2.P.5.6",
-          "title": "Justification of Specification(s)",
-          "fileName": "justification-of-specifications.pdf",
-          "pages": 10,
-          "bookmarks": 5,
-          "version": 2,
-          "irOnly": true,
-          "decoyNote": "Not asked for: the request offered 'tighten or justify', and you tightened."
-        }
-      ],
-      "steps": [
-        "Open the Sequences tab and create sequence 0001 (sub-type: amendment).",
-        "Place Form FDA 356h and a cover letter that references the information request.",
-        "Place the response document in 1.11.1.",
-        "Drop the revised specification on 3.2.P.5.1 and choose 'replace', targeting the 0000 leaf. Same for stability data in 3.2.P.8.3.",
-        "Validate, then publish 0001."
-      ],
-      "hints": [
-        "The revised documents keep the same file name; they live in a different sequence folder, so there is no clash.",
-        "Do not use 'new' for an updated document — the reviewer would then see two specifications.",
-        "Only send what was asked. The revised justification is a trap: you tightened the limit, so no new justification is needed.",
-        "Open the Consistency tab after you place the revised specification: the Quality Overall Summary still quotes the old limit. In real life the agency may ask you to align it; this mission only asks for what the letter requested."
-      ],
-      "checks": [
-        {
-          "id": "seq",
-          "label": "Sequence 0001 created as an amendment"
-        },
-        {
-          "id": "forms",
-          "label": "356h and cover letter in 0001"
-        },
-        {
-          "id": "response",
-          "label": "Response document in 1.11.1"
-        },
-        {
-          "id": "replaceSpec",
-          "label": "3.2.P.5.1 replaced (targets the 0000 leaf)"
-        },
-        {
-          "id": "replaceStab",
-          "label": "3.2.P.8.3 replaced (targets the 0000 leaf)"
-        },
-        {
-          "id": "onlyAsked",
-          "label": "Nothing sent that was not asked for"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0001 published"
-        }
-      ]
+     "id": "d-p51-v2",
+     "section": "3.2.P.5.1",
+     "title": "Specification(s)",
+     "fileName": "specifications.pdf",
+     "pages": 2,
+     "version": 2,
+     "irOnly": true,
+     "note": "Revised: dissolution Q = 80% in 30 minutes.",
+     "factOverrides": {
+      "dissolution": "Q = 80% in 30 minutes"
+     }
     },
     {
-      "id": 11,
-      "phase": 1,
-      "title": "Rescue the dossier",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "guided": 30,
-        "standard": 30,
-        "expert": 30
-      },
-      "brief": "A contractor handed over sequence 0000 for Ostrevia the night before the filing date. It has 25 planted defects. You have 30 minutes to find and fix as many as you can before you submit it for scoring.",
-      "steps": [
-        "Run the validator to see what it can find.",
-        "Fix each defect in place: rename files, edit titles, move documents, fix PDF properties, add missing items.",
-        "Re-validate as you go. Submit for scoring when you are done or when the clock runs out."
-      ],
-      "hints": [
-        "Defects span every rule family: metadata, file names, PDF settings, misplaced documents, lifecycle, missing Module 1 items and granularity.",
-        "Some defects hide inside documents: open the properties panel for each flagged leaf.",
-        "Moving a document to the right heading fixes a misplacement; fixing it does not need a new sequence because 0000 is not yet published."
-      ],
-      "defectCount": 25
+     "id": "d-p83-v2",
+     "section": "3.2.P.8.3",
+     "title": "Stability Data",
+     "fileName": "stability-data.pdf",
+     "pages": 81,
+     "bookmarks": 34,
+     "version": 2,
+     "irOnly": true,
+     "note": "Updated with 12-month long-term and 6-month accelerated data."
     },
     {
-      "id": 2,
-      "phase": 2,
-      "title": "Centralised marketing authorisation",
-      "region": "EU",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "maa",
-      "minutes": {
-        "expert": 60
-      },
-      "brief": "Halcyon Ridge is filing Ostrevia (lumiravostat) tablets with the European Medicines Agency through the centralised procedure. Build sequence 0000: complete the EU envelope, assemble EU Module 1 with the eAF and QRD product information, reuse Modules 2–5, and make sure the modules agree with each other before you publish.",
-      "steps": [
-        "Complete the EU envelope in Module 1: procedure tracking number EMEA/H/C/006123, procedure type, submission type maa, submission unit initial.",
-        "Place every mandatory EU Module 1 document: cover letter (1.0), eAF (1.2), product information (1.3.1), mock-ups (1.3.2), experts (1.4), ERA (1.6.1), pharmacovigilance (1.8.1, 1.8.2) and paediatrics (1.10).",
-        "Place Modules 2–5 from the library.",
-        "Open the Consistency tab and resolve every contradiction between modules.",
-        "Clear the validator and publish sequence 0000."
-      ],
-      "hints": [
-        "Two library documents contradict Module 3. Look at shelf life and the drug product manufacturer's address.",
-        "In the EU, study grouping uses node extensions rather than US study tagging files, so no tagging is needed here.",
-        "EU Module 1 file names start with the country folder code, e.g. ema-cover.pdf. The generated documents already follow it."
-      ],
-      "checks": [
-        {
-          "id": "meta",
-          "label": "EU envelope complete"
-        },
-        {
-          "id": "m1",
-          "label": "All mandatory EU Module 1 items placed"
-        },
-        {
-          "id": "required",
-          "label": "All required Module 2–5 headings filled"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "noMedium",
-          "label": "No Medium findings"
-        },
-        {
-          "id": "noDecoys",
-          "label": "No granularity decoys"
-        },
-        {
-          "id": "consistent",
-          "label": "No contradictions between modules"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0000 published"
-        }
-      ],
-      "plant": [
-        {
-          "doc": "eu-pi",
-          "facts": {
-            "shelfLife": "24 months"
-          }
-        },
-        {
-          "doc": "eu-eaf",
-          "facts": {
-            "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NY, USA"
-          }
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "phase": 3,
-      "title": "New drug application under v4.0",
-      "region": "Japan"
-    },
-    {
-      "id": 5,
-      "phase": 2,
-      "title": "Respond to the list of questions",
-      "region": "EU",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "maa",
-      "minutes": {
-        "expert": 40
-      },
-      "brief": "Sequence 0000 of the Ostrevia MAA is under assessment. At Day 120 the committee adopted a list of questions and the clock stopped. Build the response sequence that restarts it: a responses document, the changed Module 3 and product information, each replacing the version in 0000, with the envelope linking back to the start of the procedure.",
-      "letter": {
-        "from": "Committee assessment team (fictional)",
-        "date": "Day 120 list of questions (clock stop)",
-        "subject": "EMEA/H/C/006123 - Ostrevia (lumiravostat) - List of Questions",
-        "body": [
-          "Major objection 1 (quality): The proposed dissolution limit of Q = 70% in 45 minutes is not discriminating. Tighten the limit on the basis of the batch data and update the drug product specification.",
-          "Other concern 2 (clinical safety): In section 4.4 of the SmPC, add a warning on transaminase elevations observed in the pivotal studies, with corresponding package leaflet wording.",
-          "Please submit the responses within the agreed clock-stop period. The clock restarts on receipt of a valid response sequence."
-        ]
-      },
-      "extraDocuments": [
-        {
-          "id": "eu-resp-d120",
-          "section": "eu:responses",
-          "region": "EU",
-          "title": "Responses to the Day 120 List of Questions",
-          "fileName": "common-responses-maa-d120.pdf",
-          "pages": 18,
-          "bookmarks": 6,
-          "irOnly": true
-        },
-        {
-          "id": "d-p51-v2",
-          "section": "3.2.P.5.1",
-          "title": "Specification(s)",
-          "fileName": "specifications.pdf",
-          "pages": 2,
-          "version": 2,
-          "irOnly": true,
-          "note": "Revised: dissolution Q = 80% in 30 minutes.",
-          "factOverrides": {
-            "dissolution": "Q = 80% in 30 minutes"
-          }
-        },
-        {
-          "id": "d-qos-v2",
-          "section": "2.3",
-          "title": "Quality Overall Summary",
-          "fileName": "quality-overall-summary.pdf",
-          "pages": 86,
-          "bookmarks": 44,
-          "version": 2,
-          "irOnly": true,
-          "links": [
-            "3.2.S.4.1",
-            "3.2.P.5.1",
-            "3.2.P.8.1"
-          ],
-          "note": "Updated to the revised dissolution limit.",
-          "factOverrides": {
-            "dissolution": "Q = 80% in 30 minutes"
-          }
-        },
-        {
-          "id": "eu-pi-v2",
-          "section": "eu:1.3.1",
-          "region": "EU",
-          "title": "SmPC, Annex II, Labelling and Package Leaflet (English) - Ostrevia",
-          "fileName": "ema-combined-tablet10mg-25mg.pdf",
-          "pages": 47,
-          "bookmarks": 16,
-          "version": 2,
-          "irOnly": true,
-          "note": "Section 4.4 warning on transaminase elevations added; package leaflet aligned."
-        },
-        {
-          "id": "d-p56-v2",
-          "section": "3.2.P.5.6",
-          "title": "Justification of Specification(s)",
-          "fileName": "justification-of-specifications.pdf",
-          "pages": 10,
-          "bookmarks": 5,
-          "version": 2,
-          "irOnly": true,
-          "note": "Updated justification for the tightened limit."
-        }
-      ],
-      "steps": [
-        "In Sequences, create 0001: submission type maa, submission unit response, related sequence 0000.",
-        "Generate a cover letter (1.0) and place the responses document under Responses.",
-        "Replace 3.2.P.5.1 with the revised specification and 1.3.1 with the updated product information, each targeting the 0000 leaf.",
-        "Check the Consistency tab: anything else that states the dissolution limit must be updated too.",
-        "Validate and publish 0001."
-      ],
-      "hints": [
-        "The related sequence is the sequence that started the procedure: 0000.",
-        "The Quality Overall Summary quotes the dissolution limit, so it must be replaced as well, or the modules will contradict each other.",
-        "The revised justification (3.2.P.5.6) is optional here; sending it with replace is acceptable."
-      ],
-      "checks": [
-        {
-          "id": "seq",
-          "label": "Sequence 0001: maa / response"
-        },
-        {
-          "id": "related",
-          "label": "Related sequence is 0000"
-        },
-        {
-          "id": "forms",
-          "label": "Cover letter in 1.0"
-        },
-        {
-          "id": "response",
-          "label": "Responses document placed"
-        },
-        {
-          "id": "replaceSpec",
-          "label": "3.2.P.5.1 replaced (targets 0000)"
-        },
-        {
-          "id": "replacePi",
-          "label": "1.3.1 product information replaced (targets 0000)"
-        },
-        {
-          "id": "consistent",
-          "label": "No contradictions between modules"
-        },
-        {
-          "id": "onlyAsked",
-          "label": "Nothing sent that the questions did not need"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0001 published"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "phase": 2,
-      "title": "Add a new manufacturing site",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 35
-      },
-      "brief": "Ostrevia is approved. Halcyon Ridge wants to add a second drug product manufacturing site, Northgate Contract Manufacturing in Pennsylvania, which has not been inspected for this product type. Decide how the change is filed in the US and how the same change would be classified in the EU, then build the US supplement.",
-      "quiz": [
-        {
-          "id": "us",
-          "q": "How is this change filed in the US?",
-          "options": [
-            "Prior approval supplement (PAS)",
-            "Changes being effected in 30 days (CBE-30)",
-            "Changes being effected (CBE-0)",
-            "Annual report"
-          ],
-          "answer": 0,
-          "why": "A new site that has not had a satisfactory cGMP inspection for this type of operation is a major change: it needs FDA approval before product made there can be distributed."
-        },
-        {
-          "id": "eu",
-          "q": "In the EU, adding a manufacturing site for a non-sterile tablet (not batch release or secondary packaging) is usually…",
-          "options": [
-            "Type IA",
-            "Type IB",
-            "Type II",
-            "A line extension"
-          ],
-          "answer": 1,
-          "why": "Under the variations classification guideline this is a Type IB change for non-sterile products. Sterile or biological products move to Type II."
-        }
-      ],
-      "extraDocuments": [
-        {
-          "id": "d-356h-s1",
-          "section": "1.1",
-          "form": "fda-356h",
-          "title": "Form FDA 356h",
-          "fileName": "fda-356h.pdf",
-          "pages": 4,
-          "irOnly": true,
-          "version": 2,
-          "note": "Completed for the supplement: lists both drug product sites.",
-          "factOverrides": {
-            "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
-          }
-        },
-        {
-          "id": "d-p31-v2",
-          "section": "3.2.P.3.1",
-          "title": "Manufacturer(s)",
-          "fileName": "manufacturers.pdf",
-          "pages": 3,
-          "version": 2,
-          "irOnly": true,
-          "note": "Adds the Northgate site.",
-          "factOverrides": {
-            "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
-          }
-        },
-        {
-          "id": "d-p35-siteb",
-          "section": "3.2.P.3.5",
-          "title": "Process Validation - Northgate Site",
-          "fileName": "process-validation-northgate.pdf",
-          "pages": 24,
-          "bookmarks": 9,
-          "irOnly": true,
-          "factExclude": [
-            "batches"
-          ]
-        },
-        {
-          "id": "d-p83-siteb",
-          "section": "3.2.P.8.3",
-          "title": "Stability Data - Northgate Batches",
-          "fileName": "stability-data-northgate.pdf",
-          "pages": 30,
-          "bookmarks": 12,
-          "irOnly": true,
-          "factExclude": [
-            "batches"
-          ]
-        },
-        {
-          "id": "d-a1-v2",
-          "section": "3.2.A.1",
-          "title": "Facilities and Equipment",
-          "fileName": "facilities-equipment.pdf",
-          "pages": 7,
-          "version": 2,
-          "irOnly": true,
-          "note": "Adds the Northgate facility.",
-          "factOverrides": {
-            "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
-          }
-        }
-      ],
-      "steps": [
-        "Answer the two classification questions in this panel.",
-        "Create sequence 0001: chemistry, manufacturing and controls supplement, sub-type application.",
-        "Place Form FDA 356h (the version completed for this supplement) and a cover letter.",
-        "Replace 3.2.P.3.1 and 3.2.A.1 with the versions that add the new site; add the new site's process validation and stability data.",
-        "Check consistency, validate and publish."
-      ],
-      "hints": [
-        "The 356h in sequence 0000 lists only the original site. Use the supplement's 356h so the form agrees with 3.2.P.3.1.",
-        "The new site's validation and stability reports are additional documents: 'new' (or 'append') is right; they do not replace the original site's data.",
-        "Batch numbers for the new site differ from the original primary batches. The consistency check compares only documents about the same batches."
-      ],
-      "checks": [
-        {
-          "id": "quiz",
-          "label": "Classification questions answered correctly"
-        },
-        {
-          "id": "seq",
-          "label": "Sequence 0001: CMC supplement / application"
-        },
-        {
-          "id": "forms",
-          "label": "Supplement 356h and cover letter"
-        },
-        {
-          "id": "replaceP31",
-          "label": "3.2.P.3.1 replaced (targets 0000)"
-        },
-        {
-          "id": "replaceA1",
-          "label": "3.2.A.1 replaced (targets 0000)"
-        },
-        {
-          "id": "siteB",
-          "label": "New site validation and stability added"
-        },
-        {
-          "id": "consistent",
-          "label": "No contradictions between modules"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0001 published"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "phase": 2,
-      "title": "Safety labelling update",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 30
-      },
-      "brief": "Post-marketing surveillance of Ostrevia has identified a signal of drug-induced liver injury. The safety team wants a new Warnings and Precautions subsection on hepatotoxicity in the prescribing information without waiting for FDA approval. Classify the change and build the labeling supplement.",
-      "quiz": [
-        {
-          "id": "us",
-          "q": "Which US filing lets the company implement a strengthened warning before FDA approval?",
-          "options": [
-            "Prior approval supplement",
-            "Changes being effected supplement (CBE-0)",
-            "Annual report",
-            "Correspondence only"
-          ],
-          "answer": 1,
-          "why": "Adding or strengthening a contraindication, warning, precaution or adverse reaction can be made under a 'changes being effected' supplement and implemented on submission (21 CFR 314.70(c)(6)(iii))."
-        },
-        {
-          "id": "eu",
-          "q": "The equivalent safety update to the SmPC of a centrally authorised product is usually…",
-          "options": [
-            "Type IA variation",
-            "Type IB variation",
-            "Type II variation",
-            "Renewal"
-          ],
-          "answer": 2,
-          "why": "Changes to the SmPC, labelling or package leaflet driven by new safety data are generally Type II variations (category C.I.4)."
-        }
-      ],
-      "extraDocuments": [
-        {
-          "id": "d-pi-v2",
-          "section": "1.14.1.3",
-          "title": "Draft Prescribing Information",
-          "fileName": "draft-labeling-text.pdf",
-          "pages": 25,
-          "bookmarks": 19,
-          "version": 2,
-          "irOnly": true,
-          "note": "New section 5.x Hepatotoxicity; adverse reactions updated."
-        },
-        {
-          "id": "d-annot-v2",
-          "section": "1.14.1.2",
-          "title": "Annotated Draft Labeling Text",
-          "fileName": "annotated-draft-labeling.pdf",
-          "pages": 40,
-          "bookmarks": 20,
-          "version": 2,
-          "irOnly": true,
-          "note": "Annotations reference the hepatic safety review."
-        },
-        {
-          "id": "d-hep-review",
-          "section": "5.3.6",
-          "title": "Cumulative Review of Hepatic Adverse Events",
-          "fileName": "hepatic-safety-review.pdf",
-          "pages": 45,
-          "bookmarks": 14,
-          "irOnly": true
-        }
-      ],
-      "steps": [
-        "Answer the classification questions.",
-        "Create sequence 0001: labeling supplement, sub-type application.",
-        "Place Form FDA 356h and a cover letter.",
-        "Replace the draft labeling text (1.14.1.3) and annotated labeling (1.14.1.2), targeting their 0000 leaves.",
-        "Add the hepatic safety review in 5.3.6, validate and publish."
-      ],
-      "hints": [
-        "Keep the leaf titles the same as in 0000 so reviewers recognise the replaced labeling.",
-        "The safety review is new information: operation 'new'."
-      ],
-      "checks": [
-        {
-          "id": "quiz",
-          "label": "Classification questions answered correctly"
-        },
-        {
-          "id": "seq",
-          "label": "Sequence 0001: labeling supplement / application"
-        },
-        {
-          "id": "forms",
-          "label": "356h and cover letter"
-        },
-        {
-          "id": "replacePi",
-          "label": "1.14.1.3 replaced (targets 0000)"
-        },
-        {
-          "id": "replaceAnnot",
-          "label": "1.14.1.2 replaced (targets 0000)"
-        },
-        {
-          "id": "review",
-          "label": "Hepatic safety review in 5.3.6"
-        },
-        {
-          "id": "onlyAsked",
-          "label": "Nothing unrelated sent"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0001 published"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "phase": 2,
-      "title": "Annual report and periodic safety report",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 35
-      },
-      "brief": "Ostrevia has been on the market for a year. File the first annual report, then the periodic adverse drug experience report (PADER) for the same period. Both are recurring submissions: each year's report is new, it does not replace last year's.",
-      "quiz": [
-        {
-          "id": "op",
-          "q": "Next year, the distribution data in 1.13.11 is updated for the new reporting period. Which operation?",
-          "options": [
-            "Replace last year's leaf",
-            "Append to last year's leaf",
-            "New",
-            "Delete last year's leaf, then new"
-          ],
-          "answer": 2,
-          "why": "Each annual report covers its own period. Last year's report stays valid as a record of that year, so the new report is filed as new documents."
-        }
-      ],
-      "extraDocuments": [
-        {
-          "id": "d-2252-ar",
-          "section": "1.1",
-          "form": "fda-2252",
-          "title": "Form FDA 2252 - Annual Report",
-          "fileName": "fda-2252-annual-report.pdf",
-          "pages": 2,
-          "irOnly": true
-        },
-        {
-          "id": "d-ar-safety",
-          "section": "1.13.3",
-          "title": "Summary of Safety Information - Reporting Period 1",
-          "fileName": "ar1-summary-safety.pdf",
-          "pages": 12,
-          "bookmarks": 5,
-          "irOnly": true
-        },
-        {
-          "id": "d-ar-mfg",
-          "section": "1.13.5",
-          "title": "Summary of Manufacturing Changes - Reporting Period 1",
-          "fileName": "ar1-manufacturing-changes.pdf",
-          "pages": 4,
-          "irOnly": true
-        },
-        {
-          "id": "d-ar-dist",
-          "section": "1.13.11",
-          "title": "Distribution Data - Reporting Period 1",
-          "fileName": "ar1-distribution-data.pdf",
-          "pages": 3,
-          "irOnly": true
-        },
-        {
-          "id": "d-ar-pmc",
-          "section": "1.13.12",
-          "title": "Status of Postmarketing Study Commitments and Requirements",
-          "fileName": "ar1-pmc-status.pdf",
-          "pages": 5,
-          "bookmarks": 3,
-          "irOnly": true
-        },
-        {
-          "id": "d-2252-pader",
-          "section": "1.1",
-          "form": "fda-2252",
-          "title": "Form FDA 2252 - Periodic Safety Report",
-          "fileName": "fda-2252-pader.pdf",
-          "pages": 2,
-          "irOnly": true
-        },
-        {
-          "id": "d-pader",
-          "section": "5.3.6",
-          "title": "Periodic Adverse Drug Experience Report - Reporting Period 1",
-          "fileName": "pader-period-1.pdf",
-          "pages": 58,
-          "bookmarks": 16,
-          "irOnly": true
-        }
-      ],
-      "steps": [
-        "Answer the lifecycle question.",
-        "Create 0001: annual report, sub-type report. Place Form FDA 2252, a cover letter and the four annual report sections (1.13.3, 1.13.5, 1.13.11, 1.13.12) as new. Publish.",
-        "Create 0002: periodic safety reports, sub-type report. Place Form FDA 2252, a cover letter and the PADER (5.3.6) as new. Publish."
-      ],
-      "hints": [
-        "Each report sequence needs its own Form FDA 2252 and cover letter.",
-        "In this app the PADER is placed in 5.3.6 (reports of post-marketing experience)."
-      ],
-      "checks": [
-        {
-          "id": "quiz",
-          "label": "Lifecycle question answered correctly"
-        },
-        {
-          "id": "ar",
-          "label": "0001: annual report / report, with 2252 and cover letter"
-        },
-        {
-          "id": "arDocs",
-          "label": "Four annual report sections placed as new"
-        },
-        {
-          "id": "psr",
-          "label": "0002: periodic safety reports / report, with 2252 and cover letter"
-        },
-        {
-          "id": "pader",
-          "label": "PADER in 5.3.6 as new"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings in 0001 or 0002"
-        },
-        {
-          "id": "published",
-          "label": "0001 and 0002 published"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "phase": 2,
-      "title": "Drug master file support",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "nda",
-      "minutes": {
-        "expert": 30
-      },
-      "brief": "Corvane Fine Chemicals, the drug substance manufacturer, has amended its Type II drug master file to describe an improved final crystallisation step. Halcyon Ridge must reference the amended DMF in its NDA: an updated letter of authorization, its own summary of the process, and batch data from material made by the new step.",
-      "quiz": [
-        {
-          "id": "open",
-          "q": "Which part of the DMF can Halcyon Ridge (the NDA holder) see?",
-          "options": [
-            "The whole DMF",
-            "Only the open (applicant's) part the holder shares",
-            "Nothing, but FDA tells it the content",
-            "Only the letter of authorization"
-          ],
-          "answer": 1,
-          "why": "The DMF holder keeps confidential manufacturing details in the DMF; the applicant gets the non-confidential part. The letter of authorization lets FDA read the full DMF on the applicant's behalf."
-        },
-        {
-          "id": "eu",
-          "q": "In the EU, the equivalent is the Active Substance Master File (ASMF). Its two parts are…",
-          "options": [
-            "Public and private",
-            "Applicant's part and restricted part",
-            "Module 2 and Module 3",
-            "Open part and DMF part"
-          ],
-          "answer": 1,
-          "why": "An ASMF has an applicant's part (shared with the MA applicant) and a restricted part (sent only to the authorities)."
-        },
-        {
-          "id": "loa",
-          "q": "Where does the letter of authorization go in US Module 1?",
-          "options": [
-            "1.2",
-            "1.3.4",
-            "1.4.1",
-            "1.12.4"
-          ],
-          "answer": 2,
-          "why": "1.4.1 Letter of authorization."
-        }
-      ],
-      "extraDocuments": [
-        {
-          "id": "d-loa-v2",
-          "section": "1.4.1",
-          "title": "Letter of Authorization for DMF (Corvane Fine Chemicals)",
-          "fileName": "letter-of-authorization-dmf.pdf",
-          "pages": 1,
-          "version": 2,
-          "irOnly": true,
-          "note": "Updated to reference the DMF amendment of July 2026."
-        },
-        {
-          "id": "d-s22-v2",
-          "section": "3.2.S.2.2",
-          "title": "Description of Manufacturing Process and Process Controls",
-          "fileName": "manufacturing-process.pdf",
-          "pages": 17,
-          "bookmarks": 9,
-          "version": 2,
-          "irOnly": true,
-          "note": "Applicant's summary of the revised crystallisation step; restricted details are in the DMF."
-        },
-        {
-          "id": "d-s44-post",
-          "section": "3.2.S.4.4",
-          "title": "Batch Analyses - Post-change Batches",
-          "fileName": "batch-analyses-post-change.pdf",
-          "pages": 5,
-          "bookmarks": 3,
-          "irOnly": true
-        }
-      ],
-      "steps": [
-        "Answer the three questions.",
-        "Create 0001: CMC supplement, sub-type application. Place 356h and a cover letter.",
-        "Replace the letter of authorization (1.4.1) and 3.2.S.2.2, targeting 0000.",
-        "Add the post-change batch analyses in 3.2.S.4.4 as new (or append). Validate and publish."
-      ],
-      "hints": [
-        "The post-change batch data adds to, and does not replace, the original batch analyses."
-      ],
-      "checks": [
-        {
-          "id": "quiz",
-          "label": "Questions answered correctly"
-        },
-        {
-          "id": "seq",
-          "label": "Sequence 0001: CMC supplement / application"
-        },
-        {
-          "id": "forms",
-          "label": "356h and cover letter"
-        },
-        {
-          "id": "replaceLoa",
-          "label": "1.4.1 letter of authorization replaced (targets 0000)"
-        },
-        {
-          "id": "replaceS22",
-          "label": "3.2.S.2.2 replaced (targets 0000)"
-        },
-        {
-          "id": "batches",
-          "label": "Post-change batch analyses added"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0001 published"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "phase": 2,
-      "title": "Paper to eCTD baseline",
-      "region": "EU",
-      "version": "3.2.2",
-      "productId": "nce-tablet",
-      "appType": "maa",
-      "minutes": {
-        "expert": 40
-      },
-      "brief": "Ostrevia's quality dossier was originally filed as NeeS volumes. Before the next variation, the company wants an eCTD baseline: Module 3 rebuilt as granular eCTD documents in a reformat sequence, with no change in content.",
-      "steps": [
-        "Set the envelope: tracking number EMEA/H/C/006123, submission type none, submission unit reformat, no related sequence.",
-        "Generate a cover letter (1.0) stating that the sequence is a reformat with no content change.",
-        "Rebuild 3.2.S and 3.2.P from the granular library documents. Do not use the NeeS volumes.",
-        "Leave Modules 2, 4 and 5 and the rest of Module 1 out: a baseline covers what is being reformatted.",
-        "Validate and publish 0000."
-      ],
-      "hints": [
-        "The two NeeS volumes look convenient but are one file per module: far too coarse for lifecycle.",
-        "A reformat sequence must not change content, so no new product information or summaries belong in it."
-      ],
-      "checks": [
-        {
-          "id": "seq",
-          "label": "Sequence 0000: submission unit reformat"
-        },
-        {
-          "id": "forms",
-          "label": "Cover letter in 1.0"
-        },
-        {
-          "id": "required",
-          "label": "All required Module 3 headings filled"
-        },
-        {
-          "id": "noLegacy",
-          "label": "NeeS volumes not used"
-        },
-        {
-          "id": "onlyM3",
-          "label": "Only Module 3 and the cover letter"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0000 published"
-        }
-      ],
-      "extraDocuments": [
-        {
-          "id": "legacy-s",
-          "section": "3.2.S",
-          "decoy": "coarse",
-          "title": "NeeS Volume 3.1 - Drug Substance (complete)",
-          "fileName": "nees-volume-3-1-drug-substance.pdf",
-          "pages": 240,
-          "bookmarks": 30,
-          "coach": "A whole-section NeeS volume. A baseline should rebuild each subsection as its own document."
-        },
-        {
-          "id": "legacy-p",
-          "section": "3.2.P",
-          "decoy": "coarse",
-          "title": "NeeS Volume 3.2 - Drug Product (complete)",
-          "fileName": "nees-volume-3-2-drug-product.pdf",
-          "pages": 310,
-          "bookmarks": 34,
-          "coach": "A whole-section NeeS volume. A baseline should rebuild each subsection as its own document."
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "phase": 2,
-      "title": "Generic application",
-      "region": "US",
-      "version": "3.2.2",
-      "productId": "generic-tablet",
-      "appType": "anda",
-      "minutes": {
-        "expert": 60
-      },
-      "brief": "Ashvale Generics is filing an ANDA for talmisartan tablets, 20 mg and 40 mg, referencing Corvenza 40 mg. Bioequivalence was shown for 40 mg under fasting and fed conditions; a biowaiver is requested for 20 mg. Choose the patent certification and build sequence 0000.",
-      "quiz": [
-        {
-          "id": "para",
-          "q": "Corvenza has one listed patent expiring in 2031. Ashvale believes it is invalid and wants to launch before 2031. Which certification?",
-          "options": [
-            "Paragraph I (no patent listed)",
-            "Paragraph II (patent expired)",
-            "Paragraph III (will wait for expiry)",
-            "Paragraph IV (invalid or not infringed)"
-          ],
-          "answer": 3,
-          "why": "A Paragraph IV certification states the patent is invalid, unenforceable or not infringed. It triggers notice to the patent holder and possible litigation. Patent and exclusivity data come from the Orange Book (see the Orange & Purple Book Explorer app)."
-        }
-      ],
-      "steps": [
-        "Answer the patent certification question.",
-        "Complete the US metadata (ANDA, application number, original application / application).",
-        "Place the ANDA Module 1: forms 356h and 3794, cover letter, certifications, patent certification, basis for submission, comparison with the RLD, biowaiver request, labeling and listed drug labeling.",
-        "Place 2.3, 2.7.1, Module 3 and the bioequivalence studies in 5.3.1; tag the studies.",
-        "Clear the validator and publish."
-      ],
-      "hints": [
-        "An ANDA has no Module 4 and a short Module 2: the QOS and the biopharmaceutics summary.",
-        "The BE study reports are grouped by study tagging files like any other US study."
-      ],
-      "checks": [
-        {
-          "id": "quiz",
-          "label": "Patent certification question answered correctly"
-        },
-        {
-          "id": "meta",
-          "label": "US metadata complete"
-        },
-        {
-          "id": "m1",
-          "label": "All mandatory ANDA Module 1 items placed"
-        },
-        {
-          "id": "required",
-          "label": "All required Module 2, 3 and 5 headings filled"
-        },
-        {
-          "id": "noHigh",
-          "label": "No High findings"
-        },
-        {
-          "id": "noMedium",
-          "label": "No Medium findings"
-        },
-        {
-          "id": "published",
-          "label": "Sequence 0000 published"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "phase": 3,
-      "title": "Biosimilar application",
-      "region": "US and EU"
-    },
-    {
-      "id": 14,
-      "phase": 3,
-      "title": "New drug application in India",
-      "region": "India"
-    },
-    {
-      "id": 15,
-      "phase": 3,
-      "title": "Renewal and transfer",
-      "region": "EU"
-    },
-    {
-      "id": 16,
-      "phase": 3,
-      "title": "Withdrawal",
-      "region": "Any"
+     "id": "d-p56-v2",
+     "section": "3.2.P.5.6",
+     "title": "Justification of Specification(s)",
+     "fileName": "justification-of-specifications.pdf",
+     "pages": 10,
+     "bookmarks": 5,
+     "version": 2,
+     "irOnly": true,
+     "decoyNote": "Not asked for: the request offered 'tighten or justify', and you tightened."
     }
-  ]
+   ],
+   "steps": [
+    "Open the Sequences tab and create sequence 0001 (sub-type: amendment).",
+    "Place Form FDA 356h and a cover letter that references the information request.",
+    "Place the response document in 1.11.1.",
+    "Drop the revised specification on 3.2.P.5.1 and choose 'replace', targeting the 0000 leaf. Same for stability data in 3.2.P.8.3.",
+    "Validate, then publish 0001."
+   ],
+   "hints": [
+    "The revised documents keep the same file name; they live in a different sequence folder, so there is no clash.",
+    "Do not use 'new' for an updated document — the reviewer would then see two specifications.",
+    "Only send what was asked. The revised justification is a trap: you tightened the limit, so no new justification is needed.",
+    "Open the Consistency tab after you place the revised specification: the Quality Overall Summary still quotes the old limit. In real life the agency may ask you to align it; this mission only asks for what the letter requested."
+   ],
+   "checks": [
+    {
+     "id": "seq",
+     "label": "Sequence 0001 created as an amendment"
+    },
+    {
+     "id": "forms",
+     "label": "356h and cover letter in 0001"
+    },
+    {
+     "id": "response",
+     "label": "Response document in 1.11.1"
+    },
+    {
+     "id": "replaceSpec",
+     "label": "3.2.P.5.1 replaced (targets the 0000 leaf)"
+    },
+    {
+     "id": "replaceStab",
+     "label": "3.2.P.8.3 replaced (targets the 0000 leaf)"
+    },
+    {
+     "id": "onlyAsked",
+     "label": "Nothing sent that was not asked for"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0001 published"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "phase": 1,
+   "title": "Rescue the dossier",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "guided": 30,
+    "standard": 30,
+    "expert": 30
+   },
+   "brief": "A contractor handed over sequence 0000 for Ostrevia the night before the filing date. It has 25 planted defects. You have 30 minutes to find and fix as many as you can before you submit it for scoring.",
+   "steps": [
+    "Run the validator to see what it can find.",
+    "Fix each defect in place: rename files, edit titles, move documents, fix PDF properties, add missing items.",
+    "Re-validate as you go. Submit for scoring when you are done or when the clock runs out."
+   ],
+   "hints": [
+    "Defects span every rule family: metadata, file names, PDF settings, misplaced documents, lifecycle, missing Module 1 items and granularity.",
+    "Some defects hide inside documents: open the properties panel for each flagged leaf.",
+    "Moving a document to the right heading fixes a misplacement; fixing it does not need a new sequence because 0000 is not yet published."
+   ],
+   "defectCount": 25
+  },
+  {
+   "id": 2,
+   "phase": 2,
+   "title": "Centralised marketing authorisation",
+   "region": "EU",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "maa",
+   "minutes": {
+    "expert": 60
+   },
+   "brief": "Halcyon Ridge is filing Ostrevia (lumiravostat) tablets with the European Medicines Agency through the centralised procedure. Build sequence 0000: complete the EU envelope, assemble EU Module 1 with the eAF and QRD product information, reuse Modules 2–5, and make sure the modules agree with each other before you publish.",
+   "steps": [
+    "Complete the EU envelope in Module 1: procedure tracking number EMEA/H/C/006123, procedure type, submission type maa, submission unit initial.",
+    "Place every mandatory EU Module 1 document: cover letter (1.0), eAF (1.2), product information (1.3.1), mock-ups (1.3.2), experts (1.4), ERA (1.6.1), pharmacovigilance (1.8.1, 1.8.2) and paediatrics (1.10).",
+    "Place Modules 2–5 from the library.",
+    "Open the Consistency tab and resolve every contradiction between modules.",
+    "Clear the validator and publish sequence 0000."
+   ],
+   "hints": [
+    "Two library documents contradict Module 3. Look at shelf life and the drug product manufacturer's address.",
+    "In the EU, study grouping uses node extensions rather than US study tagging files, so no tagging is needed here.",
+    "EU Module 1 file names start with the country folder code, e.g. ema-cover.pdf. The generated documents already follow it."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "EU envelope complete"
+    },
+    {
+     "id": "m1",
+     "label": "All mandatory EU Module 1 items placed"
+    },
+    {
+     "id": "required",
+     "label": "All required Module 2–5 headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "noDecoys",
+     "label": "No granularity decoys"
+    },
+    {
+     "id": "consistent",
+     "label": "No contradictions between modules"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    }
+   ],
+   "plant": [
+    {
+     "doc": "eu-pi",
+     "facts": {
+      "shelfLife": "24 months"
+     }
+    },
+    {
+     "doc": "eu-eaf",
+     "facts": {
+      "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NY, USA"
+     }
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "phase": 3,
+   "title": "New drug application under v4.0",
+   "region": "Japan",
+   "regionCode": "JP",
+   "version": "4.0",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 60
+   },
+   "brief": "Build submission unit 1 of the Ostrevia new drug application in Japan under eCTD v4.0: Japanese Module 1 and Module 2, the reception number, the cover, and study keywords instead of study tagging files. Publish it. Then answer the reviewers' first inquiries in unit 2 with a replacement, a suspension and a reused document.",
+   "letter": {
+    "from": "Review team (fictional)",
+    "date": "First inquiries, after receipt of unit 1",
+    "subject": "Ostrevia (lumiravostat) - first inquiries",
+    "body": [
+     "Inquiry 1 (quality): Only 6 months of long-term stability data were provided. Provide the 12-month data in place of the 6-month data.",
+     "Inquiry 2 (quality): The interim photostability note in 3.2.P.8.3 is superseded by the full results in the 12-month data. It should no longer form part of the current dossier.",
+     "Inquiry 3 (clinical): The literature reference on the mechanism of action filed in 4.3 also supports the clinical discussion. Make it available in 5.4 as well, without sending it again.",
+     "Answer in unit 2 with a cover and a response document in Japanese at 1.13.3."
+    ]
+   },
+   "extraDocuments": [
+    {
+     "id": "jp-lit-moa",
+     "section": "4.3",
+     "title": "Literature Reference: Mechanism of Action of Lumiravostat (J. Fict. Pharmacol. 2024)",
+     "fileName": "ref-mechanism-of-action.pdf",
+     "pages": 12,
+     "bookmarks": 3
+    },
+    {
+     "id": "jp-p83-interim",
+     "section": "3.2.P.8.3",
+     "title": "Stability Data: Interim Photostability Note",
+     "fileName": "photostability-interim.pdf",
+     "pages": 6,
+     "bookmarks": 2
+    },
+    {
+     "id": "jp-p83-v2",
+     "section": "3.2.P.8.3",
+     "title": "Stability Data (12 months)",
+     "fileName": "stability-data.pdf",
+     "pages": 72,
+     "bookmarks": 12,
+     "version": 2,
+     "irOnly": true,
+     "note": "12-month long-term and 6-month accelerated data, including photostability."
+    },
+    {
+     "id": "jp-resp-1",
+     "section": "jp:1.13.3",
+     "region": "JP",
+     "lang": "ja",
+     "title": "Responses to the First Inquiries (Japanese)",
+     "fileName": "inquiry-responses-1.pdf",
+     "pages": 8,
+     "bookmarks": 3,
+     "irOnly": true
+    }
+   ],
+   "quiz": [
+    {
+     "id": "seqno",
+     "q": "What number does the first submission unit carry in eCTD v4.0?",
+     "options": [
+      "0000",
+      "0001",
+      "1",
+      "Any number the applicant chooses"
+     ],
+     "answer": 2,
+     "why": "v4.0 numbers submission units as positive integers starting at 1. The four-digit 0000 belongs to v3.2.2 sequences."
+    },
+    {
+     "id": "delete",
+     "q": "How do you take a document out of the current dossier in v4.0?",
+     "options": [
+      "A delete operation",
+      "Suspend its context of use",
+      "Send an empty file",
+      "Append a note"
+     ],
+     "answer": 1,
+     "why": "v4.0 has no delete or append. A context of use is replaced or suspended; the document itself stays on record."
+    },
+    {
+     "id": "reuse",
+     "q": "A document sent in unit 1 is needed under another heading in unit 2. What is sent?",
+     "options": [
+      "The file again, with a new checksum",
+      "Only a new context of use that refers to the existing document ID",
+      "A copy with a different file name",
+      "Nothing: it appears everywhere automatically"
+     ],
+     "answer": 1,
+     "why": "v4.0 separates the document from where it is used. The new context of use points to the document ID already sent, so the file is not sent again."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the reception number (10 digits, e.g. 2026000123) and check the brand, JAN and applicant.",
+    "Build unit 1: Japanese Module 1 (1.1 to 1.12), the Japanese Module 2 documents (not the English ones), Modules 3 to 5, the literature reference in 4.3 and the interim photostability note in 3.2.P.8.3.",
+    "Generate the cover; it is filed as m1/jp/cover.pdf and not referenced in the XML.",
+    "Give each study report in 4.2 and 5.3 a study ID keyword (Tag studies from documents does this).",
+    "Answer the quiz, validate and publish unit 1.",
+    "In Sequences, create unit 2. Replace 3.2.P.8.3 stability data with the 12-month version, suspend the interim photostability note, place the literature reference again at 5.4 (it shows as reused), and add a cover and the response document at 1.13.3.",
+    "Validate and publish unit 2. Look at the Submission unit tab: the reused document is not in sha256.txt."
+   ],
+   "hints": [
+    "Library documents marked (Japanese) are the ones to use in Module 1 and Module 2.",
+    "Suspend is offered on the earlier document's card in the builder, where v3.2.2 would offer delete.",
+    "Drag the literature reference from the library onto 5.4 in unit 2 and choose New. Because unit 1 already sent it, it becomes a reuse."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "Japan metadata complete (reception number, names)"
+    },
+    {
+     "id": "m1",
+     "label": "Mandatory Japanese Module 1 items and cover placed in unit 1"
+    },
+    {
+     "id": "ja",
+     "label": "Module 1 and 2 in Japanese in unit 1"
+    },
+    {
+     "id": "keywords",
+     "label": "Study keywords on the study reports"
+    },
+    {
+     "id": "noHigh1",
+     "label": "Unit 1: no High findings"
+    },
+    {
+     "id": "published1",
+     "label": "Unit 1 published"
+    },
+    {
+     "id": "replace",
+     "label": "Unit 2: stability data replaced (targets unit 1)"
+    },
+    {
+     "id": "suspend",
+     "label": "Unit 2: interim note suspended"
+    },
+    {
+     "id": "reuse",
+     "label": "Unit 2: literature reference reused at 5.4"
+    },
+    {
+     "id": "response",
+     "label": "Unit 2: cover and Japanese response document at 1.13.3"
+    },
+    {
+     "id": "published2",
+     "label": "Unit 2 published with no High findings"
+    },
+    {
+     "id": "quiz",
+     "label": "v4.0 questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "phase": 2,
+   "title": "Respond to the list of questions",
+   "region": "EU",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "maa",
+   "minutes": {
+    "expert": 40
+   },
+   "brief": "Sequence 0000 of the Ostrevia MAA is under assessment. At Day 120 the committee adopted a list of questions and the clock stopped. Build the response sequence that restarts it: a responses document, the changed Module 3 and product information, each replacing the version in 0000, with the envelope linking back to the start of the procedure.",
+   "letter": {
+    "from": "Committee assessment team (fictional)",
+    "date": "Day 120 list of questions (clock stop)",
+    "subject": "EMEA/H/C/006123 - Ostrevia (lumiravostat) - List of Questions",
+    "body": [
+     "Major objection 1 (quality): The proposed dissolution limit of Q = 70% in 45 minutes is not discriminating. Tighten the limit on the basis of the batch data and update the drug product specification.",
+     "Other concern 2 (clinical safety): In section 4.4 of the SmPC, add a warning on transaminase elevations observed in the pivotal studies, with corresponding package leaflet wording.",
+     "Please submit the responses within the agreed clock-stop period. The clock restarts on receipt of a valid response sequence."
+    ]
+   },
+   "extraDocuments": [
+    {
+     "id": "eu-resp-d120",
+     "section": "eu:responses",
+     "region": "EU",
+     "title": "Responses to the Day 120 List of Questions",
+     "fileName": "common-responses-maa-d120.pdf",
+     "pages": 18,
+     "bookmarks": 6,
+     "irOnly": true
+    },
+    {
+     "id": "d-p51-v2",
+     "section": "3.2.P.5.1",
+     "title": "Specification(s)",
+     "fileName": "specifications.pdf",
+     "pages": 2,
+     "version": 2,
+     "irOnly": true,
+     "note": "Revised: dissolution Q = 80% in 30 minutes.",
+     "factOverrides": {
+      "dissolution": "Q = 80% in 30 minutes"
+     }
+    },
+    {
+     "id": "d-qos-v2",
+     "section": "2.3",
+     "title": "Quality Overall Summary",
+     "fileName": "quality-overall-summary.pdf",
+     "pages": 86,
+     "bookmarks": 44,
+     "version": 2,
+     "irOnly": true,
+     "links": [
+      "3.2.S.4.1",
+      "3.2.P.5.1",
+      "3.2.P.8.1"
+     ],
+     "note": "Updated to the revised dissolution limit.",
+     "factOverrides": {
+      "dissolution": "Q = 80% in 30 minutes"
+     }
+    },
+    {
+     "id": "eu-pi-v2",
+     "section": "eu:1.3.1",
+     "region": "EU",
+     "title": "SmPC, Annex II, Labelling and Package Leaflet (English) - Ostrevia",
+     "fileName": "ema-combined-tablet10mg-25mg.pdf",
+     "pages": 47,
+     "bookmarks": 16,
+     "version": 2,
+     "irOnly": true,
+     "note": "Section 4.4 warning on transaminase elevations added; package leaflet aligned."
+    },
+    {
+     "id": "d-p56-v2",
+     "section": "3.2.P.5.6",
+     "title": "Justification of Specification(s)",
+     "fileName": "justification-of-specifications.pdf",
+     "pages": 10,
+     "bookmarks": 5,
+     "version": 2,
+     "irOnly": true,
+     "note": "Updated justification for the tightened limit."
+    }
+   ],
+   "steps": [
+    "In Sequences, create 0001: submission type maa, submission unit response, related sequence 0000.",
+    "Generate a cover letter (1.0) and place the responses document under Responses.",
+    "Replace 3.2.P.5.1 with the revised specification and 1.3.1 with the updated product information, each targeting the 0000 leaf.",
+    "Check the Consistency tab: anything else that states the dissolution limit must be updated too.",
+    "Validate and publish 0001."
+   ],
+   "hints": [
+    "The related sequence is the sequence that started the procedure: 0000.",
+    "The Quality Overall Summary quotes the dissolution limit, so it must be replaced as well, or the modules will contradict each other.",
+    "The revised justification (3.2.P.5.6) is optional here; sending it with replace is acceptable."
+   ],
+   "checks": [
+    {
+     "id": "seq",
+     "label": "Sequence 0001: maa / response"
+    },
+    {
+     "id": "related",
+     "label": "Related sequence is 0000"
+    },
+    {
+     "id": "forms",
+     "label": "Cover letter in 1.0"
+    },
+    {
+     "id": "response",
+     "label": "Responses document placed"
+    },
+    {
+     "id": "replaceSpec",
+     "label": "3.2.P.5.1 replaced (targets 0000)"
+    },
+    {
+     "id": "replacePi",
+     "label": "1.3.1 product information replaced (targets 0000)"
+    },
+    {
+     "id": "consistent",
+     "label": "No contradictions between modules"
+    },
+    {
+     "id": "onlyAsked",
+     "label": "Nothing sent that the questions did not need"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0001 published"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "phase": 2,
+   "title": "Add a new manufacturing site",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 35
+   },
+   "brief": "Ostrevia is approved. Halcyon Ridge wants to add a second drug product manufacturing site, Northgate Contract Manufacturing in Pennsylvania, which has not been inspected for this product type. Decide how the change is filed in the US and how the same change would be classified in the EU, then build the US supplement.",
+   "quiz": [
+    {
+     "id": "us",
+     "q": "How is this change filed in the US?",
+     "options": [
+      "Prior approval supplement (PAS)",
+      "Changes being effected in 30 days (CBE-30)",
+      "Changes being effected (CBE-0)",
+      "Annual report"
+     ],
+     "answer": 0,
+     "why": "A new site that has not had a satisfactory cGMP inspection for this type of operation is a major change: it needs FDA approval before product made there can be distributed."
+    },
+    {
+     "id": "eu",
+     "q": "In the EU, adding a manufacturing site for a non-sterile tablet (not batch release or secondary packaging) is usually…",
+     "options": [
+      "Type IA",
+      "Type IB",
+      "Type II",
+      "A line extension"
+     ],
+     "answer": 1,
+     "why": "Under the variations classification guideline this is a Type IB change for non-sterile products. Sterile or biological products move to Type II."
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "d-356h-s1",
+     "section": "1.1",
+     "form": "fda-356h",
+     "title": "Form FDA 356h",
+     "fileName": "fda-356h.pdf",
+     "pages": 4,
+     "irOnly": true,
+     "version": 2,
+     "note": "Completed for the supplement: lists both drug product sites.",
+     "factOverrides": {
+      "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
+     }
+    },
+    {
+     "id": "d-p31-v2",
+     "section": "3.2.P.3.1",
+     "title": "Manufacturer(s)",
+     "fileName": "manufacturers.pdf",
+     "pages": 3,
+     "version": 2,
+     "irOnly": true,
+     "note": "Adds the Northgate site.",
+     "factOverrides": {
+      "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
+     }
+    },
+    {
+     "id": "d-p35-siteb",
+     "section": "3.2.P.3.5",
+     "title": "Process Validation - Northgate Site",
+     "fileName": "process-validation-northgate.pdf",
+     "pages": 24,
+     "bookmarks": 9,
+     "irOnly": true,
+     "factExclude": [
+      "batches"
+     ]
+    },
+    {
+     "id": "d-p83-siteb",
+     "section": "3.2.P.8.3",
+     "title": "Stability Data - Northgate Batches",
+     "fileName": "stability-data-northgate.pdf",
+     "pages": 30,
+     "bookmarks": 12,
+     "irOnly": true,
+     "factExclude": [
+      "batches"
+     ]
+    },
+    {
+     "id": "d-a1-v2",
+     "section": "3.2.A.1",
+     "title": "Facilities and Equipment",
+     "fileName": "facilities-equipment.pdf",
+     "pages": 7,
+     "version": 2,
+     "irOnly": true,
+     "note": "Adds the Northgate facility.",
+     "factOverrides": {
+      "dpManufacturer": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA; Northgate Contract Manufacturing Inc., Exampleton, PA, USA"
+     }
+    }
+   ],
+   "steps": [
+    "Answer the two classification questions in this panel.",
+    "Create sequence 0001: chemistry, manufacturing and controls supplement, sub-type application.",
+    "Place Form FDA 356h (the version completed for this supplement) and a cover letter.",
+    "Replace 3.2.P.3.1 and 3.2.A.1 with the versions that add the new site; add the new site's process validation and stability data.",
+    "Check consistency, validate and publish."
+   ],
+   "hints": [
+    "The 356h in sequence 0000 lists only the original site. Use the supplement's 356h so the form agrees with 3.2.P.3.1.",
+    "The new site's validation and stability reports are additional documents: 'new' (or 'append') is right; they do not replace the original site's data.",
+    "Batch numbers for the new site differ from the original primary batches. The consistency check compares only documents about the same batches."
+   ],
+   "checks": [
+    {
+     "id": "quiz",
+     "label": "Classification questions answered correctly"
+    },
+    {
+     "id": "seq",
+     "label": "Sequence 0001: CMC supplement / application"
+    },
+    {
+     "id": "forms",
+     "label": "Supplement 356h and cover letter"
+    },
+    {
+     "id": "replaceP31",
+     "label": "3.2.P.3.1 replaced (targets 0000)"
+    },
+    {
+     "id": "replaceA1",
+     "label": "3.2.A.1 replaced (targets 0000)"
+    },
+    {
+     "id": "siteB",
+     "label": "New site validation and stability added"
+    },
+    {
+     "id": "consistent",
+     "label": "No contradictions between modules"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0001 published"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "phase": 2,
+   "title": "Safety labelling update",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 30
+   },
+   "brief": "Post-marketing surveillance of Ostrevia has identified a signal of drug-induced liver injury. The safety team wants a new Warnings and Precautions subsection on hepatotoxicity in the prescribing information without waiting for FDA approval. Classify the change and build the labeling supplement.",
+   "quiz": [
+    {
+     "id": "us",
+     "q": "Which US filing lets the company implement a strengthened warning before FDA approval?",
+     "options": [
+      "Prior approval supplement",
+      "Changes being effected supplement (CBE-0)",
+      "Annual report",
+      "Correspondence only"
+     ],
+     "answer": 1,
+     "why": "Adding or strengthening a contraindication, warning, precaution or adverse reaction can be made under a 'changes being effected' supplement and implemented on submission (21 CFR 314.70(c)(6)(iii))."
+    },
+    {
+     "id": "eu",
+     "q": "The equivalent safety update to the SmPC of a centrally authorised product is usually…",
+     "options": [
+      "Type IA variation",
+      "Type IB variation",
+      "Type II variation",
+      "Renewal"
+     ],
+     "answer": 2,
+     "why": "Changes to the SmPC, labelling or package leaflet driven by new safety data are generally Type II variations (category C.I.4)."
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "d-pi-v2",
+     "section": "1.14.1.3",
+     "title": "Draft Prescribing Information",
+     "fileName": "draft-labeling-text.pdf",
+     "pages": 25,
+     "bookmarks": 19,
+     "version": 2,
+     "irOnly": true,
+     "note": "New section 5.x Hepatotoxicity; adverse reactions updated."
+    },
+    {
+     "id": "d-annot-v2",
+     "section": "1.14.1.2",
+     "title": "Annotated Draft Labeling Text",
+     "fileName": "annotated-draft-labeling.pdf",
+     "pages": 40,
+     "bookmarks": 20,
+     "version": 2,
+     "irOnly": true,
+     "note": "Annotations reference the hepatic safety review."
+    },
+    {
+     "id": "d-hep-review",
+     "section": "5.3.6",
+     "title": "Cumulative Review of Hepatic Adverse Events",
+     "fileName": "hepatic-safety-review.pdf",
+     "pages": 45,
+     "bookmarks": 14,
+     "irOnly": true
+    }
+   ],
+   "steps": [
+    "Answer the classification questions.",
+    "Create sequence 0001: labeling supplement, sub-type application.",
+    "Place Form FDA 356h and a cover letter.",
+    "Replace the draft labeling text (1.14.1.3) and annotated labeling (1.14.1.2), targeting their 0000 leaves.",
+    "Add the hepatic safety review in 5.3.6, validate and publish."
+   ],
+   "hints": [
+    "Keep the leaf titles the same as in 0000 so reviewers recognise the replaced labeling.",
+    "The safety review is new information: operation 'new'."
+   ],
+   "checks": [
+    {
+     "id": "quiz",
+     "label": "Classification questions answered correctly"
+    },
+    {
+     "id": "seq",
+     "label": "Sequence 0001: labeling supplement / application"
+    },
+    {
+     "id": "forms",
+     "label": "356h and cover letter"
+    },
+    {
+     "id": "replacePi",
+     "label": "1.14.1.3 replaced (targets 0000)"
+    },
+    {
+     "id": "replaceAnnot",
+     "label": "1.14.1.2 replaced (targets 0000)"
+    },
+    {
+     "id": "review",
+     "label": "Hepatic safety review in 5.3.6"
+    },
+    {
+     "id": "onlyAsked",
+     "label": "Nothing unrelated sent"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0001 published"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "phase": 2,
+   "title": "Annual report and periodic safety report",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 35
+   },
+   "brief": "Ostrevia has been on the market for a year. File the first annual report, then the periodic adverse drug experience report (PADER) for the same period. Both are recurring submissions: each year's report is new, it does not replace last year's.",
+   "quiz": [
+    {
+     "id": "op",
+     "q": "Next year, the distribution data in 1.13.11 is updated for the new reporting period. Which operation?",
+     "options": [
+      "Replace last year's leaf",
+      "Append to last year's leaf",
+      "New",
+      "Delete last year's leaf, then new"
+     ],
+     "answer": 2,
+     "why": "Each annual report covers its own period. Last year's report stays valid as a record of that year, so the new report is filed as new documents."
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "d-2252-ar",
+     "section": "1.1",
+     "form": "fda-2252",
+     "title": "Form FDA 2252 - Annual Report",
+     "fileName": "fda-2252-annual-report.pdf",
+     "pages": 2,
+     "irOnly": true
+    },
+    {
+     "id": "d-ar-safety",
+     "section": "1.13.3",
+     "title": "Summary of Safety Information - Reporting Period 1",
+     "fileName": "ar1-summary-safety.pdf",
+     "pages": 12,
+     "bookmarks": 5,
+     "irOnly": true
+    },
+    {
+     "id": "d-ar-mfg",
+     "section": "1.13.5",
+     "title": "Summary of Manufacturing Changes - Reporting Period 1",
+     "fileName": "ar1-manufacturing-changes.pdf",
+     "pages": 4,
+     "irOnly": true
+    },
+    {
+     "id": "d-ar-dist",
+     "section": "1.13.11",
+     "title": "Distribution Data - Reporting Period 1",
+     "fileName": "ar1-distribution-data.pdf",
+     "pages": 3,
+     "irOnly": true
+    },
+    {
+     "id": "d-ar-pmc",
+     "section": "1.13.12",
+     "title": "Status of Postmarketing Study Commitments and Requirements",
+     "fileName": "ar1-pmc-status.pdf",
+     "pages": 5,
+     "bookmarks": 3,
+     "irOnly": true
+    },
+    {
+     "id": "d-2252-pader",
+     "section": "1.1",
+     "form": "fda-2252",
+     "title": "Form FDA 2252 - Periodic Safety Report",
+     "fileName": "fda-2252-pader.pdf",
+     "pages": 2,
+     "irOnly": true
+    },
+    {
+     "id": "d-pader",
+     "section": "5.3.6",
+     "title": "Periodic Adverse Drug Experience Report - Reporting Period 1",
+     "fileName": "pader-period-1.pdf",
+     "pages": 58,
+     "bookmarks": 16,
+     "irOnly": true
+    }
+   ],
+   "steps": [
+    "Answer the lifecycle question.",
+    "Create 0001: annual report, sub-type report. Place Form FDA 2252, a cover letter and the four annual report sections (1.13.3, 1.13.5, 1.13.11, 1.13.12) as new. Publish.",
+    "Create 0002: periodic safety reports, sub-type report. Place Form FDA 2252, a cover letter and the PADER (5.3.6) as new. Publish."
+   ],
+   "hints": [
+    "Each report sequence needs its own Form FDA 2252 and cover letter.",
+    "In this app the PADER is placed in 5.3.6 (reports of post-marketing experience)."
+   ],
+   "checks": [
+    {
+     "id": "quiz",
+     "label": "Lifecycle question answered correctly"
+    },
+    {
+     "id": "ar",
+     "label": "0001: annual report / report, with 2252 and cover letter"
+    },
+    {
+     "id": "arDocs",
+     "label": "Four annual report sections placed as new"
+    },
+    {
+     "id": "psr",
+     "label": "0002: periodic safety reports / report, with 2252 and cover letter"
+    },
+    {
+     "id": "pader",
+     "label": "PADER in 5.3.6 as new"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings in 0001 or 0002"
+    },
+    {
+     "id": "published",
+     "label": "0001 and 0002 published"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "phase": 2,
+   "title": "Drug master file support",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 30
+   },
+   "brief": "Corvane Fine Chemicals, the drug substance manufacturer, has amended its Type II drug master file to describe an improved final crystallisation step. Halcyon Ridge must reference the amended DMF in its NDA: an updated letter of authorization, its own summary of the process, and batch data from material made by the new step.",
+   "quiz": [
+    {
+     "id": "open",
+     "q": "Which part of the DMF can Halcyon Ridge (the NDA holder) see?",
+     "options": [
+      "The whole DMF",
+      "Only the open (applicant's) part the holder shares",
+      "Nothing, but FDA tells it the content",
+      "Only the letter of authorization"
+     ],
+     "answer": 1,
+     "why": "The DMF holder keeps confidential manufacturing details in the DMF; the applicant gets the non-confidential part. The letter of authorization lets FDA read the full DMF on the applicant's behalf."
+    },
+    {
+     "id": "eu",
+     "q": "In the EU, the equivalent is the Active Substance Master File (ASMF). Its two parts are…",
+     "options": [
+      "Public and private",
+      "Applicant's part and restricted part",
+      "Module 2 and Module 3",
+      "Open part and DMF part"
+     ],
+     "answer": 1,
+     "why": "An ASMF has an applicant's part (shared with the MA applicant) and a restricted part (sent only to the authorities)."
+    },
+    {
+     "id": "loa",
+     "q": "Where does the letter of authorization go in US Module 1?",
+     "options": [
+      "1.2",
+      "1.3.4",
+      "1.4.1",
+      "1.12.4"
+     ],
+     "answer": 2,
+     "why": "1.4.1 Letter of authorization."
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "d-loa-v2",
+     "section": "1.4.1",
+     "title": "Letter of Authorization for DMF (Corvane Fine Chemicals)",
+     "fileName": "letter-of-authorization-dmf.pdf",
+     "pages": 1,
+     "version": 2,
+     "irOnly": true,
+     "note": "Updated to reference the DMF amendment of July 2026."
+    },
+    {
+     "id": "d-s22-v2",
+     "section": "3.2.S.2.2",
+     "title": "Description of Manufacturing Process and Process Controls",
+     "fileName": "manufacturing-process.pdf",
+     "pages": 17,
+     "bookmarks": 9,
+     "version": 2,
+     "irOnly": true,
+     "note": "Applicant's summary of the revised crystallisation step; restricted details are in the DMF."
+    },
+    {
+     "id": "d-s44-post",
+     "section": "3.2.S.4.4",
+     "title": "Batch Analyses - Post-change Batches",
+     "fileName": "batch-analyses-post-change.pdf",
+     "pages": 5,
+     "bookmarks": 3,
+     "irOnly": true
+    }
+   ],
+   "steps": [
+    "Answer the three questions.",
+    "Create 0001: CMC supplement, sub-type application. Place 356h and a cover letter.",
+    "Replace the letter of authorization (1.4.1) and 3.2.S.2.2, targeting 0000.",
+    "Add the post-change batch analyses in 3.2.S.4.4 as new (or append). Validate and publish."
+   ],
+   "hints": [
+    "The post-change batch data adds to, and does not replace, the original batch analyses."
+   ],
+   "checks": [
+    {
+     "id": "quiz",
+     "label": "Questions answered correctly"
+    },
+    {
+     "id": "seq",
+     "label": "Sequence 0001: CMC supplement / application"
+    },
+    {
+     "id": "forms",
+     "label": "356h and cover letter"
+    },
+    {
+     "id": "replaceLoa",
+     "label": "1.4.1 letter of authorization replaced (targets 0000)"
+    },
+    {
+     "id": "replaceS22",
+     "label": "3.2.S.2.2 replaced (targets 0000)"
+    },
+    {
+     "id": "batches",
+     "label": "Post-change batch analyses added"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0001 published"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "phase": 2,
+   "title": "Paper to eCTD baseline",
+   "region": "EU",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "maa",
+   "minutes": {
+    "expert": 40
+   },
+   "brief": "Ostrevia's quality dossier was originally filed as NeeS volumes. Before the next variation, the company wants an eCTD baseline: Module 3 rebuilt as granular eCTD documents in a reformat sequence, with no change in content.",
+   "steps": [
+    "Set the envelope: tracking number EMEA/H/C/006123, submission type none, submission unit reformat, no related sequence.",
+    "Generate a cover letter (1.0) stating that the sequence is a reformat with no content change.",
+    "Rebuild 3.2.S and 3.2.P from the granular library documents. Do not use the NeeS volumes.",
+    "Leave Modules 2, 4 and 5 and the rest of Module 1 out: a baseline covers what is being reformatted.",
+    "Validate and publish 0000."
+   ],
+   "hints": [
+    "The two NeeS volumes look convenient but are one file per module: far too coarse for lifecycle.",
+    "A reformat sequence must not change content, so no new product information or summaries belong in it."
+   ],
+   "checks": [
+    {
+     "id": "seq",
+     "label": "Sequence 0000: submission unit reformat"
+    },
+    {
+     "id": "forms",
+     "label": "Cover letter in 1.0"
+    },
+    {
+     "id": "required",
+     "label": "All required Module 3 headings filled"
+    },
+    {
+     "id": "noLegacy",
+     "label": "NeeS volumes not used"
+    },
+    {
+     "id": "onlyM3",
+     "label": "Only Module 3 and the cover letter"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "legacy-s",
+     "section": "3.2.S",
+     "decoy": "coarse",
+     "title": "NeeS Volume 3.1 - Drug Substance (complete)",
+     "fileName": "nees-volume-3-1-drug-substance.pdf",
+     "pages": 240,
+     "bookmarks": 30,
+     "coach": "A whole-section NeeS volume. A baseline should rebuild each subsection as its own document."
+    },
+    {
+     "id": "legacy-p",
+     "section": "3.2.P",
+     "decoy": "coarse",
+     "title": "NeeS Volume 3.2 - Drug Product (complete)",
+     "fileName": "nees-volume-3-2-drug-product.pdf",
+     "pages": 310,
+     "bookmarks": 34,
+     "coach": "A whole-section NeeS volume. A baseline should rebuild each subsection as its own document."
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "phase": 2,
+   "title": "Generic application",
+   "region": "US",
+   "version": "3.2.2",
+   "productId": "generic-tablet",
+   "appType": "anda",
+   "minutes": {
+    "expert": 60
+   },
+   "brief": "Ashvale Generics is filing an ANDA for talmisartan tablets, 20 mg and 40 mg, referencing Corvenza 40 mg. Bioequivalence was shown for 40 mg under fasting and fed conditions; a biowaiver is requested for 20 mg. Choose the patent certification and build sequence 0000.",
+   "quiz": [
+    {
+     "id": "para",
+     "q": "Corvenza has one listed patent expiring in 2031. Ashvale believes it is invalid and wants to launch before 2031. Which certification?",
+     "options": [
+      "Paragraph I (no patent listed)",
+      "Paragraph II (patent expired)",
+      "Paragraph III (will wait for expiry)",
+      "Paragraph IV (invalid or not infringed)"
+     ],
+     "answer": 3,
+     "why": "A Paragraph IV certification states the patent is invalid, unenforceable or not infringed. It triggers notice to the patent holder and possible litigation. Patent and exclusivity data come from the Orange Book (see the Orange & Purple Book Explorer app)."
+    }
+   ],
+   "steps": [
+    "Answer the patent certification question.",
+    "Complete the US metadata (ANDA, application number, original application / application).",
+    "Place the ANDA Module 1: forms 356h and 3794, cover letter, certifications, patent certification, basis for submission, comparison with the RLD, biowaiver request, labeling and listed drug labeling.",
+    "Place 2.3, 2.7.1, Module 3 and the bioequivalence studies in 5.3.1; tag the studies.",
+    "Clear the validator and publish."
+   ],
+   "hints": [
+    "An ANDA has no Module 4 and a short Module 2: the QOS and the biopharmaceutics summary.",
+    "The BE study reports are grouped by study tagging files like any other US study."
+   ],
+   "checks": [
+    {
+     "id": "quiz",
+     "label": "Patent certification question answered correctly"
+    },
+    {
+     "id": "meta",
+     "label": "US metadata complete"
+    },
+    {
+     "id": "m1",
+     "label": "All mandatory ANDA Module 1 items placed"
+    },
+    {
+     "id": "required",
+     "label": "All required Module 2, 3 and 5 headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "phase": 3,
+   "title": "Biosimilar application",
+   "region": "US and EU",
+   "regionCode": "US",
+   "version": "3.2.2",
+   "productId": "biosimilar-mab",
+   "appType": "bla-351k",
+   "minutes": {
+    "expert": 60
+   },
+   "brief": "Build the original 351(k) biologics license application for Selvanta (olvecitamab-kzrt), a proposed biosimilar to Arventa. The library holds a document the applicant has no right to use, and the dossier has one contradiction to find. Then answer how the same product would be filed in the EU.",
+   "plant": [
+    {
+     "doc": "b-qos",
+     "facts": {
+      "dissolution": "Relative potency 70-130% of reference standard"
+     }
+    }
+   ],
+   "extraDocuments": [
+    {
+     "id": "bs-ref-csr",
+     "section": "5.3.5.1",
+     "title": "Clinical Study Report: Arventa Pivotal Efficacy Study ARV-301 (reference product sponsor)",
+     "fileName": "arv-301-csr.pdf",
+     "pages": 640,
+     "bookmarks": 40,
+     "decoy": true,
+     "note": "The reference product sponsor's own study report."
+    }
+   ],
+   "quiz": [
+    {
+     "id": "us",
+     "q": "Under which provision is a US biosimilar licensed?",
+     "options": [
+      "Section 505(b)(2) of the FD&C Act",
+      "Section 351(k) of the PHS Act",
+      "Section 351(a) of the PHS Act",
+      "Section 505(j) of the FD&C Act"
+     ],
+     "answer": 1,
+     "why": "351(k) is the abbreviated pathway for biosimilar and interchangeable products. 351(a) is the full BLA used for Arventa itself."
+    },
+    {
+     "id": "excl",
+     "q": "When can FDA approve a 351(k) application at the earliest?",
+     "options": [
+      "Any time after filing",
+      "4 years after the reference product was first licensed",
+      "12 years after the reference product was first licensed",
+      "When the reference product's patents expire, whatever the date"
+     ],
+     "answer": 2,
+     "why": "The reference product has 12 years of exclusivity from first licensure; a 351(k) application cannot be submitted until 4 years after it."
+    },
+    {
+     "id": "eu",
+     "q": "What is the legal basis for an EU biosimilar marketing authorisation?",
+     "options": [
+      "Article 8(3) of Directive 2001/83/EC",
+      "Article 10(1)",
+      "Article 10(4)",
+      "Article 10a"
+     ],
+     "answer": 2,
+     "why": "Article 10(4) covers similar biological medicinal products: the applicant provides comparability data in place of the reference product's full non-clinical and clinical package."
+    },
+    {
+     "id": "eu152",
+     "q": "Where does the EU Module 1 hold the information on the reference medicinal product for a biosimilar?",
+     "options": [
+      "1.3.1",
+      "1.5.2",
+      "1.8.2",
+      "1.2"
+     ],
+     "answer": 1,
+     "why": "1.5.2 is 'Information for generic, hybrid or bio-similar applications'. It identifies the reference product and summarises comparability."
+    }
+   ],
+   "steps": [
+    "Set the application number (six digits) in Module 1.",
+    "Build sequence 0000: Module 1 (356h, user fee, certifications, labeling), Modules 2 to 5 with the comparative analytical, PK and efficacy studies.",
+    "Leave out anything that is not yours to file.",
+    "Open Consistency and correct the contradiction you find.",
+    "Answer the quiz, validate and publish 0000."
+   ],
+   "hints": [
+    "A biosimilar applicant relies on the reference product's approval through its comparability data; it does not file the reference sponsor's reports.",
+    "Look at the potency acceptance range in Module 2 against 3.2.P.5.1."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "US metadata complete"
+    },
+    {
+     "id": "m1",
+     "label": "All mandatory 351(k) Module 1 items placed"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noDecoys",
+     "label": "No reference sponsor documents filed"
+    },
+    {
+     "id": "consistent",
+     "label": "No contradictions between modules"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "noMedium",
+     "label": "No Medium findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "US and EU biosimilar questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "phase": 3,
+   "title": "New drug application in India",
+   "region": "India",
+   "regionCode": "IN",
+   "version": "CTD",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 50
+   },
+   "brief": "Ostrevia is approved in the US and the EU. An Indian importer, acting as the authorised agent of the manufacturer, applies for permission to import it as a new drug. Build the CTD for the online portal with the right form, the fee receipt and the agent's documents, ask for a waiver of the local clinical trial, and get it through screening.",
+   "quiz": [
+    {
+     "id": "form",
+     "q": "Which form is the application to import a new drug for sale or distribution?",
+     "options": [
+      "Form CT-18",
+      "Form CT-21",
+      "Form CT-04",
+      "Form 44"
+     ],
+     "answer": 0,
+     "why": "Under the New Drugs and Clinical Trials Rules, 2019, CT-18 is the application to import a new drug; CT-21 is the application to manufacture one. Form 44 belongs to the older rules."
+    },
+    {
+     "id": "waiver",
+     "q": "On what basis can the local clinical trial be waived?",
+     "options": [
+      "Never: a local trial is always required",
+      "The drug is approved in a country the regulator has specified, among other conditions",
+      "The applicant pays a higher fee",
+      "The drug is a generic"
+     ],
+     "answer": 1,
+     "why": "Rule 101 lets the licensing authority, with central government approval, specify countries whose approvals can support a waiver of the local trial, subject to the conditions in the rules."
+    },
+    {
+     "id": "time",
+     "q": "Within what time does the authority decide on an application for a new drug already approved outside India?",
+     "options": [
+      "30 days",
+      "90 working days",
+      "180 days",
+      "12 months"
+     ],
+     "answer": 1,
+     "why": "The rules set 90 working days for a decision on such an application."
+    }
+   ],
+   "steps": [
+    "In Module 1, enter the authorised agent and the agent's address.",
+    "Check the submission type in Sequences or Module 1: import of a new drug (CT-18).",
+    "Build 0000: covering letter (1.1), the applicant introduction, CT-18 and the fee receipt (1.2.2), the agent's authorisation and the CoPP and GMP certificates (1.2.3), coordinates (1.2.4), labels (1.3), QC protocols (1.4), regulatory status and the waiver request (1.5), price (1.6), and Modules 2 to 5.",
+    "Answer the quiz, validate and publish (the CTD goes to the portal as PDF uploads; there is no backbone XML).",
+    "Open Review and send 0000 through the mock gateway. It must pass screening."
+   ],
+   "hints": [
+    "The library has both CT-18 and CT-21. Only one fits an import application.",
+    "The request to waive the local clinical trial is in 1.5, with the regulatory status in other countries."
+   ],
+   "checks": [
+    {
+     "id": "meta",
+     "label": "Authorised agent details entered"
+    },
+    {
+     "id": "type",
+     "label": "Submission type: import of a new drug"
+    },
+    {
+     "id": "ct18",
+     "label": "Form CT-18 and fee receipt in 1.2.2"
+    },
+    {
+     "id": "noCt21",
+     "label": "Form CT-21 not filed"
+    },
+    {
+     "id": "agent",
+     "label": "Agent authorisation and certificates in 1.2.3"
+    },
+    {
+     "id": "waiver",
+     "label": "Regulatory status and waiver request in 1.5"
+    },
+    {
+     "id": "required",
+     "label": "All required headings filled"
+    },
+    {
+     "id": "noHigh",
+     "label": "No High findings"
+    },
+    {
+     "id": "published",
+     "label": "0000 published"
+    },
+    {
+     "id": "gateway",
+     "label": "Accepted at screening (mock gateway)"
+    },
+    {
+     "id": "quiz",
+     "label": "India questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "phase": 3,
+   "title": "Renewal and transfer",
+   "region": "EU",
+   "regionCode": "EU",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "maa",
+   "minutes": {
+    "expert": 50
+   },
+   "brief": "Ostrevia has held its EU marketing authorisation for almost five years. File the renewal in 0001. Then the authorisation moves to a new holder, Lumen Vale Pharma B.V.: file the transfer in 0002 so that every document that names the holder agrees.",
+   "letter": {
+    "from": "Regulatory planning (fictional)",
+    "date": "Internal brief",
+    "subject": "Ostrevia: renewal, then transfer to Lumen Vale Pharma B.V.",
+    "body": [
+     "Renewal: the authorisation expires in 10 months. File the renewal now with the renewal form, the addendum to the clinical overview and the updated product information.",
+     "Transfer: once the renewal is filed, the authorisation transfers to Lumen Vale Pharma B.V., Exampledam, the Netherlands. The transfer form, the product information and the summary of the pharmacovigilance system must all name the new holder, and so must the envelope."
+    ]
+   },
+   "newHolder": "Lumen Vale Pharma B.V., Exampledam, Netherlands",
+   "extraDocuments": [
+    {
+     "id": "eu-eaf-renewal",
+     "section": "eu:1.2",
+     "form": "eaf",
+     "region": "EU",
+     "title": "Renewal Application Form",
+     "fileName": "ema-form-renewal.pdf",
+     "pages": 18,
+     "bookmarks": 6,
+     "irOnly": true
+    },
+    {
+     "id": "d-co-renewal",
+     "section": "2.5",
+     "title": "Addendum to the Clinical Overview (Renewal)",
+     "fileName": "clinical-overview-addendum-renewal.pdf",
+     "pages": 24,
+     "bookmarks": 6,
+     "irOnly": true
+    },
+    {
+     "id": "eu-pi-renewal",
+     "section": "eu:1.3.1",
+     "region": "EU",
+     "title": "SmPC, Annex II, Labelling and Package Leaflet (English) - Ostrevia",
+     "fileName": "ema-combined-tablet10mg-25mg.pdf",
+     "pages": 46,
+     "bookmarks": 16,
+     "version": 2,
+     "irOnly": true,
+     "note": "Updated for the renewal: section 4.8 frequencies revised from five years of data."
+    },
+    {
+     "id": "eu-eaf-transfer",
+     "section": "eu:1.2",
+     "form": "eaf",
+     "region": "EU",
+     "title": "Transfer Application Form",
+     "fileName": "ema-form-transfer.pdf",
+     "pages": 12,
+     "bookmarks": 4,
+     "irOnly": true,
+     "factOverrides": {
+      "holder": "Lumen Vale Pharma B.V., Exampledam, Netherlands"
+     }
+    },
+    {
+     "id": "eu-pi-transfer",
+     "section": "eu:1.3.1",
+     "region": "EU",
+     "title": "SmPC, Annex II, Labelling and Package Leaflet (English) - Ostrevia",
+     "fileName": "ema-combined-tablet10mg-25mg.pdf",
+     "pages": 46,
+     "bookmarks": 16,
+     "version": 3,
+     "irOnly": true,
+     "note": "Marketing authorisation holder changed to Lumen Vale Pharma B.V.",
+     "factOverrides": {
+      "holder": "Lumen Vale Pharma B.V., Exampledam, Netherlands"
+     }
+    },
+    {
+     "id": "eu-pv-transfer",
+     "section": "eu:1.8.1",
+     "region": "EU",
+     "title": "Summary of the Applicant's Pharmacovigilance System",
+     "fileName": "phvig-system.pdf",
+     "pages": 4,
+     "version": 2,
+     "irOnly": true,
+     "note": "The new holder's pharmacovigilance system and QPPV.",
+     "factOverrides": {
+      "holder": "Lumen Vale Pharma B.V., Exampledam, Netherlands"
+     }
+    }
+   ],
+   "quiz": [
+    {
+     "id": "when",
+     "q": "When must the renewal application be submitted?",
+     "options": [
+      "Any time before expiry",
+      "At least 9 months before the authorisation expires",
+      "At least 3 months before expiry",
+      "On the expiry date"
+     ],
+     "answer": 1,
+     "why": "The renewal must reach the agency at least nine months before the authorisation ceases to be valid."
+    },
+    {
+     "id": "where",
+     "q": "Where must the new holder of a centralised authorisation be established?",
+     "options": [
+      "Anywhere",
+      "In the European Economic Area",
+      "In the country of manufacture",
+      "In the same country as the old holder"
+     ],
+     "answer": 1,
+     "why": "A marketing authorisation holder must be established in the EEA."
+    },
+    {
+     "id": "related",
+     "q": "What is the related sequence for the renewal sequence?",
+     "options": [
+      "0000, the initial MAA",
+      "None: a renewal starts a new procedure",
+      "The last variation",
+      "0001"
+     ],
+     "answer": 1,
+     "why": "The related sequence links sequences within one procedure. A renewal starts its own procedure, so it has none."
+    }
+   ],
+   "steps": [
+    "Create 0001: submission type renewal, submission unit initial, no related sequence. Add a cover letter, the renewal application form, the clinical overview addendum (new, alongside the original) and the updated product information (replace).",
+    "Validate and publish 0001.",
+    "Create 0002: submission type transfer, submission unit initial. Add a cover letter and the transfer application form.",
+    "Replace the product information and the pharmacovigilance system summary with the new holder's versions.",
+    "In Module 1, change the applicant to the new holder.",
+    "Check Consistency: the holder must agree in 1.2, 1.3.1 and 1.8.1. Answer the quiz, validate and publish 0002."
+   ],
+   "hints": [
+    "In 0002 the product information to replace is the renewal version sent in 0001, not the one in 0000.",
+    "The holder is stated in the application form, the product information and the pharmacovigilance summary."
+   ],
+   "checks": [
+    {
+     "id": "renewal",
+     "label": "0001 is a renewal (renewal / initial, no related sequence)"
+    },
+    {
+     "id": "renewalDocs",
+     "label": "0001: cover, renewal form, clinical overview addendum"
+    },
+    {
+     "id": "renewalPi",
+     "label": "0001: product information replaced (targets 0000)"
+    },
+    {
+     "id": "published1",
+     "label": "0001 published with no High findings"
+    },
+    {
+     "id": "transfer",
+     "label": "0002 is a transfer (transfer / initial)"
+    },
+    {
+     "id": "transferDocs",
+     "label": "0002: cover and transfer form"
+    },
+    {
+     "id": "transferPi",
+     "label": "0002: product information replaced (targets 0001)"
+    },
+    {
+     "id": "transferPv",
+     "label": "0002: pharmacovigilance summary replaced"
+    },
+    {
+     "id": "envelope",
+     "label": "Envelope applicant is the new holder"
+    },
+    {
+     "id": "holder",
+     "label": "The holder agrees across Module 1"
+    },
+    {
+     "id": "published2",
+     "label": "0002 published with no High findings"
+    },
+    {
+     "id": "quiz",
+     "label": "Renewal and transfer questions answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "phase": 3,
+   "title": "Withdrawal",
+   "region": "US",
+   "regionCode": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "expert": 25
+   },
+   "brief": "The Ostrevia NDA (sequence 0000) is under review. After an internal decision the company withdraws the application before action. File the withdrawal correctly: the letter in the right heading, with the dossier left exactly as it was.",
+   "letter": {
+    "from": "Head of regulatory affairs (fictional)",
+    "date": "Internal decision",
+    "subject": "Withdraw NDA 299001 (Ostrevia) before action",
+    "body": [
+     "We will withdraw the Ostrevia NDA. Send a letter to the agency requesting withdrawal of the unapproved application, with the usual form and cover letter.",
+     "Do not change or remove anything already filed. We may refile later."
+    ]
+   },
+   "extraDocuments": [
+    {
+     "id": "d-withdraw",
+     "section": "1.5.5",
+     "title": "Request to Withdraw NDA 299001 (Unapproved Application)",
+     "fileName": "withdrawal-request.pdf",
+     "pages": 2,
+     "irOnly": true
+    },
+    {
+     "id": "d-withdraw-approved",
+     "section": "1.5.7",
+     "title": "Request for Withdrawal of Approval of an Application",
+     "fileName": "withdrawal-of-approval.pdf",
+     "pages": 2,
+     "irOnly": true,
+     "decoy": true
+    },
+    {
+     "id": "d-356h-wd",
+     "section": "1.1",
+     "form": "fda-356h",
+     "title": "Form FDA 356h",
+     "fileName": "fda-356h.pdf",
+     "pages": 4,
+     "version": 2,
+     "irOnly": true,
+     "note": "Completed for the amendment."
+    }
+   ],
+   "quiz": [
+    {
+     "id": "delete",
+     "q": "Should the withdrawal sequence delete the documents filed in 0000?",
+     "options": [
+      "Yes, every leaf, so the dossier is empty",
+      "Yes, but only Modules 2 to 5",
+      "No: the record stays as filed; the letter asks for withdrawal",
+      "No, but replace them with blank pages"
+     ],
+     "answer": 2,
+     "why": "Withdrawal is a request in a letter. Deleting leaves would rewrite the record of what was filed and makes a later refiling harder."
+    },
+    {
+     "id": "refile",
+     "q": "What does withdrawing an unapproved application mean for a later refiling?",
+     "options": [
+      "It can never be refiled",
+      "It is without prejudice to refiling",
+      "It can be refiled only after 5 years",
+      "Refiling needs a court order"
+     ],
+     "answer": 1,
+     "why": "The regulations say withdrawal of an unapproved application is without prejudice to refiling."
+    }
+   ],
+   "steps": [
+    "Create 0001 for the original application with sub-type amendment.",
+    "Add a cover letter (1.2) and Form FDA 356h (1.1).",
+    "Place the withdrawal request in the heading for withdrawal of an unapproved application.",
+    "Send nothing else, and no delete operations. Answer the quiz, validate and publish 0001."
+   ],
+   "hints": [
+    "1.5.7 is for withdrawing an approval that has been granted. This application was never approved."
+   ],
+   "checks": [
+    {
+     "id": "seq",
+     "label": "0001: original application / amendment"
+    },
+    {
+     "id": "forms",
+     "label": "Cover letter and Form FDA 356h"
+    },
+    {
+     "id": "letter",
+     "label": "Withdrawal request in 1.5.5"
+    },
+    {
+     "id": "wrong",
+     "label": "Nothing in 1.5.7"
+    },
+    {
+     "id": "noDelete",
+     "label": "No delete operations"
+    },
+    {
+     "id": "onlyLetter",
+     "label": "Nothing else sent"
+    },
+    {
+     "id": "published",
+     "label": "0001 published with no High findings"
+    },
+    {
+     "id": "quiz",
+     "label": "Withdrawal questions answered correctly"
+    }
+   ]
+  }
+ ]
 }

@@ -13,7 +13,9 @@ export const LEVELS = [
 export const BADGES = [
   { id: 'first-valid', label: 'First valid sequence', about: 'Publish a sequence with no High findings.' },
   { id: 'zero-error', label: 'Zero-error publish', about: 'Publish a sequence with no findings at all.' },
-  { id: 'all-regions', label: 'All regions', about: 'Publish sequences for both the US and the EU.' },
+  { id: 'all-regions', label: 'All regions', about: 'Publish for the US, the EU, Japan and India.' },
+  { id: 'v4', label: 'Next generation', about: 'Score 80% or more on mission 3 (eCTD v4.0).' },
+  { id: 'approved', label: 'Through review', about: 'Take an application through the review simulator to a positive outcome.' },
   { id: 'lifecycle', label: 'Lifecycle hand', about: 'Score 80% or more on missions 4, 5 and 6.' },
   { id: 'reviewer-eye', label: "Reviewer's eye", about: 'Find every contradiction in reviewer\'s eye mode before revealing.' },
   { id: 'rescuer', label: 'Rescuer', about: 'Score 80% or more on mission 11.' },
@@ -49,7 +51,9 @@ export function progressSummary({ projects, attempts, lessonProgress, lessonCoun
   const earned = {
     'first-valid': published.some((x) => x.counts.High === 0),
     'zero-error': published.some((x) => x.counts.High + x.counts.Medium + x.counts.Low === 0),
-    'all-regions': ['US', 'EU'].every((r) => published.some((x) => x.p.region === r)),
+    'all-regions': ['US', 'EU', 'JP', 'IN'].every((r) => published.some((x) => x.p.region === r)),
+    v4: ok(3),
+    approved: projects.some((p) => p.review?.clock?.outcome?.positive),
     lifecycle: ok(4) && ok(5) && ok(6),
     'reviewer-eye': projects.some((p) => p.reviewerEye?.score === 100),
     rescuer: ok(11),
