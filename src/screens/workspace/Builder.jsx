@@ -253,7 +253,7 @@ export default function Builder({ project, seq, mutate, validation, toast, guide
                   <div key={e.key} className="leaf-card prior">
                     <div className="row" style={{ justifyContent: 'space-between' }}>
                       <span className="lt">{e.leaf.title || '(no title)'}</span>
-                      <span className="pill">seq {e.seq}</span>
+                      <span className="pill">{v4 ? `unit ${seqInt(e.seq)}` : `seq ${e.seq}`}</span>
                     </div>
                     <div className="fn">{e.leaf.fileName}</div>
                     {isReplacedNow && <p className="small muted" style={{ margin: '.3rem 0 0' }}>Acted on in this sequence.</p>}

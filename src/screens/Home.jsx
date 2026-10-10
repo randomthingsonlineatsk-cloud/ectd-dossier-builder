@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useApp } from '../ctx.js';
 import { go } from '../App.jsx';
-import { createProject, PRODUCTS, productOptions } from '../engine/model.js';
+import { createProject, PRODUCTS, productOptions, REGION_VERSION } from '../engine/model.js';
 
 const REGION_OPTION = {
   US: (o) => `US — ${({ 'bla-351k': 'BLA 351(k) biosimilar' })[o.appType] ?? o.appType.toUpperCase()} (eCTD v3.2.2)`,
@@ -128,25 +128,23 @@ export default function Home() {
           <label className="field">Fictional product
             <select value={productId} onChange={(e) => { setProductId(e.target.value); setRegion(productOptions(e.target.value)[0].region); }}>
               {Object.values(PRODUCTS).map((pr) => <option key={pr.id} value={pr.id}>{pr.product.brandName} ({pr.product.inn}) — {pr.label}</option>)}
-              <option disabled>Monoclonal antibody, biosimilar — Phase 3</option>
             </select>
           </label>
           <label className="field">Region and application type
             <select value={opt.region} onChange={(e) => setRegion(e.target.value)}>
               {opts.map((o) => <option key={o.region} value={o.region}>{REGION_OPTION[o.region]?.(o) ?? `${o.region} — ${o.appType.toUpperCase()}`}</option>)}
-              <option disabled>Japan — NDA, v4.0 (Phase 3)</option>
-              <option disabled>India — NDA under NDCT Rules (Phase 3)</option>
             </select>
           </label>
           <label className="field">eCTD version
-            <select defaultValue="3.2.2"><option value="3.2.2">v3.2.2</option><option disabled>v4.0 (Phase 3)</option></select>
+            <input type="text" readOnly value={{ '3.2.2': 'v3.2.2', '4.0': 'v4.0 (submission unit)', CTD: 'Not eCTD: CTD as PDF uploads' }[REGION_VERSION[opt.region]]} aria-describedby="ver-help" />
+            <small id="ver-help">Set by the region: the US and EU use v3.2.2 here, Japan v4.0, India its online portal.</small>
           </label>
         </div>
         <div className="row" style={{ marginTop: '1rem' }}><button className="btn primary" type="submit">Create project</button></div>
       </form>
 
       <div className="section-head"><h2>Where eCTD stands in 2026</h2></div>
-      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This release teaches v3.2.2 with the US and EU packs; a later release adds v4.0, Japan and India.</p>
+      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This app teaches v3.2.2 with the US and EU packs, v4.0 with the Japan pack, and India's CTD for its online portal.</p>
       <StatusTable />
     </div>
   );

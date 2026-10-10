@@ -135,9 +135,9 @@ export default function Workspace({ id }) {
             <p className="small muted" style={{ margin: 0 }}><a href="#/">Projects</a> / {p.product.brandName} ({p.product.inn}) · {REGION_LABEL[project.region]} {project.appType.toUpperCase()} · {project.ectdVersion === 'CTD' ? 'CTD (portal)' : `eCTD ${project.ectdVersion}`}</p>
             <h1>{project.name}</h1>
           </div>
-          <label className="field" style={{ minWidth: 220 }}>Working on sequence
+          <label className="field" style={{ minWidth: 220 }}>{project.ectdVersion === '4.0' ? 'Working on submission unit' : 'Working on sequence'}
             <select value={seq.number} onChange={(e) => setSeqNumber(e.target.value)}>
-              {sortedSequences(project).map((s) => <option key={s.id} value={s.number}>{s.number} — {s.subType} ({s.status})</option>)}
+              {sortedSequences(project).map((s) => <option key={s.id} value={s.number}>{project.ectdVersion === '4.0' ? `Unit ${parseInt(s.number, 10)}` : s.number} — {s.subType} ({s.status})</option>)}
             </select>
           </label>
         </div>

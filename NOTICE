@@ -10,8 +10,9 @@ as section 4(d) of the License requires, so the original author stays credited.
 
 Training content notice: every product, company, document, study and person in
 this application is fictional. Section codes, form numbers and XML element names
-follow public ICH and FDA specifications; the app does not reproduce any agency
-form, portal or logo, and its output is not suitable for a real submission.
+follow public ICH, FDA, EU, PMDA and CDSCO specifications; the app does not reproduce any agency
+form, portal, gateway or logo, and its output is not suitable for a real submission.
+The gateway and review clock are simulations.
 
 Third-party components:
 - React and React DOM (MIT License), Copyright (c) Meta Platforms, Inc. and affiliates.
