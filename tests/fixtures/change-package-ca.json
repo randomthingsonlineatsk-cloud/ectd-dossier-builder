@@ -1,0 +1,164 @@
+{
+  "kind": "variations-classifier/change-package",
+  "schema": 1,
+  "createdAt": "2026-10-11T00:00:00.000Z",
+  "notice": "Training only. Fictional product and company; not suitable for a real submission.",
+  "app": {
+    "name": "Variations Classifier",
+    "author": "Khan Gulrez Shagufa Fazal Ahmed"
+  },
+  "userId": "u-fixture",
+  "classId": null,
+  "caseId": "c-fixture-ca",
+  "product": {
+    "id": "nce-tablet",
+    "ectdProductId": "nce-tablet",
+    "brandName": "Ostrevia",
+    "inn": "lumiravostat",
+    "appType": "nda",
+    "applicationNumber": "999101",
+    "holder": "Halcyon Ridge Pharmaceuticals, Inc.",
+    "in": null,
+    "eu": null,
+    "ca": {
+      "din": "09990101",
+      "holder": "Halcyon Ridge Pharmaceuticals Canada ULC"
+    },
+    "ch": null,
+    "jp": null
+  },
+  "region": "CA",
+  "pack": {
+    "id": "ca",
+    "edition": "2026.1"
+  },
+  "submission": {
+    "category": "L3",
+    "categoryLabel": "Level III: notice of change (annual notification)",
+    "kind": "cmc",
+    "ectd": {
+      "submissionType": "level-iii",
+      "subType": "initial",
+      "submissionMode": "single"
+    },
+    "mode": "single",
+    "alsoProducts": [],
+    "description": "Move drug product manufacturing to a different site",
+    "implementation": {
+      "badge": "Do, then notify",
+      "rule": "Implement without prior review, then file the Level III form: pharmaceuticals at implementation (recommended) or in the annual notification; biologics within 12 months. Data within 30 days if asked."
+    },
+    "submitDate": "2026-11-02",
+    "earliestUse": "2026-11-02",
+    "related": false
+  },
+  "changes": [
+    {
+      "id": "ch-fixture-ca",
+      "changeId": "dp-site-move",
+      "title": "Move drug product manufacturing to a different site",
+      "note": "",
+      "category": "L3",
+      "categoryLabel": "Level III: notice of change (annual notification)",
+      "entry": {
+        "src": "qual",
+        "source": "Post-Notice of Compliance (NOC) Changes: Quality Document, Appendix 1 (human pharmaceuticals)",
+        "at": "A1 item 23"
+      },
+      "why": "A new or replacement site for drug product manufacture meeting the conditions is Level III."
+    }
+  ],
+  "module1": [
+    {
+      "code": "ca:1.0.1",
+      "label": "Cover letter"
+    },
+    {
+      "code": "ca:1.2.8",
+      "label": "Post-NOC changes: notices of change (Level III) form"
+    }
+  ],
+  "ctd": [
+    {
+      "code": "ca:1.0.1",
+      "label": "Cover letter",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ca:1.2.8",
+      "label": "Post-NOC changes: notices of change (Level III) form",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "2.3",
+      "label": "Quality overall summary, updated sections",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.3.1",
+      "label": "Drug product manufacturer(s), names and addresses",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.3.3",
+      "label": "Description of the manufacturing process and process controls",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.3.5",
+      "label": "Process validation or evaluation (including sterilization validation where relevant)",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.5.4",
+      "label": "Drug product batch analyses",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.8.2",
+      "label": "Post-approval stability protocol and commitment",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.P.8.3",
+      "label": "Drug product stability data",
+      "operation": "append",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    },
+    {
+      "code": "3.2.A.1",
+      "label": "Facilities and equipment",
+      "operation": "replace",
+      "why": [
+        "Move drug product manufacturing to a different site"
+      ]
+    }
+  ],
+  "coverLetter": "Halcyon Ridge Pharmaceuticals Canada ULC\n200 Maple Crescent, Suite 4, Fictionton, ON A1A 1A1, Canada\n\n2026-11-02\n\nTo: Health Canada, Pharmaceutical Drugs Directorate (training letter; not for submission)\n\nRe: Ostrevia (lumiravostat), DIN 09990101\nLEVEL III: NOTICE OF CHANGE (ANNUAL NOTIFICATION)\n\nHalcyon Ridge Pharmaceuticals Canada ULC submits the following change:\n\n1. Move drug product manufacturing to a different site (Level III: notice of change (annual notification); Post-Notice of Compliance (NOC) Changes, A1 item 23)\n\nThe change has been implemented on 2026-11-02. Supporting data are available on request.\n\nContact: Claire Gauthier, Manager, Regulatory Affairs\n\nTraining material. Fictional company and product."
+}

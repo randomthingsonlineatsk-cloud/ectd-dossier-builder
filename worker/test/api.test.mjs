@@ -57,4 +57,29 @@ await t('a bad key is refused, and deleting the class removes access', async () 
   assert.equal((await call('DELETE', '/class', { token: inst })).data.ok, true);
   assert.equal((await call('GET', '/me', { token: stu })).status, 401);
 });
+// The Variations Classifier lives under /vc/v1 with its own tables.
+const VC = BASE.replace(/\/ectd\/v1$/, '/vc/v1');
+const vcall = async (method, path, opts = {}) => {
+  const res = await fetch(VC + path, { method, headers: { 'content-type': 'application/json', ...(opts.token ? { authorization: `Bearer ${opts.token}` } : {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('Variations Classifier: separate health, classes and keys', async () => {
+  assert.equal((await vcall('GET', '/health')).data.service, 'vc-classroom');
+  const c = await vcall('POST', '/classes', { body: { name: 'Variations 101', instructorName: 'Dr Vee' } });
+  assert.equal(c.status, 201);
+  const key = c.data.instructorKey;
+  assert.equal((await call('GET', '/me', { token: key })).status, 401, 'an app key does not work on the other app');
+  const j = await vcall('POST', '/join', { body: { code: c.data.class.code, name: 'Chen' } });
+  assert.equal(j.status, 201);
+  const a = await vcall('POST', '/assignments', { token: key, body: { missionId: 23, difficulty: 'standard', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201);
+  const bad = await vcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'variations-classifier/mission-submission', case: { missionId: 22 } }, score: 80 } });
+  assert.equal(bad.status, 400);
+  const ok = await vcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'variations-classifier/mission-submission', case: { id: 'c1', missionId: 23 } }, score: 85, axes: { categories: 40 } } });
+  assert.equal(ok.status, 201);
+  const me = await vcall('GET', '/me', { token: key });
+  assert.equal(me.data.submissions.length, 1);
+  assert.equal(me.data.leaderboard[0].total, 85);
+  assert.equal((await vcall('DELETE', '/class', { token: key })).data.ok, true);
+});
 console.log(`\n${pass} classroom API tests passed`);

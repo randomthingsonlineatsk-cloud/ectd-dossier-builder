@@ -287,6 +287,18 @@
   {
    "value": "nc",
    "label": "NC (notifiable change)"
+  },
+  {
+   "value": "sands",
+   "label": "SANDS (supplement to an abbreviated new drug submission)"
+  },
+  {
+   "value": "level-iii",
+   "label": "Level III notice (post-NOC change notification)"
+  },
+  {
+   "value": "administrative",
+   "label": "Administrative submission"
   }
  ],
  "submissionSubTypes": [

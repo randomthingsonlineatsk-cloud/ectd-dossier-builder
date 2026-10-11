@@ -1,0 +1,164 @@
+{
+  "kind": "variations-classifier/change-package",
+  "schema": 1,
+  "createdAt": "2026-10-11T00:00:00.000Z",
+  "notice": "Training only. Fictional product and company; not suitable for a real submission.",
+  "app": {
+    "name": "Variations Classifier",
+    "author": "Khan Gulrez Shagufa Fazal Ahmed"
+  },
+  "userId": "u-fixture",
+  "classId": null,
+  "caseId": "c-fixture-jp",
+  "product": {
+    "id": "nce-tablet",
+    "ectdProductId": "nce-tablet",
+    "brandName": "Ostrevia",
+    "inn": "lumiravostat",
+    "appType": "nda",
+    "applicationNumber": "999101",
+    "holder": "Halcyon Ridge Pharmaceuticals, Inc.",
+    "in": null,
+    "eu": null,
+    "ca": null,
+    "ch": null,
+    "jp": {
+      "approvalNumber": "30500AMX00101000",
+      "holder": "Halcyon Ridge Japan K.K."
+    }
+  },
+  "region": "JP",
+  "pack": {
+    "id": "jp",
+    "edition": "2026.1"
+  },
+  "submission": {
+    "category": "PCA",
+    "categoryLabel": "Partial change approval application",
+    "kind": "cmc",
+    "ectd": {
+      "submissionType": "jp_partial-change",
+      "subType": "jp_ctd",
+      "submissionMode": "single"
+    },
+    "mode": "single",
+    "alsoProducts": [],
+    "description": "Relax (widen) an acceptance criterion",
+    "implementation": {
+      "badge": "Wait for approval",
+      "rule": "Apply for partial change approval and implement only after approval."
+    },
+    "submitDate": "2026-11-02",
+    "earliestUse": "2027-05-02",
+    "related": false
+  },
+  "changes": [
+    {
+      "id": "ch-fixture-jp",
+      "changeId": "spec-relax",
+      "title": "Relax (widen) an acceptance criterion",
+      "note": "",
+      "category": "PCA",
+      "categoryLabel": "Partial change approval application",
+      "entry": {
+        "src": "reg47",
+        "source": "Enforcement Regulations of the PMD Act, Article 47 (scope of minor changes)",
+        "at": "Article 47(2)"
+      },
+      "why": "A change to the specification is excluded from minor changes by Article 47(2), so it needs a partial change approval."
+    }
+  ],
+  "module1": [
+    {
+      "code": "jp:cover",
+      "label": "Cover letter"
+    },
+    {
+      "code": "jp:1.2",
+      "label": "Copy of the partial change approval application form (new and old comparison)"
+    },
+    {
+      "code": "jp:1.12",
+      "label": "List of attached documents"
+    },
+    {
+      "code": "jp:1.13.1",
+      "label": "Documents for the approved product (current approval form)"
+    }
+  ],
+  "ctd": [
+    {
+      "code": "jp:1.2",
+      "label": "Copy of the partial change approval application form (new and old comparison)",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "jp:1.12",
+      "label": "List of attached documents",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "jp:1.13.1",
+      "label": "Documents for the approved product (current approval form)",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "2.3",
+      "label": "Quality overall summary, updated sections",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.1",
+      "label": "Drug product specification",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.4",
+      "label": "Drug product batch analyses",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.6",
+      "label": "Justification of the drug product specification",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.8.3",
+      "label": "Drug product stability data",
+      "operation": "append",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "jp:cover",
+      "label": "Cover letter",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    }
+  ],
+  "coverLetter": "Halcyon Ridge Japan K.K.\n1-2-3 Fictional-cho, Example-ku, Tokyo 100-0000, Japan\n\n2026-11-02\n\nTo: the Ministry of Health, Labour and Welfare and PMDA (training letter; not for submission)\n\nRe: Ostrevia (lumiravostat), approval No. 30500AMX00101000\nPARTIAL CHANGE APPROVAL APPLICATION\n\nHalcyon Ridge Japan K.K. submits the following change:\n\n1. Relax (widen) an acceptance criterion (Partial change approval application; Enforcement Regulations of the PMD Act, Article 47 (scope of minor changes), Article 47(2))\n\nWe will implement the change only after approval.\nA comparison of the current and proposed approval form entries is enclosed.\n\nContact: Haruka Sato, Regulatory Affairs\n\nTraining material. Fictional company and product."
+}

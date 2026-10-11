@@ -233,6 +233,14 @@
   {
    "value": "supplemental-info",
    "label": "supplemental-info"
+  },
+  {
+   "value": "var-type1a",
+   "label": "var-type1a (type IA variation)"
+  },
+  {
+   "value": "var-type1ain",
+   "label": "var-type1ain (type IA-IN variation)"
   }
  ],
  "submissionSubTypes": [
