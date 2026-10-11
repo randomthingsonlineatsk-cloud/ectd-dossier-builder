@@ -82,4 +82,27 @@ await t('Variations Classifier: separate health, classes and keys', async () => 
   assert.equal(me.data.leaderboard[0].total, 85);
   assert.equal((await vcall('DELETE', '/class', { token: key })).data.ok, true);
 });
+const LW = BASE.replace(/\/ectd\/v1$/, '/lw/v1');
+const lwcall = async (method, path, opts = {}) => {
+  const res = await fetch(LW + path, { method, headers: { 'content-type': 'application/json', ...(opts.token ? { authorization: `Bearer ${opts.token}` } : {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('Labelling Workbench: drills as assignments, with text ids', async () => {
+  assert.equal((await lwcall('GET', '/health')).data.service, 'lw-classroom');
+  const c = await lwcall('POST', '/classes', { body: { name: 'Labelling 101', instructorName: 'Dr Elle' } });
+  assert.equal(c.status, 201);
+  const key = c.data.instructorKey;
+  assert.equal((await vcall('GET', '/me', { token: key })).status, 401, 'a key does not work on another app');
+  assert.equal((await lwcall('POST', '/assignments', { token: key, body: { missionId: 'Bad Id!', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await lwcall('POST', '/assignments', { token: key, body: { missionId: 'ccds-rollout', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201);
+  assert.equal(a.data.assignment.missionId, 'ccds-rollout');
+  const j = await lwcall('POST', '/join', { body: { code: c.data.class.code, name: 'Dev' } });
+  const bad = await lwcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'labelling-workbench/drill-submission', project: { drill: { id: 'hl-fix' } } }, score: 80 } });
+  assert.equal(bad.status, 400);
+  const ok = await lwcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'labelling-workbench/drill-submission', project: { id: 'p1', drill: { id: 'ccds-rollout' } } }, score: 100 } });
+  assert.equal(ok.status, 201);
+  assert.equal((await lwcall('GET', '/me', { token: key })).data.leaderboard[0].total, 100);
+  assert.equal((await lwcall('DELETE', '/class', { token: key })).data.ok, true);
+});
 console.log(`\n${pass} classroom API tests passed`);
