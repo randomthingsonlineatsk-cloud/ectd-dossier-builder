@@ -11,7 +11,7 @@ VC_APP_URL = "https://randomthingsonlineatsk-cloud.github.io/variations-classifi
 ALLOWED_ORIGINS = "https://randomthingsonlineatsk-cloud.github.io"
 APP_URL = "https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/"
 REMINDER_HOURS = "48"
-# BREVO_SENDER_EMAIL = "classes@example.org"   # set to enable email reminders
+BREVO_SENDER_EMAIL = "randomthingsonlineatsk@gmail.com"   # verified sender in Brevo; reminders need the BREVO_API_KEY secret too
 # BREVO_SENDER_NAME = "eCTD Dossier Builder"
 # Secret, set with: npx wrangler secret put BREVO_API_KEY
 
