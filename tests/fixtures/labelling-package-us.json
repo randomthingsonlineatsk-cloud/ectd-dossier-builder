@@ -1,0 +1,94 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-11T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mv3lcr5r-4v8zru",
+ "region": "US",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "labeling-supplement",
+  "subType": "application",
+  "description": "Labeling for Ostrevia (draft labeling)",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "d-mv3lcr5s-sff63h",
+   "kind": "pi",
+   "role": null,
+   "status": "draft",
+   "version": 0,
+   "section": "1.14.1.3",
+   "title": "Ostrevia Prescribing information (draft)",
+   "fileName": "ostrevia-prescribing-information-draft.pdf",
+   "pages": 4,
+   "content": "These highlights do not include all the information needed to use OSTREVIA safely and effectively. See full prescribing information for OSTREVIA.\nSerious infections leading to hospitalization or death have occurred. Avoid use with an active, serious infection. (5.1)\nMalignancies, including lymphoma, have been observed. (5.2)\nThrombosis, including deep venous thrombosis and pulmonary embolism, has "
+  },
+  {
+   "id": "d-mv3lcr5s-sff63h-annotated",
+   "kind": "pi",
+   "role": "annotated",
+   "status": "draft",
+   "version": 0,
+   "section": "1.14.1.2",
+   "title": "Ostrevia annotated draft labeling text",
+   "fileName": "ostrevia-prescribing-information-annotated.pdf",
+   "pages": 5,
+   "content": "Annotated draft labeling. Each statement is linked to its source in the Labelling Workbench export.\n\nThese highlights do not include all the information needed to use OSTREVIA safely and effectively. See full prescribing information for OSTREVIA.\nSerious infections leading to hospitalization or death have occurred. Avoid use with an active, serious infection. (5.1)\nMalignancies, including lymphoma"
+  },
+  {
+   "id": "d-mv3lcr5w-l9d5v1",
+   "kind": "mg",
+   "role": null,
+   "status": "draft",
+   "version": 0,
+   "section": "1.14.1.3",
+   "title": "Ostrevia Medication Guide (draft)",
+   "fileName": "ostrevia-medication-guide-draft.pdf",
+   "pages": 2,
+   "content": "OSTREVIA can cause serious side effects, including:\nSerious infections. OSTREVIA lowers the ability of your immune system to fight infections. Some people have had serious infections that needed hospital care or caused death. Tell your healthcare provider right away if you have a fever, sweating, chills, cough, or burning when you pass urine.\nCancer. Some people taking OSTREVIA have had lymphoma a"
+  },
+  {
+   "id": "d-mv3lcr5w-e2owel",
+   "kind": "carton",
+   "role": null,
+   "status": "draft",
+   "version": 0,
+   "section": "1.14.1.1",
+   "title": "Ostrevia Carton (draft)",
+   "fileName": "ostrevia-carton-draft.pdf",
+   "pages": 1,
+   "content": "OSTREVIA\n(lumiravostat) tablets\n10 mg\ntablets\nFor oral use\n30 tablets\nRx only\nNDC 99999-1010-3\nRecommended dosage: See prescribing information.\nStore at 20°C to 25°C (68°F to 77°F); excursions permitted to 15°C to 30°C (59°F to 86°F).\nLOT: XXXXXX\nEXP: YYYY-MM\nManufactured for: Halcyon Ridge Pharmaceuticals, Inc., Fictionville, NJ 08000, USA\nDispense the accompanying Medication Guide to each patien"
+  },
+  {
+   "id": "d-mv3lcr5w-39h1w5",
+   "kind": "container",
+   "role": null,
+   "status": "draft",
+   "version": 0,
+   "section": "1.14.1.1",
+   "title": "Ostrevia Container label (draft)",
+   "fileName": "ostrevia-container-label-draft.pdf",
+   "pages": 1,
+   "content": "OSTREVIA\n(lumiravostat) tablets\n10 mg\ntablets\nFor oral use\n30 tablets\nRx only\nNDC 99999-1010-3\nStore at 20°C to 25°C.\nLOT: XXXXXX\nEXP: YYYY-MM\nHalcyon Ridge Pharmaceuticals, Inc., Fictionville, NJ 08000\nDispense the accompanying Medication Guide to each patient."
+  }
+ ]
+}

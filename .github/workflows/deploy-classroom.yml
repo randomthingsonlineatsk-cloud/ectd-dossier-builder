@@ -1,5 +1,6 @@
 # Deploys the optional classroom server (Cloudflare Worker + D1) and rebuilds the site so it
-# points at it. The same Worker also serves the Variations Classifier under /vc/v1 (vc_ tables). Run it from the Actions tab ("Run workflow") after adding two repository secrets:
+# points at it. The same Worker also serves the Variations Classifier under /vc/v1 (vc_ tables) and the
+# Labelling Workbench under /lw/v1 (lw_ tables). Run it from the Actions tab ("Run workflow") after adding two repository secrets:
 #   CLOUDFLARE_API_TOKEN  - a Cloudflare API token with Workers Scripts:Edit and D1:Edit
 #   CLOUDFLARE_ACCOUNT_ID - your Cloudflare account ID
 # Optional secret for email reminders: BREVO_API_KEY (also set BREVO_SENDER_EMAIL in worker/wrangler.toml).
@@ -82,6 +83,11 @@ jobs:
           curl -s "${{ steps.worker.outputs.url }}/vc/v1/health" || echo "::warning::The /vc/v1 routes did not answer yet."
           echo
 
+      - name: Check the Labelling Workbench routes
+        run: |
+          curl -s "${{ steps.worker.outputs.url }}/lw/v1/health" || echo "::warning::The /lw/v1 routes did not answer yet."
+          echo
+
       - name: Rebuild the site with the classroom server built in
         env:
           VITE_CLASSROOM_API: ${{ steps.worker.outputs.url }}/ectd/v1
@@ -108,3 +114,4 @@ jobs:
           echo "API address: ${{ steps.worker.outputs.url }}/ectd/v1" >> "$GITHUB_STEP_SUMMARY"
           echo "The site on GitHub Pages now has it built in; the Classroom page is ready to use." >> "$GITHUB_STEP_SUMMARY"
           echo "Variations Classifier API address: ${{ steps.worker.outputs.url }}/vc/v1" >> "$GITHUB_STEP_SUMMARY"
+          echo "Labelling Workbench API address: ${{ steps.worker.outputs.url }}/lw/v1" >> "$GITHUB_STEP_SUMMARY"

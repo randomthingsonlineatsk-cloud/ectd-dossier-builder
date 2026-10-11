@@ -1,6 +1,7 @@
-// Classroom mode API: a Cloudflare Worker with a D1 database, shared by two apps.
+// Classroom mode API: a Cloudflare Worker with a D1 database, shared by three apps.
 //   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
+//   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
@@ -22,6 +23,9 @@ export function apps(env) {
     { id: 'vc', prefix: env.VC_PREFIX ?? '/vc/v1', t: 'vc_', service: 'vc-classroom', thing: 'case', name: 'Variations Classifier',
       appUrl: env.VC_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/variations-classifier/',
       missionOf: (p) => (p?.kind === 'variations-classifier/mission-submission' ? p?.case?.missionId : null) },
+    { id: 'lw', prefix: env.LW_PREFIX ?? '/lw/v1', t: 'lw_', service: 'lw-classroom', thing: 'drill project', name: 'Labelling Workbench', textMissions: true, missionWord: 'Drill',
+      appUrl: env.LW_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/',
+      missionOf: (p) => (p?.kind === 'labelling-workbench/drill-submission' ? p?.project?.drill?.id : null) },
   ];
 }
 
@@ -175,8 +179,8 @@ async function route(request, env, path, app) {
   if (seg[0] === 'assignments' && seg.length === 1 && method === 'POST') {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor can set assignments.');
     const b = await body(request);
-    const missionId = Number(b.missionId);
-    if (!Number.isInteger(missionId) || missionId < 1 || missionId > 99) throw new HttpError(400, 'Choose a mission.');
+    const missionId = app.textMissions ? clean(b.missionId, 40) : Number(b.missionId);
+    if (app.textMissions ? !/^[a-z0-9-]{2,40}$/.test(missionId) : (!Number.isInteger(missionId) || missionId < 1 || missionId > 99)) throw new HttpError(400, app.textMissions ? 'Choose a drill.' : 'Choose a mission.');
     const difficulty = DIFFICULTIES.includes(b.difficulty) ? b.difficulty : 'standard';
     const due = new Date(b.dueAt);
     if (Number.isNaN(due.getTime())) throw new HttpError(400, 'Give a valid due date.');
@@ -202,7 +206,7 @@ async function route(request, env, path, app) {
     const project = JSON.stringify(b.project ?? null);
     if (!b.project || project.length > MAX_PROJECT_BYTES) throw new HttpError(413, `Project files are limited to ${Math.round(MAX_PROJECT_BYTES / 1000)} KB.`);
     const missionId = app.missionOf(b.project);
-    if (Number(missionId) !== a.mission_id) throw new HttpError(400, `That ${app.thing} is not mission ${a.mission_id}.`);
+    if (String(missionId ?? '') !== String(a.mission_id)) throw new HttpError(400, `That ${app.thing} is not ${(app.missionWord ?? 'mission').toLowerCase()} ${a.mission_id}.`);
     const score = Math.max(0, Math.min(100, Math.round(Number(b.score) || 0)));
     const s = { id: randomId('sub'), assignment_id: a.id, member_id: me.member.id, submitted_at: now(), score, axes: JSON.stringify(b.axes ?? null), counts: JSON.stringify(b.counts ?? null), checks: JSON.stringify(b.checks ?? null), project, size: project.length };
     await env.DB.prepare(`INSERT INTO ${t}submissions (id, assignment_id, member_id, submitted_at, score, axes, counts, checks, project, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
@@ -295,8 +299,8 @@ async function remindersFor(env, app, at) {
       body: JSON.stringify({
         sender: { email: env.BREVO_SENDER_EMAIL, name: app.name },
         to: [{ email: r.email, name: r.name }],
-        subject: `Reminder: mission ${r.mission_id} for ${r.class_name} is due soon`,
-        textContent: `Hello ${r.name},\n\nMission ${r.mission_id} for ${r.class_name} is due on ${r.due_at.slice(0, 16).replace('T', ' ')} UTC and we have no submission from you yet.\n\nOpen the app, go to Classroom, and submit your ${app.thing} when you are ready: ${appUrl}#/classroom\n\nThis is a training exercise. All products and documents are fictional.`,
+        subject: `Reminder: ${(app.missionWord ?? "mission").toLowerCase()} ${r.mission_id} for ${r.class_name} is due soon`,
+        textContent: `Hello ${r.name},\n\n${app.missionWord ?? 'Mission'} ${r.mission_id} for ${r.class_name} is due on ${r.due_at.slice(0, 16).replace('T', ' ')} UTC and we have no submission from you yet.\n\nOpen the app, go to Classroom, and submit your ${app.thing} when you are ready: ${appUrl}#/classroom\n\nThis is a training exercise. All products and documents are fictional.`,
       }),
     });
     if (res.ok) {
