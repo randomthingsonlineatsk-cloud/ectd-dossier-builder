@@ -1,4 +1,4 @@
-# Classroom API for the eCTD Dossier Builder.
+# Classroom API for the eCTD Dossier Builder (/ectd/v1) and the Variations Classifier (/vc/v1).
 # Deploy steps are in worker/README.md. Replace database_id with your own D1 database.
 name = "ectd-classroom"
 main = "src/index.js"
@@ -6,6 +6,8 @@ compatibility_date = "2024-11-01"
 
 [vars]
 PREFIX = "/ectd/v1"
+VC_PREFIX = "/vc/v1"
+VC_APP_URL = "https://randomthingsonlineatsk-cloud.github.io/variations-classifier/"
 ALLOWED_ORIGINS = "https://randomthingsonlineatsk-cloud.github.io"
 APP_URL = "https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/"
 REMINDER_HOURS = "48"

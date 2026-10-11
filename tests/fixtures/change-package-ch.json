@@ -1,0 +1,172 @@
+{
+  "kind": "variations-classifier/change-package",
+  "schema": 1,
+  "createdAt": "2026-10-11T00:00:00.000Z",
+  "notice": "Training only. Fictional product and company; not suitable for a real submission.",
+  "app": {
+    "name": "Variations Classifier",
+    "author": "Khan Gulrez Shagufa Fazal Ahmed"
+  },
+  "userId": "u-fixture",
+  "classId": null,
+  "caseId": "c-fixture-ch",
+  "product": {
+    "id": "nce-tablet",
+    "ectdProductId": "nce-tablet",
+    "brandName": "Ostrevia",
+    "inn": "lumiravostat",
+    "appType": "nda",
+    "applicationNumber": "999101",
+    "holder": "Halcyon Ridge Pharmaceuticals, Inc.",
+    "in": null,
+    "eu": null,
+    "ca": null,
+    "ch": {
+      "authNumber": "99101",
+      "holder": "Halcyon Ridge Pharma (Schweiz) AG"
+    },
+    "jp": null
+  },
+  "region": "CH",
+  "pack": {
+    "id": "ch",
+    "edition": "2026.1"
+  },
+  "submission": {
+    "category": "IB",
+    "categoryLabel": "Type IB",
+    "kind": "cmc",
+    "ectd": {
+      "submissionType": "var-type1b",
+      "subType": "initial",
+      "submissionMode": "single"
+    },
+    "mode": "single",
+    "alsoProducts": [],
+    "description": "Extend the shelf life (expiration dating period)",
+    "implementation": {
+      "badge": "Tell, wait about 70 days, then do",
+      "rule": "Notify before implementing; the variation is accepted if Swissmedic does not object within 70 days (10 days formal control and 60 days evaluation)."
+    },
+    "submitDate": "2026-11-02",
+    "earliestUse": "2027-01-11",
+    "related": false
+  },
+  "changes": [
+    {
+      "id": "ch-fixture-ch",
+      "changeId": "shelf-life-extend",
+      "title": "Extend the shelf life (expiration dating period)",
+      "note": "",
+      "category": "IB",
+      "categoryLabel": "Type IB",
+      "entry": {
+        "src": "annex7",
+        "source": "Therapeutic Products Licensing Requirements Ordinance (TPLRO, SR 812.212.22), Annex 7: list of variations (revised, harmonised with the EU list)",
+        "at": "Q.II.f.1(b)5"
+      },
+      "why": "An extension based on extrapolation in line with the stability guidelines is Type IB."
+    }
+  ],
+  "module1": [
+    {
+      "code": "ch:1.0",
+      "label": "Cover letter (generally not required for Type IA, IA-IN and IB)"
+    },
+    {
+      "code": "ch:1.2.1",
+      "label": "Form: Variations and extensions HMP (version valid from 1 February 2026)"
+    },
+    {
+      "code": "ch:1.2.2",
+      "label": "Additional forms (for example the manufacturer information form)"
+    },
+    {
+      "code": "ch:1.3.1",
+      "label": "Information for healthcare professionals (tracked and clean)"
+    },
+    {
+      "code": "ch:1.3.2",
+      "label": "Patient information"
+    },
+    {
+      "code": "ch:1.3.3",
+      "label": "Packaging texts"
+    }
+  ],
+  "ctd": [
+    {
+      "code": "ch:1.0",
+      "label": "Cover letter (generally not required for Type IA, IA-IN and IB)",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ch:1.2.1",
+      "label": "Form: Variations and extensions HMP (version valid from 1 February 2026)",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ch:1.2.2",
+      "label": "Additional forms (for example the manufacturer information form)",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ch:1.3.1",
+      "label": "Information for healthcare professionals (tracked and clean)",
+      "operation": "replace",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ch:1.3.2",
+      "label": "Patient information",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "ch:1.3.3",
+      "label": "Packaging texts",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "3.2.P.8.1",
+      "label": "Stability summary and conclusion (shelf life, storage)",
+      "operation": "replace",
+      "why": [
+        "Extend the shelf life (expiration dating period)"
+      ]
+    },
+    {
+      "code": "3.2.P.8.2",
+      "label": "Post-approval stability protocol and commitment",
+      "operation": "replace",
+      "why": [
+        "Extend the shelf life (expiration dating period)"
+      ]
+    },
+    {
+      "code": "3.2.P.8.3",
+      "label": "Drug product stability data",
+      "operation": "append",
+      "why": [
+        "Extend the shelf life (expiration dating period)"
+      ]
+    }
+  ],
+  "coverLetter": "Halcyon Ridge Pharma (Schweiz) AG\nMusterstrasse 12, 9999 Beispielstadt, Switzerland\n\n2026-11-02\n\nTo: Swissmedic (training letter; not for submission)\n\nRe: Ostrevia (lumiravostat), Swissmedic authorisation No. 99101\nTYPE IB\n\nHalcyon Ridge Pharma (Schweiz) AG submits the following change:\n\n1. Extend the shelf life (expiration dating period) (Type IB; Therapeutic Products Licensing Requirements Ordinance (TPLRO, SR 812.212.22), Annex 7, Q.II.f.1(b)5)\n\nWe will implement the change only after the waiting period, unless Swissmedic objects.\nRevised product information is enclosed (clean and with changes marked).\n\nContact: Lukas Meier, Head of Regulatory Affairs\n\nTraining material. Fictional company and product."
+}

@@ -203,6 +203,14 @@
     {
       "value": "jp_original",
       "label": "jp_original (new drug application)"
+    },
+    {
+      "value": "jp_partial-change",
+      "label": "jp_partial-change (partial change approval application)"
+    },
+    {
+      "value": "jp_change-plan",
+      "label": "jp_change-plan (change plan confirmation, PACMP step 1)"
     }
   ],
   "submissionSubTypes": [

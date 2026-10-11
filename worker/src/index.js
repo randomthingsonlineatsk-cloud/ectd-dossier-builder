@@ -1,16 +1,29 @@
-// Classroom mode API for the eCTD Dossier Builder: a Cloudflare Worker with a D1 database.
+// Classroom mode API: a Cloudflare Worker with a D1 database, shared by two apps.
+//   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
+//   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 // Instructors create a class and get a join code; students join with the code and their
-// name, start assigned missions in the app, and submit their project file. Instructors see
-// scores and validation summaries, verify scores in their own browser, and comment.
-// Optional email reminders go out through Brevo on a schedule.
+// name, start assigned missions in the app, and submit their work. Instructors see scores,
+// verify them in their own browser, and comment. Optional email reminders go out through
+// Brevo on a schedule. The two apps never see each other's classes.
 //
-// All routes live under PREFIX (default /ectd/v1) so the Worker can be shared with other apps.
 // Auth: a random bearer token per instructor (the class key) and per student; only SHA-256
 // hashes of tokens are stored.
 
 const MAX_PROJECT_BYTES = 1_500_000;
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const DIFFICULTIES = ['guided', 'standard', 'expert'];
+
+// The apps this Worker serves. Each has its own route prefix and table prefix.
+export function apps(env) {
+  return [
+    { id: 'ectd', prefix: env.PREFIX ?? '/ectd/v1', t: 'ectd_', service: 'ectd-classroom', thing: 'project', name: env.BREVO_SENDER_NAME ?? 'eCTD Dossier Builder',
+      appUrl: env.APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/',
+      missionOf: (p) => p?.project?.mission?.id ?? p?.project?.missionId },
+    { id: 'vc', prefix: env.VC_PREFIX ?? '/vc/v1', t: 'vc_', service: 'vc-classroom', thing: 'case', name: 'Variations Classifier',
+      appUrl: env.VC_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/variations-classifier/',
+      missionOf: (p) => (p?.kind === 'variations-classifier/mission-submission' ? p?.case?.missionId : null) },
+  ];
+}
 
 const now = () => new Date().toISOString();
 const randomId = (prefix) => `${prefix}_${[...crypto.getRandomValues(new Uint8Array(9))].map((b) => b.toString(16).padStart(2, '0')).join('')}`;
@@ -51,13 +64,13 @@ function bearer(request) {
 }
 
 // Resolves the caller: { role: 'instructor', cls } or { role: 'student', member, cls }.
-async function who(request, env) {
+async function who(request, env, t) {
   const hash = await sha256Hex(bearer(request));
-  const cls = await env.DB.prepare('SELECT * FROM ectd_classes WHERE instructor_key_hash = ?').bind(hash).first();
+  const cls = await env.DB.prepare(`SELECT * FROM ${t}classes WHERE instructor_key_hash = ?`).bind(hash).first();
   if (cls) return { role: 'instructor', cls };
-  const member = await env.DB.prepare('SELECT * FROM ectd_members WHERE token_hash = ?').bind(hash).first();
+  const member = await env.DB.prepare(`SELECT * FROM ${t}members WHERE token_hash = ?`).bind(hash).first();
   if (member) {
-    const c = await env.DB.prepare('SELECT * FROM ectd_classes WHERE id = ?').bind(member.class_id).first();
+    const c = await env.DB.prepare(`SELECT * FROM ${t}classes WHERE id = ?`).bind(member.class_id).first();
     return { role: 'student', member, cls: c };
   }
   throw new HttpError(401, 'That key is not recognised. It may belong to a deleted class.');
@@ -70,13 +83,13 @@ const publicSubmission = (s, withProject = false) => ({
   axes: parseJSON(s.axes), counts: parseJSON(s.counts), checks: parseJSON(s.checks), size: s.size, ...(withProject ? { project: parseJSON(s.project) } : {}),
 });
 
-async function leaderboard(env, classId) {
+async function leaderboard(env, classId, t) {
   // Best score per member per assignment (verified score wins over the reported one), summed.
   const rows = await env.DB.prepare(`
     SELECT m.id AS member_id, m.name AS name, s.assignment_id AS assignment_id,
            MAX(COALESCE(s.verified_score, s.score)) AS best
-    FROM ectd_members m
-    LEFT JOIN ectd_submissions s ON s.member_id = m.id
+    FROM ${t}members m
+    LEFT JOIN ${t}submissions s ON s.member_id = m.id
     WHERE m.class_id = ?
     GROUP BY m.id, s.assignment_id`).bind(classId).all();
   const byMember = new Map();
@@ -88,18 +101,19 @@ async function leaderboard(env, classId) {
   return [...byMember.values()].sort((a, b) => b.total - a.total || a.name.localeCompare(b.name)).map((e, i) => ({ rank: i + 1, ...e }));
 }
 
-async function submissionAccess(env, me, submissionId) {
-  const s = await env.DB.prepare(`SELECT s.*, a.class_id FROM ectd_submissions s JOIN ectd_assignments a ON a.id = s.assignment_id WHERE s.id = ?`).bind(submissionId).first();
+async function submissionAccess(env, me, submissionId, t) {
+  const s = await env.DB.prepare(`SELECT s.*, a.class_id FROM ${t}submissions s JOIN ${t}assignments a ON a.id = s.assignment_id WHERE s.id = ?`).bind(submissionId).first();
   if (!s || s.class_id !== me.cls.id) throw new HttpError(404, 'Submission not found.');
   if (me.role === 'student' && s.member_id !== me.member.id) throw new HttpError(403, 'You can only see your own submissions.');
   return s;
 }
 
-async function route(request, env, path) {
+async function route(request, env, path, app) {
+  const { t } = app;
   const method = request.method;
   const seg = path.split('/').filter(Boolean);
 
-  if (method === 'GET' && seg.length === 1 && seg[0] === 'health') return json({ ok: true, service: 'ectd-classroom', time: now() });
+  if (method === 'GET' && seg.length === 1 && seg[0] === 'health') return json({ ok: true, service: app.service, time: now() });
 
   // Instructor creates a class.
   if (method === 'POST' && seg[0] === 'classes' && seg.length === 1) {
@@ -111,7 +125,7 @@ async function route(request, env, path) {
     const cls = { id: randomId('cls'), name, code: joinCode(), instructor_name: instructorName, instructor_email: clean(b.instructorEmail, 200) || null, instructor_key_hash: await sha256Hex(key), created_at: now() };
     for (let i = 0; i < 5; i++) {
       try {
-        await env.DB.prepare('INSERT INTO ectd_classes (id, name, code, instructor_name, instructor_email, instructor_key_hash, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+        await env.DB.prepare(`INSERT INTO ${t}classes (id, name, code, instructor_name, instructor_email, instructor_key_hash, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`)
           .bind(cls.id, cls.name, cls.code, cls.instructor_name, cls.instructor_email, cls.instructor_key_hash, cls.created_at).run();
         return json({ class: publicClass(cls), instructorKey: key }, 201);
       } catch (e) {
@@ -128,31 +142,31 @@ async function route(request, env, path) {
     const code = clean(b.code, 12).toUpperCase().replace(/[^A-Z0-9]/g, '');
     const name = clean(b.name, 120);
     if (!code || !name) throw new HttpError(400, 'Enter the join code and your name.');
-    const cls = await env.DB.prepare('SELECT * FROM ectd_classes WHERE code = ?').bind(code).first();
+    const cls = await env.DB.prepare(`SELECT * FROM ${t}classes WHERE code = ?`).bind(code).first();
     if (!cls) throw new HttpError(404, 'No class has that join code.');
     const token = randomToken();
     const member = { id: randomId('mem'), class_id: cls.id, name, email: clean(b.email, 200) || null, user_id: clean(b.userId, 80) || null, token_hash: await sha256Hex(token), joined_at: now() };
-    await env.DB.prepare('INSERT INTO ectd_members (id, class_id, name, email, user_id, token_hash, joined_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    await env.DB.prepare(`INSERT INTO ${t}members (id, class_id, name, email, user_id, token_hash, joined_at) VALUES (?, ?, ?, ?, ?, ?, ?)`)
       .bind(member.id, member.class_id, member.name, member.email, member.user_id, member.token_hash, member.joined_at).run();
     return json({ class: publicClass(cls), member: { id: member.id, name: member.name }, token }, 201);
   }
 
-  const me = await who(request, env);
+  const me = await who(request, env, t);
 
   // The caller's view of the class.
   if (method === 'GET' && seg[0] === 'me' && seg.length === 1) {
-    const assignments = (await env.DB.prepare('SELECT * FROM ectd_assignments WHERE class_id = ? ORDER BY due_at').bind(me.cls.id).all()).results.map(publicAssignment);
-    const board = await leaderboard(env, me.cls.id);
+    const assignments = (await env.DB.prepare(`SELECT * FROM ${t}assignments WHERE class_id = ? ORDER BY due_at`).bind(me.cls.id).all()).results.map(publicAssignment);
+    const board = await leaderboard(env, me.cls.id, t);
     if (me.role === 'instructor') {
-      const members = (await env.DB.prepare('SELECT id, name, email, joined_at FROM ectd_members WHERE class_id = ? ORDER BY name').bind(me.cls.id).all()).results
+      const members = (await env.DB.prepare(`SELECT id, name, email, joined_at FROM ${t}members WHERE class_id = ? ORDER BY name`).bind(me.cls.id).all()).results
         .map((m) => ({ id: m.id, name: m.name, email: m.email, joinedAt: m.joined_at }));
       const subs = (await env.DB.prepare(`SELECT s.id, s.assignment_id, s.member_id, s.submitted_at, s.score, s.verified_score, s.axes, s.counts, s.checks, s.size
-        FROM ectd_submissions s JOIN ectd_assignments a ON a.id = s.assignment_id WHERE a.class_id = ? ORDER BY s.submitted_at DESC`).bind(me.cls.id).all()).results.map((s) => publicSubmission(s));
+        FROM ${t}submissions s JOIN ${t}assignments a ON a.id = s.assignment_id WHERE a.class_id = ? ORDER BY s.submitted_at DESC`).bind(me.cls.id).all()).results.map((s) => publicSubmission(s));
       return json({ role: 'instructor', class: publicClass(me.cls), members, assignments, submissions: subs, leaderboard: board, reminders: !!env.BREVO_API_KEY });
     }
-    const subs = (await env.DB.prepare('SELECT * FROM ectd_submissions WHERE member_id = ? ORDER BY submitted_at DESC').bind(me.member.id).all()).results.map((s) => publicSubmission(s));
+    const subs = (await env.DB.prepare(`SELECT * FROM ${t}submissions WHERE member_id = ? ORDER BY submitted_at DESC`).bind(me.member.id).all()).results.map((s) => publicSubmission(s));
     const ids = subs.map((s) => s.id);
-    const comments = ids.length ? (await env.DB.prepare(`SELECT * FROM ectd_comments WHERE submission_id IN (${ids.map(() => '?').join(',')}) ORDER BY created_at`).bind(...ids).all()).results : [];
+    const comments = ids.length ? (await env.DB.prepare(`SELECT * FROM ${t}comments WHERE submission_id IN (${ids.map(() => '?').join(',')}) ORDER BY created_at`).bind(...ids).all()).results : [];
     return json({ role: 'student', class: publicClass(me.cls), member: { id: me.member.id, name: me.member.name }, assignments, submissions: subs,
       comments: comments.map((c) => ({ id: c.id, submissionId: c.submission_id, author: c.author, authorName: c.author_name, body: c.body, createdAt: c.created_at })), leaderboard: board });
   }
@@ -167,57 +181,57 @@ async function route(request, env, path) {
     const due = new Date(b.dueAt);
     if (Number.isNaN(due.getTime())) throw new HttpError(400, 'Give a valid due date.');
     const a = { id: randomId('asg'), class_id: me.cls.id, mission_id: missionId, difficulty, due_at: due.toISOString(), note: clean(b.note, 500), created_at: now() };
-    await env.DB.prepare('INSERT INTO ectd_assignments (id, class_id, mission_id, difficulty, due_at, note, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    await env.DB.prepare(`INSERT INTO ${t}assignments (id, class_id, mission_id, difficulty, due_at, note, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`)
       .bind(a.id, a.class_id, a.mission_id, a.difficulty, a.due_at, a.note, a.created_at).run();
     return json({ assignment: publicAssignment(a) }, 201);
   }
   if (seg[0] === 'assignments' && seg.length === 2 && method === 'DELETE') {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor can remove assignments.');
-    const r = await env.DB.prepare('DELETE FROM ectd_assignments WHERE id = ? AND class_id = ?').bind(seg[1], me.cls.id).run();
+    const r = await env.DB.prepare(`DELETE FROM ${t}assignments WHERE id = ? AND class_id = ?`).bind(seg[1], me.cls.id).run();
     if (!r.meta?.changes) throw new HttpError(404, 'Assignment not found.');
-    await env.DB.prepare('DELETE FROM ectd_submissions WHERE assignment_id = ?').bind(seg[1]).run();
+    await env.DB.prepare(`DELETE FROM ${t}submissions WHERE assignment_id = ?`).bind(seg[1]).run();
     return json({ ok: true });
   }
 
   // Student: submit a project for an assignment.
   if (seg[0] === 'assignments' && seg.length === 3 && seg[2] === 'submissions' && method === 'POST') {
     if (me.role !== 'student') throw new HttpError(403, 'Only students submit work.');
-    const a = await env.DB.prepare('SELECT * FROM ectd_assignments WHERE id = ? AND class_id = ?').bind(seg[1], me.cls.id).first();
+    const a = await env.DB.prepare(`SELECT * FROM ${t}assignments WHERE id = ? AND class_id = ?`).bind(seg[1], me.cls.id).first();
     if (!a) throw new HttpError(404, 'Assignment not found.');
     const b = await body(request);
     const project = JSON.stringify(b.project ?? null);
     if (!b.project || project.length > MAX_PROJECT_BYTES) throw new HttpError(413, `Project files are limited to ${Math.round(MAX_PROJECT_BYTES / 1000)} KB.`);
-    const missionId = b.project?.project?.mission?.id ?? b.project?.project?.missionId;
-    if (Number(missionId) !== a.mission_id) throw new HttpError(400, `That project is not mission ${a.mission_id}.`);
+    const missionId = app.missionOf(b.project);
+    if (Number(missionId) !== a.mission_id) throw new HttpError(400, `That ${app.thing} is not mission ${a.mission_id}.`);
     const score = Math.max(0, Math.min(100, Math.round(Number(b.score) || 0)));
     const s = { id: randomId('sub'), assignment_id: a.id, member_id: me.member.id, submitted_at: now(), score, axes: JSON.stringify(b.axes ?? null), counts: JSON.stringify(b.counts ?? null), checks: JSON.stringify(b.checks ?? null), project, size: project.length };
-    await env.DB.prepare('INSERT INTO ectd_submissions (id, assignment_id, member_id, submitted_at, score, axes, counts, checks, project, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+    await env.DB.prepare(`INSERT INTO ${t}submissions (id, assignment_id, member_id, submitted_at, score, axes, counts, checks, project, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
       .bind(s.id, s.assignment_id, s.member_id, s.submitted_at, s.score, s.axes, s.counts, s.checks, s.project, s.size).run();
     return json({ submission: publicSubmission(s), late: s.submitted_at > a.due_at }, 201);
   }
 
   // One submission (with the project file), its verified score, and comments.
   if (seg[0] === 'submissions' && seg.length === 2 && method === 'GET') {
-    const s = await submissionAccess(env, me, seg[1]);
-    const comments = (await env.DB.prepare('SELECT * FROM ectd_comments WHERE submission_id = ? ORDER BY created_at').bind(s.id).all()).results;
+    const s = await submissionAccess(env, me, seg[1], t);
+    const comments = (await env.DB.prepare(`SELECT * FROM ${t}comments WHERE submission_id = ? ORDER BY created_at`).bind(s.id).all()).results;
     return json({ submission: publicSubmission(s, true), comments: comments.map((c) => ({ id: c.id, author: c.author, authorName: c.author_name, body: c.body, createdAt: c.created_at })) });
   }
   if (seg[0] === 'submissions' && seg.length === 2 && method === 'PATCH') {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor verifies scores.');
-    const s = await submissionAccess(env, me, seg[1]);
+    const s = await submissionAccess(env, me, seg[1], t);
     const b = await body(request);
     const v = Math.max(0, Math.min(100, Math.round(Number(b.verifiedScore))));
     if (Number.isNaN(v)) throw new HttpError(400, 'Give a score from 0 to 100.');
-    await env.DB.prepare('UPDATE ectd_submissions SET verified_score = ? WHERE id = ?').bind(v, s.id).run();
+    await env.DB.prepare(`UPDATE ${t}submissions SET verified_score = ? WHERE id = ?`).bind(v, s.id).run();
     return json({ ok: true, verifiedScore: v });
   }
   if (seg[0] === 'submissions' && seg.length === 3 && seg[2] === 'comments' && method === 'POST') {
-    const s = await submissionAccess(env, me, seg[1]);
+    const s = await submissionAccess(env, me, seg[1], t);
     const b = await body(request);
     const text = clean(b.body, 2000);
     if (!text) throw new HttpError(400, 'Write a comment first.');
     const c = { id: randomId('cmt'), submission_id: s.id, author: me.role, author_name: me.role === 'instructor' ? me.cls.instructor_name : me.member.name, body: text, created_at: now() };
-    await env.DB.prepare('INSERT INTO ectd_comments (id, submission_id, author, author_name, body, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+    await env.DB.prepare(`INSERT INTO ${t}comments (id, submission_id, author, author_name, body, created_at) VALUES (?, ?, ?, ?, ?, ?)`)
       .bind(c.id, c.submission_id, c.author, c.author_name, c.body, c.created_at).run();
     return json({ comment: { id: c.id, author: c.author, authorName: c.author_name, body: c.body, createdAt: c.created_at } }, 201);
   }
@@ -225,21 +239,21 @@ async function route(request, env, path) {
   // Instructor removes a student, or deletes the class.
   if (seg[0] === 'members' && seg.length === 2 && method === 'DELETE') {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor can remove students.');
-    const r = await env.DB.prepare('DELETE FROM ectd_members WHERE id = ? AND class_id = ?').bind(seg[1], me.cls.id).run();
+    const r = await env.DB.prepare(`DELETE FROM ${t}members WHERE id = ? AND class_id = ?`).bind(seg[1], me.cls.id).run();
     if (!r.meta?.changes) throw new HttpError(404, 'Student not found.');
-    await env.DB.prepare('DELETE FROM ectd_submissions WHERE member_id = ?').bind(seg[1]).run();
+    await env.DB.prepare(`DELETE FROM ${t}submissions WHERE member_id = ?`).bind(seg[1]).run();
     return json({ ok: true });
   }
   if (seg[0] === 'class' && seg.length === 1 && method === 'DELETE') {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor can delete the class.');
     const id = me.cls.id;
     await env.DB.batch([
-      env.DB.prepare('DELETE FROM ectd_comments WHERE submission_id IN (SELECT s.id FROM ectd_submissions s JOIN ectd_assignments a ON a.id = s.assignment_id WHERE a.class_id = ?)').bind(id),
-      env.DB.prepare('DELETE FROM ectd_submissions WHERE assignment_id IN (SELECT id FROM ectd_assignments WHERE class_id = ?)').bind(id),
-      env.DB.prepare('DELETE FROM ectd_reminders WHERE assignment_id IN (SELECT id FROM ectd_assignments WHERE class_id = ?)').bind(id),
-      env.DB.prepare('DELETE FROM ectd_assignments WHERE class_id = ?').bind(id),
-      env.DB.prepare('DELETE FROM ectd_members WHERE class_id = ?').bind(id),
-      env.DB.prepare('DELETE FROM ectd_classes WHERE id = ?').bind(id),
+      env.DB.prepare(`DELETE FROM ${t}comments WHERE submission_id IN (SELECT s.id FROM ${t}submissions s JOIN ${t}assignments a ON a.id = s.assignment_id WHERE a.class_id = ?)`).bind(id),
+      env.DB.prepare(`DELETE FROM ${t}submissions WHERE assignment_id IN (SELECT id FROM ${t}assignments WHERE class_id = ?)`).bind(id),
+      env.DB.prepare(`DELETE FROM ${t}reminders WHERE assignment_id IN (SELECT id FROM ${t}assignments WHERE class_id = ?)`).bind(id),
+      env.DB.prepare(`DELETE FROM ${t}assignments WHERE class_id = ?`).bind(id),
+      env.DB.prepare(`DELETE FROM ${t}members WHERE class_id = ?`).bind(id),
+      env.DB.prepare(`DELETE FROM ${t}classes WHERE id = ?`).bind(id),
     ]);
     return json({ ok: true });
   }
@@ -248,35 +262,45 @@ async function route(request, env, path) {
 }
 
 // Reminders: students with an email address and no submission, for assignments due within
-// REMINDER_HOURS (default 48). One reminder per student per assignment.
+// REMINDER_HOURS (default 48). One reminder per student per assignment, for each app.
 export async function sendReminders(env, at = new Date()) {
   if (!env.BREVO_API_KEY || !env.BREVO_SENDER_EMAIL) return { sent: 0, skipped: 'Brevo is not configured.' };
+  let sent = 0; let candidates = 0;
+  for (const app of apps(env)) {
+    const r = await remindersFor(env, app, at);
+    sent += r.sent; candidates += r.candidates;
+  }
+  return { sent, candidates };
+}
+
+async function remindersFor(env, app, at) {
+  const { t } = app;
   const hours = Number(env.REMINDER_HOURS ?? 48);
   const until = new Date(at.getTime() + hours * 3600_000).toISOString();
   const rows = (await env.DB.prepare(`
     SELECT a.id AS assignment_id, a.mission_id, a.due_at, c.name AS class_name, m.id AS member_id, m.name, m.email
-    FROM ectd_assignments a
-    JOIN ectd_classes c ON c.id = a.class_id
-    JOIN ectd_members m ON m.class_id = a.class_id
+    FROM ${t}assignments a
+    JOIN ${t}classes c ON c.id = a.class_id
+    JOIN ${t}members m ON m.class_id = a.class_id
     WHERE a.due_at > ? AND a.due_at <= ? AND m.email IS NOT NULL
-      AND NOT EXISTS (SELECT 1 FROM ectd_submissions s WHERE s.assignment_id = a.id AND s.member_id = m.id)
-      AND NOT EXISTS (SELECT 1 FROM ectd_reminders r WHERE r.assignment_id = a.id AND r.member_id = m.id)
+      AND NOT EXISTS (SELECT 1 FROM ${t}submissions s WHERE s.assignment_id = a.id AND s.member_id = m.id)
+      AND NOT EXISTS (SELECT 1 FROM ${t}reminders r WHERE r.assignment_id = a.id AND r.member_id = m.id)
     LIMIT 200`).bind(at.toISOString(), until).all()).results ?? [];
   let sent = 0;
   for (const r of rows) {
-    const appUrl = env.APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/';
+    const appUrl = app.appUrl;
     const res = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
       body: JSON.stringify({
-        sender: { email: env.BREVO_SENDER_EMAIL, name: env.BREVO_SENDER_NAME ?? 'eCTD Dossier Builder' },
+        sender: { email: env.BREVO_SENDER_EMAIL, name: app.name },
         to: [{ email: r.email, name: r.name }],
         subject: `Reminder: mission ${r.mission_id} for ${r.class_name} is due soon`,
-        textContent: `Hello ${r.name},\n\nMission ${r.mission_id} for ${r.class_name} is due on ${r.due_at.slice(0, 16).replace('T', ' ')} UTC and we have no submission from you yet.\n\nOpen the app, go to Classroom, and submit your project when you are ready: ${appUrl}#/classroom\n\nThis is a training exercise. All products and documents are fictional.`,
+        textContent: `Hello ${r.name},\n\nMission ${r.mission_id} for ${r.class_name} is due on ${r.due_at.slice(0, 16).replace('T', ' ')} UTC and we have no submission from you yet.\n\nOpen the app, go to Classroom, and submit your ${app.thing} when you are ready: ${appUrl}#/classroom\n\nThis is a training exercise. All products and documents are fictional.`,
       }),
     });
     if (res.ok) {
-      await env.DB.prepare('INSERT OR IGNORE INTO ectd_reminders (assignment_id, member_id, sent_at) VALUES (?, ?, ?)').bind(r.assignment_id, r.member_id, now()).run();
+      await env.DB.prepare(`INSERT OR IGNORE INTO ${t}reminders (assignment_id, member_id, sent_at) VALUES (?, ?, ?)`).bind(r.assignment_id, r.member_id, now()).run();
       sent++;
     }
   }
@@ -288,10 +312,10 @@ export default {
     const cors = corsHeaders(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
-    const prefix = env.PREFIX ?? '/ectd/v1';
-    if (!url.pathname.startsWith(prefix)) return json({ error: 'Not found.' }, 404, cors);
+    const app = apps(env).find((a) => url.pathname === a.prefix || url.pathname.startsWith(`${a.prefix}/`));
+    if (!app) return json({ error: 'Not found.' }, 404, cors);
     try {
-      const res = await route(request, env, url.pathname.slice(prefix.length));
+      const res = await route(request, env, url.pathname.slice(app.prefix.length), app);
       for (const [k, v] of Object.entries(cors)) res.headers.set(k, v);
       return res;
     } catch (e) {

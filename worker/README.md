@@ -1,13 +1,17 @@
 # Classroom server (Cloudflare Worker + D1)
 
-Classroom mode for the eCTD Dossier Builder. The app itself stays a static site; only classroom
+Classroom mode for the eCTD Dossier Builder, shared with the
+[Variations Classifier](https://github.com/randomthingsonlineatsk-cloud/variations-classifier). The app itself stays a static site; only classroom
 mode talks to this small API. Instructors create a class and share a join code; students join,
 start assigned missions, and submit their project files; instructors see scores and validation
 results, re-score each submission in their own browser, comment, and see a leaderboard.
 Optional deadline reminders go out by email through Brevo.
 
-Tables are prefixed `ectd_` and every route sits under `/ectd/v1`, so the Worker and its D1
-database can be shared with other apps.
+Tables are prefixed `ectd_` and every route sits under `/ectd/v1`. The Variations Classifier
+uses the same Worker and database with `vc_` tables and routes under `/vc/v1` (set by `VC_PREFIX`
+and `VC_APP_URL` in `wrangler.toml`). The two apps never see each other's classes or keys; in the
+Variations Classifier a submission is the student's mission case, which the instructor re-scores
+in their own browser.
 
 ## Deploy with one click (GitHub Actions)
 
@@ -31,7 +35,7 @@ npx wrangler deploy                           # prints https://ectd-classroom.<y
 ```
 
 The API address to give the app is the Worker URL plus `/ectd/v1`, for example
-`https://ectd-classroom.<you>.workers.dev/ectd/v1`. Either enter it on the app's Classroom page,
+`https://ectd-classroom.<you>.workers.dev/ectd/v1` (and `/vc/v1` for the Variations Classifier). Either enter it on the app's Classroom page,
 or build the app with it baked in:
 
 ```bash
