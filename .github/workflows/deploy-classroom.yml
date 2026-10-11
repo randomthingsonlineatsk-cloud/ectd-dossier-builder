@@ -80,7 +80,7 @@ jobs:
       - name: Check the Variations Classifier routes
         run: |
           curl -s "${{ steps.worker.outputs.url }}/vc/v1/health" || echo "::warning::The /vc/v1 routes did not answer yet."
-          echo"
+          echo
 
       - name: Rebuild the site with the classroom server built in
         env:
