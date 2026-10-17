@@ -1,4 +1,4 @@
-// Labelling package from the Labelling Workbench: labels land in US Module 1.14.
+// Labelling package from the Labelling Workbench: labels land in the region's Module 1 labelling node.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createProject } from '../src/engine/model.js';
@@ -38,6 +38,26 @@ t('uses the selected draft sequence; warns about another product; refuses anothe
   assert.equal(importLabellingPackage(other, parseLabellingPackage(text)).warnings.length, 1);
   const eu = createProject({ name: 'x', productId: 'nce-tablet', region: 'EU', user: { userId: 'u-1' } });
   assert.throws(() => importLabellingPackage(eu, parseLabellingPackage(text)), /for US/);
+});
+
+for (const [r, region, nodes, type] of [['eu', 'EU', ['eu:1.3.1'], 'var-type2'], ['in', 'IN', ['in:1.3'], 'post-approval-change'], ['ca', 'CA', ['ca:1.3.1', 'ca:1.3.2'], 'snds'], ['ch', 'CH', ['ch:1.3.1', 'ch:1.3.2'], 'var-type2'], ['jp', 'JP', ['jp:1.8'], 'jp_partial-change']]) {
+  t(`${region}: the package lands in ${nodes.join(' and ')} of a new ${type} sequence`, () => {
+    const pkg = parseLabellingPackage(readFileSync(new URL(`./fixtures/labelling-package-${r}.json`, import.meta.url), 'utf8'));
+    assert.equal(pkg.region, region);
+    const p = createProject({ name: 'labels', productId: 'nce-tablet', region, user: { userId: 'u-1' } });
+    p.sequences[0].status = 'published';
+    const { seq, placed, warnings } = importLabellingPackage(p, pkg, { seqNumber: p.sequences[0].number });
+    assert.equal(warnings.length, region === 'JP' ? 1 : 0, JSON.stringify(warnings));
+    assert.equal(seq.submissionType, type);
+    assert.equal(placed.length, pkg.documents.length);
+    assert.deepEqual([...new Set(seq.leaves.map((l) => l.nodeCode))].sort(), nodes);
+    for (const l of seq.leaves) assert.equal(p.documents[l.docId]?.region, region);
+  });
+}
+t('a package for one region is refused by a project for another', () => {
+  const pkg = parseLabellingPackage(readFileSync(new URL('./fixtures/labelling-package-jp.json', import.meta.url), 'utf8'));
+  const p = createProject({ name: 'x', productId: 'nce-tablet', region: 'EU', user: { userId: 'u-1' } });
+  assert.throws(() => importLabellingPackage(p, pkg), /for JP/);
 });
 
 console.log(`labelling package: ${n} tests passed`);

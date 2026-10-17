@@ -60,6 +60,8 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **Change packages from the Variations Classifier.** The [Variations Classifier](https://github.com/randomthingsonlineatsk-cloud/variations-classifier), a separate app, classifies post-approval changes and exports a `change-package.json`. On the Sequences tab, **Import change package** starts a draft sequence of the right submission type, uses the package's cover letter, and lists the leaves to add with their operations as a to-do list. Packages come for the US, EU, India, Canada (Level III notices, notifiable changes, SNDS and SANDS), Switzerland (Type IA to II) and Japan (partial change applications and change plans); the classroom server also hosts that app's classes under `/vc/v1`.
 
+**Labelling packages from the Labelling Workbench.** The [Labelling Workbench](https://github.com/randomthingsonlineatsk-cloud/labelling-workbench) exports a `labelling-package.json`. On the Sequences tab, **Import labelling package** adds the labels to the draft sequence (or starts one of the package's submission type) in the Module 1 labelling node of their region: US 1.14, EU 1.3.1 (one combined product information document), India 1.3, Canada and Switzerland 1.3.1 and 1.3.2, and Japan 1.8 (the Workbench's insert is an English practice text, so the import warns that Japan expects Module 1 in Japanese).
+
 **Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
 
 

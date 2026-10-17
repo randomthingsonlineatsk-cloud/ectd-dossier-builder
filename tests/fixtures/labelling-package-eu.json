@@ -1,0 +1,47 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-17T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mvc6e6wa-9jr95f",
+ "region": "EU",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "var-type2",
+  "subType": "initial",
+  "description": "Labelling for Ostrevia",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "p-mvc6e6wa-9jr95f-combined",
+   "kind": "eu-combined",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "eu:1.3.1",
+   "lang": "en",
+   "title": "SmPC, Annex II, Labelling and Package Leaflet (English) - Ostrevia",
+   "fileName": "ema-ostrevia-combined-pi-en.pdf",
+   "pages": 5,
+   "content": "SmPC\nOstrevia 10 mg film-coated tablets\nOstrevia 25 mg film-coated tablets\nOstrevia 10 mg film-coated tablets: each film-coated tablet contains 10 mg lumiravostat.\nOstrevia 25 mg film-coated tablets: each film-coated tablet contains 25 mg lumiravostat.\nFor the full list of excipients, see section 6.1.\nFilm-coated tablet (tablet).\n10 mg: white, round, film-coated tablet, debossed with \"HR\" on one s"
+  }
+ ]
+}

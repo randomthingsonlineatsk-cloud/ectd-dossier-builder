@@ -1,0 +1,70 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-17T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mvc6e6ww-riooqo",
+ "region": "CA",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "snds",
+  "subType": "initial",
+  "description": "Labelling for Ostrevia",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "d-mvc6e6ww-l25vg9",
+   "kind": "ca-pm",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "ca:1.3.1",
+   "title": "Ostrevia Product monograph (Canada)",
+   "fileName": "ostrevia-product-monograph-canada.pdf",
+   "pages": 2,
+   "content": "Section\nDate\n7 WARNINGS AND PRECAUTIONS, Hepatic/Biliary/Pancreatic\n2026-08\nOSTREVIA (lumiravostat) is indicated for the treatment of adults with moderate to severe chronic hand eczema that has not responded adequately to potent topical corticosteroids, or when these are not advisable.\nPediatrics (< 18 years of age): No data are available to Health Canada; therefore, Health Canada has not authoriz"
+  },
+  {
+   "id": "d-mvc6e6wx-np92tz",
+   "kind": "ca-pmi",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "ca:1.3.1",
+   "title": "Ostrevia Patient Medication Information (Canada)",
+   "fileName": "ostrevia-patient-medication-information-canada.pdf",
+   "pages": 2,
+   "content": "Serious Warnings and Precautions\n• Serious infections: OSTREVIA can lower your ability to fight infections. Some infections, including tuberculosis, have led to hospital stays or death.\n• Cancer: some people taking OSTREVIA have had cancers, including lymphoma.\n• Blood clots: blood clots in the legs or lungs have happened and can be life-threatening.\nOSTREVIA is used in adults to treat moderate to"
+  },
+  {
+   "id": "d-mvc6e6wx-k08enr",
+   "kind": "ca-label",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "ca:1.3.2",
+   "title": "Ostrevia Outer label (Canada)",
+   "fileName": "ostrevia-outer-label-canada.pdf",
+   "pages": 1,
+   "content": "Pr\nOSTREVIA\nlumiravostat tablets / comprimés de lumiravostat\n10 mg\nFilm-coated tablets / Comprimés pelliculés\nDIN 09990101\n30 tablets / 30 comprimés\nDosage: see the product monograph. / Posologie : voir la monographie de produit.\nEach tablet contains 10 mg lumiravostat. / Chaque comprimé contient 10 mg de lumiravostat.\nStore at 15°C to 30°C. Protect from moisture. / Conserver entre 15 °C et 30 °C."
+  }
+ ]
+}

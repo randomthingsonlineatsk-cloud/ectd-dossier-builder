@@ -1,0 +1,70 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-17T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mvc6e6wp-39lgd8",
+ "region": "IN",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "post-approval-change",
+  "subType": "application",
+  "description": "Labelling for Ostrevia",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "d-mvc6e6wp-bepfxo",
+   "kind": "in-pi",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "in:1.3",
+   "title": "Ostrevia Package insert (India)",
+   "fileName": "ostrevia-package-insert-india.pdf",
+   "pages": 1,
+   "content": "Lumiravostat Tablets 10 mg / 25 mg\nEach film-coated tablet contains: Lumiravostat 10 mg (or 25 mg). Excipients q.s. Colour: Titanium Dioxide IP (25 mg: Iron Oxide Yellow).\nFilm-coated tablets, 10 mg and 25 mg.\nLumiravostat is indicated for the treatment of adults with moderate to severe chronic hand eczema not adequately controlled with potent topical corticosteroids, or when these are not advisab"
+  },
+  {
+   "id": "d-mvc6e6wq-2b4mg0",
+   "kind": "in-carton",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "in:1.3",
+   "title": "Ostrevia Carton (India)",
+   "fileName": "ostrevia-carton-india.pdf",
+   "pages": 1,
+   "content": "Rx\nLumiravostat Tablets 10 mg\nOSTREVIA\nEach film-coated tablet contains: Lumiravostat 10 mg. Excipients q.s. Colour: Titanium Dioxide IP.\n3 strips of 10 film-coated tablets\nSCHEDULE H PRESCRIPTION DRUG – CAUTION\nNot to be sold by retail without the prescription of a Registered Medical Practitioner.\nDosage: As directed by the physician.\nStore below 30°C. Protect from moisture. Keep out of reach of "
+  },
+  {
+   "id": "d-mvc6e6wq-qkbs1v",
+   "kind": "in-label",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "in:1.3",
+   "title": "Ostrevia Strip or container label (India)",
+   "fileName": "ostrevia-strip-or-container-label-india.pdf",
+   "pages": 1,
+   "content": "Rx\nLumiravostat Tablets 10 mg\nOSTREVIA\nEach film-coated tablet contains: Lumiravostat 10 mg. Excipients q.s. Colour: Titanium Dioxide IP.\n10 film-coated tablets\nSCHEDULE H PRESCRIPTION DRUG – CAUTION\nNot to be sold by retail without the prescription of a Registered Medical Practitioner.\nStore below 30°C. Protect from moisture. Keep out of reach of children.\nManufactured by: Sahyadri Formulations P"
+  }
+ ]
+}
