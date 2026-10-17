@@ -4,7 +4,7 @@ import { historyOf, lifecycleState, nextSequenceNumber, sortedSequences, isRetir
 import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 import { parseChangePackage, importChangePackage, todoStatus } from '../../engine/changepkg.js';
-import { parseLabellingPackage, importLabellingPackage } from '../../engine/labelpkg.js';
+import { parseLabellingPackage, importLabellingPackage, LABEL_PKG_REGIONS, LABEL_PKG_NODE } from '../../engine/labelpkg.js';
 
 export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
   const seqs = sortedSequences(project);
@@ -40,7 +40,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
       let num; let res;
       mutate((p) => { res = importLabellingPackage(p, pkg, { seqNumber: seq?.number }); num = res.seq.number; });
       setSeqNumber(num);
-      toast(`${res.placed.length} label document(s) placed in sequence ${num} (Module 1.14).${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
+      toast(`${res.placed.length} label document(s) placed in sequence ${num} (${LABEL_PKG_NODE[project.region] ?? 'Module 1'}).${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
     } catch (err) { toast(err.message, 'error'); }
   };
 
@@ -139,10 +139,10 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
         </label>
       </section>
 
-      {project.region === 'US' && (
+      {LABEL_PKG_REGIONS.includes(project.region) && (
         <section className="panel">
           <h2 style={{ fontSize: 'var(--step-1)' }}>Import labelling package</h2>
-          <p className="small muted">Labels written in the <a href="https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/" target="_blank" rel="noreferrer">Labelling Workbench</a> go into Module 1.14: draft labels to 1.14.1, approved ones to 1.14.2. They are added to the selected draft sequence, or to a new labeling supplement if the selected sequence is published.</p>
+          <p className="small muted">Labels written in the <a href="https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/" target="_blank" rel="noreferrer">Labelling Workbench</a> go into {project.region === 'US' ? 'Module 1.14: draft labels to 1.14.1, approved ones to 1.14.2' : `${LABEL_PKG_NODE[project.region]}, the product information node of this region`}. They are added to the selected draft sequence, or to a new sequence for the change if the selected sequence is published.</p>
           <label className="btn" style={{ width: 'fit-content' }}>Import labelling package
             <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importLabels(e.target.files[0]); e.target.value = ''; }} />
           </label>

@@ -1,0 +1,58 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-17T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mvc6e6x0-a7jxhs",
+ "region": "CH",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "var-type2",
+  "subType": "initial",
+  "description": "Labelling for Ostrevia",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "d-mvc6e6x0-4g3wa4",
+   "kind": "ch-fi",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "ch:1.3.1",
+   "title": "Ostrevia Fachinformation (Switzerland)",
+   "fileName": "ostrevia-fachinformation-switzerland.pdf",
+   "pages": 2,
+   "content": "Lumiravostat.\nTablet core: microcrystalline cellulose, mannitol, croscarmellose sodium, magnesium stearate; film coat: hypromellose, titanium dioxide, macrogol (25 mg tablets also iron oxide yellow). Each tablet contains less than 1 mmol (23 mg) sodium.\nFilm-coated tablets of 10 mg and 25 mg lumiravostat.\n10 mg: white, round, film-coated tablets debossed \"HR\" on one side and \"10\" on the other.\n25 "
+  },
+  {
+   "id": "d-mvc6e6x0-a52z1k",
+   "kind": "ch-pi",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "ch:1.3.2",
+   "title": "Ostrevia Patienteninformation (Switzerland)",
+   "fileName": "ostrevia-patienteninformation-switzerland.pdf",
+   "pages": 1,
+   "content": "Ostrevia contains lumiravostat. It calms the immune activity that causes long-lasting hand eczema. Your doctor prescribes it when creams have not helped enough.\nIf you are allergic to lumiravostat or any of the other ingredients, if you have active tuberculosis or another serious infection, or if you are pregnant.\nOstrevia can lower your ability to fight infections. Your doctor will test you for t"
+  }
+ ]
+}

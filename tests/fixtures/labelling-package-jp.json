@@ -1,0 +1,46 @@
+{
+ "kind": "labelling-workbench/labelling-package",
+ "schema": 1,
+ "createdAt": "2026-10-17T00:00:00.000Z",
+ "notice": "Training only. Fictional product and company; not approved labeling and not suitable for a real submission.",
+ "app": {
+  "name": "Labelling Workbench",
+  "author": "Khan Gulrez Shagufa Fazal Ahmed"
+ },
+ "userId": "u-fixture",
+ "classId": null,
+ "projectId": "p-mvc6e6x1-qh8zzm",
+ "region": "JP",
+ "product": {
+  "id": "nce-tablet",
+  "ectdProductId": "nce-tablet",
+  "brandName": "Ostrevia",
+  "inn": "lumiravostat"
+ },
+ "pack": {
+  "id": "us",
+  "version": "1.0.0",
+  "asOf": "2026-10-11"
+ },
+ "submission": {
+  "submissionType": "jp_partial-change",
+  "subType": "jp_ctd",
+  "description": "Labelling for Ostrevia",
+  "trigger": null,
+  "o4": null
+ },
+ "documents": [
+  {
+   "id": "d-mvc6e6x1-u8vb65",
+   "kind": "jp-pi",
+   "role": null,
+   "status": "approved",
+   "version": 0,
+   "section": "jp:1.8",
+   "title": "Ostrevia Package insert (Japan)",
+   "fileName": "ostrevia-package-insert-japan.pdf",
+   "pages": 2,
+   "content": "1.1 Serious infections, including tuberculosis and pneumonia, some fatal, and malignancies have been reported. Use only under a physician with sufficient knowledge and experience of the treatment of hand eczema and of this drug, after explaining its risks to the patient.\n1.2 Before treatment, check for tuberculosis by interview, an interferon-gamma release assay or tuberculin test, and a chest X-r"
+  }
+ ]
+}
