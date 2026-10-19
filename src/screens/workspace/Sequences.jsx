@@ -5,6 +5,7 @@ import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 import { parseChangePackage, importChangePackage, todoStatus } from '../../engine/changepkg.js';
 import { parseLabellingPackage, importLabellingPackage, LABEL_PKG_REGIONS, LABEL_PKG_NODE } from '../../engine/labelpkg.js';
+import { parseIndPackage, importIndPackage } from '../../engine/indpkg.js';
 
 export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
   const seqs = sortedSequences(project);
@@ -41,6 +42,16 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
       mutate((p) => { res = importLabellingPackage(p, pkg, { seqNumber: seq?.number }); num = res.seq.number; });
       setSeqNumber(num);
       toast(`${res.placed.length} label document(s) placed in sequence ${num} (${LABEL_PKG_NODE[project.region] ?? 'Module 1'}).${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  const importInd = async (file) => {
+    try {
+      const pkg = parseIndPackage(await file.text());
+      let num; let res;
+      mutate((p) => { res = importIndPackage(p, pkg, { seqNumber: seq?.number }); num = res.seq.number; });
+      setSeqNumber(num);
+      toast(`${res.placed.length} IND document(s) for ${pkg.product?.drug ?? 'the drug'} placed in sequence ${num}.${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
     } catch (err) { toast(err.message, 'error'); }
   };
 
@@ -145,6 +156,16 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
           <p className="small muted">Labels written in the <a href="https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/" target="_blank" rel="noreferrer">Labelling Workbench</a> go into {project.region === 'US' ? 'Module 1.14: draft labels to 1.14.1, approved ones to 1.14.2' : `${LABEL_PKG_NODE[project.region]}, the product information node of this region`}. They are added to the selected draft sequence, or to a new sequence for the change if the selected sequence is published.</p>
           <label className="btn" style={{ width: 'fit-content' }}>Import labelling package
             <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importLabels(e.target.files[0]); e.target.value = ''; }} />
+          </label>
+        </section>
+      )}
+
+      {project.region === 'US' && (
+        <section className="panel">
+          <h2 style={{ fontSize: 'var(--step-1)' }}>Import IND package</h2>
+          <p className="small muted">An initial IND built in the <a href="https://randomthingsonlineatsk-cloud.github.io/clinical-trial-simulator/" target="_blank" rel="noreferrer">Clinical Trial Simulator</a> brings Forms FDA 1571, 1572 and 3674 (1.1), the cover letter (1.2), the general investigational plan (1.20), the investigator's brochure and investigational labels (1.14.4), the summaries (2.3 and 2.4) and the protocol (5.3.3.1 or 5.3.3.2). They go into the selected draft sequence, or into a new original application.{project.appType !== 'ind' && ' This project is not an IND, so the checks will use its own requirements.'}</p>
+          <label className="btn" style={{ width: 'fit-content' }}>Import IND package
+            <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importInd(e.target.files[0]); e.target.value = ''; }} />
           </label>
         </section>
       )}

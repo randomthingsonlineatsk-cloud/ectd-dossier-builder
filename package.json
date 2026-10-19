@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node tests/engine.test.mjs && node tests/phase2.test.mjs && node tests/phase3.test.mjs && node tests/phase4.test.mjs && node tests/phase5.test.mjs && node tests/phase6.test.mjs && node tests/phase7.test.mjs && node tests/labelpkg.test.mjs"
+    "test": "node tests/engine.test.mjs && node tests/phase2.test.mjs && node tests/phase3.test.mjs && node tests/phase4.test.mjs && node tests/phase5.test.mjs && node tests/phase6.test.mjs && node tests/phase7.test.mjs && node tests/labelpkg.test.mjs && node tests/indpkg.test.mjs"
   },
   "author": "Khan Gulrez Shagufa Fazal Ahmed",
   "license": "Apache-2.0",
