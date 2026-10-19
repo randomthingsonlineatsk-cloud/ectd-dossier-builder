@@ -1,0 +1,87 @@
+{
+ "kind": "clinical-trial-simulator/ind-package",
+ "schema": 1,
+ "createdAt": "2026-10-20T00:00:00.000Z",
+ "userId": "u-fixture",
+ "classId": null,
+ "notice": "Training only. Fictional drug and sponsor; not a real IND.",
+ "region": "US",
+ "product": {
+  "drug": "Vasclarin",
+  "code": "VSC-9",
+  "modality": "Small molecule — oral, once-daily",
+  "indication": "Resistant hypertension on three antihypertensive agents"
+ },
+ "sponsor": "Halvern Therapeutics (fictional)",
+ "submission": {
+  "submissionType": "original-application",
+  "subType": "application",
+  "appType": "ind",
+  "description": "Initial IND for Vasclarin (VSC-9): phase 1 first-in-human study"
+ },
+ "documents": [
+  {
+   "section": "1.1",
+   "title": "Form FDA 1571 Investigational New Drug Application",
+   "fileName": "fda-1571.pdf",
+   "content": "Sponsor: Halvern Therapeutics (fictional)\nDrug: Vasclarin (VSC-9)\nPhase: 1\nIND type: commercial\nCommitments: 4 of 4 given\nTransfer of obligations to a CRO: none",
+   "form": "fda-1571"
+  },
+  {
+   "section": "1.1",
+   "title": "Form FDA 1572 Statement of Investigator",
+   "fileName": "fda-1572.pdf",
+   "content": "Principal investigator at the phase 1 unit (fictional).",
+   "form": "fda-1572"
+  },
+  {
+   "section": "1.1",
+   "title": "Form FDA 3674 Certification of Compliance",
+   "fileName": "fda-3674.pdf",
+   "content": "The requirements of 42 U.S.C. 282(j) do not apply: phase 1 trial.",
+   "form": "fda-3674"
+  },
+  {
+   "section": "1.2",
+   "title": "Cover letter: initial IND",
+   "fileName": "cover-letter.pdf",
+   "content": "Halvern Therapeutics (fictional) submits this initial IND for Vasclarin for Resistant hypertension on three antihypertensive agents. Phase 1 first-in-human study."
+  },
+  {
+   "section": "1.20",
+   "title": "Introductory Statement and General Investigational Plan",
+   "fileName": "general-investigational-plan.pdf",
+   "content": "The rationale, the indication, the general approach, the kinds of trials planned in the coming year, the estimated number of subjects, and risks anticipated from the toxicology"
+  },
+  {
+   "section": "1.14.4.1",
+   "title": "Investigator's Brochure - Vasclarin (Edition 1)",
+   "fileName": "investigators-brochure.pdf",
+   "content": "Description of the drug substance and formulation, with the structural formula if known\nSummary of pharmacological and toxicological effects in animals (and humans, if known)\nSummary of pharmacokinetics and biological disposition in animals (and humans, if known)\nSummary of information on safety and effectiveness in humans from prior studies\nPossible risks and side effects to be anticipated, with precautions or special monitoring\n\nSustained blood-pressure reduction in a salt-sensitive rat model; clean 13-week toxicology with a wide NOAEL margin and no QT liability.\nKnown: Wide therapeutic margin and predictable, mechanism-based pharmacology.\nUnknown: Human dose-response, food effect, and whether benefit is preserved on top of three background agents."
+  },
+  {
+   "section": "1.14.4.2",
+   "title": "Investigational Drug Labeling",
+   "fileName": "investigational-labels.pdf",
+   "content": "Caution: New Drug—Limited by Federal (or United States) law to investigational use."
+  },
+  {
+   "section": "5.3.3.1",
+   "title": "Protocol VSC-9-101: first-in-human single and multiple ascending dose study in healthy volunteers",
+   "fileName": "vsc-9-101-protocol.pdf",
+   "content": "Population: healthy\nStarting dose basis: noael\nEscalation: accelerated\nSample size: small\nDLT definition: prespecified\nSafety measures: sentinel, stagger, src, stopping, site"
+  },
+  {
+   "section": "2.3",
+   "title": "Quality Overall Summary (IND)",
+   "fileName": "quality-overall-summary.pdf",
+   "content": "Drug substance and drug product for Vasclarin; Small molecule — oral, once-daily."
+  },
+  {
+   "section": "2.4",
+   "title": "Nonclinical Overview",
+   "fileName": "nonclinical-overview.pdf",
+   "content": "Sustained blood-pressure reduction in a salt-sensitive rat model; clean 13-week toxicology with a wide NOAEL margin and no QT liability.\nGLP: compliance statement provided for each pivotal study."
+  }
+ ]
+}

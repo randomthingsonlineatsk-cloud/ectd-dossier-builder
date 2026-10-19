@@ -62,6 +62,8 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **Labelling packages from the Labelling Workbench.** The [Labelling Workbench](https://github.com/randomthingsonlineatsk-cloud/labelling-workbench) exports a `labelling-package.json`. On the Sequences tab, **Import labelling package** adds the labels to the draft sequence (or starts one of the package's submission type) in the Module 1 labelling node of their region: US 1.14, EU 1.3.1 (one combined product information document), India 1.3, Canada and Switzerland 1.3.1 and 1.3.2, and Japan 1.8 (the Workbench's insert is an English practice text, so the import warns that Japan expects Module 1 in Japanese).
 
+**IND packages from the Clinical Trial Simulator.** The [Clinical Trial Simulator](https://github.com/randomthingsonlineatsk-cloud/clinical-trial-simulator) exports an `ind-package.json` from its US IND step. In a US project, **Import IND package** on the Sequences tab places the initial IND (21 CFR 312.23) in the draft sequence, or in a new original application: Forms FDA 1571, 1572 and 3674 in 1.1, the cover letter in 1.2, the general investigational plan in 1.20, the investigator's brochure in 1.14.4.1, the investigational labels in 1.14.4.2, the quality and nonclinical summaries in 2.3 and 2.4, and the protocol in 5.3.3.1 (healthy volunteers) or 5.3.3.2 (patients). It warns if the project is not an IND.
+
 **Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
 
 
