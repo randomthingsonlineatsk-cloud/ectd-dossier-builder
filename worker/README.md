@@ -9,7 +9,9 @@ Optional deadline reminders go out by email through Brevo.
 
 Tables are prefixed `ectd_` and every route sits under `/ectd/v1`. The Variations Classifier
 uses the same Worker and database with `vc_` tables and routes under `/vc/v1` (set by `VC_PREFIX`
-and `VC_APP_URL` in `wrangler.toml`). The two apps never see each other's classes or keys; in the
+and `VC_APP_URL` in `wrangler.toml`). The [Labelling Workbench](https://github.com/randomthingsonlineatsk-cloud/labelling-workbench) uses `lw_` tables under `/lw/v1`, and the
+[CDM Query & Edit-Check Console](https://github.com/randomthingsonlineatsk-cloud/cdm-query-console) uses `cdm_` tables under `/cdm/v1` (assignments are its missions M1 to M13; a
+submission is the compressed mission project, which the instructor re-scores in their own browser). The two apps never see each other's classes or keys; in the
 Variations Classifier a submission is the student's mission case, which the instructor re-scores
 in their own browser.
 

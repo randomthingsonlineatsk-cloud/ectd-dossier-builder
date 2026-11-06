@@ -105,4 +105,25 @@ await t('Labelling Workbench: drills as assignments, with text ids', async () =>
   assert.equal((await lwcall('GET', '/me', { token: key })).data.leaderboard[0].total, 100);
   assert.equal((await lwcall('DELETE', '/class', { token: key })).data.ok, true);
 });
+const CDM = BASE.replace(/\/ectd\/v1$/, '/cdm/v1');
+const cdmcall = async (method, path, { token, body } = {}) => {
+  const res = await fetch(CDM + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('CDM Query & Edit-Check Console: missions M1 to M13 as assignments', async () => {
+  assert.equal((await cdmcall('GET', '/health')).data.service, 'cdm-classroom');
+  const c = await cdmcall('POST', '/classes', { body: { name: 'CDM 101', instructorName: 'Dr Dee' } });
+  const key = c.data.instructorKey;
+  assert.equal((await lwcall('GET', '/me', { token: key })).status, 401, 'a CDM key does not work on another app');
+  assert.equal((await cdmcall('POST', '/assignments', { token: key, body: { missionId: 'ccds-rollout', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await cdmcall('POST', '/assignments', { token: key, body: { missionId: 'M6', difficulty: 'guided', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201); assert.equal(a.data.assignment.missionId, 'M6');
+  const j = await cdmcall('POST', '/join', { body: { code: c.data.class.code, name: 'Kim' } });
+  const wrong = await cdmcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'cdm-query-console/mission-submission', missionId: 'M5', gz: 'x' }, score: 80 } });
+  assert.equal(wrong.status, 400);
+  const ok = await cdmcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'cdm-query-console/mission-submission', missionId: 'M6', gz: 'H4sI', size: 10 }, score: 85, checks: [{ id: 'd1', label: '9 of 9 classed', ok: true }] } });
+  assert.equal(ok.status, 201);
+  assert.equal((await cdmcall('GET', '/me', { token: key })).data.leaderboard[0].total, 85);
+  assert.equal((await cdmcall('DELETE', '/class', { token: key })).data.ok, true);
+});
 console.log(`\n${pass} classroom API tests passed`);
