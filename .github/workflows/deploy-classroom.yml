@@ -93,6 +93,11 @@ jobs:
           curl -s "${{ steps.worker.outputs.url }}/cdm/v1/health" || echo "::warning::The /cdm/v1 routes did not answer yet."
           echo
 
+      - name: Check the status page
+        run: |
+          CODE=$(curl -s -o /tmp/status.html -w "%{http_code}" "${{ steps.worker.outputs.url }}/" || true)
+          if grep -q "All systems working" /tmp/status.html; then echo "Status page: all systems working."; else echo "::warning::The status page answered $CODE and reports a problem."; fi
+
       - name: Rebuild the site with the classroom server built in
         env:
           VITE_CLASSROOM_API: ${{ steps.worker.outputs.url }}/ectd/v1

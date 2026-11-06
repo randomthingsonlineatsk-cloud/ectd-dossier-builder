@@ -315,11 +315,39 @@ async function remindersFor(env, app, at) {
   return { sent, candidates: rows.length };
 }
 
+// A plain status page at the server's base address, so a person can see it is up. It checks the
+// database live and lists the apps this server serves. It holds no class or student data.
+async function statusPage(env, url) {
+  const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let db = false, dbMs = 0;
+  try { const t0 = Date.now(); await env.DB.prepare('SELECT 1 AS ok').first(); db = true; dbMs = Date.now() - t0; } catch { db = false; }
+  const rows = [];
+  for (const a of apps(env)) {
+    let tables = false;
+    try { await env.DB.prepare(`SELECT COUNT(*) AS n FROM ${a.t}classes`).first(); tables = true; } catch { tables = false; }
+    rows.push(`<tr><td><a href="${esc(a.appUrl)}">${esc(a.name)}</a></td><td><a href="${esc(url.origin + a.prefix)}/health"><code>${esc(a.prefix)}/health</code></a></td><td class="${tables ? 'ok' : 'bad'}">${tables ? 'Ready' : 'Tables missing'}</td></tr>`);
+  }
+  const allOk = db && !rows.some((r) => r.includes('class="bad"'));
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Classroom server status</title>
+<style>:root{color-scheme:light dark;--bg:#f7f7f5;--fg:#1d1d1b;--mute:#5d5d58;--line:#d9d9d4;--ok:#1f7a3a;--bad:#b3261e}@media (prefers-color-scheme:dark){:root{--bg:#161615;--fg:#ececea;--mute:#a3a39e;--line:#3a3a37;--ok:#5cc27f;--bad:#f2867e}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif}main{max-width:720px;margin:0 auto;padding:32px 16px}h1{font-size:22px;margin:0 0 4px}.mute{color:var(--mute)}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:600;border:1px solid currentColor;margin:12px 0}.ok{color:var(--ok)}.bad{color:var(--bad)}
+table{width:100%;border-collapse:collapse;margin-top:8px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}a{color:inherit}code{font-size:13px}
+@media (max-width:560px){th:nth-child(2),td:nth-child(2){display:none}}</style></head><body><main>
+<h1>Classroom server</h1><p class="mute">The shared classroom server for Khan Gulrez Shagufa Fazal Ahmed's training apps. Students and instructors use it through the Classroom tab inside each app; this page only shows that it is running.</p>
+<p class="badge ${allOk ? 'ok' : 'bad'}">${allOk ? 'All systems working' : 'Something needs attention'}</p>
+<p>Database: <span class="${db ? 'ok' : 'bad'}">${db ? `connected (answered in ${dbMs} ms)` : 'not reachable'}</span><br><span class="mute">Checked ${esc(now().replace('T', ' ').slice(0, 19))} UTC. Reload the page to check again.</span></p>
+<table><thead><tr><th>App</th><th>Health check</th><th>Classroom tables</th></tr></thead><tbody>${rows.join('')}</tbody></table>
+<p class="mute" style="margin-top:24px">All study data in these apps is fictional. Built by Khan Gulrez Shagufa Fazal Ahmed.</p></main></body></html>`;
+  return new Response(html, { status: allOk ? 200 : 503, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' } });
+}
+
 export default {
   async fetch(request, env) {
     const cors = corsHeaders(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
+    if (request.method === 'GET' && (url.pathname === '/' || url.pathname === '')) return statusPage(env, url);
     const app = apps(env).find((a) => url.pathname === a.prefix || url.pathname.startsWith(`${a.prefix}/`));
     if (!app) return json({ error: 'Not found.' }, 404, cors);
     try {

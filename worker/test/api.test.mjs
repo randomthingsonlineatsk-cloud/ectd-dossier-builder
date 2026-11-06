@@ -10,6 +10,11 @@ const t = async (name, fn) => { await fn(); pass++; console.log('ok -', name); }
 
 let inst, stu, cls, asg, sub;
 await t('health', async () => { assert.equal((await call('GET', '/health')).data.ok, true); });
+await t('status page at the base address', async () => {
+  const res = await fetch(new URL('/', BASE)); const html = await res.text();
+  assert.equal(res.status, 200); assert.match(res.headers.get('content-type'), /text\/html/);
+  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1']) assert.ok(html.includes(p));
+});
 await t('instructor creates a class and gets a join code', async () => {
   const r = await call('POST', '/classes', { body: { name: 'RA Publishing 101', instructorName: 'Dr Test' } });
   assert.equal(r.status, 201); assert.match(r.data.class.code, /^[A-Z2-9]{6}$/);

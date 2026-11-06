@@ -76,3 +76,7 @@ npm run db:local
 npx wrangler dev --local          # http://localhost:8787/ectd/v1
 npm test                          # in another terminal
 ```
+
+## Status page
+
+Open the server's base address (for example https://ectd-classroom.randomthingsonlineatsk.workers.dev/) in a browser to see whether it is running. The page checks the database live and shows, for each app, its health-check link and whether its classroom tables exist. It shows no class or student data.
