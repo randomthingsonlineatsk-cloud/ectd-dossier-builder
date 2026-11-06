@@ -2,6 +2,7 @@
 //   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
+//   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M13)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
@@ -26,6 +27,9 @@ export function apps(env) {
     { id: 'lw', prefix: env.LW_PREFIX ?? '/lw/v1', t: 'lw_', service: 'lw-classroom', thing: 'drill project', name: 'Labelling Workbench', textMissions: true, missionWord: 'Drill',
       appUrl: env.LW_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/',
       missionOf: (p) => (p?.kind === 'labelling-workbench/drill-submission' ? p?.project?.drill?.id : null) },
+    { id: 'cdm', prefix: env.CDM_PREFIX ?? '/cdm/v1', t: 'cdm_', service: 'cdm-classroom', thing: 'mission project', name: 'CDM Query & Edit-Check Console', textMissions: true, missionPattern: /^M\d{1,2}$/,
+      appUrl: env.CDM_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/cdm-query-console/',
+      missionOf: (p) => (p?.kind === 'cdm-query-console/mission-submission' ? p?.missionId : null) },
   ];
 }
 
@@ -180,7 +184,7 @@ async function route(request, env, path, app) {
     if (me.role !== 'instructor') throw new HttpError(403, 'Only the instructor can set assignments.');
     const b = await body(request);
     const missionId = app.textMissions ? clean(b.missionId, 40) : Number(b.missionId);
-    if (app.textMissions ? !/^[a-z0-9-]{2,40}$/.test(missionId) : (!Number.isInteger(missionId) || missionId < 1 || missionId > 99)) throw new HttpError(400, app.textMissions ? 'Choose a drill.' : 'Choose a mission.');
+    if (app.textMissions ? !(app.missionPattern ?? /^[a-z0-9-]{2,40}$/).test(missionId) : (!Number.isInteger(missionId) || missionId < 1 || missionId > 99)) throw new HttpError(400, app.textMissions ? 'Choose a drill.' : 'Choose a mission.');
     const difficulty = DIFFICULTIES.includes(b.difficulty) ? b.difficulty : 'standard';
     const due = new Date(b.dueAt);
     if (Number.isNaN(due.getTime())) throw new HttpError(400, 'Give a valid due date.');
