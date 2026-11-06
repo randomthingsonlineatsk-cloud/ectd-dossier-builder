@@ -81,4 +81,4 @@ npm test                          # in another terminal
 
 Open the server's base address (for example https://ectd-classroom.randomthingsonlineatsk.workers.dev/) in a browser to see whether it is running. The page checks the database live and shows, for each app, its health-check link and whether its classroom tables exist. It shows no class or student data.
 
-The page is built from the same app list as the routes (`apps()` in `src/index.js`), so an app added there appears on the page automatically. When adding an app: add its entry to `apps()`, its tables to `schema.sql`, and its prefix and app URL to `wrangler.toml`, then run the "Deploy classroom server" action. The action's last check fails loudly if the page does not report all systems working.
+The page is built from the same app list as the routes (`apps()` in `src/index.js`), so an app added there appears on the page automatically. When adding an app: add its entry to `apps()`, its tables to `schema.sql`, and its prefix and app URL to `wrangler.toml`, then run the "Deploy classroom server" action. The action's last check warns if the page does not report all systems working.
