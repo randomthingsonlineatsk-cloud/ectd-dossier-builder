@@ -4,8 +4,8 @@ import { go } from '../App.jsx';
 import { createProject, PRODUCTS, productOptions, optionKey, REGION_VERSION } from '../engine/model.js';
 
 const REGION_OPTION = {
-  US: (o) => `US — ${({ 'bla-351k': 'BLA 351(k) biosimilar' })[o.appType] ?? o.appType.toUpperCase()} (eCTD v3.2.2)`,
-  EU: () => 'EU — centralised MAA (eCTD v3.2.2)',
+  US: (o) => `US — ${({ 'bla-351k': 'BLA 351(k) biosimilar' })[o.appType] ?? o.appType.toUpperCase()} (eCTD v3.2.2 or v4.0)`,
+  EU: (o) => o.variant ? `EU — MAA (eCTD v3.2.2)` : 'EU — centralised MAA (eCTD v3.2.2 or v4.0)',
   JP: () => 'Japan — new drug application (eCTD v4.0)',
   IN: () => 'India — new drug, CTD for the online portal',
 };
@@ -52,12 +52,15 @@ export default function Home() {
   const [okey, setOkey] = useState('US:nda');
   const opts = productOptions(productId);
   const opt = opts.find((o) => optionKey(o) === okey) ?? opts[0];
+  const [ver, setVer] = useState('3.2.2');
+  const canChoose = opt.region === 'US' || (opt.region === 'EU' && opt.appType === 'maa' && !opt.variant);
+  const ectdVersion = canChoose ? ver : REGION_VERSION[opt.region];
   const fileRef = useRef();
 
   const start = async (e) => {
     e.preventDefault();
     const prod = PRODUCTS[productId];
-    const p = createProject({ name: name.trim() || `${prod.product.brandName} ${opt.appType.toUpperCase()} practice`, productId, region: opt.region, appType: opt.appType, variant: opt.variant ?? null, user });
+    const p = createProject({ name: name.trim() || `${prod.product.brandName} ${opt.appType.toUpperCase()} practice`, productId, region: opt.region, appType: opt.appType, variant: opt.variant ?? null, ectdVersion, user });
     await saveProject(p);
     go(`/project/${p.id}`);
   };
@@ -78,10 +81,11 @@ export default function Home() {
 
   return (
     <div className="page">
+      <div className="callout" style={{ marginBottom: '1rem' }}><strong>New: v4.0 Migration Lab.</strong> Take a published US or EU v3.2.2 lifecycle, see what each current leaf becomes in eCTD v4.0 (context of use, keywords, path), fix what blocks the move, then create the v4.0 project with the first unit numbered for you. Open any US or EU project and choose the <em>v4.0 Migration Lab</em> tab, or read <a href="#/learn/8">lesson 8, Moving to eCTD v4.0</a>.</div>
       <section className="hero">
         <div>
           <h1>Publish a dossier before you publish a real one.</h1>
-          <p className="lede">Assemble a fictional NDA, ANDA or EU marketing authorisation application in eCTD v3.2.2: place documents into the CTD tree, build the backbone, run the validator, and manage lifecycle sequences the way a regulatory operations team does.</p>
+          <p className="lede">Assemble a fictional NDA, ANDA or EU marketing authorisation application in eCTD v3.2.2 or v4.0: place documents into the CTD tree, build the backbone, run the validator, and manage lifecycle sequences the way a regulatory operations team does.</p>
           <div className="row">
             <a className="btn primary" href="#/learn">Start with lesson 1</a>
             <a className="btn" href="#/missions">Take a mission</a>
@@ -135,16 +139,26 @@ export default function Home() {
               {opts.map((o) => <option key={optionKey(o)} value={optionKey(o)}>{o.label ?? REGION_OPTION[o.region]?.(o) ?? `${o.region} — ${o.appType.toUpperCase()}`}</option>)}
             </select>
           </label>
-          <label className="field">eCTD version
-            <input type="text" readOnly value={{ '3.2.2': 'v3.2.2', '4.0': 'v4.0 (submission unit)', CTD: 'Not eCTD: CTD as PDF uploads' }[REGION_VERSION[opt.region]]} aria-describedby="ver-help" />
-            <small id="ver-help">Set by the region: the US and EU use v3.2.2 here, Japan v4.0, India its online portal.</small>
-          </label>
+          {canChoose ? (
+            <label className="field">eCTD version
+              <select value={ver} onChange={(e) => setVer(e.target.value)} aria-describedby="ver-help">
+                <option value="3.2.2">v3.2.2</option>
+                <option value="4.0">v4.0 (submission units)</option>
+              </select>
+              <small id="ver-help">{opt.region === 'US' ? 'FDA accepts both; v4.0 is optional. Since 16 October 2026 an existing v3.2.2 application can move to v4.0: practise that in the v4.0 Migration Lab.' : 'EMA accepts v4.0 for new centralised applications; v3.2.2 lifecycles move later. Practice either.'}</small>
+            </label>
+          ) : (
+            <label className="field">eCTD version
+              <input type="text" readOnly value={{ '3.2.2': 'v3.2.2', '4.0': 'v4.0 (submission unit)', CTD: 'Not eCTD: CTD as PDF uploads' }[REGION_VERSION[opt.region]]} aria-describedby="ver-help" />
+              <small id="ver-help">Set by the region: Japan uses v4.0, India its online portal, and the other procedures v3.2.2 here.</small>
+            </label>
+          )}
         </div>
         <div className="row" style={{ marginTop: '1rem' }}><button className="btn primary" type="submit">Create project</button></div>
       </form>
 
       <div className="section-head"><h2>Where eCTD stands in 2026</h2></div>
-      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has moved to v4.0. This app teaches v3.2.2 with the US, EU, Canada and Switzerland packs, v4.0 with the Japan pack, and India's CTD for its online portal.</p>
+      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has made v4.0 mandatory. This app teaches v3.2.2 with the US, EU, Canada and Switzerland packs, v4.0 with the Japan pack and (optionally) for US and EU centralised applications, the move from one to the other in the v4.0 Migration Lab, and India's CTD for its online portal.</p>
       <StatusTable />
     </div>
   );

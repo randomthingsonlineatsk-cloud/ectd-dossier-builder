@@ -9,6 +9,14 @@
       "label": "EU · eCTD v3.2.2",
       "rules": "all"
     },
+    "US-4.0": {
+      "label": "US · eCTD v4.0",
+      "rules": "all"
+    },
+    "EU-4.0": {
+      "label": "EU · eCTD v4.0 (centralised)",
+      "rules": "all"
+    },
     "JP-4.0": {
       "label": "Japan · eCTD v4.0",
       "rules": "all"
@@ -512,6 +520,14 @@
       "title": "Sequence numbers in v4.0 are whole numbers starting at 1",
       "explain": "The v4.0 sequence number is an integer: the first submission unit is 1, then 2, 3 and so on.",
       "fix": "Number the first submission unit 1."
+    },
+    {
+      "id": "V4-03",
+      "family": "eCTD v4.0",
+      "severity": "High",
+      "title": "Forward compatibility: the first v4.0 unit follows the last v3.2.2 sequence",
+      "explain": "When an application moves from v3.2.2 to v4.0, the first v4.0 unit takes the next whole number after the last v3.2.2 sequence and carries that v3.2.2 sequence number; later units do not. Once a v4.0 unit is sent, every later unit must be v4.0 (FDA eCTD v4.0 Technical Conformance Guide, section 2.1).",
+      "fix": "Make the v4.0 project from the v4.0 Migration Lab, which numbers the first unit for you."
     },
     {
       "id": "JP-01",

@@ -589,5 +589,106 @@
         "why": "CDSCO takes CTD-structured dossiers through the SUGAM portal."
       }
     ]
+  },
+  {
+    "id": 8,
+    "title": "Moving to eCTD v4.0",
+    "minutes": 10,
+    "summary": "Forward compatibility: how a live v3.2.2 application continues in v4.0, what each leaf becomes, and where the US and EU stand.",
+    "sections": [
+      {
+        "heading": "Why applications have to move",
+        "body": [
+          "An application lives for decades. A product approved in v3.2.2 will still be getting variations, safety updates and annual reports long after its agency starts asking for v4.0, so the lifecycle has to cross from one standard to the other without starting again.",
+          "That crossing is called forward compatibility. The v3.2.2 sequences already sent stay exactly as they are. The application simply continues in v4.0, and the first v4.0 submission unit can reach back into the v3.2.2 history to replace or suspend what is there."
+        ]
+      },
+      {
+        "heading": "The numbering rule",
+        "body": [
+          "The first v4.0 unit takes the next whole number after the last v3.2.2 sequence: if the last sequence was 0003, the first v4.0 unit is 4. Only that first unit also carries the v3.2.2 sequence number it follows; later units do not.",
+          "It is one way only. Once a v4.0 unit has been sent for an application, every later unit must be v4.0 too. That is why publishing teams plan the switch, and close or publish any open v3.2.2 work, before they make it."
+        ]
+      },
+      {
+        "heading": "What a leaf becomes",
+        "body": [
+          "In v3.2.2 a leaf sits under a heading, with attributes such as substance, manufacturer or dosage form, and study reports are grouped by study tagging files with file tags. In v4.0 the same document is a context of use with keywords.",
+          "The study ID becomes a study keyword. The file tag becomes a document type keyword, required for 4.2.x and 5.3.1.x to 5.3.5.x. Substance, product and indication attributes become sender-defined keywords. Where several documents sit under one heading, a group title keyword can tell them apart, but it is meant to be used sparingly.",
+          "To lifecycle a v3.2.2 document from v4.0 you point at it with a leaf reference. Only active (current) leaves can be lifecycled. A replacement keeps the heading and attributes by sending the same context of use and keyword values; suspend takes it out of the current view, because v4.0 has no delete."
+        ]
+      },
+      {
+        "heading": "US and EU",
+        "body": [
+          "FDA has accepted new applications in v4.0 since 16 September 2024, and CDER and CBER have accepted forward compatibility for existing v3.2.2 applications since 16 October 2026. v4.0 is still optional: FDA accepts both versions and has not set a date for requiring v4.0.",
+          "In the EU, v4.0 is optional for new centralised applications since 22 December 2025. There is no separate regional envelope: a unit has submissionunit.xml and sha256.txt, and all of Module 1 sits in one m1 folder, with country and language carried as keywords, so every Module 1 file name must be unique. Documents and units can never be deleted. Forward compatibility for existing centralised lifecycles is still being piloted, and EMA's own documents give different dates for when v4.0 becomes mandatory for new centralised applications, so plan by phase and check EMA's eSubmission pages.",
+          "Japan made v4.0 mandatory for new applications from 1 April 2026; it is taught with the Japan pack in this app."
+        ]
+      },
+      {
+        "heading": "Try it",
+        "body": [
+          "Open a US NDA or EU centralised MAA project with at least one published sequence and choose the v4.0 Migration Lab tab. It lists every current leaf with its v4.0 context of use, keywords and path, flags what would block the move (missing study IDs, invalid file tags, duplicate titles, clashing EU Module 1 file names, open drafts), and scores readiness. When nothing High is left, it creates a new v4.0 project with the v3.2.2 sequences kept as read-only history and the first unit numbered for you."
+        ]
+      }
+    ],
+    "quiz": [
+      {
+        "q": "The last v3.2.2 sequence of an application is 0007. What is the first v4.0 unit?",
+        "options": [
+          "0000",
+          "1",
+          "8",
+          "0008 in v3.2.2, then 1 in v4.0"
+        ],
+        "answer": 2,
+        "why": "The first v4.0 unit takes the next whole number after the last v3.2.2 sequence, and carries 0007 as the sequence it follows."
+      },
+      {
+        "q": "After the first v4.0 unit is sent, the next submission can be…",
+        "options": [
+          "v3.2.2 or v4.0",
+          "v4.0 only",
+          "v3.2.2 only for Module 1",
+          "either, if the agency agrees in writing"
+        ],
+        "answer": 1,
+        "why": "Forward compatibility is one way: every later unit must be v4.0."
+      },
+      {
+        "q": "In v4.0, what replaces a v3.2.2 file tag on a clinical study report?",
+        "options": [
+          "A group title keyword",
+          "A document type keyword",
+          "A sender-defined keyword",
+          "Nothing: file tags carry over"
+        ],
+        "answer": 1,
+        "why": "Document type keywords replace file tags and are required for 4.2.x and 5.3.1.x to 5.3.5.x."
+      },
+      {
+        "q": "Which v3.2.2 leaves can a v4.0 unit lifecycle by leaf reference?",
+        "options": [
+          "Any leaf ever sent",
+          "Only active (current) leaves",
+          "Only Module 1 leaves",
+          "Only leaves from the last sequence"
+        ],
+        "answer": 1,
+        "why": "Only active leaves can be lifecycled; replaced and deleted leaves stay in the history."
+      },
+      {
+        "q": "Why can two EU Module 1 files with the same name block a migration?",
+        "options": [
+          "EMA limits file names to eight characters",
+          "In v4.0 all of Module 1 is one m1 folder",
+          "v4.0 needs one file per unit",
+          "Country folders must be renamed in v3.2.2 first"
+        ],
+        "answer": 1,
+        "why": "Country and language become keywords and the m1 folder is flat, so file names must be unique."
+      }
+    ]
   }
 ]

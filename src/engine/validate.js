@@ -69,7 +69,7 @@ export function validate(project, seqNumber) {
   const eu = project.region === 'EU';
   const jpR = project.region === 'JP';
   const inR = project.region === 'IN';
-  const v4 = project.ectdVersion === '4.0';
+  const v4 = project.ectdVersion === '4.0' && !seq.legacy;
   const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1', CA: 'ca:1', CH: 'ch:1' }[project.region] ?? '1';
   const meta = jpR ? [
     ['receptionNumber', s.jp?.receptionNumber, 'eCTD reception number'],
@@ -116,6 +116,15 @@ export function validate(project, seqNumber) {
   for (const [k, v, label] of meta) if (!String(v ?? '').trim()) add('BB-06', k, `${label} is missing from the regional metadata.`, { nodeCode: m1Root });
 
   if (v4 && !(/^\d{4}$/.test(seq.number) && parseInt(seq.number, 10) >= 1)) add('V4-02', 'number', `Sequence ${seq.number} would be numbered 0; v4.0 starts at 1.`, { nodeCode: m1Root });
+  if (v4) {
+    const legacy = seqs.filter((x) => x.legacy), firstV4 = seqs.find((x) => !x.legacy);
+    if (legacy.length && firstV4?.id === seq.id) {
+      const last = legacy.at(-1).number;
+      if (seq.forwardFrom !== last) add('V4-03', 'carry', `Unit ${parseInt(seq.number, 10)} is the first v4.0 unit but does not carry the last v3.2.2 sequence number (${last}).`, { nodeCode: m1Root });
+      if (parseInt(seq.number, 10) !== parseInt(last, 10) + 1) add('V4-03', 'next', `The first v4.0 unit is ${parseInt(seq.number, 10)}; it should be ${parseInt(last, 10) + 1}, the next whole number after v3.2.2 sequence ${last}.`, { nodeCode: m1Root });
+    }
+    if (legacy.length && seq.forwardFrom && firstV4?.id !== seq.id) add('V4-03', 'only-first', `Only the first v4.0 unit carries the v3.2.2 sequence number; unit ${parseInt(seq.number, 10)} also carries ${seq.forwardFrom}.`, { nodeCode: m1Root });
+  }
   if (jpR && s.jp?.brandName && s.jp.brandName !== PRODUCTS[project.productId]?.product.brandName) add('JP-07', 'brand', `Brand name "${s.jp.brandName}" does not match the application form ("${PRODUCTS[project.productId]?.product.brandName}").`, { nodeCode: m1Root });
   if (jpR && s.jp?.applicantName && s.jp.applicantName !== PRODUCTS[project.productId]?.applicant.name) add('JP-07', 'applicant', `Applicant "${s.jp.applicantName}" does not match the application form ("${PRODUCTS[project.productId]?.applicant.name}").`, { nodeCode: m1Root });
 
