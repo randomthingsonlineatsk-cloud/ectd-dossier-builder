@@ -13,7 +13,7 @@ await t('health', async () => { assert.equal((await call('GET', '/health')).data
 await t('status page at the base address', async () => {
   const res = await fetch(new URL('/', BASE)); const html = await res.text();
   assert.equal(res.status, 200); assert.match(res.headers.get('content-type'), /text\/html/);
-  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1']) assert.ok(html.includes(p));
+  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1']) assert.ok(html.includes(p));
 });
 await t('instructor creates a class and gets a join code', async () => {
   const r = await call('POST', '/classes', { body: { name: 'RA Publishing 101', instructorName: 'Dr Test' } });
@@ -130,5 +130,26 @@ await t('CDM Query & Edit-Check Console: missions M1 to M13 as assignments', asy
   assert.equal(ok.status, 201);
   assert.equal((await cdmcall('GET', '/me', { token: key })).data.leaderboard[0].total, 85);
   assert.equal((await cdmcall('DELETE', '/class', { token: key })).data.ok, true);
+});
+const SDTM = BASE.replace(/\/ectd\/v1$/, '/sdtm/v1');
+const sdtmcall = async (method, path, { token, body } = {}) => {
+  const res = await fetch(SDTM + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('SDTM Mapping Trainer: missions S1 to S26 as assignments', async () => {
+  assert.equal((await sdtmcall('GET', '/health')).data.service, 'sdtm-classroom');
+  const c = await sdtmcall('POST', '/classes', { body: { name: 'SDTM 101', instructorName: 'Dr Rao' } });
+  const key = c.data.instructorKey;
+  assert.equal((await cdmcall('GET', '/me', { token: key })).status, 401, 'an SDTM key does not work on another app');
+  assert.equal((await sdtmcall('POST', '/assignments', { token: key, body: { missionId: 'M6', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await sdtmcall('POST', '/assignments', { token: key, body: { missionId: 'S22', difficulty: 'expert', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201); assert.equal(a.data.assignment.missionId, 'S22'); assert.equal(a.data.assignment.difficulty, 'expert');
+  const j = await sdtmcall('POST', '/join', { body: { code: c.data.class.code, name: 'Asha' } });
+  const wrong = await sdtmcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'sdtm-mapping-trainer/mission-submission', missionId: 'S3', gz: 'x' }, score: 80 } });
+  assert.equal(wrong.status, 400);
+  const ok = await sdtmcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'sdtm-mapping-trainer/mission-submission', missionId: 'S22', gz: 'H4sI', size: 10 }, score: 91, checks: [{ id: 'd1', label: 'Datasets: 95%', ok: true }] } });
+  assert.equal(ok.status, 201);
+  assert.equal((await sdtmcall('GET', '/me', { token: key })).data.leaderboard[0].total, 91);
+  assert.equal((await sdtmcall('DELETE', '/class', { token: key })).data.ok, true);
 });
 console.log(`\n${pass} classroom API tests passed`);

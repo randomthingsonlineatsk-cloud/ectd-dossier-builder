@@ -1,5 +1,6 @@
 # Classroom API for the eCTD Dossier Builder (/ectd/v1), the Variations Classifier (/vc/v1),
-# the Labelling Workbench (/lw/v1) and the CDM Query & Edit-Check Console (/cdm/v1).
+# the Labelling Workbench (/lw/v1), the CDM Query & Edit-Check Console (/cdm/v1) and the
+# SDTM Mapping Trainer (/sdtm/v1).
 # Deploy steps are in worker/README.md. Replace database_id with your own D1 database.
 name = "ectd-classroom"
 main = "src/index.js"
@@ -13,6 +14,8 @@ LW_PREFIX = "/lw/v1"
 LW_APP_URL = "https://randomthingsonlineatsk-cloud.github.io/labelling-workbench/"
 CDM_PREFIX = "/cdm/v1"
 CDM_APP_URL = "https://randomthingsonlineatsk-cloud.github.io/cdm-query-console/"
+SDTM_PREFIX = "/sdtm/v1"
+SDTM_APP_URL = "https://randomthingsonlineatsk-cloud.github.io/sdtm-mapping-trainer/"
 ALLOWED_ORIGINS = "https://randomthingsonlineatsk-cloud.github.io"
 APP_URL = "https://randomthingsonlineatsk-cloud.github.io/ectd-dossier-builder/"
 REMINDER_HOURS = "48"

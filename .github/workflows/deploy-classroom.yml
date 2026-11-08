@@ -1,6 +1,6 @@
 # Deploys the optional classroom server (Cloudflare Worker + D1) and rebuilds the site so it
 # points at it. The same Worker also serves the Variations Classifier under /vc/v1 (vc_ tables) and the
-# Labelling Workbench under /lw/v1 (lw_ tables) and the CDM Query & Edit-Check Console under /cdm/v1 (cdm_ tables). Run it from the Actions tab ("Run workflow") after adding two repository secrets:
+# Labelling Workbench under /lw/v1 (lw_ tables), the CDM Query & Edit-Check Console under /cdm/v1 (cdm_ tables) and the SDTM Mapping Trainer under /sdtm/v1 (sdtm_ tables). Run it from the Actions tab ("Run workflow") after adding two repository secrets:
 #   CLOUDFLARE_API_TOKEN  - a Cloudflare API token with Workers Scripts:Edit and D1:Edit
 #   CLOUDFLARE_ACCOUNT_ID - your Cloudflare account ID
 # Optional secret for email reminders: BREVO_API_KEY (also set BREVO_SENDER_EMAIL in worker/wrangler.toml).
@@ -93,6 +93,11 @@ jobs:
           curl -s "${{ steps.worker.outputs.url }}/cdm/v1/health" || echo "::warning::The /cdm/v1 routes did not answer yet."
           echo
 
+      - name: Check the SDTM Mapping Trainer routes
+        run: |
+          curl -s "${{ steps.worker.outputs.url }}/sdtm/v1/health" || echo "::warning::The /sdtm/v1 routes did not answer yet."
+          echo
+
       - name: Check the status page
         run: |
           CODE=$(curl -s -o /tmp/status.html -w "%{http_code}" "${{ steps.worker.outputs.url }}/" || true)
@@ -126,3 +131,4 @@ jobs:
           echo "Variations Classifier API address: ${{ steps.worker.outputs.url }}/vc/v1" >> "$GITHUB_STEP_SUMMARY"
           echo "Labelling Workbench API address: ${{ steps.worker.outputs.url }}/lw/v1" >> "$GITHUB_STEP_SUMMARY"
           echo "CDM Query & Edit-Check Console API address: ${{ steps.worker.outputs.url }}/cdm/v1" >> "$GITHUB_STEP_SUMMARY"
+          echo "SDTM Mapping Trainer API address: ${{ steps.worker.outputs.url }}/sdtm/v1" >> "$GITHUB_STEP_SUMMARY"
