@@ -3,6 +3,7 @@
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
 //   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M13)
+//   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S26)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
@@ -30,6 +31,9 @@ export function apps(env) {
     { id: 'cdm', prefix: env.CDM_PREFIX ?? '/cdm/v1', t: 'cdm_', service: 'cdm-classroom', thing: 'mission project', name: 'CDM Query & Edit-Check Console', textMissions: true, missionPattern: /^M\d{1,2}$/,
       appUrl: env.CDM_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/cdm-query-console/',
       missionOf: (p) => (p?.kind === 'cdm-query-console/mission-submission' ? p?.missionId : null) },
+    { id: 'sdtm', prefix: env.SDTM_PREFIX ?? '/sdtm/v1', t: 'sdtm_', service: 'sdtm-classroom', thing: 'mission project', name: 'SDTM Mapping Trainer', textMissions: true, missionPattern: /^S\d{1,2}$/,
+      appUrl: env.SDTM_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/sdtm-mapping-trainer/',
+      missionOf: (p) => (p?.kind === 'sdtm-mapping-trainer/mission-submission' ? p?.missionId : null) },
   ];
 }
 

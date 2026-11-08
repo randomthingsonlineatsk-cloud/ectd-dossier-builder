@@ -11,7 +11,7 @@ Tables are prefixed `ectd_` and every route sits under `/ectd/v1`. The Variation
 uses the same Worker and database with `vc_` tables and routes under `/vc/v1` (set by `VC_PREFIX`
 and `VC_APP_URL` in `wrangler.toml`). The [Labelling Workbench](https://github.com/randomthingsonlineatsk-cloud/labelling-workbench) uses `lw_` tables under `/lw/v1`, and the
 [CDM Query & Edit-Check Console](https://github.com/randomthingsonlineatsk-cloud/cdm-query-console) uses `cdm_` tables under `/cdm/v1` (assignments are its missions M1 to M13; a
-submission is the compressed mission project, which the instructor re-scores in their own browser). The two apps never see each other's classes or keys; in the
+submission is the compressed mission project, which the instructor re-scores in their own browser), and the [SDTM Mapping Trainer](https://github.com/randomthingsonlineatsk-cloud/sdtm-mapping-trainer) uses `sdtm_` tables under `/sdtm/v1` (assignments are its missions S1 to S26, at a guided, standard or expert level; a submission is likewise the compressed mission project). The apps never see each other's classes or keys; in the
 Variations Classifier a submission is the student's mission case, which the instructor re-scores
 in their own browser.
 
@@ -37,7 +37,7 @@ npx wrangler deploy                           # prints https://ectd-classroom.<y
 ```
 
 The API address to give the app is the Worker URL plus `/ectd/v1`, for example
-`https://ectd-classroom.<you>.workers.dev/ectd/v1` (and `/vc/v1` for the Variations Classifier). Either enter it on the app's Classroom page,
+`https://ectd-classroom.<you>.workers.dev/ectd/v1` (and `/vc/v1`, `/lw/v1`, `/cdm/v1` and `/sdtm/v1` for the other apps). Either enter it on the app's Classroom page,
 or build the app with it baked in:
 
 ```bash
