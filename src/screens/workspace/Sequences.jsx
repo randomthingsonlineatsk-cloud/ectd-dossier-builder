@@ -83,7 +83,7 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
             <tbody>
               {seqs.map((s) => (
                 <tr key={s.id} style={s.number === seq.number ? { background: 'var(--surface-2)' } : undefined}>
-                  <td><span className="seq-chip">{s.number}</span></td>
+                  <td><span className="seq-chip">{project.ectdVersion === '4.0' && !s.legacy ? parseInt(s.number, 10) : s.number}</span>{s.legacy ? <span className="pill" title="Published in eCTD v3.2.2 before the move to v4.0; reached from v4.0 by leaf reference">v3.2.2</span> : null}{s.forwardFrom ? <span className="pill ok" title="First v4.0 unit: carries the last v3.2.2 sequence number">follows {s.forwardFrom}</span> : null}</td>
                   <td>{s.submissionType} / {s.subType}{eu && s.relatedSequence ? <span className="small muted"> · related {s.relatedSequence}</span> : null}{eu && s.submissionMode !== 'single' ? <span className="small muted"> · {s.submissionMode}</span> : null}</td>
                   <td>{s.description || <span className="muted">—</span>}</td>
                   <td>{s.leaves.length}</td>

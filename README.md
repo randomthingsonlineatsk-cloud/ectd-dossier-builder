@@ -64,6 +64,8 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **IND packages from the Clinical Trial Simulator.** The [Clinical Trial Simulator](https://github.com/randomthingsonlineatsk-cloud/clinical-trial-simulator) exports an `ind-package.json` from its US IND step. In a US project, **Import IND package** on the Sequences tab places the initial IND (21 CFR 312.23) in the draft sequence, or in a new original application: Forms FDA 1571, 1572 and 3674 in 1.1, the cover letter in 1.2, the general investigational plan in 1.20, the investigator's brochure in 1.14.4.1, the investigational labels in 1.14.4.2, the quality and nonclinical summaries in 2.3 and 2.4, and the protocol in 5.3.3.1 (healthy volunteers) or 5.3.3.2 (patients). It warns if the project is not an IND.
 
+**eCTD v4.0 for the US and EU, and the v4.0 Migration Lab.** A new US application or EU centralised MAA can be built in v3.2.2 or v4.0. A v4.0 unit is written as `submissionunit.xml` and `sha256.txt` with contexts of use and keywords; in the EU, Module 1 is one `m1` folder with country and language keywords, under an `ema…` top folder, and the unit, application, procedure, territory and authority codes are EMA's published ones (codes the guidance does not show are written with a TRAINING code system and a comment saying so). The **v4.0 Migration Lab** tab on a US or EU centralised v3.2.2 project plans forward compatibility: it lists every current leaf with its v4.0 context of use, keywords (study, document type from the file tag, sender-defined substance, product and indication, EU country and language) and path, flags what blocks the move (MIG-01 to MIG-09: missing study IDs, invalid file tags, duplicate titles, clashing EU Module 1 file names, open drafts, non-centralised EU procedures), scores readiness, downloads the inventory as CSV, and creates a new v4.0 project with the published sequences kept read-only as v3.2.2 history and the first unit numbered as the next whole number, carrying the last v3.2.2 sequence. Replacing a v3.2.2 leaf from v4.0 writes a leaf reference. Validation rule V4-03 checks the forward-compatibility numbering. Lesson 8 teaches the move.
+
 **Project files.** Export and import as JSON. Every project and attempt carries a user ID and class ID, so classroom mode (Phase 4) needs no migration.
 
 
@@ -131,6 +133,9 @@ Every drag-and-drop action has a keyboard path, tree headings are reachable with
 - EMA eSubmission, EU eCTD v4.0 validation criteria
 - GMP-Compliance, Swissmedic eCTD v4.0
 - Freyr, India and SUGAM
+- FDA, Electronic Common Technical Document (eCTD) v4.0 (new applications since 16 September 2024; forward compatibility since 16 October 2026): https://www.fda.gov/drugs/electronic-submissions-cder/electronic-common-technical-document-ectd-v40
+- FDA, eCTD v4.0 Technical Conformance Guide, revision 1.5, section 2.1 (forward compatibility rules), via https://www.fda.gov/drugs/electronic-regulatory-submission-and-review/ectd-submission-standards-ectd-v40-and-regional-m1
+- EMA, EU eCTD v4.0 Practical Guidance v1 and the eCTD v4.0 roadmap: https://www.ema.europa.eu/en/documents/other/ectd-v40-eursnext-roadmap_en.pdf
 
 ## Sources for the Phase 3 packs
 

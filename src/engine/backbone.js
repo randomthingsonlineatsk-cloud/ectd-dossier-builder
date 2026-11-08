@@ -266,7 +266,7 @@ ${modules.join('\n')}
 
 export function publishSequence(project, seqNumber) {
   const seq = seqByNumber(project, seqNumber);
-  if (project.ectdVersion === '4.0') {
+  if (project.ectdVersion === '4.0' && !seq.legacy) {
     const unit = buildSubmissionUnit(project, seq);
     const log = [
       { file: `${seqInt(seq.number)}/submissionunit.xml`, checksum: unit.xmlSum, operation: '—', target: '—', node: 'submission unit' },

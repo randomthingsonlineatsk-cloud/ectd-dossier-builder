@@ -13,7 +13,7 @@ export default function ValidateView({ project, seq, validation, focusNode, setT
     <div className="stack" style={{ maxWidth: 980 }}>
       <div className="row" style={{ justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>Validation report: sequence {seq.number}</h2>
+          <h2 style={{ fontSize: 'var(--step-1)', margin: 0 }}>Validation report: {project.ectdVersion === '4.0' && !seq.legacy ? `submission unit ${parseInt(seq.number, 10)}` : `sequence ${seq.number}`}</h2>
           <span className="small muted">Profile: {profileLabel(project)} · {rulesData.rules.length} core rules · runs live as you edit</span>
         </div>
         <div className="row">
