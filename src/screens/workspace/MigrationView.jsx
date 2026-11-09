@@ -54,7 +54,7 @@ export default function MigrationView({ project, focusNode, setTab, toast }) {
           <li>Document type keywords replace v3.2.2 file tags and are required for 4.2.x and 5.3.1.x to 5.3.5.x; study IDs become study keywords; substance, product and indication attributes become sender-defined keywords.</li>
           {eu ? <>
             <li>EU: there is no separate regional envelope (submissionunit.xml and sha256.txt only), and Module 1 is one m1 folder: country and language become keywords, so every Module 1 file name must be unique.</li>
-            <li>EU: documents and submission units can never be deleted. Forward compatibility for existing centralised lifecycles is still in EMA’s pilot (phase 3, 2026); practise it here, and follow EMA’s eSubmission pages before a real move.</li>
+            <li>EU: documents and submission units can never be deleted. Forward compatibility for existing centralised lifecycles is still in EMA’s pilot (phase 3, 2026). v4.0 is optional for new centralised applications for now; EMA’s own documents give the date it becomes mandatory as December 2027 in one place and Q1 2028 in another, so plan for either; practise it here, and follow EMA’s eSubmission pages before a real move.</li>
           </> : <li>US: CDER and CBER have accepted forward compatibility for existing v3.2.2 applications since 16 October 2026. v4.0 is still optional: FDA accepts v3.2.2 and v4.0 side by side and has set no date for requiring v4.0.</li>}
         </ul>
       </section>

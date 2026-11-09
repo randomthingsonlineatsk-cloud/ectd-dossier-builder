@@ -622,7 +622,7 @@
         "heading": "US and EU",
         "body": [
           "FDA has accepted new applications in v4.0 since 16 September 2024, and CDER and CBER have accepted forward compatibility for existing v3.2.2 applications since 16 October 2026. v4.0 is still optional: FDA accepts both versions and has not set a date for requiring v4.0.",
-          "In the EU, v4.0 is optional for new centralised applications since 22 December 2025. There is no separate regional envelope: a unit has submissionunit.xml and sha256.txt, and all of Module 1 sits in one m1 folder, with country and language carried as keywords, so every Module 1 file name must be unique. Documents and units can never be deleted. Forward compatibility for existing centralised lifecycles is still being piloted, and EMA's own documents give different dates for when v4.0 becomes mandatory for new centralised applications, so plan by phase and check EMA's eSubmission pages.",
+          "In the EU, v4.0 is optional for new centralised applications since 22 December 2025. There is no separate regional envelope: a unit has submissionunit.xml and sha256.txt, and all of Module 1 sits in one m1 folder, with country and language carried as keywords, so every Module 1 file name must be unique. Documents and units can never be deleted. Forward compatibility for existing centralised lifecycles is still being piloted, and EMA's own documents give different dates for when v4.0 becomes mandatory for new centralised applications (December 2027 in one, Q1 2028 in another), so plan by phase and check EMA's eSubmission pages.",
           "Japan made v4.0 mandatory for new applications from 1 April 2026; it is taught with the Japan pack in this app."
         ]
       },
