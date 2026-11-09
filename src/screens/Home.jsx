@@ -145,7 +145,7 @@ export default function Home() {
                 <option value="3.2.2">v3.2.2</option>
                 <option value="4.0">v4.0 (submission units)</option>
               </select>
-              <small id="ver-help">{opt.region === 'US' ? 'FDA accepts both; v4.0 is optional. Since 16 October 2026 an existing v3.2.2 application can move to v4.0: practise that in the v4.0 Migration Lab.' : 'EMA accepts v4.0 for new centralised applications; v3.2.2 lifecycles move later. Practice either.'}</small>
+              <small id="ver-help">{opt.region === 'US' ? 'FDA accepts both; v4.0 is optional. Since 16 October 2026 an existing v3.2.2 application can move to v4.0: practise that in the v4.0 Migration Lab.' : 'EMA has accepted v4.0 for new centralised applications since 22 December 2025; it becomes mandatory in December 2027 or Q1 2028 (EMA documents differ). Moving existing lifecycles is still a pilot. Practise either.'}</small>
             </label>
           ) : (
             <label className="field">eCTD version
