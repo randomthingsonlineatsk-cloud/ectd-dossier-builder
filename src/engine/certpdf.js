@@ -12,9 +12,9 @@ const ACCENT = rgb(0.137, 0.329, 0.549);
 
 // A short code that ties the certificate to the results it was made from. Anyone can
 // recompute it from an exported project file; it is not a security feature.
+export const verificationBasis = ({ name, userId, status, date }) => JSON.stringify({ name: name.trim(), userId, date, missions: status.missionScores.map((m) => [m.id, m.score]), exam: status.exam?.score ?? null });
 export function verificationCode({ name, userId, status, date }) {
-  const basis = JSON.stringify({ name: name.trim(), userId, date, missions: status.missionScores.map((m) => [m.id, m.score]), exam: status.exam?.score ?? null });
-  const h = sha256(basis).toUpperCase();
+  const h = sha256(verificationBasis({ name, userId, status, date })).toUpperCase();
   return `${h.slice(0, 4)}-${h.slice(4, 8)}-${h.slice(8, 12)}`;
 }
 
