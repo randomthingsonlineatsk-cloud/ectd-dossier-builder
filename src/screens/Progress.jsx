@@ -98,6 +98,14 @@ function Certificate({ attempts, lessonProgress, user, toast }) {
       download(kind === 'cert' ? 'ectd-dossier-builder-certificate.pdf' : 'ectd-dossier-builder-progress.pdf', bytes, 'application/pdf');
     } catch (e) { toast(`Could not make the PDF: ${e.message}`, 'error'); } finally { setBusy(false); }
   };
+  const record = async () => {
+    if (!name.trim()) return toast('Enter the name to print first.', 'warn');
+    await setMeta('certName', name.trim());
+    const { ectdRecord } = await import('../engine/passport.js');
+    const date = new Date().toISOString().slice(0, 10);
+    download(`ectd-dossier-builder-passport-${date}.json`, JSON.stringify(ectdRecord({ name, userId: user?.userId, status, date }), null, 2));
+    toast('Passport record saved. Add it to your Skills Passport on the pharmolecule site.');
+  };
   return (
     <section className="panel" style={{ marginTop: '1.5rem' }} aria-labelledby="cert-h">
       <h2 id="cert-h" style={{ fontSize: 'var(--step-1)' }}>Completion certificate</h2>
@@ -112,7 +120,9 @@ function Certificate({ attempts, lessonProgress, user, toast }) {
         <label className="field" style={{ minWidth: 280 }}>Name to print<input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" /></label>
         <button className="btn primary" disabled={!status.eligible || busy} onClick={() => make('cert')}>{busy ? 'Making…' : 'Download certificate (PDF)'}</button>
         <button className="btn" disabled={busy} onClick={() => make('progress')}>Download statement of progress</button>
+        <button className="btn" disabled={!status.eligible || busy} onClick={record}>Passport record (JSON)</button>
       </div>
+      {status.eligible && <p className="small muted">The passport record carries this certificate to the <a href="https://randomthingsonlineatsk-cloud.github.io/pharmolecule/passport.html" target="_blank" rel="noopener">Regulatory Skills Passport</a>, which checks it and puts it on one page with your certificates from the other apps.</p>}
       {!status.eligible && <p className="small muted" style={{ marginBottom: 0 }}>The certificate unlocks when every criterion is met. The statement of progress is available any time and claims no completion.</p>}
     </section>
   );
