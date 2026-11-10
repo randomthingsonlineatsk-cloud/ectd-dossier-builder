@@ -174,7 +174,7 @@ export default function Workspace({ id }) {
         {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
         {tab === 'review' && <ReviewView project={project} seq={seq} mutate={mutate} toast={toast} setSeqNumber={setSeqNumber} setTab={setTab} focusNode={focusNode} />}
         {tab === 'planning' && <PlanningView project={project} seq={seq} mutate={mutate} toast={toast} focusNode={focusNode} setTab={setTab} />}
-        {tab === 'm4q' && <M4qView project={project} focusNode={focusNode} setTab={setTab} />}
+        {tab === 'm4q' && <M4qView project={project} mutate={mutate} focusNode={focusNode} setTab={setTab} toast={toast} />}
         {tab === 'migrate' && <MigrationView project={project} focusNode={focusNode} setTab={setTab} toast={toast} />}
         {tab === 'settings' && <SettingsView project={project} mutate={mutate} attempts={attempts} />}
       </div>

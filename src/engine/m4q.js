@@ -154,7 +154,9 @@ export function analyseM4q(project) {
   }
   rows.sort((a, b) => INDEX.order.indexOf(a.nodeCode) - INDEX.order.indexOf(b.nodeCode));
   const have = new Set(rows.map((r) => r.nodeCode));
-  const gaps = NEW_IN_R2.map((g) => ({ ...g, label: label(g.code), sources: g.from.filter((c) => [...have].some((h) => h === c || h.startsWith(`${c}.`))) }));
+  const d = project.m4q ?? {};
+  const drafted = { '2.3.2.1': (d.qtpp ?? []).length > 0, '2.3.2.3': (d.cs ?? []).length > 0, '2.3.5.1': rows.length > 0, '2.3.5.2': (d.ec ?? []).length > 0, '2.3.5.3': (d.pacmp ?? []).length > 0 };
+  const gaps = NEW_IN_R2.map((g) => ({ ...g, label: label(g.code), drafted: drafted[g.code], sources: g.from.filter((c) => [...have].some((h) => h === c || h.startsWith(`${c}.`))) }));
   const count = (a) => rows.filter((r) => r.action === a).length;
   const placed = rows.filter((r) => r.action !== 'none').length;
   return {
@@ -167,10 +169,148 @@ export function analyseM4q(project) {
 }
 
 const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-export function m4qCsv(project, a) {
-  const head = ['Sequence', 'R1 heading', 'Document', 'Action', 'R2 Module 2.3', 'R2 Module 3', 'Note'];
-  const lines = [head.map(q).join(','), ...a.rows.map((r) => [r.seq, r.r1, r.title, r.action, r.core.join('; '), r.data, r.note].map(q).join(','))];
+export function m4qCsv(project, a, d = project.m4q ?? null) {
+  const head = ['Sequence', 'R1 heading', 'Document', 'Action', 'R2 Module 2.3', 'R2 Module 3', 'D/M/C/S part', 'Note'];
+  const lines = [head.map(q).join(','), ...a.rows.map((r) => [r.seq, r.r1, r.title, r.action, r.core.join('; '), r.data, partOf(r.nodeCode) ? PART_LABEL[partOf(r.nodeCode)] : '', r.note].map(q).join(','))];
   lines.push('', q('New in R2, to be written') , ...a.gaps.map((g) => [q(''), q(g.label), q(g.why), q('write'), q(g.sources.length ? `Draw on ${g.sources.map(displayCode).join(', ')}` : 'No source in this dossier'), q(''), q('')].join(',')));
+  if (d) {
+    lines.push('', q('2.3.2.1 Quality Target Product Profile'), ['Attribute', 'Target', 'Justification', 'CQA'].map(q).join(','), ...(d.qtpp ?? []).map((r) => [r.attribute, r.target, r.justification, r.cqa ? 'Yes' : 'No'].map(q).join(',')));
+    lines.push('', q('2.3.2.3 Overall Control Strategy Representation'), ['CQA', 'Material controls', 'Process controls', 'In-process controls', 'Specification', 'Supporting data (R1)'].map(q).join(','), ...(d.cs ?? []).map((r) => [r.cqa, r.materials, r.process, r.inProcess, r.specification, r.source].map(q).join(',')));
+    lines.push('', q('2.3.5.2 Established conditions'), ['Element', 'Established condition', 'Reporting category', 'Justification'].map(q).join(','), ...(d.ec ?? []).map((r) => [r.element, r.isEc === false ? 'No' : 'Yes', r.category, r.justification].map(q).join(',')));
+    lines.push('', q('2.3.5.3 Post-approval change management protocols'), ['Change', 'Studies', 'Acceptance criteria', 'Proposed category'].map(q).join(','), ...(d.pacmp ?? []).map((r) => [r.change, r.studies, r.criteria, r.category].map(q).join(',')));
+  }
   lines.push('', q(`What-if under the ICH M4Q(R2) Step 2 draft. ${project.name}. Training material, fictional product.`));
   return lines.join('\r\n');
+}
+
+// ---------------------------------------------------------------- the R2 structure, material by material
+// Which D/M/C/S part an R1 heading feeds (null when it is not part of that pattern).
+const PART = [
+  [/^3\.2\.S\.1/, 'D'], [/^3\.2\.S\.2\.[1-4]/, 'M'], [/^3\.2\.S\.2\.[56]/, 'M'], [/^3\.2\.S\.3/, 'D'], [/^3\.2\.S\.4/, 'C'], [/^3\.2\.S\.6/, 'S'], [/^3\.2\.S\.7/, 'S'],
+  [/^3\.2\.P\.1/, 'D'], [/^3\.2\.P\.3/, 'M'], [/^3\.2\.P\.4/, 'C'], [/^3\.2\.P\.5/, 'C'], [/^3\.2\.P\.7/, 'S'], [/^3\.2\.P\.8/, 'S'],
+];
+export const partOf = (code) => PART.find(([re]) => re.test(code))?.[1] ?? null;
+export const PART_LABEL = { D: 'Description', M: 'Manufacture', C: 'Control', S: 'Storage' };
+
+// The R2 materials (Step 2 draft), what each holds, and whether it follows D/M/C/S.
+export const MATERIALS = [
+  { id: 'DS', label: 'Drug Substances', dmcs: true, holds: { D: 'Nomenclature, structure, properties and characterisation', M: 'Manufacturers, process and process controls, critical steps', C: 'Specification and its justification, batch data', S: 'Container closure, retest period or shelf life, storage' } },
+  { id: 'SI', label: 'Substance Intermediates', dmcs: true, optional: true, holds: { D: 'The intermediate and its characteristics', M: 'How it is made', C: 'Its controls', S: 'Holding and storage' } },
+  { id: 'SM', label: 'Starting/Source Materials', dmcs: true, holds: { D: 'The starting or source material', M: 'Its route or source', C: 'Its specification', S: 'Storage, if relevant' } },
+  { id: 'RM', label: 'Raw Materials', dmcs: false, holds: { '': 'Reagents, solvents, media and other materials, with their controls; viral and TSE safety of materials of biological origin' } },
+  { id: 'EX', label: 'Excipients', dmcs: true, holds: { D: 'The excipient and its function', M: 'Manufacture, for novel excipients', C: 'Specification, including human or animal origin', S: 'Storage, if relevant' } },
+  { id: 'RS', label: 'Reference Standards and/or Materials', dmcs: false, holds: { '': 'Reference standards for the drug substance and drug product, their qualification and storage' } },
+  { id: 'IM', label: 'Impurities', dmcs: false, module3Only: true, holds: { '': 'Characterisation of impurities in the drug substance and drug product' } },
+  { id: 'DP', label: 'Drug Products', dmcs: true, holds: { D: 'Description and composition, batch formula', M: 'Manufacturers, process and process controls, validation', C: 'Specification and its justification, batch data', S: 'Container closure, shelf life, storage and in-use conditions' } },
+  { id: 'PI', label: 'Product Intermediates', dmcs: true, optional: true, holds: { D: 'The intermediate', M: 'How it is made', C: 'Its controls', S: 'Hold times and storage' } },
+  { id: 'MD', label: 'Medical Devices', dmcs: true, optional: true, holds: { D: 'The device or device part', M: 'Its assembly', C: 'Its performance controls', S: 'Storage' } },
+  { id: 'AP', label: 'Analytical Procedures', dmcs: false, holds: { '': 'Each analytical procedure, with the summary of its validation in 2.3.4.AP and the data in 3.2.AP' } },
+  { id: 'FA', label: 'Facilities', dmcs: false, holds: { '': 'Manufacturing, testing and packaging sites, and facility information such as R1 3.2.A.1' } },
+];
+
+// For each material: its parts, with the R1 documents of this dossier that feed each.
+export function r2Structure(a) {
+  return MATERIALS.map((m) => {
+    const rows = a.rows.filter((r) => r.core.some((c) => c.startsWith(`2.3.3.${m.id} `)) || r.data.startsWith(`3.2.${m.id} `));
+    const parts = m.dmcs
+      ? ['D', 'M', 'C', 'S'].map((p) => ({ part: p, label: PART_LABEL[p], holds: m.holds[p], docs: rows.filter((r) => partOf(r.nodeCode) === p) }))
+      : [{ part: '', label: 'Whole section', holds: m.holds[''], docs: rows }];
+    if (m.dmcs) { const placed = new Set(parts.flatMap((p) => p.docs)); const rest = rows.filter((r) => !placed.has(r)); if (rest.length) parts.push({ part: '', label: 'Development and other', holds: 'Supporting development and validation data', docs: rest }); }
+    return { ...m, parts, count: rows.length };
+  });
+}
+
+// ---------------------------------------------------------------- drafting the new R2 content
+const productKind = (productId, facts = {}) => {
+  const form = String(facts.dosageForm ?? '').toLowerCase();
+  return { bio: /mab|biosimilar/.test(productId), sterile: /inject|infusion|vial|sterile/.test(form), oral: /tablet|capsule/.test(form), mr: /extended|modified|delayed/.test(form) };
+};
+
+// QTPP, control strategy, ECs and PACMPs, started from the product's facts. Every row is editable.
+export function starterDrafts(project, product) {
+  const f = product?.facts ?? {}; const pr = product?.product ?? {};
+  const k = productKind(project.productId, f);
+  const row = (attribute, target, justification, cqa) => ({ attribute, target, justification, cqa });
+  const qtpp = [
+    row('Dosage form and strength', `${f.dosageForm ?? pr.dosageForm ?? ''}; ${f.strengths ?? (pr.strengths ?? []).join(', ')}`, 'Meets the dosing in the clinical studies.', false),
+    row('Route of administration', pr.route ?? (k.sterile ? 'intravenous' : 'oral'), 'As in the pivotal studies.', false),
+    row('Indication and population', f.indication ?? pr.indicationText ?? '', 'The proposed indication.', false),
+    row('Shelf life and storage', `${f.shelfLife ?? ''}; ${f.storage ?? ''}`, 'Supports commercial distribution.', false),
+    row('Identity', 'Positive', 'Ensures the right product.', true),
+    row(k.bio ? 'Protein content' : 'Assay', f.assay ?? '', 'Delivers the labelled dose.', true),
+    row(k.bio ? 'Potency' : k.oral ? (k.mr ? 'Drug release' : 'Dissolution') : 'Particulate matter', k.bio || k.oral ? f.dissolution ?? '' : 'Meets the pharmacopoeia', k.mr ? 'Controls the release profile the clinical data rest on.' : 'Linked to clinical performance.', true),
+    row(k.bio ? 'Product-related variants (aggregates, charge variants)' : 'Degradation products', k.bio ? 'Within the limits supported by clinical lots' : 'Within ICH Q3B limits', 'Patient safety.', true),
+  ];
+  if (k.oral && !k.mr) qtpp.push(row('Uniformity of dosage units', 'Meets the pharmacopoeia', 'Each unit delivers the labelled dose.', true));
+  if (k.sterile) qtpp.push(row('Sterility and bacterial endotoxins', 'Sterile; endotoxins within limits', 'Parenteral use.', true));
+  else qtpp.push(row('Microbiological quality', 'Meets the pharmacopoeia', 'Patient safety.', true));
+  const ctl = {
+    Identity: ['Drug substance identity (3.2.S.4.1)', 'Line clearance and labelling controls', '', 'Identity test (IR or HPLC retention time)'],
+    Assay: ['Drug substance assay (3.2.S.4.1)', 'Blend uniformity, compression weight control', 'Tablet weight', f.assay ?? ''],
+    'Protein content': ['Drug substance protein content', 'Formulation and fill controls', 'Fill volume', f.assay ?? ''],
+  };
+  const cs = qtpp.filter((r) => r.cqa).map((r) => {
+    const c = ctl[r.attribute] ?? ['', '', '', r.target];
+    return { cqa: r.attribute, materials: c[0], process: c[1], inProcess: c[2], specification: c[3], source: k.bio ? '3.2.P.5.1, 3.2.S.2.2' : '3.2.P.5.1, 3.2.P.3.3' };
+  });
+  return { qtpp, cs, ec: [], pacmp: [], started: new Date().toISOString() };
+}
+
+// 2.3.5.1: the change summary, built from the dossier's own sequences.
+export function changeSummary(project) {
+  return sortedSequences(project).map((s) => {
+    const quality = s.leaves.filter((l) => inQuality(l.nodeCode));
+    return { seq: s.number, what: s.description || `${s.submissionType} / ${s.subType}`, status: s.status, quality: quality.map((l) => `${l.operation} ${displayCode(l.nodeCode)} ${l.title}`) };
+  }).filter((x) => x.quality.length);
+}
+
+export const EC_CATEGORIES = ['Prior approval', 'Moderate (notify, then implement)', 'Low (annual or after implementation)'];
+
+export function checkDrafts(d) {
+  const out = [];
+  const add = (sev, where, msg) => out.push({ sev, where, msg });
+  if (!d) return [{ sev: 'High', where: '2.3.2', msg: 'Nothing drafted yet. Start from the product, then edit.' }];
+  if ((d.qtpp ?? []).length < 5) add('Medium', '2.3.2.1', 'The QTPP has fewer than five attributes.');
+  for (const r of d.qtpp ?? []) if (!String(r.target ?? '').trim()) add('High', '2.3.2.1', `"${r.attribute || 'An attribute'}" has no target.`);
+  const cqas = (d.qtpp ?? []).filter((r) => r.cqa);
+  if (!cqas.length) add('High', '2.3.2.1', 'No attribute is marked as a critical quality attribute.');
+  for (const q of cqas) {
+    const c = (d.cs ?? []).find((x) => x.cqa === q.attribute);
+    if (!c) add('High', '2.3.2.3', `CQA "${q.attribute}" has no row in the control strategy.`);
+    else {
+      if (![c.materials, c.process, c.inProcess].some((v) => String(v ?? '').trim())) add('High', '2.3.2.3', `CQA "${q.attribute}" has no material, process or in-process control: the specification alone is not a control strategy.`);
+      if (!String(c.specification ?? '').trim()) add('Medium', '2.3.2.3', `CQA "${q.attribute}" has no specification test or limit.`);
+    }
+  }
+  for (const c of d.cs ?? []) if (!cqas.some((q) => q.attribute === c.cqa)) add('Low', '2.3.2.3', `"${c.cqa}" is in the control strategy but not a CQA in the QTPP.`);
+  for (const e of d.ec ?? []) {
+    if (!String(e.element ?? '').trim()) add('Medium', '2.3.5.2', 'An established condition has no element.');
+    if (!EC_CATEGORIES.includes(e.category)) add('Medium', '2.3.5.2', `"${e.element || 'An element'}" has no reporting category.`);
+  }
+  for (const p of d.pacmp ?? []) if (!String(p.studies ?? '').trim() || !String(p.criteria ?? '').trim()) add('Medium', '2.3.5.3', `The protocol for "${p.change || 'a change'}" needs its studies and acceptance criteria.`);
+  return out;
+}
+
+const h = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const table = (head, rows) => `<table><thead><tr>${head.map((x) => `<th>${h(x)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((x) => `<td>${h(x)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${head.length}">None.</td></tr>`}</tbody></table>`;
+
+// A printable page with the drafts, laid out under the R2 headings.
+export function draftsHtml(project, d, product) {
+  const cs = changeSummary(project);
+  const pr = product?.product ?? {};
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${h(pr.brandName ?? project.name)}: M4Q(R2) drafts</title>
+<style>body{font-family:system-ui,sans-serif;max-width:60rem;margin:2rem auto;padding:0 1rem;color:#1d2433;background:#fff}table{border-collapse:collapse;width:100%;margin:.5rem 0 1.5rem}th,td{border:1px solid #c8ccd4;padding:.35rem .5rem;text-align:left;vertical-align:top;font-size:.9rem}th{background:#eef0f4}.note{background:#fff7e0;border:1px solid #e8c770;padding:.6rem .8rem;font-size:.9rem}</style></head><body>
+<p class="note">What-if under the ICH M4Q(R2) Step 2 draft (endorsed 14 May 2025; Step 4 targeted June 2027). Not for submission. Training material: fictional product and company.</p>
+<h1>${h(pr.brandName ?? '')} (${h(pr.inn ?? '')}): new R2 content</h1>
+<h2>2.3.2.1 Quality Target Product Profile</h2>
+${table(['Attribute', 'Target', 'Justification', 'CQA'], (d.qtpp ?? []).map((r) => [r.attribute, r.target, r.justification, r.cqa ? 'Yes' : 'No']))}
+<h2>2.3.2.3 Overall Control Strategy Representation</h2>
+${table(['CQA', 'Material controls', 'Process controls', 'In-process controls', 'Specification', 'Supporting data (R1)'], (d.cs ?? []).map((r) => [r.cqa, r.materials, r.process, r.inProcess, r.specification, r.source]))}
+<h2>2.3.5.1 Change Summary and Justifications</h2>
+${table(['Sequence', 'Submission', 'Quality documents'], cs.map((x) => [x.seq, `${x.what} (${x.status})`, x.quality.join('; ')]))}
+<h2>2.3.5.2 Product Lifecycle Management Document</h2>
+${table(['Element', 'Established condition', 'Reporting category', 'Justification'], (d.ec ?? []).map((r) => [r.element, r.isEc === false ? 'No' : 'Yes', r.category, r.justification]))}
+<h2>2.3.5.3 Content of Post-Approval Change Management Protocols</h2>
+${table(['Change', 'Studies', 'Acceptance criteria', 'Proposed category'], (d.pacmp ?? []).map((r) => [r.change, r.studies, r.criteria, r.category]))}
+</body></html>`;
 }

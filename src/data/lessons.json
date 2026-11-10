@@ -720,7 +720,8 @@
    {
     "heading": "Try it",
     "body": [
-     "Open any project and the M4Q(R2) what-if tab. It lists every current quality document with the R2 places it would go to: moved as it is, split between 2.3 and Module 3, rewritten (the QOS and pharmaceutical development), or with no place in the draft. It also lists the new R2 content that has no R1 heading, and which of your documents to draw on. The mapping is the app's, drawn from the draft; ICH publishes its own mapping for real work."
+     "Open any project and the M4Q(R2) what-if tab. It lists every current quality document with the R2 places it would go to: moved as it is, split between 2.3 and Module 3, rewritten (the QOS and pharmaceutical development), or with no place in the draft.",
+     "Then write the new R2 content: start from the product, make the quality target product profile and the control strategy table your own (every CQA needs a material, process or in-process control, not only a specification), and add established conditions or a change protocol if you propose them. The material view shows where each of your documents lands in D/M/C/S. The mapping is the app's, drawn from the draft; ICH publishes its own mapping for real work."
     ]
    }
   ],
