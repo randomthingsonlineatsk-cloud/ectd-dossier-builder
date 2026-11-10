@@ -152,26 +152,42 @@ export function analyseM4q(project) {
       core: (m?.core ?? []).map(label), data: m?.data ? label(m.data) : '', action: m?.action ?? 'none', note: m?.note ?? 'No mapping.',
     });
   }
-  rows.sort((a, b) => INDEX.order.indexOf(a.nodeCode) - INDEX.order.indexOf(b.nodeCode));
+  for (const r of rows) r.placed = true;
+  // Preview: library documents not placed yet, at the heading they belong under. Decoys are left
+  // out, and during an unsubmitted standard or expert mission the preview stays closed, since it
+  // would show where each document goes.
+  const previewOpen = !project.mission || project.mission.difficulty === 'guided' || !!project.mission.submitted;
+  const used = new Set([...st.entries.values()].map((e) => e.leaf.docId).filter(Boolean));
+  const library = Object.values(project.documents ?? {}).filter((doc) => !doc.decoy && doc.section && inQuality(String(doc.section)) && INDEX.map[doc.section] && !used.has(doc.id));
+  const preview = previewOpen ? library.map((doc) => {
+    const m = mapFor(doc.section);
+    return { seq: '', leafId: doc.id, nodeCode: doc.section, r1: `${displayCode(doc.section)} ${nodeLabel(doc.section)}`, title: doc.title, placed: false,
+      core: (m?.core ?? []).map(label), data: m?.data ? label(m.data) : '', action: m?.action ?? 'none', note: m?.note ?? 'No mapping.' };
+  }) : [];
+  rows.push(...preview);
+  rows.sort((a, b) => INDEX.order.indexOf(a.nodeCode) - INDEX.order.indexOf(b.nodeCode) || Number(b.placed) - Number(a.placed));
   const have = new Set(rows.map((r) => r.nodeCode));
+  const placedRows = rows.filter((r) => r.placed);
   const d = project.m4q ?? {};
-  const drafted = { '2.3.2.1': (d.qtpp ?? []).length > 0, '2.3.2.3': (d.cs ?? []).length > 0, '2.3.5.1': rows.length > 0, '2.3.5.2': (d.ec ?? []).length > 0, '2.3.5.3': (d.pacmp ?? []).length > 0 };
+  const drafted = { '2.3.2.1': (d.qtpp ?? []).length > 0, '2.3.2.3': (d.cs ?? []).length > 0, '2.3.5.1': placedRows.length > 0, '2.3.5.2': (d.ec ?? []).length > 0, '2.3.5.3': (d.pacmp ?? []).length > 0 };
   const gaps = NEW_IN_R2.map((g) => ({ ...g, label: label(g.code), drafted: drafted[g.code], sources: g.from.filter((c) => [...have].some((h) => h === c || h.startsWith(`${c}.`))) }));
   const count = (a) => rows.filter((r) => r.action === a).length;
   const placed = rows.filter((r) => r.action !== 'none').length;
+  const previewHidden = previewOpen ? 0 : library.length;
   return {
     status: M4Q_STATUS, rows, gaps,
     move: count('move'), split: count('split'), rewrite: count('rewrite'), none: count('none'),
     coverage: rows.length ? Math.round((100 * placed) / rows.length) : 0,
     published: seqs.filter((s) => s.status === 'published').length,
+    placedCount: placedRows.length, previewCount: preview.length, previewHidden,
     r2Sections: [...new Set(rows.flatMap((r) => [...r.core, r.data].filter(Boolean)))].sort(),
   };
 }
 
 const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
 export function m4qCsv(project, a, d = project.m4q ?? null) {
-  const head = ['Sequence', 'R1 heading', 'Document', 'Action', 'R2 Module 2.3', 'R2 Module 3', 'D/M/C/S part', 'Note'];
-  const lines = [head.map(q).join(','), ...a.rows.map((r) => [r.seq, r.r1, r.title, r.action, r.core.join('; '), r.data, partOf(r.nodeCode) ? PART_LABEL[partOf(r.nodeCode)] : '', r.note].map(q).join(','))];
+  const head = ['Sequence', 'Status', 'R1 heading', 'Document', 'Action', 'R2 Module 2.3', 'R2 Module 3', 'D/M/C/S part', 'Note'];
+  const lines = [head.map(q).join(','), ...a.rows.map((r) => [r.seq, r.placed ? 'In the dossier' : 'Library preview (not placed)', r.r1, r.title, r.action, r.core.join('; '), r.data, partOf(r.nodeCode) ? PART_LABEL[partOf(r.nodeCode)] : '', r.note].map(q).join(','))];
   lines.push('', q('New in R2, to be written') , ...a.gaps.map((g) => [q(''), q(g.label), q(g.why), q('write'), q(g.sources.length ? `Draw on ${g.sources.map(displayCode).join(', ')}` : 'No source in this dossier'), q(''), q('')].join(',')));
   if (d) {
     lines.push('', q('2.3.2.1 Quality Target Product Profile'), ['Attribute', 'Target', 'Justification', 'CQA'].map(q).join(','), ...(d.qtpp ?? []).map((r) => [r.attribute, r.target, r.justification, r.cqa ? 'Yes' : 'No'].map(q).join(',')));

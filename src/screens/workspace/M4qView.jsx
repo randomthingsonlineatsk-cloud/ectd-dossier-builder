@@ -44,6 +44,8 @@ export default function M4qView({ project, mutate, focusNode, setTab, toast }) {
   const findings = useMemo(() => checkDrafts(d), [d]);
   const changes = useMemo(() => changeSummary(project), [project]);
   const [openMat, setOpenMat] = useState('DS');
+  const [showPreview, setShowPreview] = useState(true);
+  const shown = showPreview ? a.rows : a.rows.filter((r) => r.placed);
 
   const edit = (list, i, k, v) => mutate((p) => { p.m4q[list][i][k] = v; if (list === 'qtpp' && k === 'attribute') { const old = project.m4q.qtpp[i].attribute; for (const c of p.m4q.cs) if (c.cqa === old) c.cqa = v; } });
   const addRow = (list, row) => mutate((p) => { p.m4q[list].push(row); });
@@ -57,13 +59,16 @@ export default function M4qView({ project, mutate, focusNode, setTab, toast }) {
         <h2 style={{ fontSize: 'var(--step-1)' }}>M4Q(R2) what-if</h2>
         <p>{a.status.text}</p>
         <div className="row" style={{ gap: '1.5rem', flexWrap: 'wrap' }}>
-          <div><span className="small muted">Quality documents</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.rows.length}</div></div>
+          <div><span className="small muted">In the dossier</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.placedCount}</div></div>
+          <div><span className="small muted">Library, not placed yet</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.previewCount}</div></div>
           <div><span className="small muted">Move as they are</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.move}</div></div>
           <div><span className="small muted">Split between 2.3 and Module 3</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.split}</div></div>
           <div><span className="small muted">Rewrite</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.rewrite}</div></div>
           <div><span className="small muted">No place in the draft</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.none}</div></div>
           <div><span className="small muted">New R2 sections drafted</span><div style={{ fontSize: 'var(--step-2)', fontWeight: 700 }}>{a.gaps.filter((g) => g.drafted).length} of {a.gaps.length}</div></div>
         </div>
+        <p className="small muted" style={{ marginTop: '.5rem' }}>Counts cover the documents in the dossier and, as a preview, the product's library documents you have not placed yet.</p>
+        {a.previewHidden > 0 && <p className="small callout">The preview of the {a.previewHidden} library documents you have not placed yet opens when you submit this mission, so it does not give away where each one goes. Place documents in the Builder to see them here now.</p>}
         <div className="row" style={{ marginTop: '1rem', flexWrap: 'wrap' }}>
           <button className="btn" onClick={() => download(`${slug(project.name)}-m4q-r2-what-if.csv`, m4qCsv(project, a), 'text/csv')}>Download the mapping and drafts (CSV)</button>
           <button className="btn" disabled={!d} onClick={() => download(`${slug(project.name)}-m4q-r2-drafts.html`, draftsHtml(project, d, product), 'text/html')}>Download the drafts (printable HTML)</button>
@@ -146,7 +151,7 @@ export default function M4qView({ project, mutate, focusNode, setTab, toast }) {
                   <tr key={p.label}>
                     <td>{p.part ? `${p.part}: ${p.label}` : p.label}</td>
                     <td className="small">{p.holds}</td>
-                    <td className="small">{p.docs.length ? p.docs.map((r) => <div key={`${r.seq}:${r.leafId}`}>{dc(r.nodeCode)} {r.title}</div>) : <span className="muted">none yet</span>}</td>
+                    <td className="small">{p.docs.filter((r) => showPreview || r.placed).length ? p.docs.filter((r) => showPreview || r.placed).map((r) => <div key={`${r.seq}:${r.leafId}`}>{dc(r.nodeCode)} {r.title}{!r.placed && <span className="muted"> (not placed yet)</span>}</div>) : <span className="muted">none yet</span>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -162,19 +167,20 @@ export default function M4qView({ project, mutate, focusNode, setTab, toast }) {
 
       <section className="panel">
         <h3>Where each document would go</h3>
-        {a.rows.length === 0 ? <p className="muted">No quality documents (2.3 or Module 3) placed yet.</p> : (
+        <label className="row small" style={{ margin: '.25rem 0 .75rem' }}><input type="checkbox" checked={showPreview} onChange={(e) => setShowPreview(e.target.checked)} /> Include library documents not placed yet (preview)</label>
+        {shown.length === 0 ? <p className="muted">No quality documents (2.3 or Module 3) placed yet.</p> : (
           <div style={{ overflowX: 'auto' }}>
             <table className="data">
               <thead><tr><th>R1 heading</th><th>Document</th><th>Action</th><th>R2 Module 2.3</th><th>R2 Module 3</th><th></th></tr></thead>
               <tbody>
-                {a.rows.map((r) => (
-                  <tr key={`${r.seq}:${r.leafId}`}>
+                {shown.map((r) => (
+                  <tr key={`${r.seq}:${r.leafId}`} style={r.placed ? undefined : { opacity: 0.85 }}>
                     <td className="small">{r.r1}</td>
-                    <td>{r.title}<div className="small muted">{r.note}</div></td>
+                    <td>{r.title}{!r.placed && <> <span className="pill">Not placed yet</span></>}<div className="small muted">{r.note}</div></td>
                     <td><span className={`pill ${ACTION[r.action][1]}`}>{ACTION[r.action][0]}</span></td>
                     <td className="small">{r.core.length ? r.core.join('; ') : '—'}</td>
                     <td className="small">{r.data || '—'}</td>
-                    <td><button className="btn small" onClick={() => { focusNode(r.nodeCode, r.leafId); setTab('builder'); }}>Show</button></td>
+                    <td><button className="btn small" onClick={() => { focusNode(r.nodeCode, r.placed ? r.leafId : null); setTab('builder'); }}>{r.placed ? 'Show' : 'Place it'}</button></td>
                   </tr>
                 ))}
               </tbody>

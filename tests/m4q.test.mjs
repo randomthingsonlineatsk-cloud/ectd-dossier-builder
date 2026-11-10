@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { INDEX } from '../src/engine/tree.js';
 import { seedMission, buildComplete } from '../src/engine/missions.js';
 import { analyseM4q, m4qCsv, MAP, R2, M4Q_STATUS, mapFor, starterDrafts, checkDrafts, draftsHtml, r2Structure, changeSummary, partOf } from '../src/engine/m4q.js';
-import { PRODUCTS } from '../src/engine/model.js';
+import { PRODUCTS, createProject } from '../src/engine/model.js';
 
 const user = { userId: 'u-q', classId: null };
 let n = 0; const t = async (name, fn) => { await fn(); n++; };
@@ -64,6 +64,25 @@ await t('structure view: materials with D/M/C/S parts and the documents that fee
   assert.ok(ds.count > 0);
   assert.equal(partOf('3.2.P.5.1'), 'C'); assert.equal(partOf('3.2.S.7.3'), 'S'); assert.equal(partOf('3.2.P.2'), null);
   assert.ok(st.find((x) => x.id === 'AP').parts[0].docs.length > 0, 'analytical procedures collected from 3.2.S.4.2 and 3.2.P.5.2');
+});
+
+await t('library preview: a new project shows where unplaced documents would go; missions keep it closed until submitted', async () => {
+  const p = createProject({ name: 'blank', productId: 'nce-tablet', region: 'US', user });
+  const a = analyseM4q(p);
+  assert.equal(a.placedCount, 0); assert.ok(a.previewCount >= 20, `${a.previewCount}`);
+  assert.ok(a.rows.every((r) => !r.placed)); assert.ok(!a.rows.some((r) => /single file|only/i.test(r.title) && /Dissolution test only/.test(r.title)), 'decoys left out');
+  assert.ok(r2Structure(a).find((x) => x.id === 'DP').count > 0);
+  assert.match(m4qCsv(p, a), /Library preview \(not placed\)/);
+  const std = await seedMission(1, 'standard', user);
+  const s1 = analyseM4q(std);
+  assert.equal(s1.previewCount, 0); assert.ok(s1.previewHidden > 0);
+  std.mission.submitted = new Date().toISOString();
+  assert.ok(analyseM4q(std).previewCount > 0);
+  const g = await seedMission(1, 'guided', user);
+  assert.ok(analyseM4q(g).previewCount > 0);
+  const full = await seedMission(1, 'standard', user); buildComplete(full);
+  const af = analyseM4q(full);
+  assert.ok(af.placedCount >= 20); assert.equal(af.rows.filter((r) => r.placed).length, af.placedCount);
 });
 
 console.log(`M4Q(R2) what-if: ${n} tests passed`);
