@@ -18,6 +18,7 @@ import MissionView from './workspace/MissionView.jsx';
 import ReviewView from './workspace/ReviewView.jsx';
 import PlanningView from './workspace/PlanningView.jsx';
 import MigrationView from './workspace/MigrationView.jsx';
+import M4qView from './workspace/M4qView.jsx';
 
 function Timer({ mission, onExpire }) {
   const [now, setNow] = useState(Date.now());
@@ -124,7 +125,7 @@ export default function Workspace({ id }) {
   const tabs = [
     ...(project.mission ? [['mission', 'Mission']] : []),
     ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', project.ectdVersion === '4.0' ? 'Submission unit' : project.region === 'IN' ? 'Portal upload' : 'Backbone'],
-    ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['planning', 'Planning'], ...(['US', 'EU'].includes(project.region) && project.ectdVersion === '3.2.2' && !(project.region === 'EU' && (project.appType !== 'maa' || project.variant)) ? [['migrate', 'v4.0 Migration Lab']] : []), ['review', 'Review', (project.review?.questions ?? []).filter((q) => q.status !== 'resolved').length], ['settings', 'Settings'],
+    ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['planning', 'Planning'], ...(['US', 'EU'].includes(project.region) && project.ectdVersion === '3.2.2' && !(project.region === 'EU' && (project.appType !== 'maa' || project.variant)) ? [['migrate', 'v4.0 Migration Lab']] : []), ['m4q', 'M4Q(R2) what-if'], ['review', 'Review', (project.review?.questions ?? []).filter((q) => q.status !== 'resolved').length], ['settings', 'Settings'],
   ];
   const guided = project.mission?.difficulty === 'guided';
 
@@ -159,7 +160,7 @@ export default function Workspace({ id }) {
           <span className={`pill ${validation.counts.High ? 'high' : validation.counts.Medium ? 'medium' : 'ok'}`}>Seq {seq.number}: {validation.counts.High} high, {validation.counts.Medium} medium</span>
         </div>
       )}
-      {seq.status === 'published' && !['sequences', 'mission', 'review', 'planning', 'migrate'].includes(tab) && (
+      {seq.status === 'published' && !['sequences', 'mission', 'review', 'planning', 'migrate', 'm4q'].includes(tab) && (
         <div className="callout" style={{ margin: '1rem 1.25rem 0' }}>Sequence {seq.number} is published and read-only. Go to Sequences to create the next one.</div>
       )}
       <div className="ws-body" role="tabpanel">
@@ -173,6 +174,7 @@ export default function Workspace({ id }) {
         {tab === 'validate' && <ValidateView project={project} seq={seq} validation={validation} focusNode={focusNode} setTab={setTab} onRerun={() => { setNonce((n) => n + 1); toast(`Validated sequence ${seq.number}: ${validation.verdict.text}`); }} />}
         {tab === 'review' && <ReviewView project={project} seq={seq} mutate={mutate} toast={toast} setSeqNumber={setSeqNumber} setTab={setTab} focusNode={focusNode} />}
         {tab === 'planning' && <PlanningView project={project} seq={seq} mutate={mutate} toast={toast} focusNode={focusNode} setTab={setTab} />}
+        {tab === 'm4q' && <M4qView project={project} focusNode={focusNode} setTab={setTab} />}
         {tab === 'migrate' && <MigrationView project={project} focusNode={focusNode} setTab={setTab} toast={toast} />}
         {tab === 'settings' && <SettingsView project={project} mutate={mutate} attempts={attempts} />}
       </div>
