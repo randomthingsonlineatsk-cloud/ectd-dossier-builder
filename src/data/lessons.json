@@ -771,5 +771,75 @@
     "why": "Comments are to be resolved by November 2026 and Step 4 is targeted for June 2027."
    }
   ]
+ },
+ {
+  "id": 10,
+  "title": "China: eCTD with the NMPA",
+  "minutes": 8,
+  "summary": "Where eCTD stands in China, the China Module 1, the envelope and numbering, and what the validator checks.",
+  "sections": [
+   {
+    "heading": "Where it stands",
+    "body": [
+     "China has accepted eCTD v3.2.2 since 29 December 2021 (NMPA Announcement 2021 No. 119), at first for chemical drugs of registration categories 1 and 5.1 and for biological products of category 1. Announcement 2025 No. 10 widened the scope from 27 January 2025 to most chemical and biological clinical trial applications and to more marketing application categories. eCTD stays voluntary: applicants may still file paper or other electronic dossiers, but once a product has an eCTD submission, the later submissions for it are eCTD too.",
+     "The rules sit in three documents published with the 2021 announcement: the eCTD Technical Specification V1.0, the Validation Standard V1.0 and the Implementation Guide V1.0. Documents for review are in Chinese; documents in another language come with a Chinese translation."
+    ]
+   },
+   {
+    "heading": "The China Module 1",
+    "body": [
+     "Module 1 follows NMPA's administrative documents and drug information: 1.0 cover letter, 1.2 application form, 1.3 product information (draft package insert and labels, the quality standard and manufacturing process, inspection-related information, product certificates), 1.4 application status (prior approvals), 1.5 expedited procedures, 1.6 communication meetings, 1.7 clinical trial management, 1.8 pharmacovigilance and risk management, 1.9 post-marketing studies, 1.10 applicant and manufacturer certification (with the domestic registration agent of an imported drug) and 1.11 small and micro enterprises.",
+     "Each chapter has a numbered folder under m1/cn: 00 for the cover letter, then 02 to 11. The envelope and the Module 1 leaves are in m1/cn/cn-regional.xml, whose root element is cn_ectd."
+    ]
+   },
+   {
+    "heading": "Envelope and numbering",
+    "body": [
+     "The envelope has three levels. The application: its number (a letter for the type, x new drug, y generic, l clinical trial; the year; a five-digit serial, e.g. x202612345), the application type, the product type and the product's permanent original number. The regulatory activity: its type (initial application, supplementary application, filing, report, new indication, re-registration, development safety update report, baseline) and its related sequence, the first sequence of the activity. The sequence: its four-digit number, its type (initial submission, response, withdrawal, or format conversion for a baseline), a description of at most 120 characters, and a contact.",
+     "Sequences start at 0000 and go up by one with no gaps. China recommends the operations new, replace and delete; append is reserved for study tagging file content, and anywhere else it raises a warning to be explained in the cover letter."
+    ]
+   },
+   {
+    "heading": "Try it",
+    "body": [
+     "Create an Ostrevia project for China (imported originator, category 5.1) or start mission 25. Fill in the envelope, place the Chinese Module 1 (watch for the English-only package insert in the library), add Modules 2 to 5, validate and publish 0000. Then take a change case from the Variations Classifier's China pack and import its change package: a supplementary application or a filing becomes the next sequence."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Since when has NMPA accepted eCTD submissions, and is it mandatory?",
+    "options": [
+     "Since 2016, mandatory",
+     "Since 29 December 2021, voluntary for the listed application types",
+     "Since 2025, mandatory for all applications",
+     "Not yet"
+    ],
+    "answer": 1,
+    "why": "Announcement 2021 No. 119 introduced eCTD from 29 December 2021; Announcement 2025 No. 10 widened its scope from 27 January 2025. Both say applications may be filed in eCTD."
+   },
+   {
+    "q": "What does the letter x at the start of a China application number mean?",
+    "options": [
+     "An imported drug",
+     "A new drug application",
+     "An expedited procedure",
+     "A supplement"
+    ],
+    "answer": 1,
+    "why": "x is a new drug application, y a generic drug application and l a clinical trial application."
+   },
+   {
+    "q": "Where does the cover letter of a China sequence sit?",
+    "options": [
+     "m1/cn/01",
+     "m1/cn/00",
+     "m1/cn/cover",
+     "In Module 2"
+    ],
+    "answer": 1,
+    "why": "Module 1 chapters have numbered folders; 1.0 is folder 00."
+   }
+  ]
  }
 ]

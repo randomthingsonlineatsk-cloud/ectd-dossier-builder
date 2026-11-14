@@ -8,7 +8,7 @@ import { rng } from './compare.js';
 
 export const TOPICS = bank.topics;
 const LESSON_TOPIC = { 1: 'ctd', 2: 'formats', 3: 'granularity', 4: 'backbone', 5: 'lifecycle', 6: 'v4', 7: 'regions' };
-const MISSION_TOPIC = { 3: 'v4', 6: 'postapproval', 7: 'postapproval', 8: 'us', 9: 'us', 12: 'us', 13: 'biologics', 14: 'india', 15: 'eu', 16: 'us' };
+const MISSION_TOPIC = { 25: 'regions', 3: 'v4', 6: 'postapproval', 7: 'postapproval', 8: 'us', 9: 'us', 12: 'us', 13: 'biologics', 14: 'india', 15: 'eu', 16: 'us' };
 
 let cache = null;
 export function allQuestions() {

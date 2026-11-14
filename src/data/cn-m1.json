@@ -1,0 +1,494 @@
+{
+ "_about": "China Module 1 headings from NMPA's Module 1 (administrative documents and drug information) requirements; folders, envelope and rules modelled on the NMPA eCTD Technical Specification V1.0, Validation Standard V1.0 and Implementation Guide V1.0 (Announcement 2021 No. 119; scope widened by Announcement 2025 No. 10). Simplified for training: heading 1.3.4 (traditional Chinese medicine) and the clinical-trial subheadings are left out. Codes carry a 'cn:' prefix in the app.",
+ "region": "CN",
+ "regionalFile": "m1/cn/cn-regional.xml",
+ "folder": "m1/cn",
+ "version": "3.2.2",
+ "tree": {
+  "code": "cn:1",
+  "display": "1",
+  "title": "Module 1 (China)",
+  "element": "m1-cn",
+  "children": [
+   {
+    "code": "cn:1.0",
+    "title": "Cover Letter",
+    "titleZh": "说明函",
+    "element": "m1-1-0",
+    "folder": "00",
+    "help": "Every sequence: contact, the inapplicable documents, the validation tool and version with explanations of any warnings, and the commitments the implementation guide asks for."
+   },
+   {
+    "code": "cn:1.2",
+    "title": "Application Form",
+    "titleZh": "申请表",
+    "element": "m1-1-2",
+    "folder": "02"
+   },
+   {
+    "code": "cn:1.3",
+    "title": "Product Information",
+    "titleZh": "产品信息相关材料",
+    "element": "m1-1-3",
+    "folder": "03",
+    "children": [
+     {
+      "code": "cn:1.3.1",
+      "title": "Package Insert (draft) and Revision Notes",
+      "titleZh": "说明书",
+      "element": "m1-1-3-1"
+     },
+     {
+      "code": "cn:1.3.2",
+      "title": "Labels (draft)",
+      "titleZh": "包装标签",
+      "element": "m1-1-3-2"
+     },
+     {
+      "code": "cn:1.3.3",
+      "title": "Quality Standard and Manufacturing Process",
+      "titleZh": "产品质量标准和生产工艺",
+      "element": "m1-1-3-3"
+     },
+     {
+      "code": "cn:1.3.5",
+      "title": "Common Name Approval Materials",
+      "titleZh": "药品通用名称核定申请材料",
+      "element": "m1-1-3-5"
+     },
+     {
+      "code": "cn:1.3.6",
+      "title": "Inspection-Related Information",
+      "titleZh": "检查相关信息",
+      "element": "m1-1-3-6"
+     },
+     {
+      "code": "cn:1.3.7",
+      "title": "Product Certificates (including marketing authorisations abroad)",
+      "titleZh": "产品相关证明性文件",
+      "element": "m1-1-3-7"
+     },
+     {
+      "code": "cn:1.3.8",
+      "title": "Other Product Information",
+      "titleZh": "其他产品信息相关材料",
+      "element": "m1-1-3-8"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.4",
+    "title": "Application Status",
+    "titleZh": "申请状态",
+    "element": "m1-1-4",
+    "folder": "04",
+    "children": [
+     {
+      "code": "cn:1.4.1",
+      "title": "Prior Approval Status",
+      "titleZh": "既往批准情况",
+      "element": "m1-1-4-1"
+     },
+     {
+      "code": "cn:1.4.2",
+      "title": "Adjusting, Suspending or Terminating a Clinical Trial",
+      "titleZh": "申请调整临床试验方案、暂停或者终止临床试验",
+      "element": "m1-1-4-2"
+     },
+     {
+      "code": "cn:1.4.5",
+      "title": "Withdrawal of a Pending Application",
+      "titleZh": "申请撤回尚未批准的药物注册申请",
+      "element": "m1-1-4-5"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.5",
+    "title": "Expedited Registration Procedures",
+    "titleZh": "加快上市注册程序申请",
+    "element": "m1-1-5",
+    "folder": "05",
+    "children": [
+     {
+      "code": "cn:1.5.1",
+      "title": "Application for an Expedited Procedure",
+      "titleZh": "加快上市注册程序申请",
+      "element": "m1-1-5-1"
+     },
+     {
+      "code": "cn:1.5.2",
+      "title": "Termination of an Expedited Procedure",
+      "titleZh": "加快上市注册程序终止申请",
+      "element": "m1-1-5-2"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.6",
+    "title": "Communication Meetings",
+    "titleZh": "沟通交流会议",
+    "element": "m1-1-6",
+    "folder": "06",
+    "children": [
+     {
+      "code": "cn:1.6.1",
+      "title": "Meeting Application",
+      "titleZh": "会议申请",
+      "element": "m1-1-6-1"
+     },
+     {
+      "code": "cn:1.6.2",
+      "title": "Meeting Background Materials",
+      "titleZh": "会议背景资料",
+      "element": "m1-1-6-2"
+     },
+     {
+      "code": "cn:1.6.3",
+      "title": "Meeting Correspondence and Minutes",
+      "titleZh": "会议相关信函、会议纪要以及答复",
+      "element": "m1-1-6-3"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.7",
+    "title": "Clinical Trial Management Information",
+    "titleZh": "临床试验过程管理信息",
+    "element": "m1-1-7",
+    "folder": "07"
+   },
+   {
+    "code": "cn:1.8",
+    "title": "Pharmacovigilance and Risk Management",
+    "titleZh": "药物警戒与风险管理",
+    "element": "m1-1-8",
+    "folder": "08",
+    "children": [
+     {
+      "code": "cn:1.8.1",
+      "title": "Development Safety Update Reports",
+      "titleZh": "研发期间安全性更新报告及附件",
+      "element": "m1-1-8-1"
+     },
+     {
+      "code": "cn:1.8.2",
+      "title": "Other Potential Serious Safety Risk Information",
+      "titleZh": "其他潜在的严重安全性风险信息",
+      "element": "m1-1-8-2"
+     },
+     {
+      "code": "cn:1.8.3",
+      "title": "Risk Management Plan",
+      "titleZh": "风险管理计划",
+      "element": "m1-1-8-3"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.9",
+    "title": "Post-Marketing Studies",
+    "titleZh": "上市后研究",
+    "element": "m1-1-9",
+    "folder": "09"
+   },
+   {
+    "code": "cn:1.10",
+    "title": "Applicant and Manufacturer Certification",
+    "titleZh": "申请人/生产企业证明性文件",
+    "element": "m1-1-10",
+    "folder": "10",
+    "children": [
+     {
+      "code": "cn:1.10.1",
+      "title": "Domestic Applicant or Manufacturer Qualification",
+      "titleZh": "境内生产药品申请人/生产企业资质证明文件",
+      "element": "m1-1-10-1"
+     },
+     {
+      "code": "cn:1.10.2",
+      "title": "Overseas Applicant or Manufacturer Qualification",
+      "titleZh": "境外生产药品申请人/生产企业资质证明文件",
+      "element": "m1-1-10-2"
+     },
+     {
+      "code": "cn:1.10.3",
+      "title": "Registration Agent Authorisation (domestic agent)",
+      "titleZh": "注册代理机构证明文件",
+      "element": "m1-1-10-3"
+     }
+    ]
+   },
+   {
+    "code": "cn:1.11",
+    "title": "Small and Micro Enterprise Certification",
+    "titleZh": "小微企业证明文件",
+    "element": "m1-1-11",
+    "folder": "11"
+   }
+  ]
+ },
+ "submissionTypes": [
+  {
+   "value": "initial",
+   "label": "initial (首次申请: first application)"
+  },
+  {
+   "value": "supplemental",
+   "label": "supplemental (补充申请: supplementary application)"
+  },
+  {
+   "value": "filing",
+   "label": "filing (备案: filing change)"
+  },
+  {
+   "value": "report",
+   "label": "report (报告: report change)"
+  },
+  {
+   "value": "new-indication",
+   "label": "new-indication (新增适应症)"
+  },
+  {
+   "value": "re-registration",
+   "label": "re-registration (再注册)"
+  },
+  {
+   "value": "dsur",
+   "label": "dsur (研发期间安全性更新报告: development safety update report)"
+  },
+  {
+   "value": "baseline",
+   "label": "baseline (基线: baseline of a paper-approved product)"
+  }
+ ],
+ "submissionSubTypes": [
+  {
+   "value": "initial",
+   "label": "Initial submission (首次提交)",
+   "help": "The first sequence of the regulatory activity; its related sequence is itself."
+  },
+  {
+   "value": "response",
+   "label": "Response (回复)",
+   "help": "Answers to CDE's request for supplementary information; the related sequence is the first sequence of the activity."
+  },
+  {
+   "value": "withdrawal",
+   "label": "Withdrawal (撤回)",
+   "help": "Withdraws the regulatory activity; it reverses the earlier changes of the activity."
+  },
+  {
+   "value": "reformat",
+   "label": "Format conversion (格式转换)",
+   "help": "Only with the baseline activity: the approved paper dossier converted to eCTD."
+  }
+ ],
+ "applicationTypes": [
+  {
+   "value": "nda",
+   "label": "New drug application (x)",
+   "phase": 8
+  }
+ ],
+ "allowed": {
+  "nda": {
+   "initial": [
+    "initial",
+    "response",
+    "withdrawal"
+   ],
+   "supplemental": [
+    "initial",
+    "response",
+    "withdrawal"
+   ],
+   "filing": [
+    "initial",
+    "withdrawal"
+   ],
+   "report": [
+    "initial"
+   ],
+   "new-indication": [
+    "initial",
+    "response",
+    "withdrawal"
+   ],
+   "re-registration": [
+    "initial",
+    "response"
+   ],
+   "baseline": [
+    "reformat"
+   ]
+  }
+ },
+ "forms": [],
+ "checklist": {
+  "nda:initial:initial": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   },
+   {
+    "section": "cn:1.2",
+    "label": "Drug registration application form",
+    "level": "mandatory",
+    "rule": "CN-02"
+   },
+   {
+    "section": "cn:1.3.1",
+    "label": "Package insert (draft)",
+    "level": "mandatory",
+    "rule": "CN-03"
+   },
+   {
+    "section": "cn:1.3.2",
+    "label": "Labels (draft)",
+    "level": "mandatory",
+    "rule": "CN-03"
+   },
+   {
+    "section": "cn:1.3.3",
+    "label": "Quality standard and manufacturing process",
+    "level": "mandatory",
+    "rule": "CN-04"
+   },
+   {
+    "section": "cn:1.3.6",
+    "label": "Inspection-related information",
+    "level": "mandatory",
+    "rule": "CN-04"
+   },
+   {
+    "section": "cn:1.8.3",
+    "label": "Risk management plan",
+    "level": "mandatory",
+    "rule": "CN-05"
+   },
+   {
+    "section": "cn:1.10.2",
+    "label": "Overseas applicant qualification (imported drug)",
+    "level": "mandatory",
+    "rule": "CN-06"
+   },
+   {
+    "section": "cn:1.10.3",
+    "label": "Registration agent authorisation (imported drug)",
+    "level": "mandatory",
+    "rule": "CN-06"
+   },
+   {
+    "section": "cn:1.3.7",
+    "label": "Marketing authorisations abroad (for a drug already marketed abroad)",
+    "level": "conditional"
+   },
+   {
+    "section": "cn:1.6.3",
+    "label": "Minutes of the pre-application meeting with CDE",
+    "level": "conditional"
+   }
+  ],
+  "nda:supplemental:initial": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   },
+   {
+    "section": "cn:1.2",
+    "label": "Supplementary application form",
+    "level": "mandatory",
+    "rule": "CN-02"
+   },
+   {
+    "section": "cn:1.4.1",
+    "label": "Prior approval status (registration certificate and earlier approvals)",
+    "level": "mandatory",
+    "rule": "CN-13"
+   },
+   {
+    "section": "cn:1.3.1",
+    "label": "Revised package insert, when it changes",
+    "level": "conditional"
+   },
+   {
+    "section": "cn:1.3.2",
+    "label": "Revised labels, when they change",
+    "level": "conditional"
+   }
+  ],
+  "nda:filing:initial": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   },
+   {
+    "section": "cn:1.2",
+    "label": "Filing form",
+    "level": "mandatory",
+    "rule": "CN-02"
+   },
+   {
+    "section": "cn:1.4.1",
+    "label": "Prior approval status",
+    "level": "mandatory",
+    "rule": "CN-13"
+   }
+  ],
+  "nda:report:initial": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ],
+  "nda:supplemental:response": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ],
+  "nda:initial:response": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ],
+  "nda:filing:withdrawal": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ],
+  "nda:supplemental:withdrawal": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ],
+  "nda:initial:withdrawal": [
+   {
+    "section": "cn:1.0",
+    "label": "Cover letter",
+    "level": "mandatory",
+    "rule": "CN-01"
+   }
+  ]
+ }
+}

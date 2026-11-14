@@ -8,6 +8,7 @@ const REGION_OPTION = {
   EU: (o) => o.variant ? `EU — MAA (eCTD v3.2.2)` : 'EU — centralised MAA (eCTD v3.2.2 or v4.0)',
   JP: () => 'Japan — new drug application (eCTD v4.0)',
   IN: () => 'India — new drug, CTD for the online portal',
+  CN: () => 'China — imported originator, category 5.1 (eCTD v3.2.2, NMPA)',
 };
 import { db } from '../engine/db.js';
 import { exportProject, parseProjectFile, download } from '../engine/io.js';
@@ -158,7 +159,7 @@ export default function Home() {
       </form>
 
       <div className="section-head"><h2>Where eCTD stands in 2026</h2></div>
-      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has made v4.0 mandatory. This app teaches v3.2.2 with the US, EU, Canada and Switzerland packs, v4.0 with the Japan pack and (optionally) for US and EU centralised applications, the move from one to the other in the v4.0 Migration Lab, and India's CTD for its online portal.</p>
+      <p>The industry is mid-transition: v3.2.2 is still everyday in the US and EU, while Japan has made v4.0 mandatory. This app teaches v3.2.2 with the US, EU, Canada, Switzerland and China packs, v4.0 with the Japan pack and (optionally) for US and EU centralised applications, the move from one to the other in the v4.0 Migration Lab, and India's CTD for its online portal.</p>
       <StatusTable />
     </div>
   );
