@@ -116,7 +116,7 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
   return (
     <div className="stack" style={{ maxWidth: 980 }}>
       <section className="panel">
-        <h2 style={{ fontSize: 'var(--step-1)' }}>{{ EU: 'EU envelope (eu-regional.xml)', JP: 'Submission unit metadata (submissionunit.xml, eCTD v4.0)', IN: 'Application details (CTD for the online portal)', CA: 'Regulatory transaction information (ca-regional.xml)', CH: 'Swiss envelope (ch-regional.xml)' }[region] ?? 'Regional metadata (us-regional.xml)'}</h2>
+        <h2 style={{ fontSize: 'var(--step-1)' }}>{{ EU: 'EU envelope (eu-regional.xml)', JP: 'Submission unit metadata (submissionunit.xml, eCTD v4.0)', IN: 'Application details (CTD for the online portal)', CA: 'Regulatory transaction information (ca-regional.xml)', CH: 'Swiss envelope (ch-regional.xml)', CN: 'China envelope (cn-regional.xml)' }[region] ?? 'Regional metadata (us-regional.xml)'}</h2>
         <p className="small muted">{ind ? `India takes the CTD as PDF files uploaded to the online portal; there is no backbone XML. These values go into the forms and covering letter for ${seq.number}.` : jp ? `In v4.0 these values sit inside the one submission unit message for unit ${parseInt(seq.number, 10)}. There is no separate regional XML.` : `These values go into the regional XML for sequence ${seq.number}.`} The validator checks they are complete.</p>
         <div className="grid-2">
           <label className="field">Applicant name<input type="text" value={s.applicant.name} onChange={(e) => setSetting('applicant.name', e.target.value)} /></label>
@@ -129,6 +129,23 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
               <label className="field">Regulatory activity lead
                 <select value={s.ca.activityLead} onChange={(e) => setSetting('ca.activityLead', e.target.value)}>{['Pharmaceutical', 'Biological', 'Post-Market Pharmacovigilance', 'Drug Master File'].map((x) => <option key={x}>{x}</option>)}</select>
               </label>
+            </>
+          ) : region === 'CN' ? (
+            <>
+              <label className="field">Application number <small>letter for the application type (x new drug, y generic, l clinical trial), year and five digits, e.g. x202612345; it never changes</small><input type="text" value={s.cn.applicationNumber} onChange={(e) => setSetting('cn.applicationNumber', e.target.value.trim())} /></label>
+              <label className="field">Product number (original number) <small>the product's permanent number: year and six digits, e.g. 2026000123</small><input type="text" inputMode="numeric" value={s.cn.productNumber} onChange={(e) => setSetting('cn.productNumber', e.target.value.trim())} /></label>
+              <label className="field">Product type
+                <select value={s.cn.productType} onChange={(e) => setSetting('cn.productType', e.target.value)}><option value="chemical">chemical drug</option><option value="biological">biological product</option></select>
+              </label>
+              <label className="field">Registration category <small>5.1: an originator already marketed abroad, applying in China</small>
+                <select value={s.cn.category} onChange={(e) => setSetting('cn.category', e.target.value)}>{['1', '2', '3', '4', '5.1', '5.2'].map((x) => <option key={x}>{x}</option>)}</select>
+              </label>
+              <label className="field">Manufactured outside China (imported) <small>an imported drug files through a domestic registration agent; 1.10.2 and 1.10.3 then apply</small>
+                <select value={s.cn.imported} onChange={(e) => setSetting('cn.imported', e.target.value)}><option value="yes">yes</option><option value="no">no</option></select>
+              </label>
+              <label className="field">Contact name<input type="text" value={s.cn.contactName} onChange={(e) => setSetting('cn.contactName', e.target.value)} /></label>
+              <label className="field">Contact phone<input type="text" value={s.cn.contactPhone} onChange={(e) => setSetting('cn.contactPhone', e.target.value)} /></label>
+              <label className="field">Contact email<input type="email" value={s.cn.contactEmail} onChange={(e) => setSetting('cn.contactEmail', e.target.value.trim())} /></label>
             </>
           ) : region === 'CH' ? (
             <>
@@ -201,12 +218,12 @@ export default function Module1({ project, seq, mutate, toast, setTab, focusNode
               <label className="field">Regulatory contact<input type="text" value={s.applicant.contact} onChange={(e) => setSetting('applicant.contact', e.target.value)} /></label>
             </>
           )}
-          <label className="field">Submission type
+          <label className="field">{region === 'CN' ? 'Regulatory activity type' : 'Submission type'}
             <select value={seq.submissionType} disabled={!editable} onChange={(e) => setSeq('submissionType', e.target.value)}>
               {pack.submissionTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </label>
-          <label className="field">{eu || jp ? 'Submission unit type' : 'Submission sub-type'} {subHelp && <small>{subHelp}</small>}
+          <label className="field">{eu || jp ? 'Submission unit type' : region === 'CN' ? 'Sequence type' : 'Submission sub-type'} {subHelp && <small>{subHelp}</small>}
             <select value={seq.subType} disabled={!editable} onChange={(e) => setSeq('subType', e.target.value)}>
               {pack.submissionSubTypes.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>

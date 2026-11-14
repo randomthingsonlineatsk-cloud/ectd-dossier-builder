@@ -1032,6 +1032,54 @@
    ],
    "answer": 2,
    "why": "No region accepts R2 dossiers yet."
+  },
+  {
+   "id": "cn1",
+   "topic": "regions",
+   "links": [
+    "lesson:10"
+   ],
+   "q": "Which file carries the China envelope and Module 1 leaves?",
+   "options": [
+    "m1/cn/cn-regional.xml",
+    "index.xml only",
+    "m1/china.xml",
+    "submissionunit.xml"
+   ],
+   "answer": 0,
+   "why": "cn-regional.xml, root element cn_ectd, under m1/cn."
+  },
+  {
+   "id": "cn2",
+   "topic": "regions",
+   "links": [
+    "lesson:10"
+   ],
+   "q": "In China, which sequence type goes only with a baseline activity?",
+   "options": [
+    "Response",
+    "Withdrawal",
+    "Format conversion",
+    "Initial submission"
+   ],
+   "answer": 2,
+   "why": "Format conversion turns an approved paper dossier into eCTD."
+  },
+  {
+   "id": "cn3",
+   "topic": "regions",
+   "links": [
+    "lesson:10"
+   ],
+   "q": "An imported drug's China Module 1 needs which documents in 1.10?",
+   "options": [
+    "None",
+    "The overseas applicant's qualification and the domestic registration agent's authorisation",
+    "Only a GMP certificate",
+    "The US approval letter"
+   ],
+   "answer": 1,
+   "why": "1.10.2 and 1.10.3."
   }
  ]
 }

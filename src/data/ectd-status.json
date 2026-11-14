@@ -1,6 +1,6 @@
 {
-  "_about": "Where eCTD stands by region. Kept as data so dates can be updated as agencies announce them. Last reviewed 2026-11-08.",
-  "lastReviewed": "2026-11-08",
+  "_about": "Where eCTD stands by region. Kept as data so dates can be updated as agencies announce them. Last reviewed 2026-11-14.",
+  "lastReviewed": "2026-11-14",
   "rows": [
     {
       "region": "Japan (PMDA)",
@@ -29,6 +29,13 @@
       "v40": "Technical implementation by end of 2026",
       "app": "v3.2.2, v4.0 noted",
       "source": "https://www.gmp-compliance.org/gmp-news/swissmedic-ectd-v4-0"
+    },
+    {
+      "region": "China (NMPA)",
+      "v322": "Voluntary for the application types listed: from 29 December 2021 (Announcement 2021 No. 119) and widened from 27 January 2025 (Announcement 2025 No. 10) to most chemical and biological clinical trial and marketing applications; paper or electronic (non-eCTD) dossiers remain possible",
+      "v40": "Not announced",
+      "app": "v3.2.2 with the China Module 1 (cn-regional.xml)",
+      "source": "https://www.nmpa.gov.cn/directory/web/nmpa/images/1632971756191079756.pdf"
     },
     {
       "region": "Canada, Australia",

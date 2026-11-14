@@ -70,7 +70,8 @@ export function validate(project, seqNumber) {
   const jpR = project.region === 'JP';
   const inR = project.region === 'IN';
   const v4 = project.ectdVersion === '4.0' && !seq.legacy;
-  const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1', CA: 'ca:1', CH: 'ch:1' }[project.region] ?? '1';
+  const m1Root = { EU: 'eu:1', JP: 'jp:1', IN: 'in:1', CA: 'ca:1', CH: 'ch:1', CN: 'cn:1' }[project.region] ?? '1';
+  const cnR = project.region === 'CN';
   const meta = jpR ? [
     ['receptionNumber', s.jp?.receptionNumber, 'eCTD reception number'],
     ['brandName', s.jp?.brandName, 'Brand name'],
@@ -90,6 +91,17 @@ export function validate(project, seqNumber) {
     ['dossierType', s.ca?.dossierType, 'Dossier type'],
     ['submissionType', seq.submissionType, 'Regulatory activity type'],
     ['subType', seq.subType, 'Sequence description'],
+  ] : cnR ? [
+    ['applicant', s.applicant?.name, 'Applicant'],
+    ['applicationNumber', s.cn?.applicationNumber, 'Application number'],
+    ['productNumber', s.cn?.productNumber, 'Product number (original number)'],
+    ['productType', s.cn?.productType, 'Product type'],
+    ['submissionType', seq.submissionType, 'Regulatory activity type'],
+    ['subType', seq.subType, 'Sequence type'],
+    ['description', seq.description, 'Sequence description'],
+    ['contactName', s.cn?.contactName, 'Contact name'],
+    ['contactPhone', s.cn?.contactPhone, 'Contact phone'],
+    ['contactEmail', s.cn?.contactEmail, 'Contact email'],
   ] : project.region === 'CH' ? [
     ['applicant', s.applicant?.name, 'Applicant'],
     ['applicationNumber', /^(pending|[1-9]\d{8})$/.test(s.ch?.applicationNumber || '') ? 'ok' : '', 'Application number (nine digits without leading zeros, or "pending")'],
@@ -157,6 +169,18 @@ export function validate(project, seqNumber) {
 
   const leaves = seq.leaves;
   if (project.region === 'CA') for (const l of leaves) if (!isRetireOp(l.operation) && ['ca:1.2.2', 'ca:1.5'].includes(l.nodeCode)) add('CA-06', l.id, `"${l.title}" is in ${dc(l.nodeCode)}, where no documents may be placed.`, { leafId: l.id, nodeCode: l.nodeCode });
+  if (cnR) {
+    const cn = s.cn ?? {};
+    if (cn.applicationNumber && !/^[xyl]\d{4}\d{5}$/.test(cn.applicationNumber)) add('CN-07', 'format', `Application number "${cn.applicationNumber}" is not a letter (x, y or l), a four-digit year and a five-digit serial.`, { nodeCode: m1Root });
+    else if (cn.applicationNumber && cn.applicationNumber[0] !== { nda: 'x', anda: 'y', ind: 'l' }[project.appType]) add('CN-07', 'letter', `Application number "${cn.applicationNumber}" starts with "${cn.applicationNumber[0]}", which is not the letter for this application type.`, { nodeCode: m1Root });
+    if (cn.productNumber && !/^\d{10}$/.test(cn.productNumber)) add('CN-07', 'product', `Product number "${cn.productNumber}" is not a four-digit year and a six-digit serial.`, { nodeCode: m1Root });
+    const allowed = REGION_PACKS.CN.allowed?.[project.appType]?.[seq.submissionType] ?? [];
+    if (!allowed.includes(seq.subType)) add('CN-08', 'combo', `Regulatory activity "${seq.submissionType}" with sequence type "${seq.subType}" is not an allowed combination.`, { nodeCode: m1Root });
+    if (isFirst && seq.subType !== 'initial') add('CN-09', 'first', `Sequence ${seq.number} is the first sequence but its sequence type is "${seq.subType}".`, { nodeCode: m1Root });
+    if ((seq.description ?? '').length > 120) add('CN-12', 'desc', `The description has ${seq.description.length} characters.`, { nodeCode: m1Root });
+    if (prev && parseInt(seq.number, 10) !== parseInt(prev.number, 10) + 1) add('CN-14', 'gap', `Sequence ${seq.number} follows ${prev.number}: sequence ${String(parseInt(prev.number, 10) + 1).padStart(4, '0')} is missing.`, { nodeCode: m1Root });
+    if (isFirst && seq.number !== '0000') add('CN-14', 'start', `The first sequence is ${seq.number}; it must be 0000.`, { nodeCode: m1Root });
+  }
   if (project.region === 'CH' && s.ch?.article13 === 'yes' && seq.subType === 'initial' && !leaves.some((l) => l.nodeCode === 'ch:1.7' && !isRetireOp(l.operation))) add('CH-07', 'art13', 'The envelope says Article 13, but 1.7 has no decisions of foreign authorities.', { nodeCode: 'ch:1.7' });
   if (leaves.some((l) => l.nodeCode.startsWith('3.2.S'))) {
     if (!s.substance?.name?.trim() || !s.substance?.manufacturer?.trim()) add('BB-07', 'substance', '3.2.S is missing its substance or manufacturer attribute.', { nodeCode: '3.2.S' });
@@ -202,7 +226,7 @@ export function validate(project, seqNumber) {
       else if (tEntry.leaf.nodeCode !== l.nodeCode) add('LC-03', l.id, `"${name}" is in ${dc(l.nodeCode)} but its target is in ${dc(tEntry.leaf.nodeCode)}.`, where);
     }
     // Forms and cover letters are sent new with every sequence, so they are exempt.
-    if (l.operation === 'new' && !isFirst && !['1.1', '1.2', 'eu:1.0', 'eu:1.2', 'jp:cover', 'in:1.1'].includes(l.nodeCode)) {
+    if (l.operation === 'new' && !isFirst && !['1.1', '1.2', 'eu:1.0', 'eu:1.2', 'jp:cover', 'in:1.1', 'cn:1.0', 'cn:1.2'].includes(l.nodeCode)) {
       const dup = (before.byNode[l.nodeCode] ?? []).find((e) => e.status === 'current' && e.leaf.title.trim().toLowerCase() === l.title.trim().toLowerCase());
       if (dup) add('LC-05', l.id, `"${name}" is new but a current leaf with the same title exists from sequence ${dup.seq}.`, where);
     }
@@ -246,6 +270,10 @@ export function validate(project, seqNumber) {
         if (sug && sug !== l.study.id.trim()) add('SG-03', l.id, `"${name}" reports study ${sug} but is tagged as ${l.study.id}.`, where);
       }
     }
+
+    // China: Module 1 in Chinese; append only for study tagging file content.
+    if (cnR && node?.isM1 && doc.lang !== 'zh') add('CN-10', l.id, `"${name}" in ${dc(l.nodeCode)} is not in Chinese.`, where);
+    if (cnR && l.operation === 'append' && !needsStudyTag(l.nodeCode)) add('CN-11', l.id, `"${name}" uses append outside study tagging file content; explain it in the cover letter or use replace.`, where);
 
     // Japan: Modules 1 and 2 in Japanese
     if (jpR && (node?.isM1 || l.nodeCode.startsWith('2.')) && doc.lang !== 'ja') add('JP-06', l.id, `"${name}" in ${dc(l.nodeCode)} is not the Japanese version.`, where);

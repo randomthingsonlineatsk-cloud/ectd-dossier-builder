@@ -982,6 +982,11 @@
    "region": "CH",
    "appType": "na",
    "label": "Switzerland — new active substance (eCTD v3.2.2)"
+  },
+  {
+   "region": "CN",
+   "appType": "nda",
+   "label": "China — imported originator, category 5.1 (eCTD v3.2.2, NMPA)"
   }
  ],
  "generateRegionDocs": {
@@ -989,7 +994,8 @@
   "JP": true,
   "IN": true,
   "CA": true,
-  "CH": true
+  "CH": true,
+  "CN": true
  },
  "facts": {
   "strengths": "10 mg and 25 mg",

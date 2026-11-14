@@ -6,7 +6,7 @@ import { INDEX } from './tree.js';
 
 export const PACKAGE_KIND = 'variations-classifier/change-package';
 export const PACKAGE_SCHEMA = 1;
-const REGION = { US: 'US', EU: 'EU', IN: 'IN', CA: 'CA', CH: 'CH', JP: 'JP' };
+const REGION = { US: 'US', EU: 'EU', IN: 'IN', CA: 'CA', CH: 'CH', JP: 'JP', CN: 'CN' };
 
 export function parseChangePackage(text) {
   let d;

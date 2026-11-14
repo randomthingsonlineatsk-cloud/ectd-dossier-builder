@@ -1,0 +1,168 @@
+{
+  "kind": "variations-classifier/change-package",
+  "schema": 1,
+  "createdAt": "2026-10-11T00:00:00.000Z",
+  "notice": "Training only. Fictional product and company; not suitable for a real submission.",
+  "app": {
+    "name": "Variations Classifier",
+    "author": "Khan Gulrez Shagufa Fazal Ahmed"
+  },
+  "userId": "u-fixture",
+  "classId": null,
+  "caseId": "c-fixture-cn",
+  "product": {
+    "id": "nce-tablet",
+    "ectdProductId": "nce-tablet",
+    "brandName": "Ostrevia",
+    "inn": "lumiravostat",
+    "appType": "nda",
+    "applicationNumber": "999101",
+    "holder": "Halcyon Ridge Pharmaceuticals, Inc.",
+    "in": null,
+    "eu": null,
+    "ca": null,
+    "uk": null,
+    "ch": null,
+    "cn": {
+      "regNumber": "国药准字HJ20260101",
+      "imported": true,
+      "holder": "Halcyon Ridge Pharmaceuticals, Inc.",
+      "agent": "Ostrevia (Shanghai) Regulatory Services Co., Ltd."
+    },
+    "jp": null
+  },
+  "region": "CN",
+  "pack": {
+    "id": "cn",
+    "edition": "2026.1"
+  },
+  "submission": {
+    "category": "SUPP",
+    "categoryLabel": "Approval change (major): supplementary application",
+    "kind": "cmc",
+    "ectd": {
+      "submissionType": "supplemental",
+      "subType": "initial",
+      "submissionMode": "single"
+    },
+    "mode": "single",
+    "alsoProducts": [],
+    "description": "Relax (widen) an acceptance criterion",
+    "implementation": {
+      "badge": "Wait for approval",
+      "rule": "A major change: submit a supplementary application to CDE and implement only after approval, within 6 months of it."
+    },
+    "submitDate": "2026-11-02",
+    "earliestUse": "2027-01-25",
+    "related": false
+  },
+  "changes": [
+    {
+      "id": "ch-fixture-cn",
+      "changeId": "spec-relax",
+      "title": "Relax (widen) an acceptance criterion",
+      "note": "",
+      "category": "SUPP",
+      "categoryLabel": "Approval change (major): supplementary application",
+      "entry": {
+        "src": "chem",
+        "source": "CDE: Technical Guideline for Pharmaceutical Changes to Marketed Chemical Drugs (Interim)",
+        "at": "Specifications"
+      },
+      "why": "Relaxing a limit is a major change."
+    }
+  ],
+  "module1": [
+    {
+      "code": "cn:1.0",
+      "label": "Cover letter"
+    },
+    {
+      "code": "cn:1.2",
+      "label": "Supplementary application form"
+    },
+    {
+      "code": "cn:1.3.8",
+      "label": "Change description, classification and risk assessment"
+    },
+    {
+      "code": "cn:1.4.1",
+      "label": "Prior approval status: registration certificate and earlier approvals"
+    }
+  ],
+  "ctd": [
+    {
+      "code": "cn:1.0",
+      "label": "Cover letter",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "cn:1.2",
+      "label": "Supplementary application form",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "cn:1.3.8",
+      "label": "Change description, classification and risk assessment",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "cn:1.4.1",
+      "label": "Prior approval status: registration certificate and earlier approvals",
+      "operation": "new",
+      "why": [
+        "Regional Module 1"
+      ]
+    },
+    {
+      "code": "2.3",
+      "label": "Quality overall summary, updated sections",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.1",
+      "label": "Drug product specification",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.4",
+      "label": "Drug product batch analyses",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.5.6",
+      "label": "Justification of the drug product specification",
+      "operation": "replace",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    },
+    {
+      "code": "3.2.P.8.3",
+      "label": "Drug product stability data",
+      "operation": "append",
+      "why": [
+        "Relax (widen) an acceptance criterion"
+      ]
+    }
+  ],
+  "coverLetter": "Halcyon Ridge Pharmaceuticals, Inc.\n400 Larkspur Way, Suite 12, Fictionville, NJ 08000, USA\n\n2026-11-02\n\nTo: the NMPA Center for Drug Evaluation (CDE) (training letter; not for submission)\n\nRe: Ostrevia (lumiravostat), registration certificate 国药准字HJ20260101\nAPPROVAL CHANGE (MAJOR): SUPPLEMENTARY APPLICATION\n\nHalcyon Ridge Pharmaceuticals, Inc. submits the following change:\n\n1. Relax (widen) an acceptance criterion (Approval change (major): supplementary application; CDE, Specifications)\n\nWe will implement the change only after approval.\nThe change classification, its basis in the NMPA technical guideline and the supporting studies are enclosed. Domestic agent: Ostrevia (Shanghai) Regulatory Services Co., Ltd..\n\nContact: Dana Okafor, Director, Regulatory Affairs\n\nTraining material. Fictional company and product."
+}

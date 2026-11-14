@@ -222,7 +222,29 @@ export function chDocs(p) {
   ].map(([section, title, fileName, pages, extra], i) => ({ id: `ch-${i + 1}`, section, title, fileName, pages, region: 'CH', ...(extra ?? {}) }));
 }
 
+// China: Module 1 for an imported originator already marketed abroad (chemical drug category 5.1).
+// Documents for review are in Chinese; foreign originals are attached to their translations.
+export function cnDocs(p) {
+  return [
+    ['cn:1.2', 'Drug Registration Application Form (药品注册申请表)', 'application-form.pdf', 6],
+    ['cn:1.3.1', 'Package Insert, Draft (说明书, Chinese, with the original-language text)', 'package-insert.pdf', 26, { bookmarks: 14 }],
+    ['cn:1.3.1', 'Package Insert, Draft (English only)', 'package-insert-en.pdf', 22, { lang: 'en', decoy: 'lang', coach: 'China reviews in Chinese: the package insert must be the Chinese text, with the original attached. An English-only version is a Medium finding.' }],
+    ['cn:1.3.2', 'Labels, Draft: Immediate Container and Carton (标签)', 'labels.pdf', 4],
+    ['cn:1.3.3', 'Drug Quality Standard and Manufacturing Process (质量标准和生产工艺)', 'quality-standard-process.pdf', 32, { bookmarks: 10 }],
+    ['cn:1.3.6', 'Inspection-Related Information: Sites, Batches and Production (检查相关信息)', 'inspection-information.pdf', 14],
+    ['cn:1.3.7', 'Marketing Authorisations Abroad: EU and US Approvals, Notarised (境外上市证明)', 'marketing-authorisations-abroad.pdf', 18],
+    ['cn:1.6.3', 'Pre-NDA Communication Meeting: Minutes from CDE (会议纪要)', 'pre-nda-meeting-minutes.pdf', 8],
+    ['cn:1.8.3', 'Risk Management Plan (China) (风险管理计划)', 'risk-management-plan.pdf', 58, { bookmarks: 16 }],
+    ['cn:1.10.2', 'Overseas Applicant Qualification: Certificates, Notarised and Translated', 'overseas-applicant-qualification.pdf', 12],
+    ['cn:1.10.3', 'Registration Agent Authorisation: Domestic Agent in China (注册代理机构)', 'registration-agent.pdf', 3],
+    ['cn:1.2', 'Supplementary Application Form (补充申请表)', 'supplementary-application-form.pdf', 5, { later: true }],
+    ['cn:1.4.1', 'Prior Approval Status: Drug Registration Certificate and Earlier Approvals (既往批准情况)', 'prior-approvals.pdf', 6, { later: true }],
+    ['cn:1.3.8', 'Change Description, Classification and Risk Assessment (变更情况及分类)', 'change-description.pdf', 8, { later: true }],
+  ].map(([section, title, fileName, pages, extra], i) => ({ id: `cn-${i + 1}`, section, title, fileName, pages, region: 'CN', lang: 'zh', ...(extra ?? {}) }));
+}
+
 export function regionDocs(p, region, opt = null) {
+  if (region === 'CN' && (p.generateRegionDocs ?? {}).CN) return cnDocs(p);
   if (region === 'CA' && (p.generateRegionDocs ?? {}).CA) return caDocs(p);
   if (region === 'CH' && (p.generateRegionDocs ?? {}).CH) return chDocs(p);
   if (region === 'EU' && opt?.library === 'asmf') return [];

@@ -41,7 +41,7 @@ function leafXml(project, seq, leaf, indent, hrefBase = '') {
     attrs.push('checksum-type="md5"', `checksum="${sum}"`, 'xlink:type="simple"', `xlink:href="${esc(href)}"`);
     if (doc) attrs.push(`application-version="PDF ${esc(doc.pdfVersion)}"`);
   }
-  attrs.push(`xml:lang="${esc(leaf.lang ?? 'en')}"`);
+  attrs.push(`xml:lang="${esc(leaf.lang ?? (project.region === 'CN' ? doc?.lang : null) ?? 'en')}"`);
   return `${pad}<leaf ${attrs.join(' ')}>\n${pad}  <title>${esc(leaf.title)}</title>\n${pad}</leaf>`;
 }
 
@@ -78,6 +78,7 @@ export function buildRegionalXml(project, seq) {
   if (project.region === 'EU') return buildEuRegionalXml(project, seq);
   if (project.region === 'CA') return buildCaRegionalXml(project, seq);
   if (project.region === 'CH') return buildChRegionalXml(project, seq);
+  if (project.region === 'CN') return buildCnRegionalXml(project, seq);
   const s = project.settings;
   const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
   const leafFn = (l, ind) => {
@@ -181,6 +182,38 @@ function buildChRegionalXml(project, seq) {
 ${m1Body}
 </ch-backbone>
 `;
+}
+
+// China: cn-regional.xml (root cn_ectd) with the application, regulatory activity and sequence
+// levels of the envelope, simplified from the NMPA eCTD Technical Specification V1.0.
+function buildCnRegionalXml(project, seq) {
+  const s = project.settings;
+  const cn = s.cn ?? {};
+  const m1Leaves = seq.leaves.filter((l) => INDEX.map[l.nodeCode]?.isM1);
+  const m1Body = m1Leaves.length ? nestedXml(project, seq, m1Leaves, 'cn:1', 2, (l, ind) => leafXml(project, seq, l, ind)) : '  <m1-cn/>';
+  const first = cnActivityStart(project, seq);
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!-- TRAINING ONLY: fictional content modelled on the NMPA eCTD Technical Specification V1.0 (cn-regional-1-0.xsd). Simplified. Not for submission. -->
+<cn_ectd xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="zh">
+  <admin>
+    <application application-id="${esc(cn.applicationNumber)}" application-type="${esc(project.appType)}" product-type="${esc(cn.productType)}" product-number="${esc(cn.productNumber)}">
+      <regulatory-activity type="${esc(seq.submissionType)}" related-sequence="${esc(first)}">
+        <sequence number="${esc(seq.number)}" type="${esc(seq.subType)}">
+          <description>${esc(seq.description)}</description>
+          <contact name="${esc(cn.contactName)}" phone="${esc(cn.contactPhone)}" email="${esc(cn.contactEmail)}"/>
+        </sequence>
+      </regulatory-activity>
+    </application>
+  </admin>
+${m1Body}
+</cn_ectd>
+`;
+}
+// The related sequence of a China sequence: the first sequence of its regulatory activity.
+export function cnActivityStart(project, seq) {
+  if (seq.subType === 'initial' || seq.subType === 'reformat') return seq.number;
+  const earlier = project.sequences.filter((x) => x.number < seq.number && x.submissionType === seq.submissionType && x.subType === 'initial').sort((a, b) => b.number.localeCompare(a.number))[0];
+  return earlier?.number ?? seq.number;
 }
 
 // Receiving member states: the agency in the centralised procedure, otherwise the RMS and CMSs.
@@ -327,7 +360,7 @@ export function folderTree(project, seq, { portal = false } = {}) {
   add('index-md5.txt', { kind: 'txt' });
   add(REGION_PACKS[project.region].regionalFile, { kind: 'xml' });
   add('util/dtd/ich-ectd-3-2.dtd', { kind: 'dtd' });
-  add({ EU: 'util/dtd/eu-regional.dtd', CA: 'util/dtd/ca-regional.dtd', CH: 'util/dtd/ch-regional.dtd' }[project.region] ?? 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
+  add({ EU: 'util/dtd/eu-regional.dtd', CA: 'util/dtd/ca-regional.dtd', CH: 'util/dtd/ch-regional.dtd', CN: 'util/dtd/cn-regional-1-0.xsd' }[project.region] ?? 'util/dtd/us-regional-v3-3.dtd', { kind: 'dtd' });
   add('util/dtd/ich-stf-v2-2.dtd', { kind: 'dtd' });
   for (const f of studyFiles(project, seq)) add(f.path, { kind: 'xml', node: f.nodeCode, op: 'new' });
   for (const l of seq.leaves) if (!isRetireOp(l.operation)) add(leafPath(project, l), { kind: 'pdf', leafId: l.id, node: l.nodeCode, op: l.operation });
