@@ -4,6 +4,7 @@
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
 //   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M13)
 //   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S26)
+//   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M12)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
@@ -34,6 +35,9 @@ export function apps(env) {
     { id: 'sdtm', prefix: env.SDTM_PREFIX ?? '/sdtm/v1', t: 'sdtm_', service: 'sdtm-classroom', thing: 'mission project', name: 'SDTM Mapping Trainer', textMissions: true, missionPattern: /^S\d{1,2}$/,
       appUrl: env.SDTM_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/sdtm-mapping-trainer/',
       missionOf: (p) => (p?.kind === 'sdtm-mapping-trainer/mission-submission' ? p?.missionId : null) },
+    { id: 'pb', prefix: env.PB_PREFIX ?? '/pb/v1', t: 'pb_', service: 'pb-classroom', thing: 'mission project', name: 'Protocol Builder', textMissions: true, missionPattern: /^M\d{1,2}$/,
+      appUrl: env.PB_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/protocol-builder/',
+      missionOf: (p) => (p?.kind === 'protocol-builder/mission-submission' ? p?.missionId : null) },
   ];
 }
 
