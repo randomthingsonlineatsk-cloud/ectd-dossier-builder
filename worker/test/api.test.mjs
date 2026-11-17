@@ -13,7 +13,7 @@ await t('health', async () => { assert.equal((await call('GET', '/health')).data
 await t('status page at the base address', async () => {
   const res = await fetch(new URL('/', BASE)); const html = await res.text();
   assert.equal(res.status, 200); assert.match(res.headers.get('content-type'), /text\/html/);
-  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1']) assert.ok(html.includes(p));
+  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1', '/pl/v1']) assert.ok(html.includes(p));
 });
 await t('instructor creates a class and gets a join code', async () => {
   const r = await call('POST', '/classes', { body: { name: 'RA Publishing 101', instructorName: 'Dr Test' } });
@@ -174,3 +174,24 @@ await t('Protocol Builder: missions M1 to M12 as assignments', async () => {
   assert.equal((await pbcall('DELETE', '/class', { token: key })).data.ok, true);
 });
 console.log(`\n${pass} classroom API tests passed`);
+const PL = BASE.replace(/\/ectd\/v1$/, '/pl/v1');
+const plcall = async (method, path, { token, body } = {}) => {
+  const res = await fetch(PL + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('Plain Language Lab: missions PL1 to PL12 as assignments', async () => {
+  assert.equal((await plcall('GET', '/health')).data.service, 'pl-classroom');
+  const c = await plcall('POST', '/classes', { body: { name: 'Patient writing 1', instructorName: 'Dr Rao' } });
+  const key = c.data.instructorKey;
+  assert.equal((await pbcall('GET', '/me', { token: key })).status, 401, 'a Plain Language Lab key does not work on another app');
+  assert.equal((await plcall('POST', '/assignments', { token: key, body: { missionId: 'M3', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await plcall('POST', '/assignments', { token: key, body: { missionId: 'PL10', difficulty: 'standard', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201); assert.equal(a.data.assignment.missionId, 'PL10');
+  const j = await plcall('POST', '/join', { body: { code: c.data.class.code, name: 'Asha' } });
+  const wrong = await plcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'plain-language-lab/mission-submission', missionId: 'PL3', gz: 'x' }, score: 80 } });
+  assert.equal(wrong.status, 400);
+  const ok = await plcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'plain-language-lab/mission-submission', missionId: 'PL10', gz: 'H4sI', size: 10 }, score: 86, checks: [{ id: 'd1', label: 'Planted errors found', ok: true }] } });
+  assert.equal(ok.status, 201);
+  assert.equal((await plcall('GET', '/me', { token: key })).data.leaderboard[0].total, 86);
+  assert.equal((await plcall('DELETE', '/class', { token: key })).data.ok, true);
+});
