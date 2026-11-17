@@ -1,5 +1,5 @@
 -- Classroom mode (Cloudflare D1), shared by three apps.
--- ectd_ tables: eCTD Dossier Builder. vc_ tables: Variations Classifier. lw_ tables: Labelling Workbench, cdm_ tables: CDM Query & Edit-Check Console, sdtm_ tables: SDTM Mapping Trainer, pb_ tables: Protocol Builder (same structure;
+-- ectd_ tables: eCTD Dossier Builder. vc_ tables: Variations Classifier. lw_ tables: Labelling Workbench, cdm_ tables: CDM Query & Edit-Check Console, sdtm_ tables: SDTM Mapping Trainer, pb_ tables: Protocol Builder, pl_ tables: Plain Language Lab (same structure;
 -- the "project" column holds the submitted mission case).
 
 CREATE TABLE IF NOT EXISTS ectd_classes (
@@ -395,6 +395,72 @@ CREATE TABLE IF NOT EXISTS pb_comments (
 CREATE INDEX IF NOT EXISTS pb_comments_submission ON pb_comments(submission_id);
 
 CREATE TABLE IF NOT EXISTS pb_reminders (
+  assignment_id TEXT NOT NULL,
+  member_id TEXT NOT NULL,
+  sent_at TEXT NOT NULL,
+  PRIMARY KEY (assignment_id, member_id)
+);
+
+-- pl_ tables: Plain Language Lab (same structure).
+CREATE TABLE IF NOT EXISTS pl_classes (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  code TEXT NOT NULL UNIQUE,
+  instructor_name TEXT NOT NULL,
+  instructor_email TEXT,
+  instructor_key_hash TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pl_members (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL REFERENCES pl_classes(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  email TEXT,
+  user_id TEXT,
+  token_hash TEXT NOT NULL,
+  joined_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS pl_members_class ON pl_members(class_id);
+
+CREATE TABLE IF NOT EXISTS pl_assignments (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL REFERENCES pl_classes(id) ON DELETE CASCADE,
+  mission_id TEXT NOT NULL,
+  difficulty TEXT NOT NULL,
+  due_at TEXT NOT NULL,
+  note TEXT,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS pl_assignments_class ON pl_assignments(class_id);
+
+CREATE TABLE IF NOT EXISTS pl_submissions (
+  id TEXT PRIMARY KEY,
+  assignment_id TEXT NOT NULL REFERENCES pl_assignments(id) ON DELETE CASCADE,
+  member_id TEXT NOT NULL REFERENCES pl_members(id) ON DELETE CASCADE,
+  submitted_at TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  verified_score INTEGER,
+  axes TEXT,
+  counts TEXT,
+  checks TEXT,
+  project TEXT NOT NULL,
+  size INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS pl_submissions_assignment ON pl_submissions(assignment_id);
+CREATE INDEX IF NOT EXISTS pl_submissions_member ON pl_submissions(member_id);
+
+CREATE TABLE IF NOT EXISTS pl_comments (
+  id TEXT PRIMARY KEY,
+  submission_id TEXT NOT NULL REFERENCES pl_submissions(id) ON DELETE CASCADE,
+  author TEXT NOT NULL,
+  author_name TEXT NOT NULL,
+  body TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS pl_comments_submission ON pl_comments(submission_id);
+
+CREATE TABLE IF NOT EXISTS pl_reminders (
   assignment_id TEXT NOT NULL,
   member_id TEXT NOT NULL,
   sent_at TEXT NOT NULL,
