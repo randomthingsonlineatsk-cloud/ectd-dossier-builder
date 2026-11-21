@@ -37,7 +37,7 @@ npx wrangler deploy                           # prints https://ectd-classroom.<y
 ```
 
 The API address to give the app is the Worker URL plus `/ectd/v1`, for example
-`https://ectd-classroom.<you>.workers.dev/ectd/v1` (and `/vc/v1`, `/lw/v1`, `/cdm/v1`, `/sdtm/v1`, `/pb/v1` and `/pl/v1` for the other apps). Either enter it on the app's Classroom page,
+`https://ectd-classroom.<you>.workers.dev/ectd/v1` (and `/vc/v1`, `/lw/v1`, `/cdm/v1`, `/sdtm/v1`, `/pb/v1`, `/pl/v1` and `/cs/v1` for the other apps). Either enter it on the app's Classroom page,
 or build the app with it baked in:
 
 ```bash

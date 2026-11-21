@@ -13,7 +13,7 @@ await t('health', async () => { assert.equal((await call('GET', '/health')).data
 await t('status page at the base address', async () => {
   const res = await fetch(new URL('/', BASE)); const html = await res.text();
   assert.equal(res.status, 200); assert.match(res.headers.get('content-type'), /text\/html/);
-  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1', '/pl/v1']) assert.ok(html.includes(p));
+  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1', '/pl/v1', '/cs/v1']) assert.ok(html.includes(p));
 });
 await t('instructor creates a class and gets a join code', async () => {
   const r = await call('POST', '/classes', { body: { name: 'RA Publishing 101', instructorName: 'Dr Test' } });
@@ -195,3 +195,23 @@ await t('Plain Language Lab: missions PL1 to PL12 as assignments', async () => {
   assert.equal((await plcall('GET', '/me', { token: key })).data.leaderboard[0].total, 86);
   assert.equal((await plcall('DELETE', '/class', { token: key })).data.ok, true);
 });
+const CS = BASE.replace(/\/ectd\/v1$/, '/cs/v1');
+const cscall = async (method, path, { token, body } = {}) => {
+  const res = await fetch(CS + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('CSR & Narrative Studio: missions CS1 to CS15 as assignments', async () => {
+  assert.equal((await cscall('GET', '/health')).data.service, 'cs-classroom');
+  const c = await cscall('POST', '/classes', { body: { name: 'Medical writing 2', instructorName: 'Dr Rao' } });
+  const key = c.data.instructorKey;
+  assert.equal((await plcall('GET', '/me', { token: key })).status, 401, 'a Studio key does not work on another app');
+  assert.equal((await cscall('POST', '/assignments', { token: key, body: { missionId: 'PL3', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await cscall('POST', '/assignments', { token: key, body: { missionId: 'CS12', difficulty: 'standard', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201); assert.equal(a.data.assignment.missionId, 'CS12');
+  const j = await cscall('POST', '/join', { body: { code: c.data.class.code, name: 'Asha' } });
+  const ok = await cscall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'csr-narrative-studio/mission-submission', missionId: 'CS12', gz: 'H4sI', size: 10 }, score: 89, checks: [{ id: 'd1', label: 'Risk at or below 0.09', ok: true }] } });
+  assert.equal(ok.status, 201);
+  assert.equal((await cscall('GET', '/me', { token: key })).data.leaderboard[0].total, 89);
+  assert.equal((await cscall('DELETE', '/class', { token: key })).data.ok, true);
+});
+console.log(`\n${pass} classroom API tests passed (with the Studio)`);

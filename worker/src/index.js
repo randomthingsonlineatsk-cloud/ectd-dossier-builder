@@ -6,6 +6,7 @@
 //   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S26)
 //   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M12)
 //   Plain Language Lab:   routes under PL_PREFIX (default /pl/v1), tables pl_* (missions PL1 to PL12)
+//   CSR & Narrative Studio: routes under CS_PREFIX (default /cs/v1), tables cs_* (missions CS1 to CS15)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
@@ -42,6 +43,9 @@ export function apps(env) {
     { id: 'pl', prefix: env.PL_PREFIX ?? '/pl/v1', t: 'pl_', service: 'pl-classroom', thing: 'mission project', name: 'Plain Language Lab', textMissions: true, missionPattern: /^PL\d{1,2}$/,
       appUrl: env.PL_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/plain-language-lab/',
       missionOf: (p) => (p?.kind === 'plain-language-lab/mission-submission' ? p?.missionId : null) },
+    { id: 'cs', prefix: env.CS_PREFIX ?? '/cs/v1', t: 'cs_', service: 'cs-classroom', thing: 'mission project', name: 'CSR & Narrative Studio', textMissions: true, missionPattern: /^CS\d{1,2}$/,
+      appUrl: env.CS_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/csr-narrative-studio/',
+      missionOf: (p) => (p?.kind === 'csr-narrative-studio/mission-submission' ? p?.missionId : null) },
   ];
 }
 

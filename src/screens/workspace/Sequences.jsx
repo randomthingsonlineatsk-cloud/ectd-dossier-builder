@@ -5,6 +5,7 @@ import { validate } from '../../engine/validate.js';
 import { createSequence, deleteSequence, publishWithFiles } from '../../engine/ops.js';
 import { parseChangePackage, importChangePackage, todoStatus } from '../../engine/changepkg.js';
 import { parseLabellingPackage, importLabellingPackage, LABEL_PKG_REGIONS, LABEL_PKG_NODE } from '../../engine/labelpkg.js';
+import { parseCsrPackage, importCsrPackage } from '../../engine/csrpkg.js';
 import { parseIndPackage, importIndPackage } from '../../engine/indpkg.js';
 
 export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAsync, toast, onPublished }) {
@@ -42,6 +43,16 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
       mutate((p) => { res = importLabellingPackage(p, pkg, { seqNumber: seq?.number }); num = res.seq.number; });
       setSeqNumber(num);
       toast(`${res.placed.length} label document(s) placed in sequence ${num} (${LABEL_PKG_NODE[project.region] ?? 'Module 1'}).${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
+    } catch (err) { toast(err.message, 'error'); }
+  };
+
+  const importCsr = async (file) => {
+    try {
+      const pkg = parseCsrPackage(await file.text());
+      let num; let res;
+      mutate((p) => { res = importCsrPackage(p, pkg, { seqNumber: seq?.number }); num = res.seq.number; });
+      setSeqNumber(num);
+      toast(`${res.placed.length} document(s) of the ${pkg.study.id} study report placed in 5.3.5.1 of sequence ${num}, tagged with the study.${res.warnings.length ? ` ${res.warnings.join(' ')}` : ''}`, res.warnings.length ? 'warn' : 'info');
     } catch (err) { toast(err.message, 'error'); }
   };
 
@@ -147,6 +158,14 @@ export default function Sequences({ project, seq, setSeqNumber, mutate, mutateAs
         <p className="small muted">Classified a change in the Variations Classifier? Import its change package to start a draft sequence of the right type, with the cover letter and a to-do list of leaves.</p>
         <label className="btn" style={{ width: 'fit-content' }}>Import change package
           <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importPkg(e.target.files[0]); e.target.value = ''; }} />
+        </label>
+      </section>
+
+      <section className="panel">
+        <h2 style={{ fontSize: 'var(--step-1)' }}>Import clinical study report</h2>
+        <p className="small muted">A report written in the <a href="https://randomthingsonlineatsk-cloud.github.io/csr-narrative-studio/" target="_blank" rel="noreferrer">CSR &amp; Narrative Studio</a> goes into 5.3.5.1 (controlled clinical studies) as its body, synopsis, protocol and statistical analysis plan, each tagged with the study{project.region === 'US' ? ', so a study tagging file is built for it' : ''}. On the Studio's Export page, download “Report for the eCTD (Module 5.3.5.1)”.</p>
+        <label className="btn" style={{ width: 'fit-content' }}>Import clinical study report
+          <input type="file" accept=".json,application/json" className="sr-only" onChange={(e) => { if (e.target.files[0]) importCsr(e.target.files[0]); e.target.value = ''; }} />
         </label>
       </section>
 
