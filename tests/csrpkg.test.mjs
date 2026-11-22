@@ -10,7 +10,7 @@ const t = (name, fn) => { fn(); n++; };
 const text = readFileSync(new URL('./fixtures/csr-ectd-glv-12-301.json', import.meta.url), 'utf8');
 
 t('parses the package and rejects other files', () => {
-  assert.equal(parseCsrPackage(text).documents.length, 4);
+  assert.equal(parseCsrPackage(text).documents.length, 7);
   assert.throws(() => parseCsrPackage('{"kind":"other"}'), /not a clinical study report package/);
   assert.throws(() => parseCsrPackage({ kind: 'csr-studio/ectd-5-3-5', schema: 2, documents: [{}], study: { id: 'X' } }), /newer/);
 });
@@ -19,9 +19,10 @@ for (const region of ['US', 'EU']) t(`places the report in 5.3.5.1 with study ta
   const p = createProject({ name: 'csr', productId: 'nce-tablet', region, user: { userId: 'u-1' } });
   p.sequences[0].status = 'published';
   const { seq, placed, warnings } = importCsrPackage(p, parseCsrPackage(text));
-  assert.equal(placed.length, 4);
+  assert.equal(placed.length, 7);
+  assert.deepEqual(warnings.filter((w) => /not one this app knows/.test(w)), [], 'every E3 file tag is known');
   assert.ok(seq.leaves.every((l) => l.nodeCode === '5.3.5.1'));
-  assert.deepEqual(seq.leaves.map((l) => l.study.tag).sort(), ['protocol-or-amendment', 'statistical-methods-interim-analysis-plan', 'study-report', 'synopsis']);
+  assert.deepEqual(seq.leaves.map((l) => l.study.tag).sort(), ['adverse-event-listings', 'protocol-or-amendment', 'signatures-investigators', 'statistical-methods-interim-analysis-plan', 'study-report-body', 'study-report-body', 'synopsis']);
   assert.ok(seq.leaves.every((l) => l.study.id === 'GLV-12-301'));
   assert.match(warnings.join(' '), /not approved/);
   const stf = studyFiles(p, seq);

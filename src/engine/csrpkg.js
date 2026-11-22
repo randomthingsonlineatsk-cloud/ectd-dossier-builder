@@ -1,7 +1,7 @@
 // Import of a clinical study report from the CSR & Narrative Studio (a separate app). The package
 // holds the report for Module 5.3.5.1 (study reports of controlled clinical studies) as documents
-// with their study tagging: the body (study-report), the synopsis, the protocol and amendments
-// (appendix 16.1.1) and the statistical analysis plan (16.1.9).
+// with their study tagging, split as ICH E3 granularity expects: the synopsis, the body, section 14,
+// and the appendices the Studio holds (16.1.1, 16.1.5, 16.1.9, 16.2.7), each with its E3 file tag.
 // Keep in step with csr-narrative-studio/src/domain/handoff.ts (ectdPackage, schema 1).
 import { createSequence, placeDoc } from './ops.js';
 import { makeDoc, seqByNumber, uid } from './model.js';
@@ -37,6 +37,7 @@ export function importCsrPackage(project, pkg, { seqNumber = null } = {}) {
     if (!INDEX.map[d.section] || !isPlaceable(d.section)) { warnings.push(`${d.title}: section ${d.section} is not a place for documents in this app's tree; skipped.`); continue; }
     const tag = FILE_TAGS[5].some((t) => t.value === d.study?.tag) ? d.study.tag : 'study-report';
     if (tag !== d.study?.tag) warnings.push(`${d.title}: file tag “${d.study?.tag}” is not one this app knows; tagged “study-report”.`);
+    if (tag === 'study-report' && pkg.documents.length > 1) warnings.push(`${d.title}: “study-report” means the whole report is in one file, but this report comes in ${pkg.documents.length} files.`);
     const id = `csr-${uid()}`;
     project.documents[id] = makeDoc({ id, section: d.section, region: null, title: d.title, fileName: d.fileName, pages: d.pages ?? 2, generated: true, content: d.content ?? '', source: 'CSR & Narrative Studio', study: pkg.study.id, fileTag: tag });
     const leaf = placeDoc(project, seq.number, id, d.section, 'new');
