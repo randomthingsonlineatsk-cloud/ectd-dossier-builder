@@ -2,7 +2,7 @@
 //   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
-//   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M24)
+//   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M25)
 //   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S47)
 //   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M15)
 //   Plain Language Lab:   routes under PL_PREFIX (default /pl/v1), tables pl_* (missions PL1 to PL19)
