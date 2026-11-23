@@ -2,11 +2,11 @@
 //   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
-//   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M13)
-//   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S26)
-//   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M12)
-//   Plain Language Lab:   routes under PL_PREFIX (default /pl/v1), tables pl_* (missions PL1 to PL12)
-//   CSR & Narrative Studio: routes under CS_PREFIX (default /cs/v1), tables cs_* (missions CS1 to CS15)
+//   CDM Query & Edit-Check Console: routes under CDM_PREFIX (default /cdm/v1), tables cdm_* (missions M1 to M24)
+//   SDTM Mapping Trainer: routes under SDTM_PREFIX (default /sdtm/v1), tables sdtm_* (missions S1 to S47)
+//   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M15)
+//   Plain Language Lab:   routes under PL_PREFIX (default /pl/v1), tables pl_* (missions PL1 to PL19)
+//   CSR & Narrative Studio: routes under CS_PREFIX (default /cs/v1), tables cs_* (missions CS1 to CS20)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
