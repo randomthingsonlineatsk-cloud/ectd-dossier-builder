@@ -1,4 +1,4 @@
-// Classroom mode API: a Cloudflare Worker with a D1 database, shared by three apps.
+// Classroom mode API: a Cloudflare Worker with a D1 database, shared by nine apps.
 //   eCTD Dossier Builder:  routes under PREFIX (default /ectd/v1), tables ectd_*
 //   Variations Classifier: routes under VC_PREFIX (default /vc/v1), tables vc_*
 //   Labelling Workbench:   routes under LW_PREFIX (default /lw/v1), tables lw_* (assignments are drills, with text ids)
@@ -7,10 +7,11 @@
 //   Protocol Builder:     routes under PB_PREFIX (default /pb/v1), tables pb_* (missions M1 to M15)
 //   Plain Language Lab:   routes under PL_PREFIX (default /pl/v1), tables pl_* (missions PL1 to PL19)
 //   CSR & Narrative Studio: routes under CS_PREFIX (default /cs/v1), tables cs_* (missions CS1 to CS20)
+//   Reporting Guideline Navigator: routes under RG_PREFIX (default /rg/v1), tables rg_* (missions RG1 to RG16)
 // Instructors create a class and get a join code; students join with the code and their
 // name, start assigned missions in the app, and submit their work. Instructors see scores,
 // verify them in their own browser, and comment. Optional email reminders go out through
-// Brevo on a schedule. The two apps never see each other's classes.
+// Brevo on a schedule. The apps never see each other’s classes.
 //
 // Auth: a random bearer token per instructor (the class key) and per student; only SHA-256
 // hashes of tokens are stored.
@@ -46,6 +47,9 @@ export function apps(env) {
     { id: 'cs', prefix: env.CS_PREFIX ?? '/cs/v1', t: 'cs_', service: 'cs-classroom', thing: 'mission project', name: 'CSR & Narrative Studio', textMissions: true, missionPattern: /^CS\d{1,2}$/,
       appUrl: env.CS_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/csr-narrative-studio/',
       missionOf: (p) => (p?.kind === 'csr-narrative-studio/mission-submission' ? p?.missionId : null) },
+    { id: 'rg', prefix: env.RG_PREFIX ?? '/rg/v1', t: 'rg_', service: 'rg-classroom', thing: 'mission project', name: 'Reporting Guideline Navigator', textMissions: true, missionPattern: /^RG\d{1,2}$/,
+      appUrl: env.RG_APP_URL ?? 'https://randomthingsonlineatsk-cloud.github.io/reporting-guideline-navigator/',
+      missionOf: (p) => (p?.kind === 'reporting-guideline-navigator/mission-submission' ? p?.missionId : null) },
   ];
 }
 

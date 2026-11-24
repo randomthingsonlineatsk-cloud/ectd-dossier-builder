@@ -13,7 +13,7 @@ await t('health', async () => { assert.equal((await call('GET', '/health')).data
 await t('status page at the base address', async () => {
   const res = await fetch(new URL('/', BASE)); const html = await res.text();
   assert.equal(res.status, 200); assert.match(res.headers.get('content-type'), /text\/html/);
-  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1', '/pl/v1', '/cs/v1']) assert.ok(html.includes(p));
+  assert.match(html, /All systems working/); for (const p of ['/ectd/v1', '/vc/v1', '/lw/v1', '/cdm/v1', '/sdtm/v1', '/pb/v1', '/pl/v1', '/cs/v1', '/rg/v1']) assert.ok(html.includes(p));
 });
 await t('instructor creates a class and gets a join code', async () => {
   const r = await call('POST', '/classes', { body: { name: 'RA Publishing 101', instructorName: 'Dr Test' } });
@@ -214,4 +214,25 @@ await t('CSR & Narrative Studio: missions CS1 to CS15 as assignments', async () 
   assert.equal((await cscall('GET', '/me', { token: key })).data.leaderboard[0].total, 89);
   assert.equal((await cscall('DELETE', '/class', { token: key })).data.ok, true);
 });
-console.log(`\n${pass} classroom API tests passed (with the Studio)`);
+const RG = BASE.replace(/\/ectd\/v1$/, '/rg/v1');
+const rgcall = async (method, path, { token, body } = {}) => {
+  const res = await fetch(RG + path, { method, headers: { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  return { status: res.status, data: await res.json().catch(() => null) };
+};
+await t('Reporting Guideline Navigator: missions RG1 to RG16 as assignments', async () => {
+  assert.equal((await rgcall('GET', '/health')).data.service, 'rg-classroom');
+  const c = await rgcall('POST', '/classes', { body: { name: 'Publication writing 1', instructorName: 'Dr Rao' } });
+  const key = c.data.instructorKey;
+  assert.equal((await cscall('GET', '/me', { token: key })).status, 401, 'a Navigator key does not work on another app');
+  assert.equal((await rgcall('POST', '/assignments', { token: key, body: { missionId: 'CS3', dueAt: '2030-01-01T10:00:00Z' } })).status, 400);
+  const a = await rgcall('POST', '/assignments', { token: key, body: { missionId: 'RG14', difficulty: 'standard', dueAt: '2030-01-01T10:00:00Z' } });
+  assert.equal(a.status, 201); assert.equal(a.data.assignment.missionId, 'RG14');
+  const j = await rgcall('POST', '/join', { body: { code: c.data.class.code, name: 'Asha' } });
+  const wrong = await rgcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'reporting-guideline-navigator/mission-submission', missionId: 'RG13', gz: 'H4sI', size: 10 }, score: 100 } });
+  assert.equal(wrong.status, 400, 'a run of another mission is refused');
+  const ok = await rgcall('POST', `/assignments/${a.data.assignment.id}/submissions`, { token: j.data.token, body: { project: { kind: 'reporting-guideline-navigator/mission-submission', missionId: 'RG14', gz: 'H4sI', size: 10 }, score: 100, checks: [{ id: 'd1', label: '5 of 5 gaps found and named', ok: true }] } });
+  assert.equal(ok.status, 201);
+  assert.equal((await rgcall('GET', '/me', { token: key })).data.leaderboard[0].total, 100);
+  assert.equal((await rgcall('DELETE', '/class', { token: key })).data.ok, true);
+});
+console.log(`\n${pass} classroom API tests passed (with the Studio and the Navigator)`);
