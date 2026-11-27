@@ -841,5 +841,98 @@
     "why": "Module 1 chapters have numbered folders; 1.0 is folder 00."
    }
   ]
+ },
+ {
+  "id": 11,
+  "module2": true,
+  "title": "Module 2: what each part is for",
+  "minutes": 10,
+  "summary": "The overviews and summaries that open the dossier: what each one does, how long it should be, and why every claim must trace back to Modules 3 to 5.",
+  "sections": [
+   {
+    "heading": "The summaries a reviewer reads first",
+    "body": [
+     "Module 2 summarises Modules 3, 4 and 5. It is where most reviewers start, so it has to be accurate, short and easy to check. ICH M4 sets the order: 2.1 the CTD table of contents, 2.2 the introduction, 2.3 the Quality Overall Summary, 2.4 the nonclinical overview, 2.5 the clinical overview, 2.6 the nonclinical written and tabulated summaries, and 2.7 the clinical summary.",
+     "The overviews (2.4 and 2.5) interpret: they say what the data mean and argue the case. The summaries (2.6 and 2.7) and the QOS (2.3) present the data in more detail, so a reviewer can see the facts without opening every report."
+    ],
+    "interactive": "m2where"
+   },
+   {
+    "heading": "Lengths",
+    "body": [
+     "The introduction is about one page. ICH M4S puts the nonclinical overview at about 30 pages and the written summaries at about 100 to 150 pages. ICH M4E(R2) puts the clinical overview at about 30 pages and the clinical summary at about 50 to 400 pages, excluding attached tables. The QOS summarises Module 3 without adding anything new."
+    ]
+   },
+   {
+    "heading": "The QOS follows Module 3",
+    "body": [
+     "2.3 mirrors Module 3 heading by heading: 2.3.S for each drug substance, 2.3.P for the drug product, 2.3.A for appendices such as adventitious agents (mostly biologics) and 2.3.R for regional information. Every limit, batch, manufacturer, shelf life and storage condition in it must say exactly what Module 3 says.",
+     "ICH M4Q(R2), a Step 2 draft since May 2025 with Step 4 planned for June 2027, would reorganise 2.3 around the overall control strategy and lifecycle management. Until it is final, dossiers use the current layout. The M4Q(R2) what-if tab shows the draft structure."
+    ]
+   },
+   {
+    "heading": "Claims a reviewer can check",
+    "body": [
+     "A reviewer who finds one number in Module 2 that differs from Module 3 starts doubting the rest. The Summary Writer inserts values from their source as linked fields, so each one carries a hyperlink to the Module 3 leaf that holds it and is flagged if the source later changes. The claim checker also reads typed values: it finds each claim by the words around it and compares it with Module 3."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Which Module 2 documents interpret the data and argue the case?",
+    "options": [
+     "2.6 and 2.7",
+     "2.4 and 2.5",
+     "2.3 only",
+     "2.2"
+    ],
+    "answer": 1,
+    "why": "The nonclinical and clinical overviews interpret; the summaries and the QOS present the data."
+   },
+   {
+    "q": "About how long should the clinical overview be?",
+    "options": [
+     "About 5 pages",
+     "About 30 pages",
+     "About 150 pages",
+     "At least 400 pages"
+    ],
+    "answer": 1,
+    "why": "ICH M4E(R2) puts the clinical overview at about 30 pages."
+   },
+   {
+    "q": "The QOS gives a shelf life of 48 months; 3.2.P.8.1 says 36 months. What is wrong?",
+    "options": [
+     "Nothing: the QOS may round",
+     "The QOS must say what Module 3 says, so it is an error",
+     "Module 3 must be changed to 48 months",
+     "It only matters in the EU"
+    ],
+    "answer": 1,
+    "why": "The QOS summarises Module 3 and adds nothing new; the value must match."
+   },
+   {
+    "q": "Where does the quality information for an adventitious agents safety evaluation go in Module 2?",
+    "options": [
+     "2.3.S.2",
+     "2.3.A",
+     "2.4",
+     "2.3.R"
+    ],
+    "answer": 1,
+    "why": "2.3.A summarises the Module 3.2.A appendices, which mostly apply to biologics."
+   },
+   {
+    "q": "What is the status of ICH M4Q(R2) in late 2026?",
+    "options": [
+     "Final and in force",
+     "A Step 2 draft, with Step 4 planned for June 2027",
+     "Withdrawn",
+     "Only for biologics"
+    ],
+    "answer": 1,
+    "why": "It was endorsed at Step 2 in May 2025; the work plan targets Step 4 in June 2027."
+   }
+  ]
  }
 ]

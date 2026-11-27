@@ -2789,6 +2789,190 @@
      "label": "China questions answered correctly"
     }
    ]
+  },
+  {
+   "id": 26,
+   "phase": 6,
+   "module2": true,
+   "title": "Module 2: write the introduction",
+   "region": "US",
+   "regionCode": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "standard": 30,
+    "expert": 20
+   },
+   "brief": "Halcyon Ridge is about to file the Ostrevia NDA. Sequence 0000 is built, but 2.2 is a placeholder. Write the CTD introduction in the Module 2 tab from the dossier's own data, place it in 2.2 of sequence 0000, and publish.",
+   "quiz": [
+    {
+     "id": "m26len",
+     "q": "How long should the CTD Module 2.2 introduction be?",
+     "options": [
+      "About one page",
+      "About ten pages",
+      "As long as the clinical overview",
+      "There is no guidance"
+     ],
+     "answer": 0,
+     "why": "ICH M4 asks for an introduction of about one page."
+    },
+    {
+     "id": "m26what",
+     "q": "Which of these belongs in 2.2?",
+     "options": [
+      "The efficacy results of the pivotal studies",
+      "The proprietary name, INN, class, dosage form, strengths, route and proposed indication",
+      "The batch analyses",
+      "The expert's declaration"
+     ],
+     "answer": 1,
+     "why": "2.2 introduces the product and the application; results are summarised in 2.5 and 2.7."
+    }
+   ],
+   "steps": [
+    "Open the Module 2 tab and choose 2.2 Introduction.",
+    "Write the introduction: the proprietary name and INN, the pharmacological class, the dosage form, the strengths, the route and the proposed indication. Insert the values from their source, so each one links to Module 3.",
+    "Keep it to about one page, clear every claim error, then place it in 2.2 of sequence 0000.",
+    "Answer the quiz, validate and publish 0000."
+   ],
+   "hints": [
+    "Strengths, dosage form and route are in 3.2.P.1.",
+    "The class (an oral STRK1 inhibitor) is in 3.2.S.1.3."
+   ],
+   "checks": [
+    {
+     "id": "content",
+     "label": "Names the product, INN, class, dosage form, strengths, route and indication"
+    },
+    {
+     "id": "length",
+     "label": "About one page (450 words or fewer)"
+    },
+    {
+     "id": "linked",
+     "label": "At least three values linked to their source"
+    },
+    {
+     "id": "noErrors",
+     "label": "No claim errors"
+    },
+    {
+     "id": "placed",
+     "label": "Placed in 2.2 of sequence 0000"
+    },
+    {
+     "id": "noHigh",
+     "label": "No high-severity validation findings"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "Quiz answered correctly"
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "phase": 6,
+   "module2": true,
+   "title": "Module 2: fix a QOS with 15 errors",
+   "region": "US",
+   "regionCode": "US",
+   "version": "3.2.2",
+   "productId": "nce-tablet",
+   "appType": "nda",
+   "minutes": {
+    "standard": 45,
+    "expert": 30
+   },
+   "brief": "A contractor drafted the Quality Overall Summary for Ostrevia. Before sequence 0000 goes out, your quality lead wants it checked against Module 3: it holds 15 errors. Find and fix every one in the Module 2 tab, link the values to their source, place the QOS in 2.3 and publish.",
+   "quiz": [
+    {
+     "id": "m27new",
+     "q": "May the QOS include data or justification that is not in Module 3?",
+     "options": [
+      "Yes, if it helps the reviewer",
+      "No: it summarises Module 3 and other parts of the CTD, and adds nothing new",
+      "Only for biologics",
+      "Only in the US"
+     ],
+     "answer": 1,
+     "why": "M4Q(R1) says the QOS should not include information, data or justification not already in Module 3 or elsewhere in the CTD."
+    },
+    {
+     "id": "m27q1e",
+     "q": "The shelf life is 36 months, but long-term data cover 24 months. What allows the proposal?",
+     "options": [
+      "Nothing: the data must cover 36 months",
+      "ICH Q1E, which allows extrapolation beyond the available long-term data when the data support it",
+      "ICH Q3C",
+      "A post-approval commitment alone"
+     ],
+     "answer": 1,
+     "why": "ICH Q1E sets when and how far the shelf life may be extrapolated beyond the long-term data."
+    },
+    {
+     "id": "m27where",
+     "q": "The QOS gives a different assay limit from 3.2.P.5.1. Which should you change?",
+     "options": [
+      "3.2.P.5.1, to match the QOS",
+      "The QOS, to match 3.2.P.5.1",
+      "Both, to a new value",
+      "Neither: reviewers expect small differences"
+     ],
+     "answer": 1,
+     "why": "Module 3 holds the data; the summary must follow it."
+    }
+   ],
+   "steps": [
+    "Open the Module 2 tab and choose 2.3 Quality Overall Summary. The contractor's draft is already there.",
+    "Run through every heading. For each claim error, find the value in Module 3 and correct it, ideally by inserting it from its source.",
+    "Link the other values too, so the reviewer can click through to Module 3.",
+    "Mark 2.3.A not applicable with a reason, place the QOS in 2.3 of sequence 0000, answer the quiz, validate and publish."
+   ],
+   "hints": [
+    "The checker compares each claim with the Module 3 leaf that holds it; the source tag shows which.",
+    "Errors hide in the drug substance as well as the drug product."
+   ],
+   "checks": [
+    {
+     "id": "fixedAll",
+     "label": "All 15 errors fixed"
+    },
+    {
+     "id": "fixedMost",
+     "label": "At least 12 of the 15 errors fixed"
+    },
+    {
+     "id": "noErrors",
+     "label": "No claim errors left"
+    },
+    {
+     "id": "linked",
+     "label": "At least ten values linked to their source"
+    },
+    {
+     "id": "placed",
+     "label": "Placed in 2.3 of sequence 0000"
+    },
+    {
+     "id": "consistent",
+     "label": "Consistency matrix clean"
+    },
+    {
+     "id": "published",
+     "label": "Sequence 0000 published"
+    },
+    {
+     "id": "quiz",
+     "label": "Quiz answered correctly"
+    }
+   ]
   }
  ]
 }

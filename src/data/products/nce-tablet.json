@@ -14,7 +14,8 @@
   "indication": "chronic hand eczema",
   "indicationText": "Treatment of adults with moderate-to-severe chronic hand eczema inadequately controlled with topical corticosteroids",
   "shelfLife": "36 months",
-  "storage": "Store at 20°C to 25°C; excursions permitted to 15°C–30°C"
+  "storage": "Store at 20°C to 25°C; excursions permitted to 15°C–30°C",
+  "mechanism": "an oral STRK1 inhibitor"
  },
  "applicant": {
   "name": "Halcyon Ridge Pharmaceuticals, Inc.",
@@ -1008,7 +1009,464 @@
   "assay": "95.0-105.0% of label claim",
   "excipients": "microcrystalline cellulose, croscarmellose sodium, magnesium stearate, hypromellose, titanium dioxide",
   "batches": "HR-2401, HR-2402, HR-2403",
-  "patients": "1,248 patients randomised (VERDANT-1: 612; VERDANT-2: 636)",
+  "patients": "93 patients randomised in the first cohorts (VERDANT-1: 45 of 324 planned; VERDANT-2: 48 of 324 planned)",
   "indication": "Treatment of adults with moderate-to-severe chronic hand eczema inadequately controlled with topical corticosteroids"
- }
+ },
+ "m2sources": [
+  {
+   "id": "prod-name",
+   "leaf": "3.2.P.1",
+   "dest": "Description",
+   "label": "Proprietary name",
+   "value": "Ostrevia",
+   "type": "name",
+   "scope": "2.",
+   "near": [
+    "Ostrevia"
+   ]
+  },
+  {
+   "id": "prod-inn",
+   "leaf": "3.2.S.1.1",
+   "dest": "Nomenclature",
+   "label": "INN",
+   "value": "lumiravostat",
+   "type": "name",
+   "scope": "2.",
+   "near": [
+    "lumiravostat"
+   ]
+  },
+  {
+   "id": "prod-class",
+   "leaf": "3.2.S.1.3",
+   "dest": "General properties",
+   "label": "Pharmacological class",
+   "value": "an oral STRK1 inhibitor",
+   "type": "class",
+   "scope": "2.",
+   "near": [
+    "inhibitor",
+    "STRK1"
+   ]
+  },
+  {
+   "id": "prod-form",
+   "leaf": "3.2.P.1",
+   "dest": "Description",
+   "label": "Dosage form",
+   "value": "film-coated tablet",
+   "type": "text",
+   "scope": "2.",
+   "near": [
+    "tablet"
+   ]
+  },
+  {
+   "id": "prod-strengths",
+   "leaf": "3.2.P.1",
+   "dest": "Composition",
+   "label": "Strengths",
+   "value": "10 mg and 25 mg",
+   "type": "strengths",
+   "scope": "2.",
+   "near": [
+    "strength",
+    "mg"
+   ],
+   "fact": "strengths"
+  },
+  {
+   "id": "prod-route",
+   "leaf": "3.2.P.1",
+   "dest": "Description",
+   "label": "Route",
+   "value": "oral",
+   "type": "route",
+   "scope": "2.2",
+   "near": [
+    "route",
+    "administered"
+   ]
+  },
+  {
+   "id": "s-formula",
+   "leaf": "3.2.S.1.2",
+   "dest": "Structure",
+   "label": "Molecular formula",
+   "value": "C22H26FN5O3",
+   "type": "formula",
+   "scope": "2.3.S",
+   "near": [
+    "formula"
+   ]
+  },
+  {
+   "id": "s-mw",
+   "leaf": "3.2.S.1.2",
+   "dest": "Structure",
+   "label": "Molecular weight",
+   "value": "427.5 g/mol",
+   "type": "mw",
+   "scope": "2.3.S",
+   "near": [
+    "molecular weight"
+   ]
+  },
+  {
+   "id": "s-form",
+   "leaf": "3.2.S.1.3",
+   "dest": "Polymorphism",
+   "label": "Solid form",
+   "value": "Form A",
+   "type": "polymorph",
+   "scope": "2.3.S",
+   "near": [
+    "polymorph",
+    "form"
+   ]
+  },
+  {
+   "id": "s-pka",
+   "leaf": "3.2.S.1.3",
+   "dest": "General properties",
+   "label": "pKa",
+   "value": "6.8",
+   "type": "pka",
+   "scope": "2.3.S",
+   "near": [
+    "pka"
+   ]
+  },
+  {
+   "id": "s-mfr",
+   "leaf": "3.2.S.2.1",
+   "dest": "Manufacturer",
+   "label": "Drug substance manufacturer",
+   "value": "Corvane Fine Chemicals Pvt. Ltd., Example City, India",
+   "type": "company",
+   "scope": "2.3.S",
+   "near": [
+    "manufactur"
+   ],
+   "fact": "dsManufacturer"
+  },
+  {
+   "id": "s-steps",
+   "leaf": "3.2.S.2.2",
+   "dest": "Process",
+   "label": "Synthetic steps",
+   "value": "5",
+   "type": "steps",
+   "scope": "2.3.S",
+   "near": [
+    "step"
+   ]
+  },
+  {
+   "id": "s-assay",
+   "leaf": "3.2.S.4.1",
+   "dest": "Assay",
+   "label": "Drug substance assay",
+   "value": "98.0–102.0%",
+   "type": "range",
+   "scope": "2.3.S",
+   "near": [
+    "assay"
+   ]
+  },
+  {
+   "id": "s-imp-any",
+   "leaf": "3.2.S.4.1",
+   "dest": "Impurities",
+   "label": "Any unspecified impurity",
+   "value": "NMT 0.10%",
+   "type": "nmt",
+   "scope": "2.3.S",
+   "near": [
+    "unspecified"
+   ]
+  },
+  {
+   "id": "s-imp-total",
+   "leaf": "3.2.S.4.1",
+   "dest": "Impurities",
+   "label": "Total impurities (drug substance)",
+   "value": "NMT 0.5%",
+   "type": "nmt",
+   "scope": "2.3.S",
+   "near": [
+    "total impurit"
+   ]
+  },
+  {
+   "id": "s-water",
+   "leaf": "3.2.S.4.1",
+   "dest": "Water",
+   "label": "Water content",
+   "value": "NMT 0.5%",
+   "type": "nmt",
+   "scope": "2.3.S",
+   "near": [
+    "water"
+   ]
+  },
+  {
+   "id": "s-psd",
+   "leaf": "3.2.S.4.1",
+   "dest": "Particle size",
+   "label": "Particle size (D90)",
+   "value": "NMT 50 µm",
+   "type": "um",
+   "scope": "2.3.S",
+   "near": [
+    "particle size",
+    "d90"
+   ]
+  },
+  {
+   "id": "s-container",
+   "leaf": "3.2.S.6",
+   "dest": "Container",
+   "label": "Drug substance container",
+   "value": "double low-density polyethylene bags in a high-density polyethylene drum",
+   "type": "text",
+   "scope": "2.3.S",
+   "near": [
+    "drum",
+    "bag"
+   ]
+  },
+  {
+   "id": "s-retest",
+   "leaf": "3.2.S.7.1",
+   "dest": "Retest period",
+   "label": "Drug substance retest period",
+   "value": "48 months",
+   "type": "months",
+   "scope": "2.3.S",
+   "near": [
+    "retest"
+   ]
+  },
+  {
+   "id": "s-stab-cond",
+   "leaf": "3.2.S.7.1",
+   "dest": "Conditions",
+   "label": "Drug substance long-term condition",
+   "value": "25°C/60% RH",
+   "type": "rh",
+   "scope": "2.3.S",
+   "near": [
+    "long-term"
+   ]
+  },
+  {
+   "id": "p-excip",
+   "leaf": "3.2.P.1",
+   "dest": "Composition",
+   "label": "Excipients",
+   "value": "microcrystalline cellulose, croscarmellose sodium, magnesium stearate, hypromellose, titanium dioxide",
+   "type": "excipients",
+   "scope": "2.3.P",
+   "near": [
+    "excipient",
+    "composition"
+   ],
+   "fact": "excipients"
+  },
+  {
+   "id": "p-mfr",
+   "leaf": "3.2.P.3.1",
+   "dest": "Manufacturer",
+   "label": "Drug product manufacturer",
+   "value": "Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA",
+   "type": "company",
+   "scope": "2.3.P",
+   "near": [
+    "manufactur"
+   ],
+   "fact": "dpManufacturer"
+  },
+  {
+   "id": "p-process",
+   "leaf": "3.2.P.3.3",
+   "dest": "Process",
+   "label": "Manufacturing process",
+   "value": "direct compression",
+   "type": "process",
+   "scope": "2.3.P",
+   "near": [
+    "compression",
+    "granulation"
+   ]
+  },
+  {
+   "id": "p-batchsize",
+   "leaf": "3.2.P.3.2",
+   "dest": "Batch formula",
+   "label": "Commercial batch size",
+   "value": "300,000 tablets",
+   "type": "count",
+   "scope": "2.3.P",
+   "near": [
+    "batch size"
+   ]
+  },
+  {
+   "id": "p-assay",
+   "leaf": "3.2.P.5.1",
+   "dest": "Assay",
+   "label": "Drug product assay",
+   "value": "95.0–105.0%",
+   "type": "range",
+   "scope": "2.3.P",
+   "near": [
+    "assay"
+   ],
+   "fact": "assay"
+  },
+  {
+   "id": "p-diss",
+   "leaf": "3.2.P.5.1",
+   "dest": "Dissolution",
+   "label": "Dissolution",
+   "value": "Q = 70% in 45 minutes",
+   "type": "q",
+   "scope": "2.3.P",
+   "near": [
+    "dissolution"
+   ],
+   "fact": "dissolution"
+  },
+  {
+   "id": "p-deg-any",
+   "leaf": "3.2.P.5.1",
+   "dest": "Degradation products",
+   "label": "Any degradation product",
+   "value": "NMT 0.2%",
+   "type": "nmt",
+   "scope": "2.3.P",
+   "near": [
+    "any degradation",
+    "individual degradation",
+    "any individual"
+   ]
+  },
+  {
+   "id": "p-deg-total",
+   "leaf": "3.2.P.5.1",
+   "dest": "Degradation products",
+   "label": "Total degradation products",
+   "value": "NMT 1.0%",
+   "type": "nmt",
+   "scope": "2.3.P",
+   "near": [
+    "total degradation"
+   ]
+  },
+  {
+   "id": "p-batches",
+   "leaf": "3.2.P.5.4",
+   "dest": "Batch analyses",
+   "label": "Primary stability batches",
+   "value": "HR-2401, HR-2402, HR-2403",
+   "type": "batches",
+   "scope": "2.3.P",
+   "near": [
+    "batch"
+   ],
+   "fact": "batches"
+  },
+  {
+   "id": "p-container",
+   "leaf": "3.2.P.7",
+   "dest": "Container closure",
+   "label": "Container closure",
+   "value": "high-density polyethylene bottles of 30 tablets with child-resistant caps",
+   "type": "text",
+   "scope": "2.3.P",
+   "near": [
+    "bottle",
+    "blister"
+   ]
+  },
+  {
+   "id": "p-stab-cond",
+   "leaf": "3.2.P.8.1",
+   "dest": "Conditions",
+   "label": "Long-term stability condition",
+   "value": "25°C/60% RH",
+   "type": "rh",
+   "scope": "2.3.P",
+   "near": [
+    "long-term"
+   ]
+  },
+  {
+   "id": "p-stab-acc",
+   "leaf": "3.2.P.8.1",
+   "dest": "Conditions",
+   "label": "Accelerated stability condition",
+   "value": "40°C/75% RH",
+   "type": "rh",
+   "scope": "2.3.P",
+   "near": [
+    "accelerated"
+   ]
+  },
+  {
+   "id": "p-stab-acc-data",
+   "leaf": "3.2.P.8.1",
+   "dest": "Data available",
+   "label": "Accelerated data available",
+   "value": "6 months",
+   "type": "months",
+   "scope": "2.3.P",
+   "near": [
+    "accelerated"
+   ]
+  },
+  {
+   "id": "p-stab-data",
+   "leaf": "3.2.P.8.1",
+   "dest": "Data available",
+   "label": "Long-term data available",
+   "value": "24 months",
+   "type": "months",
+   "scope": "2.3.P",
+   "near": [
+    "data",
+    "available"
+   ]
+  },
+  {
+   "id": "p-shelf",
+   "leaf": "3.2.P.8.1",
+   "dest": "Shelf life",
+   "label": "Shelf life",
+   "value": "36 months",
+   "type": "months",
+   "scope": "2.3.P",
+   "near": [
+    "shelf life",
+    "shelf-life"
+   ],
+   "fact": "shelfLife"
+  },
+  {
+   "id": "p-storage",
+   "leaf": "3.2.P.8.1",
+   "dest": "Storage",
+   "label": "Storage condition",
+   "value": "20°C to 25°C",
+   "type": "temp",
+   "scope": "2.3.P",
+   "near": [
+    "store",
+    "storage"
+   ],
+   "fact": "storage"
+  }
+ ]
 }

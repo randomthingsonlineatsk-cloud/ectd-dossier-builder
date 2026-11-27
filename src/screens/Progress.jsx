@@ -9,7 +9,7 @@ const AXIS_LABEL = { technical: 'Technical validity', lifecycle: 'Lifecycle corr
 
 export default function Progress() {
   const { projects, attempts, lessonProgress, user, toast } = useApp();
-  const sum = useMemo(() => progressSummary({ projects, attempts, lessonProgress, lessonCount: lessons.length }), [projects, attempts, lessonProgress]);
+  const sum = useMemo(() => progressSummary({ projects, attempts, lessonProgress, lessonCount: lessons.filter((l) => !l.module2).length }), [projects, attempts, lessonProgress]);
   const axes = Object.entries(sum.avg).filter(([, v]) => v != null).sort((a, b) => b[1] - a[1]);
   const idx = LEVELS.findIndex((l) => l.id === sum.level.id);
   return (
@@ -84,7 +84,7 @@ export default function Progress() {
 }
 
 function Certificate({ attempts, lessonProgress, user, toast }) {
-  const status = useMemo(() => certificateStatus({ attempts, lessonProgress, lessonCount: lessons.length }), [attempts, lessonProgress]);
+  const status = useMemo(() => certificateStatus({ attempts, lessonProgress, lessonCount: lessons.filter((l) => !l.module2).length }), [attempts, lessonProgress]);
   const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   useEffect(() => { getMeta('certName', '').then((n) => setName(n || '')).catch(() => {}); }, []);

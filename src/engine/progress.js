@@ -1,6 +1,9 @@
 // Career levels, badges and the progress summary, computed from projects, mission
 // attempts and lesson scores already stored in the browser (nothing extra is saved).
-import { MISSIONS } from './missions.js';
+import { MISSIONS as ALL_MISSIONS } from './missions.js';
+// The completion certificate and the career levels cover the dossier missions (1 to 25). The Module 2
+// missions earn their own badge, so a certificate already earned stays earned.
+const MISSIONS = ALL_MISSIONS.filter((m) => !m.module2);
 import { validate } from './validate.js';
 
 export const LEVELS = [
@@ -66,7 +69,7 @@ export function progressSummary({ projects, attempts, lessonProgress, lessonCoun
   for (const a of done) for (const k of Object.keys(axes)) if (a.axes?.[k] != null) axes[k].push(a.axes[k]);
   const avg = Object.fromEntries(Object.entries(axes).map(([k, v]) => [k, v.length ? Math.round(v.reduce((x, y) => x + y, 0) / v.length) : null]));
 
-  const missions = MISSIONS.map((m) => ({ ...m, best: best[m.id] ?? null, tries: done.filter((a) => a.missionId === m.id).length }));
+  const missions = ALL_MISSIONS.map((m) => ({ ...m, best: best[m.id] ?? null, tries: done.filter((a) => a.missionId === m.id).length }));
   return { level, best, earned, avg, missions, publishedCount: published.length };
 }
 

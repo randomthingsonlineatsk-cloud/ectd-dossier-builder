@@ -350,3 +350,8 @@ table.compare td.none { background: var(--surface-2); }
 .sub-row { margin-top: .5rem; padding: .45rem .6rem; background: var(--surface-2); border-radius: var(--radius-s); }
 .comment { margin-top: .3rem; padding-left: .5rem; border-left: 3px solid var(--line); }
 table.data tr.me td { font-weight: 600; }
+
+/* Module 2 Summary Writer: linked fields in the preview */
+mark.m2-field { background: color-mix(in srgb, var(--ok, #1f7a4d) 14%, transparent); color: inherit; border-radius: 3px; padding: 0 .15em; }
+mark.m2-stale { background: color-mix(in srgb, var(--high, #b42318) 18%, transparent); color: inherit; border-radius: 3px; padding: 0 .15em; outline: 1px dashed var(--high, #b42318); }
+mark.m2-field sup, mark.m2-stale sup { margin-left: .2em; opacity: .75; }

@@ -1,0 +1,61 @@
+{
+ "_about": "Worked Module 2 text for Ostrevia (fictional). qosModel is a clean QOS; qosPlanted is the same QOS with 15 planted errors against Module 3 (mission 27); introModel is a clean 2.2.",
+ "plantedErrors": [
+  "s-mfr",
+  "s-steps",
+  "s-assay",
+  "s-imp-any",
+  "s-imp-total",
+  "s-psd",
+  "s-retest",
+  "prod-strengths",
+  "p-process",
+  "p-assay",
+  "p-diss",
+  "p-deg-total",
+  "p-batches",
+  "p-shelf",
+  "p-storage"
+ ],
+ "introModel": {
+  "2.2": "⟦prod-name=Ostrevia⟧ (⟦prod-inn=lumiravostat⟧) is ⟦prod-class=an oral STRK1 inhibitor⟧. It is a ⟦prod-form=film-coated tablet⟧ for ⟦prod-route=oral⟧ use in strengths of ⟦prod-strengths=10 mg and 25 mg⟧. Halcyon Ridge Pharmaceuticals, Inc. proposes it for the treatment of adults with moderate-to-severe chronic hand eczema inadequately controlled with topical corticosteroids. This application covers both strengths and presents the quality, nonclinical and clinical data that support approval."
+ },
+ "qosModel": {
+  "2.3.intro": "⟦prod-name=Ostrevia⟧ (⟦prod-inn=lumiravostat⟧) is ⟦prod-class=an oral STRK1 inhibitor⟧ developed by Halcyon Ridge Pharmaceuticals, Inc. It is a ⟦prod-form=film-coated tablet⟧ in strengths of ⟦prod-strengths=10 mg and 25 mg⟧, proposed for adults with moderate-to-severe chronic hand eczema inadequately controlled with topical corticosteroids.",
+  "2.3.S.1": "Lumiravostat is a synthetic small molecule with the molecular formula ⟦s-formula=C22H26FN5O3⟧ and a molecular weight of ⟦s-mw=427.5 g/mol⟧. It is a white to off-white crystalline powder. The pKa is ⟦s-pka=6.8⟧. A single polymorph, ⟦s-form=Form A⟧, is produced consistently and is the form used in the product (3.2.S.1.3).",
+  "2.3.S.2": "The drug substance is manufactured by ⟦s-mfr=Corvane Fine Chemicals Pvt. Ltd., Example City, India⟧. The route is a ⟦s-steps=5⟧-step synthesis from defined starting materials, with in-process controls at each isolated intermediate (3.2.S.2.2). The process was validated on three consecutive commercial-scale batches (3.2.S.2.5).",
+  "2.3.S.3": "The structure was confirmed by NMR, mass spectrometry, infrared spectroscopy and single-crystal X-ray diffraction. Process impurities and degradation products were identified and the specified impurities are controlled in the specification (3.2.S.3.2).",
+  "2.3.S.4": "The specification includes appearance, identification by IR and HPLC, assay ⟦s-assay=98.0–102.0%⟧, any unspecified impurity ⟦s-imp-any=NMT 0.10%⟧, total impurities ⟦s-imp-total=NMT 0.5%⟧, water ⟦s-water=NMT 0.5%⟧, residual solvents per ICH Q3C and particle size D90 ⟦s-psd=NMT 50 µm⟧ (3.2.S.4.1). The analytical procedures are validated according to ICH Q2(R2) (3.2.S.4.3). Batch analyses of the validation batches comply with the specification (3.2.S.4.4).",
+  "2.3.S.5": "A primary reference standard was characterised by orthogonal methods; working standards are qualified against it (3.2.S.5).",
+  "2.3.S.6": "The drug substance is stored and shipped in ⟦s-container=double low-density polyethylene bags in a high-density polyethylene drum⟧ (3.2.S.6).",
+  "2.3.S.7": "Stability studies at the long-term condition of ⟦s-stab-cond=25°C/60% RH⟧ and at the accelerated condition showed no significant change. A retest period of ⟦s-retest=48 months⟧ is proposed (3.2.S.7.1).",
+  "2.3.P.1": "Ostrevia film-coated tablets are available in strengths of ⟦prod-strengths=10 mg and 25 mg⟧. The excipients are ⟦p-excip=microcrystalline cellulose, croscarmellose sodium, magnesium stearate, hypromellose, titanium dioxide⟧ (3.2.P.1).",
+  "2.3.P.2": "The formulation was chosen to give rapid release of a drug substance with pH-dependent solubility. Critical quality attributes are assay, content uniformity, dissolution and degradation products (3.2.P.2).",
+  "2.3.P.3": "The drug product is manufactured by ⟦p-mfr=Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA⟧. The process is ⟦p-process=direct compression⟧ followed by film coating, at a commercial batch size of ⟦p-batchsize=300,000 tablets⟧ (3.2.P.3.2, 3.2.P.3.3). The process was validated on three consecutive batches of each strength (3.2.P.3.5).",
+  "2.3.P.4": "All excipients comply with their pharmacopoeial monographs; none is novel or of human or animal origin (3.2.P.4.1).",
+  "2.3.P.5": "The specification includes appearance, identification, assay ⟦p-assay=95.0–105.0%⟧, uniformity of dosage units, dissolution ⟦p-diss=Q = 70% in 45 minutes⟧, any degradation product ⟦p-deg-any=NMT 0.2%⟧ and total degradation products ⟦p-deg-total=NMT 1.0%⟧ (3.2.P.5.1). The procedures are validated (3.2.P.5.3). Results for primary batches ⟦p-batches=HR-2401, HR-2402, HR-2403⟧ comply (3.2.P.5.4).",
+  "2.3.P.6": "The drug product tests use the drug substance reference standards described in 3.2.S.5.",
+  "2.3.P.7": "The tablets are packed in ⟦p-container=high-density polyethylene bottles of 30 tablets with child-resistant caps⟧ (3.2.P.7).",
+  "2.3.P.8": "Three primary batches were stored at the long-term condition of ⟦p-stab-cond=25°C/60% RH⟧. Results are available for ⟦p-stab-data=24 months⟧, with no significant change. At the accelerated condition of ⟦p-stab-acc=40°C/75% RH⟧, results for ⟦p-stab-acc-data=6 months⟧ showed no significant change. A shelf life of ⟦p-shelf=36 months⟧ is proposed, extrapolated as ICH Q1E allows. Store at ⟦p-storage=20°C to 25°C⟧ (3.2.P.8.1). Stability studies continue to the end of the proposed shelf life.",
+  "2.3.R": "Executed batch records for the primary batches are provided in 3.2.R."
+ },
+ "qosPlanted": {
+  "2.3.intro": "Ostrevia (lumiravostat) is an oral STRK1 inhibitor developed by Halcyon Ridge Pharmaceuticals, Inc. It is a film-coated tablet proposed for adults with moderate-to-severe chronic hand eczema inadequately controlled with topical corticosteroids.",
+  "2.3.S.1": "Lumiravostat is a synthetic small molecule with the molecular formula C22H26FN5O3 and a molecular weight of 427.5 g/mol. It is a white to off-white crystalline powder. The pKa is 6.8. A single polymorph, Form A, is produced consistently and is the form used in the product (3.2.S.1.3).",
+  "2.3.S.2": "The drug substance is manufactured by Brightwater Synthesis Ltd. The route is a four-step synthesis from defined starting materials, with in-process controls at each isolated intermediate (3.2.S.2.2). The process was validated on three consecutive commercial-scale batches (3.2.S.2.5).",
+  "2.3.S.3": "The structure was confirmed by NMR, mass spectrometry, infrared spectroscopy and single-crystal X-ray diffraction. Process impurities and degradation products were identified and the specified impurities are controlled in the specification (3.2.S.3.2).",
+  "2.3.S.4": "The specification includes appearance, identification by IR and HPLC, and assay 97.0–103.0%. Any unspecified impurity is limited to NMT 0.15%. Total impurities are NMT 1.0%. Water is NMT 0.5%, residual solvents meet ICH Q3C, and particle size D90 is NMT 100 µm (3.2.S.4.1). The analytical procedures are validated according to ICH Q2(R2) (3.2.S.4.3). Batch analyses of the validation batches comply with the specification (3.2.S.4.4).",
+  "2.3.S.5": "A primary reference standard was characterised by orthogonal methods; working standards are qualified against it (3.2.S.5).",
+  "2.3.S.6": "The drug substance is stored and shipped in double low-density polyethylene bags in a high-density polyethylene drum (3.2.S.6).",
+  "2.3.S.7": "Stability studies at the long-term condition of 25°C/60% RH and at the accelerated condition showed no significant change. A retest period of 36 months is proposed (3.2.S.7.1).",
+  "2.3.P.1": "Ostrevia film-coated tablets are available in strengths of 10 mg and 20 mg. The excipients are microcrystalline cellulose, croscarmellose sodium, magnesium stearate, hypromellose, titanium dioxide (3.2.P.1).",
+  "2.3.P.2": "The formulation was chosen to give rapid release of a drug substance with pH-dependent solubility. Critical quality attributes are assay, content uniformity, dissolution and degradation products (3.2.P.2).",
+  "2.3.P.3": "The drug product is manufactured by Halcyon Ridge Manufacturing LLC, Fictionville, NJ, USA. The process is wet granulation followed by film coating. The commercial batch size is 300,000 tablets (3.2.P.3.2, 3.2.P.3.3). The process was validated on three consecutive batches of each strength (3.2.P.3.5).",
+  "2.3.P.4": "All excipients comply with their pharmacopoeial monographs; none is novel or of human or animal origin (3.2.P.4.1).",
+  "2.3.P.5": "The specification includes appearance, identification and assay 90.0–110.0%, with uniformity of dosage units. Dissolution is Q = 80% in 30 minutes. Any degradation product is NMT 0.2%. Total degradation products are NMT 2.0% (3.2.P.5.1). The procedures are validated (3.2.P.5.3). Results for primary batches HR-2401, HR-2402 and HR-2404 comply (3.2.P.5.4).",
+  "2.3.P.6": "The drug product tests use the drug substance reference standards described in 3.2.S.5.",
+  "2.3.P.7": "The tablets are packed in high-density polyethylene bottles of 30 tablets with child-resistant caps (3.2.P.7).",
+  "2.3.P.8": "Three primary batches were stored at the long-term condition of 25°C/60% RH. Results are available for 24 months, with no significant change. At the accelerated condition of 40°C/75% RH, results for 6 months showed no significant change. A shelf life of 48 months is proposed, extrapolated as ICH Q1E allows. Store below 30°C (3.2.P.8.1). Stability studies continue to the end of the proposed shelf life.",
+  "2.3.R": "Executed batch records for the primary batches are provided in 3.2.R."
+ }
+}

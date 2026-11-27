@@ -201,7 +201,36 @@ function Regions() {
   );
 }
 
-const INTERACTIVES = { versions: Versions, regions: Regions, modules: ModulesTriangle, compare: Compare, status: StatusTable, granularity: Granularity, leaf: LeafAnatomy, lifecycle: Lifecycle };
+// Lesson 11: say where each piece of text belongs in Module 2.
+const M2_ITEMS = [
+  ['The proprietary name, INN, class, dosage form and proposed indication, in one page', '2.2'],
+  ['The drug product specification as a table, with the justification in summary', '2.3'],
+  ['What the toxicology findings mean for the safety of patients', '2.4'],
+  ['The argument that the benefits outweigh the risks', '2.5'],
+  ['Tables of every repeat-dose toxicity study by species and duration', '2.6'],
+  ['Adverse event rates pooled across the placebo-controlled studies', '2.7'],
+];
+function Module2Where() {
+  const [ans, setAns] = useState({});
+  const done = Object.keys(ans).length === M2_ITEMS.length;
+  const right = M2_ITEMS.filter(([, c], i) => ans[i] === c).length;
+  return (
+    <div className="callout">
+      <p className="small"><strong>Try it:</strong> where does each piece go?</p>
+      {M2_ITEMS.map(([t, c], i) => (
+        <label key={i} className="field" style={{ marginBottom: '.4rem' }}>{t}
+          <select value={ans[i] ?? ''} onChange={(e) => setAns({ ...ans, [i]: e.target.value })} aria-describedby={ans[i] ? `m2w-${i}` : undefined}>
+            <option value="">Choose…</option>{['2.2', '2.3', '2.4', '2.5', '2.6', '2.7'].map((o) => <option key={o}>{o}</option>)}
+          </select>
+          {ans[i] && <span id={`m2w-${i}`} className={`small ${ans[i] === c ? '' : 'muted'}`}>{ans[i] === c ? 'Right.' : `Not quite: this goes in ${c}.`}</span>}
+        </label>
+      ))}
+      {done && <p className="small"><strong>{right} of {M2_ITEMS.length}</strong> right.</p>}
+    </div>
+  );
+}
+
+const INTERACTIVES = { m2where: Module2Where,  versions: Versions, regions: Regions, modules: ModulesTriangle, compare: Compare, status: StatusTable, granularity: Granularity, leaf: LeafAnatomy, lifecycle: Lifecycle };
 
 function Quiz({ lesson }) {
   const { saveLesson, toast } = useApp();

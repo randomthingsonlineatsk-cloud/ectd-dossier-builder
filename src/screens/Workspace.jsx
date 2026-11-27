@@ -19,6 +19,7 @@ import ReviewView from './workspace/ReviewView.jsx';
 import PlanningView from './workspace/PlanningView.jsx';
 import MigrationView from './workspace/MigrationView.jsx';
 import M4qView from './workspace/M4qView.jsx';
+import Module2View from './workspace/Module2View.jsx';
 
 function Timer({ mission, onExpire }) {
   const [now, setNow] = useState(Date.now());
@@ -124,7 +125,7 @@ export default function Workspace({ id }) {
   const consistencyCount = consistencyIssues;
   const tabs = [
     ...(project.mission ? [['mission', 'Mission']] : []),
-    ['builder', 'Builder'], ['m1', 'Module 1'], ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', project.ectdVersion === '4.0' ? 'Submission unit' : project.region === 'IN' ? 'Portal upload' : 'Backbone'],
+    ['builder', 'Builder'], ['m1', 'Module 1'], ...(project.ectdVersion !== '4.0' || ['US', 'EU'].includes(project.region) ? [['m2', 'Module 2']] : []), ['publishing', 'Publishing'], ['consistency', 'Consistency', consistencyCount], ['sequences', 'Sequences'], ['backbone', project.ectdVersion === '4.0' ? 'Submission unit' : project.region === 'IN' ? 'Portal upload' : 'Backbone'],
     ['validate', 'Validation', validation.counts.High + validation.counts.Medium], ['planning', 'Planning'], ...(['US', 'EU'].includes(project.region) && project.ectdVersion === '3.2.2' && !(project.region === 'EU' && (project.appType !== 'maa' || project.variant)) ? [['migrate', 'v4.0 Migration Lab']] : []), ['m4q', 'M4Q(R2) what-if'], ['review', 'Review', (project.review?.questions ?? []).filter((q) => q.status !== 'resolved').length], ['settings', 'Settings'],
   ];
   const guided = project.mission?.difficulty === 'guided';
@@ -156,16 +157,17 @@ export default function Workspace({ id }) {
           <strong>Mission {project.mission.id}</strong>
           <span className="pill">{project.mission.difficulty}</span>
           <Timer mission={project.mission} onExpire={() => { toast('Time is up. Your mission has been submitted for scoring.', 'warn'); submitMission(); }} />
-          <span>Score now <strong>{evaluation.score}%</strong>{project.mission.id === 11 ? ` (${evaluation.fixed}/${evaluation.total} defects fixed)` : ''}</span>
+          <span>Score now <strong>{evaluation.score}%</strong>{project.mission.id === 11 ? ` (${evaluation.fixed}/${evaluation.total} defects fixed)` : project.mission.id === 27 ? ` (${evaluation.fixed}/${evaluation.total} errors fixed)` : ''}</span>
           <span className={`pill ${validation.counts.High ? 'high' : validation.counts.Medium ? 'medium' : 'ok'}`}>Seq {seq.number}: {validation.counts.High} high, {validation.counts.Medium} medium</span>
         </div>
       )}
-      {seq.status === 'published' && !['sequences', 'mission', 'review', 'planning', 'migrate', 'm4q'].includes(tab) && (
+      {seq.status === 'published' && !['sequences', 'mission', 'review', 'planning', 'migrate', 'm4q', 'm2'].includes(tab) && (
         <div className="callout" style={{ margin: '1rem 1.25rem 0' }}>Sequence {seq.number} is published and read-only. Go to Sequences to create the next one.</div>
       )}
       <div className="ws-body" role="tabpanel">
         {tab === 'mission' && <MissionView project={project} evaluation={evaluation} onSubmit={submitMission} mutate={mutate} />}
         {tab === 'builder' && <Builder project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} guided={guided} selectedCode={selectedCode} setSelectedCode={setSelectedCode} focusLeaf={focusLeaf} />}
+        {tab === 'm2' && <Module2View project={project} seq={seq} mutate={mutate} toast={toast} setTab={setTab} />}
         {tab === 'm1' && <Module1 project={project} seq={seq} mutate={mutate} toast={toast} setTab={setTab} focusNode={focusNode} />}
         {tab === 'publishing' && <Publishing project={project} seq={seq} mutate={mutate} validation={validation} toast={toast} focusNode={focusNode} setTab={setTab} />}
         {tab === 'consistency' && <Consistency project={project} seq={seq} mutate={mutate} toast={toast} />}

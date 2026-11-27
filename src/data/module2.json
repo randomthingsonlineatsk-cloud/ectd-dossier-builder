@@ -1,0 +1,204 @@
+{
+ "_about": "Module 2 outline for the Summary Writer. Headings follow ICH M4 (organisation), M4Q(R1), M4S and M4E(R2); the guidance lines are paraphrased, not quoted. Word targets: about 450 words a page.",
+ "wordsPerPage": 450,
+ "docs": [
+  {
+   "code": "2.2",
+   "title": "Introduction",
+   "phase": "6A",
+   "targetPages": 1,
+   "headings": [
+    {
+     "code": "2.2",
+     "title": "Introduction",
+     "guide": "One page. Name the product (proprietary name and INN), its pharmacological class and how it works, the dosage form, strengths and route, and the indication proposed. Say what this application covers.",
+     "required": true
+    }
+   ]
+  },
+  {
+   "code": "2.3",
+   "title": "Quality Overall Summary",
+   "phase": "6A",
+   "targetPages": 40,
+   "targetPagesBiologic": 80,
+   "headings": [
+    {
+     "code": "2.3.intro",
+     "title": "Introduction",
+     "guide": "Proprietary name, INN, company, dosage form, strengths, route and proposed indication, in a few lines.",
+     "required": true
+    },
+    {
+     "code": "2.3.S.1",
+     "title": "S.1 General Information",
+     "guide": "Nomenclature, structure (with formula and molecular weight) and the general properties that matter for the product: solubility, polymorphism, pKa.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.2",
+     "title": "S.2 Manufacture",
+     "guide": "Name and address of each drug substance manufacturer; a short description of the process and its controls; the materials, critical steps and process validation or evaluation in summary; the development history that matters.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.3",
+     "title": "S.3 Characterisation",
+     "guide": "How the structure was confirmed, and a summary of the impurities: their origin, which are specified, and the limits.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.4",
+     "title": "S.4 Control of Drug Substance",
+     "guide": "The specification as a table (test, method, limit), a summary of the analytical procedures and their validation, the batch analyses, and why the specification is justified.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.5",
+     "title": "S.5 Reference Standards or Materials",
+     "guide": "The reference standards used and how they were qualified.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.6",
+     "title": "S.6 Container Closure System",
+     "guide": "The container in which the drug substance is stored and shipped, and why it is suitable.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.S.7",
+     "title": "S.7 Stability",
+     "guide": "The studies done (conditions, batches, time points), the results and the proposed retest period or shelf life, and the commitment for ongoing studies.",
+     "required": true,
+     "scope": "2.3.S"
+    },
+    {
+     "code": "2.3.P.1",
+     "title": "P.1 Description and Composition of the Drug Product",
+     "guide": "The dosage form, the strengths, and the composition of each strength with the function of each component.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.2",
+     "title": "P.2 Pharmaceutical Development",
+     "guide": "How the formulation and process were developed: the drug substance and excipient choices, critical quality attributes, the manufacturing process development and the container closure choice.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.3",
+     "title": "P.3 Manufacture",
+     "guide": "Each manufacturer and its responsibilities, the batch formula, a flow of the process with in-process controls, and the process validation summary.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.4",
+     "title": "P.4 Control of Excipients",
+     "guide": "The excipient standards (pharmacopoeial or in-house) and anything novel or of animal origin.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.5",
+     "title": "P.5 Control of Drug Product",
+     "guide": "The specification as a table, the analytical procedures and their validation in summary, the batch analyses, the impurities, and the justification of the specification.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.6",
+     "title": "P.6 Reference Standards or Materials",
+     "guide": "Reference standards used for the drug product tests, if different from S.5.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.7",
+     "title": "P.7 Container Closure System",
+     "guide": "The packaging for each presentation, its materials, and why it suits the product.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.P.8",
+     "title": "P.8 Stability",
+     "guide": "The stability studies (conditions, batches, time points), the results, the proposed shelf life and storage, and the post-approval stability commitment. Say how the shelf life is supported, including any extrapolation.",
+     "required": true,
+     "scope": "2.3.P"
+    },
+    {
+     "code": "2.3.A",
+     "title": "A Appendices",
+     "guide": "Facilities and equipment, adventitious agents safety evaluation and novel excipients, where they apply (mostly biologics).",
+     "required": false,
+     "requiredFor": [
+      "mab-infusion",
+      "biosimilar-mab"
+     ]
+    },
+    {
+     "code": "2.3.R",
+     "title": "R Regional Information",
+     "guide": "Information the region asks for, such as executed batch records in the US or the medical device for a combination product in the EU.",
+     "required": false
+    }
+   ]
+  },
+  {
+   "code": "2.4",
+   "title": "Nonclinical Overview",
+   "phase": "6C",
+   "targetPages": 30
+  },
+  {
+   "code": "2.5",
+   "title": "Clinical Overview",
+   "phase": "6B",
+   "targetPages": 30
+  },
+  {
+   "code": "2.6",
+   "title": "Nonclinical Written and Tabulated Summaries",
+   "phase": "6C",
+   "targetPages": 150
+  },
+  {
+   "code": "2.7.1",
+   "title": "Summary of Biopharmaceutic Studies and Associated Analytical Methods",
+   "phase": "6B"
+  },
+  {
+   "code": "2.7.2",
+   "title": "Summary of Clinical Pharmacology Studies",
+   "phase": "6B"
+  },
+  {
+   "code": "2.7.3",
+   "title": "Summary of Clinical Efficacy",
+   "phase": "6B"
+  },
+  {
+   "code": "2.7.4",
+   "title": "Summary of Clinical Safety",
+   "phase": "6B"
+  },
+  {
+   "code": "2.7.5",
+   "title": "Literature References",
+   "phase": "6B"
+  },
+  {
+   "code": "2.7.6",
+   "title": "Synopses of Individual Studies",
+   "phase": "6B"
+  }
+ ]
+}

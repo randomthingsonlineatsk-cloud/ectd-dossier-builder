@@ -3,6 +3,7 @@ import rulesData from '../data/rules.json' with { type: 'json' };
 import { INDEX, ancestors, REGION_PACKS, displayCode as dc, inRegion, euCountry } from './tree.js';
 import { docForLeaf, leafPath, lifecycleState, seqByNumber, sortedSequences, PRODUCTS, optionFor, isRetireOp } from './model.js';
 import { needsStudyTag, isValidTag, suggestedStudy } from './stf.js';
+import { checkPlaced } from './module2.js';
 
 export const RULES = Object.fromEntries(rulesData.rules.map((r) => [r.id, r]));
 export const REQUIRED = Object.fromEntries(Object.entries(rulesData.required).filter(([, v]) => Array.isArray(v)).map(([k, v]) => [k, new Set(v)]));
@@ -260,6 +261,14 @@ export function validate(project, seqNumber) {
       add('PDF-05', l.id, `"${name}": ${parts.join('; ')}.`, where);
     }
     if (!doc.textSearchable) add('PDF-06', l.id, `"${name}" is a scanned image without searchable text.`, where);
+
+    // Module 2 written in the Summary Writer: its claims against Module 3.
+    if (doc.m2 && !isRetireOp(l.operation)) {
+      const c = checkPlaced(project, doc);
+      const RULE = { C0: 'M2-03', C12: 'M2-03', C1: 'M2-02', C2: 'M2-01', C3: 'M2-01', L2: 'M2-04', W1: 'M2-05' };
+      c.findings.forEach((f, i) => { if (RULE[f.code]) add(RULE[f.code], `${l.id}:${i}`, `${dc(l.nodeCode)}${f.heading && f.heading !== l.nodeCode ? `, ${f.heading.replace('.intro', ' introduction')}` : ''}: ${f.message}`, where); });
+      if (doc.m2.code === '2.3') for (const t of doc.links ?? []) if (!t.startsWith('3.')) add('M2-06', `${l.id}:${t}`, `${dc(l.nodeCode)} links to ${dc(t)}, outside Module 3.`, where);
+    }
 
     // Study grouping (US v3.2.2 study tagging files)
     if ((project.region === 'US' || v4) && needsStudyTag(l.nodeCode)) {

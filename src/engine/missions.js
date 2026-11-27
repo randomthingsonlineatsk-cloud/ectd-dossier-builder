@@ -6,6 +6,8 @@ import { addCoverLetter, placeDoc, publishWithFiles, updateLeaf } from './ops.js
 import { validate } from './validate.js';
 import { consistencyMatrix } from './consistency.js';
 import { publishSequence } from './backbone.js';
+import { blankDoc, checkPlaced, fieldsIn, renderText } from './module2.js';
+import m2Example from '../data/m2-ostrevia.json' with { type: 'json' };
 
 export const MISSIONS = missionsData.missions;
 export const LEVELS = missionsData.levels;
@@ -105,6 +107,17 @@ export async function seedMission(id, difficulty, user) {
     addExtras(p, m);
     return p;
   }
+  if (m.id === 26 || m.id === 27) {
+    const p = baseMissionProject(m, difficulty, user);
+    buildComplete(p);
+    if (m.id === 27) {
+      const d = blankDoc(p, '2.3');
+      for (const [k, t] of Object.entries(m2Example.qosPlanted)) if (d.sections[k]) d.sections[k].text = t;
+      p.module2 = { docs: { '2.3': d } };
+      p.mission.planted = [...m2Example.plantedErrors];
+    }
+    return p;
+  }
   throw new Error(`Mission ${id} arrives in a later phase.`);
 }
 
@@ -170,7 +183,7 @@ function seedMission11(m, difficulty, user) {
 
 export function evaluateMission(project) {
   const id = project.mission?.id ?? project.missionId;
-  const fn = { 25: evalM25, 23: evalM23, 24: evalM24, 22: evalM22, 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
+  const fn = { 26: evalM26, 27: evalM27, 25: evalM25, 23: evalM23, 24: evalM24, 22: evalM22, 20: evalM20, 21: evalM21, 17: evalM17, 18: evalM18, 19: evalM19, 3: evalM3, 13: evalM13, 14: evalM14, 15: evalM15, 16: evalM16, 1: evalM1, 2: evalM2, 4: evalM4, 5: evalM5, 6: evalM6, 7: evalM7, 8: evalM8, 9: evalM9, 10: evalM10, 11: evalM11, 12: evalM12 }[id];
   if (!fn) return null;
   const ev = fn(project);
   ev.axes = axesFor(project, ev);
@@ -544,6 +557,52 @@ function evalM25(p) {
     published: pub(p, '0000'),
     quiz: quizOk(p),
   }, v);
+}
+
+// ---------- Module 2 (Phase 6A) ----------
+const placedM2 = (p, n, code) => { const l = leavesIn(p, n).find((x) => x.nodeCode === code && !isRetireOp(x.operation)); const d = l && docForLeaf(p, l); return d?.m2 ? d : null; };
+const linkedCount = (d) => Object.values(d.m2.sections).reduce((k, s) => k + (s.na ? 0 : fieldsIn(s.text).length), 0);
+function evalM26(p) {
+  const v = validate(p, '0000');
+  const d = placedM2(p, '0000', '2.2');
+  const text = d ? renderText(Object.values(d.m2.sections).map((s) => s.text).join(' ')).toLowerCase() : '';
+  const c = d ? checkPlaced(p, d) : null;
+  return finish(26, {
+    content: ['ostrevia', 'lumiravostat', 'strk1', 'film-coated tablet', 'oral', '10 mg and 25 mg', 'chronic hand eczema'].every((w) => text.includes(w)),
+    length: !!d && d.m2.words > 40 && d.m2.words <= 450,
+    linked: !!d && linkedCount(d) >= 3,
+    noErrors: !!c && c.errors.length === 0,
+    placed: !!d,
+    noHigh: v.counts.High === 0,
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+}
+// An error counts as fixed when the checker no longer flags that source and the summary states the
+// source's value, typed or linked.
+export function qosFixes(p) {
+  const d = placedM2(p, '0000', '2.3');
+  const secs = d ? d.m2.sections : p.module2?.docs?.['2.3']?.sections ?? {};
+  const c = checkPlaced(p, { m2: { code: '2.3', sections: secs } });
+  const planted = p.mission?.planted ?? m2Example.plantedErrors;
+  const linked = new Set(Object.values(secs).flatMap((s) => fieldsIn(s.text ?? '').map((f) => f.id)));
+  const fixed = planted.filter((id) => !c.findings.some((f) => f.source === id && f.severity === 'error') && (linked.has(id) || c.findings.some((f) => f.source === id && f.unlinked)));
+  return { d, c, fixed, total: planted.length };
+}
+function evalM27(p) {
+  const v = validate(p, '0000');
+  const { d, c, fixed, total } = qosFixes(p);
+  const ev = finish(27, {
+    fixedAll: fixed.length === total,
+    fixedMost: fixed.length >= 12,
+    noErrors: !!d && c.errors.length === 0,
+    linked: !!d && linkedCount(d) >= 10,
+    placed: !!d,
+    consistent: consistent(p, '0000'),
+    published: pub(p, '0000'),
+    quiz: quizOk(p),
+  }, v);
+  return { ...ev, fixed: fixed.length, total };
 }
 
 // ---------- four scoring axes ----------

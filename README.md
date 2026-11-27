@@ -6,7 +6,7 @@ Built for regulatory affairs freshers and students, RAC candidates, and anyone w
 
 > **Training only.** Every product, company, document, study and person in the app is fictional. Section codes, form numbers and XML element names follow the public ICH and FDA specifications, but nothing the app produces is suitable for a real submission.
 
-## What is in this release (Phases 1 to 5)
+## What is in this release (Phases 1 to 5, and Phase 6A of the Module 2 Summary Writer)
 
 **Learn.** Lessons 1–7 (What CTD is; CTD vs eCTD vs NeeS; Granularity; The backbone; Lifecycle; v3.2.2 vs v4.0; Regional differences), each with an interactive exercise and a quiz, eight lifecycle drills, and a searchable glossary.
 
@@ -33,7 +33,7 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **Builder and publishing.** Drag and drop (or Pick up and Enter) into the CTD tree; misplacement and granularity warnings; required/optional view and a dossier map; real stub PDFs generated with pdf-lib (title page, bookmarks, linked table of contents, cross-document links, key facts, defects built into the file); a publishing tab with a bookmark editor, TOC generator, hyperlink manager, broken-link finder and leaf-title consistency checker.
 
-**Backbone and validation.** index.xml, the regional XML, index-md5.txt and study tagging files, shown raw and rendered, with a folder tree and publishing log; publishing records the MD5 of every file's real bytes. 119 rules across backbone, files and folders, PDF, lifecycle, eCTD v4.0, US, EU, Japan, India, Canada, Switzerland and China Module 1, study grouping, content and granularity, with a verdict line and PDF/CSV report download.
+**Backbone and validation.** index.xml, the regional XML, index-md5.txt and study tagging files, shown raw and rendered, with a folder tree and publishing log; publishing records the MD5 of every file's real bytes. 125 rules across backbone, files and folders, PDF, lifecycle, eCTD v4.0, US, EU, Japan, India, Canada, Switzerland and China Module 1, study grouping, content and granularity, with a verdict line and PDF/CSV report download.
 
 **eCTD v4.0.** One submissionunit.xml per unit, modelled on the ICH and PMDA v4.0 implementation guides: units numbered 1, 2, 3; documents placed by contexts of use with priority numbers; replacementOf for replace; statusCode "suspended" in place of delete; document reuse by reference (the file is not sent again); study keywords in place of study tagging files; SHA-256 checksums and sha256.txt.
 
@@ -45,7 +45,16 @@ Ostrevia can also be built as a US initial IND, a US Type II DMF (from the API m
 
 **Cross-module consistency QC.** Every document states structured facts (strengths, dosage form, shelf life, storage, manufacturers, limits, excipients, batches, patient numbers, indication). A matrix compares each fact wherever it is stated and highlights contradictions; reviewer's eye mode hides the highlights so you hunt first; corrections revise a draft document or create a new version to send with replace.
 
-**Missions.** Twenty-five missions at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 3 Japan NDA under v4.0; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application; 13 biosimilar application; 14 new drug application in India; 15 renewal and transfer; 16 withdrawal; 17 initial IND; 18 505(b)(2) application; 19 Type II DMF and a letter of authorization; 20 decentralised procedure; 21 active substance master file; 22 clinical trial application in India; 23 new drug submission in Canada; 24 Switzerland under Article 13; 25 China: imported originator. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
+**Missions.** Twenty-seven missions (25 dossier missions and, from Phase 6A, missions 26 and 27 on Module 2) at guided, standard and expert levels: 1 first NDA; 2 centralised MAA; 3 Japan NDA under v4.0; 4 information request; 5 EU list of questions; 6 new manufacturing site (PAS vs Type IB); 7 safety labelling update (CBE-0 vs Type II); 8 annual report and PADER; 9 DMF support; 10 paper to eCTD baseline; 11 rescue the dossier; 12 generic application; 13 biosimilar application; 14 new drug application in India; 15 renewal and transfer; 16 withdrawal; 17 initial IND; 18 505(b)(2) application; 19 Type II DMF and a letter of authorization; 20 decentralised procedure; 21 active substance master file; 22 clinical trial application in India; 23 new drug submission in Canada; 24 Switzerland under Article 13; 25 China: imported originator. Each is scored on technical validity, lifecycle correctness, cross-module consistency and time.
+
+**Module 2 Summary Writer (Phase 6A).** A Module 2 tab in every project. Learners write the CTD summaries heading by heading from the dossier's own data, with the ICH guidance for each heading (paraphrased) and a length meter.
+- 2.2 Introduction and 2.3 Quality Overall Summary in this phase, on the ICH M4Q(R1) layout. The other Module 2 documents follow in Phases 6B to 6E.
+- **Linked fields.** Values are inserted from their Module 3 source (for Ostrevia, 36 values across 3.2.S and 3.2.P: limits, conditions, batches, manufacturers, shelf life). Each one carries its source and becomes a hyperlink in the placed PDF; a field whose source changes is marked out of date.
+- **Claim checker.** Typed values count too: each claim is found by the words around it and compared with Module 3. It reports C0 empty required headings, C1 numbers with no source, C2 values that differ from their source (or linked fields out of date), C3 conditions that differ, C12 headings marked not applicable without a valid reason, and W1 values typed rather than linked.
+- **Placing and validating.** A summary is placed as a new version of its leaf (replacing it in a later sequence). Six validator rules (M2-01 to M2-06) report its claims, and the consistency matrix now reads shelf life, storage, strengths, assay, dissolution, batches and the drug substance manufacturer from the placed QOS.
+- **Missions 26 and 27:** write the 2.2 introduction; fix a QOS with 15 planted errors against Module 3. Lesson 11, "Module 2: what each part is for", has a where-does-it-go exercise and a quiz.
+- The completion certificate still covers missions 1 to 25 and lessons 1 to 10, so a certificate already earned stays earned. Module 2 gets its own badge in Phase 6E.
+- Ostrevia's study numbers now match the other apps: VERDANT-1 is a first cohort of 45 of 324 planned, and VERDANT-2 a first cohort of 48.
 
 **Region comparison.** The same Module 1 items side by side for the US, EU, Japan, India, Canada and Switzerland; "Where does it go?" and "One document, six regions" exercises; and a CTD to ASEAN ACTD conversion exercise.
 
